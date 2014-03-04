@@ -1,6 +1,7 @@
 /*
  * #%L
  * OME-BIOFORMATS C++ library for image IO.
+ * %%
  * Copyright © 2006 - 2013 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
@@ -35,53 +36,47 @@
  * #L%
  */
 
-#ifndef OME_BIOFORMATS_META_BASEMETADATA_H
-#define OME_BIOFORMATS_META_BASEMETADATA_H
+#include <ome/xml/meta/OMEXMLMetadataRoot.h>
 
-#include <vector>
-
-#include <ome/compat/cstdint.h>
+using ome::xml::model::OME;
+using ome::xml::meta::MetadataRoot;
 
 namespace ome
 {
-  namespace bioformats
+  namespace xml
   {
     namespace meta
     {
 
-      /**
-       * Abstract base class for metadata storage and retrieval.  This
-       * class provides no functionality; its purpose is to provide a
-       * common base type for the metadata storage and retrieval
-       * interfaces so that both types may be stored together in
-       * containers.
-       */
-      class BaseMetadata
+      OMEXMLMetadataRoot::OMEXMLMetadataRoot():
+	OME(),
+	MetadataRoot()
       {
-      public:
-        /// Index into an array.
-        typedef uint32_t index_type;
-        /// An array of bytes for binary image data.
-        typedef std::vector<uint8_t> byte_array;
+      }
 
-      protected:
-        /// Constructor.
-        BaseMetadata();
+      OMEXMLMetadataRoot::OMEXMLMetadataRoot(::ome::xerces::dom::Element& element,
+					     ::ome::xml::model::OMEModel& model):
+	OME(element, model),
+	MetadataRoot()
+      {
+      }
 
-      public:
-        /// Destructor.
-        virtual
-        ~BaseMetadata();
-      };
+      OMEXMLMetadataRoot::~OMEXMLMetadataRoot()
+      {
+      }
+
+      OMEXMLMetadataRoot::OMEXMLMetadataRoot(const OMEXMLMetadataRoot& copy):
+	OME(copy),
+	MetadataRoot()
+      {
+      }
+
+      OMEXMLMetadataRoot::OMEXMLMetadataRoot(const xml::model::OME& copy):
+	OME(copy),
+	MetadataRoot()
+      {
+      }
 
     }
   }
 }
-
-#endif // OME_BIOFORMATS_META_BASEMETADATA_H
-
-/*
- * Local Variables:
- * mode:C++
- * End:
- */

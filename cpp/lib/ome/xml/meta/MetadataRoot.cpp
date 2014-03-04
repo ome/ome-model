@@ -36,20 +36,20 @@
  * #L%
  */
 
-#include <ome/bioformats/meta/BaseMetadata.h>
+#include <ome/xml/meta/MetadataRoot.h>
 
 namespace ome
 {
-  namespace bioformats
+  namespace xml
   {
     namespace meta
     {
 
-      BaseMetadata::BaseMetadata()
+      MetadataRoot::MetadataRoot()
       {
       }
 
-      BaseMetadata::~BaseMetadata()
+      MetadataRoot::~MetadataRoot()
       {
       }
 
