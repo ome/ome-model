@@ -36,23 +36,26 @@
  * #L%
  */
 
-#include <ome/bioformats/meta/BaseMetadata.h>
+#include <ome/bioformats/FileInfo.h>
 
-namespace ome
+#include <gtest/gtest.h>
+
+TEST(FileInfo, Construct)
 {
-  namespace bioformats
-  {
-    namespace meta
-    {
+  ome::bioformats::FileInfo info;
+  info.filename = "/tmp/test.tiff";
+  info.reader = "TiffReader";
+  info.usedToInitialize = true;
+}
 
-      BaseMetadata::BaseMetadata()
-      {
-      }
+TEST(FileInfo, StreamOutput)
+{
+  std::ostringstream os;
+  ome::bioformats::FileInfo info;
+  info.filename = "/tmp/test.png";
+  info.reader = "PngReader";
+  info.usedToInitialize = true;
+  os << info;
 
-      BaseMetadata::~BaseMetadata()
-      {
-      }
-
-    }
-  }
+  ASSERT_FALSE(!os);
 }

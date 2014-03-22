@@ -35,64 +35,67 @@
  * #L%
  */
 
-#ifndef OME_BIOFORMATS_OME_OMEXMLMETADATAROOT_H
-#define OME_BIOFORMATS_OME_OMEXMLMETADATAROOT_H
+#ifndef OME_BIOFORMATS_FILEINFO_H
+#define OME_BIOFORMATS_FILEINFO_H
 
-#include <ome/compat/cstdint.h>
-
-#include <ome/xml/model/OME.h>
-#include <ome/bioformats/meta/MetadataRoot.h>
+#include <string>
+#include <ostream>
 
 namespace ome
 {
   namespace bioformats
   {
-    namespace ome
+
+    /**
+     * Basic metadata for a file.
+     */
+    struct FileInfo
     {
+      /// Absolute path to this file.
+      std::string filename;
 
       /**
-       * OME-XML metadata root node.
+       * FormatReader implementation used to read this file.
+       *
+       * @note In the Java implementation this returned a class.  In
+       * the C++ implementation this is the name of the reader which
+       * may be used to construct a reader via a factory.
+       * @todo Document factory function to create reader.
        */
-      class OMEXMLMetadataRoot : public ::ome::xml::model::OME,
-				 public ::ome::bioformats::meta::MetadataRoot
-      {
-      public:
-        /// Constructor.
-        OMEXMLMetadataRoot();
+      std::string reader;
 
-	/**
-         * Construct OME-XML model recursively from an XML DOM tree.
-         *
-         * @param element root of the XML DOM tree to from which to
-         * construct the model object graph.
-         * @param model handler for the OME model used to track
-         * instances and references seen during the update.
-         * @throws EnumerationException if there is an error
-         * instantiating an enumeration during model object creation.
-         */
-        OMEXMLMetadataRoot(::ome::xerces::dom::Element& element,
-			   ::ome::xml::model::OMEModel& model);
+      /**
+       * @c true if this file can be passed to the appropriate reader's
+       * FormatReader::setId() method; @c false if otherwise.
+       */
+      bool usedToInitialize;
+    };
 
-	/// Copy constructor.
-	OMEXMLMetadataRoot(const OMEXMLMetadataRoot& copy);
-
-	/// Copy constructor.
-	OMEXMLMetadataRoot(const xml::model::OME& copy);
-
-      public:
-        /// Destructor.
-        virtual
-        ~OMEXMLMetadataRoot();
-      };
-
+    /**
+     * Output FileInfo to output stream.
+     *
+     * @param os the output stream.
+     * @param info the FileInfo to output.
+     * @returns the output stream.
+     */
+    template<class charT, class traits>
+    inline std::basic_ostream<charT,traits>&
+    operator<< (std::basic_ostream<charT,traits>& os,
+                const FileInfo& info)
+    {
+      return os << "filename = " << info.filename
+                << "\nreader = " << info.reader
+                << "\nused to initialize = " << info.usedToInitialize;
     }
+
   }
 }
 
-#endif // OME_BIOFORMATS_OME_OMEXMLMETADATAROOT_H
+#endif // OME_BIOFORMATS_FILEINFO_H
 
 /*
  * Local Variables:
  * mode:C++
  * End:
  */
+

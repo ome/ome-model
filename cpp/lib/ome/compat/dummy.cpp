@@ -1,6 +1,7 @@
 /*
  * #%L
- * OME-BIOFORMATS C++ library for image IO.
+ * OME-COMPAT C++ library for C++ compatibility/portability
+ * %%
  * Copyright © 2006 - 2013 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
@@ -35,52 +36,5 @@
  * #L%
  */
 
-#ifndef OME_BIOFORMATS_META_BASEMETADATA_H
-#define OME_BIOFORMATS_META_BASEMETADATA_H
-
-#include <vector>
-
-#include <ome/compat/cstdint.h>
-
-namespace ome
-{
-  namespace bioformats
-  {
-    namespace meta
-    {
-
-      /**
-       * Abstract base class for metadata storage and retrieval.  This
-       * class provides no functionality; its purpose is to provide a
-       * common base type for the metadata storage and retrieval
-       * interfaces so that both types may be stored together in
-       * containers.
-       */
-      class BaseMetadata
-      {
-      public:
-        /// Index into an array
-        typedef uint32_t index_type;
-        typedef std::vector<uint8_t> byte_array;
-
-      protected:
-        /// Constructor.
-        BaseMetadata();
-
-      public:
-        /// Destructor.
-        virtual
-        ~BaseMetadata();
-      };
-
-    }
-  }
-}
-
-#endif // OME_BIOFORMATS_META_BASEMETADATA_H
-
-/*
- * Local Variables:
- * mode:C++
- * End:
- */
+// This file exists solely to satisfy the mach linker, which doesn't like
+// empty .a archives.

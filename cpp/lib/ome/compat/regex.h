@@ -1,6 +1,7 @@
 /*
  * #%L
- * OME-BIOFORMATS C++ library for image IO.
+ * OME-COMPAT C++ library for C++ compatibility/portability
+ * %%
  * Copyright © 2006 - 2013 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
@@ -35,43 +36,42 @@
  * #L%
  */
 
-#ifndef OME_BIOFORMATS_META_METADATA_H
-#define OME_BIOFORMATS_META_METADATA_H
+/**
+ * @file regex.h Regular expression type substitution.  This header
+ * substitutes Boost types for the same types in the std namespace
+ * when not using a conforming C++11 compiler.  This permits all code
+ * to use the C++11 standard types irrespective of the compiler being
+ * used.
+ */
 
-#include <ome/bioformats/meta/MetadataRetrieve.h>
-#include <ome/bioformats/meta/MetadataStore.h>
+#ifndef OME_COMPAT_REGEX_H
+# define OME_COMPAT_REGEX_H
 
-namespace ome
-{
-  namespace bioformats
-  {
-    namespace meta
-    {
+# include <ome/compat/config.h>
 
-      /**
-       * Abstract class for metadata storage and retrieval.  This
-       * class provides no functionality; it simply derives from both
-       * the MetadataRetrieve and MetadataStore interfaces for use by
-       * stores which provide both interfaces.
-       */
-      class Metadata : public MetadataRetrieve,
-                       public MetadataStore
-      {
-      protected:
-        /// Constructor.
-        Metadata();
-
-      public:
-        /// Destructor.
-        virtual
-        ~Metadata();
-      };
-
-    }
-  }
+# ifdef OME_HAVE_REGEX
+#  include <regex>
+# elif OME_HAVE_TR1_REGEX
+#  include <tr1/regex.hpp>
+namespace std {
+  using std::tr1::regex;
+  using std::tr1::regex_error;
+  using std::tr1::regex_match;
+  using std::tr1::regex_search;
 }
+# elif OME_HAVE_BOOST_REGEX
+#  include <boost/regex.hpp>
+namespace std {
+  using boost::regex;
+  using boost::regex_error;
+  using boost::regex_match;
+  using boost::regex_search;
+}
+# else
+#  error An regex implementation is not available
+# endif
 
-#endif // OME_BIOFORMATS_META_METADATA_H
+#endif // OME_COMPAT_REGEX_H
 
 /*
  * Local Variables:

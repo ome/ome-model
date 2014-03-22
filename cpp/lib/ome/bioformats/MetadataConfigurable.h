@@ -1,7 +1,6 @@
 /*
  * #%L
  * OME-BIOFORMATS C++ library for image IO.
- * %%
  * Copyright © 2006 - 2013 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
@@ -36,23 +35,73 @@
  * #L%
  */
 
-#include <ome/bioformats/meta/Metadata.h>
+#ifndef OME_BIOFORMATS_METADATACONFIGURABLE_H
+#define OME_BIOFORMATS_METADATACONFIGURABLE_H
+
+#include <set>
+
+#include <ome/bioformats/MetadataOptions.h>
 
 namespace ome
 {
   namespace bioformats
   {
-    namespace meta
+
+    /**
+     * Metadata configuration interface.
+     */
+    class MetadataConfigurable
     {
+    protected:
+      /// Constructor.
+      MetadataConfigurable();
 
-      Metadata::Metadata()
-      {
-      }
+    public:
+      /// Destructor.
+      virtual
+      ~MetadataConfigurable();
 
-      Metadata::~Metadata()
-      {
-      }
+      /**
+       * Get the supported metadata levels.
+       *
+       * @returns a set of supported metadata levels.
+       */
+      virtual const std::set<MetadataOptions::MetadataLevel>&
+      getSupportedMetadataLevels() = 0;
 
-    }
+      /**
+       * Set metadata options.
+       *
+       * @param options the options to set.
+       */
+      virtual void
+      setMetadataOptions(const MetadataOptions& options) = 0;
+
+      /**
+       * Get metadata options.
+       *
+       * @returns the current options.
+       */
+      virtual const MetadataOptions&
+      getMetadataOptions() const = 0;
+
+      /**
+       * Get metadata options.
+       *
+       * @returns the current options.
+       */
+      virtual MetadataOptions&
+      getMetadataOptions() = 0;
+
+    };
+
   }
 }
+
+#endif // OME_BIOFORMATS_METADATACONFIGURABLE_H
+
+/*
+ * Local Variables:
+ * mode:C++
+ * End:
+ */

@@ -1,6 +1,7 @@
 /*
  * #%L
- * OME-BIOFORMATS C++ library for image IO.
+ * OME-COMPAT C++ library for C++ compatibility/portability
+ * %%
  * Copyright © 2006 - 2013 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
@@ -35,41 +36,31 @@
  * #L%
  */
 
-#ifndef OME_BIOFORMATS_META_METADATAROOT_H
-#define OME_BIOFORMATS_META_METADATAROOT_H
+/**
+ * @file mstream.h Memory streams.  Similar to @c ifstream, this
+ * header defines imstream.
+ */
 
-#include <ome/compat/cstdint.h>
+#ifndef OME_COMPAT_MSTREAM_H
+#define OME_COMPAT_MSTREAM_H
+
+#include <ome/compat/config.h>
+
+#include <boost/iostreams/device/array.hpp>
+#include <boost/iostreams/stream.hpp>
 
 namespace ome
 {
-  namespace bioformats
-  {
-    namespace meta
-    {
 
-      /**
-       * Abstract base class for metadata root node.  This class
-       * provides no functionality; its purpose is to provide a common
-       * base type for the root node type of metadata storage
-       * implementations.
-       */
-      class MetadataRoot
-      {
-      protected:
-        /// Constructor.
-        MetadataRoot();
+  /// Character array stream source.
+  typedef boost::iostreams::basic_array_source<char> mstream_source;
 
-      public:
-        /// Destructor.
-        virtual
-        ~MetadataRoot();
-      };
+  /// Input memory stream.
+  typedef boost::iostreams::stream<mstream_source> imstream;
 
-    }
-  }
 }
 
-#endif // OME_BIOFORMATS_META_METADATAROOT_H
+#endif // OME_COMPAT_MSTREAM_H
 
 /*
  * Local Variables:
