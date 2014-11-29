@@ -1,7 +1,6 @@
 /*
  * #%L
- * OME-COMPAT C++ library for C++ compatibility/portability
- * %%
+ * OME-BIOFORMATS C++ library for image IO.
  * Copyright © 2006 - 2014 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
@@ -36,45 +35,27 @@
  * #L%
  */
 
-/**
- * @file ome/compat/module.h Module loading and introspection.
- *
- * This header defines functions for introspecting the runtime
- * location of modules.
- */
+#include <ome/bioformats/XMLTools.h>
 
-#ifndef OME_COMPAT_MODULE_H
-# define OME_COMPAT_MODULE_H
+#include <ome/xerces/ErrorReporter.h>
+#include <ome/xerces/Platform.h>
+#include <ome/xerces/String.h>
 
-# include <ome/compat/config.h>
-# include <ome/compat/filesystem.h>
+namespace xml = ome::xerces;
+
+namespace
+{
+
+  const std::string xsi_ns("http://www.w3.org/2001/XMLSchema-instance");
+  const std::string xml_schema_path("http://www.w3.org/2001/XMLSchema");
+
+}
 
 namespace ome
 {
-  namespace compat
+  namespace bioformats
   {
 
-    /**
-     * Get the runtime installation prefix path for this module.
-     *
-     * This is intended primarily for internal use, to allow discovery
-     * of the location of datafiles, loadable modules, etc.
-     *
-     * @param dtype the directory type to query.
-     * @returns the installation prefix path.
-     * @throws a @c std::runtime_error if the path could not be
-     * determined.
-     */
-    boost::filesystem::path
-    module_runtime_path(const std::string& dtype);
 
   }
 }
-
-#endif // OME_COMPAT_MODULE_H
-
-/*
- * Local Variables:
- * mode:C++
- * End:
- */
