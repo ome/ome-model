@@ -1,8 +1,8 @@
 /*
  * #%L
- * OME-XML Java library for working with OME-XML metadata structures.
+ * OME-XML C++ library for working with OME-XML metadata structures.
  * %%
- * Copyright (C) 2006 - 2014 Open Microscopy Environment:
+ * Copyright © 2014 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
  *   - University of Dundee
@@ -11,13 +11,13 @@
  * %%
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
+ *
  * 1. Redistributions of source code must retain the above copyright notice,
  *    this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright notice,
  *    this list of conditions and the following disclaimer in the documentation
  *    and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -29,38 +29,31 @@
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The views and conclusions contained in the software and documentation are
+ * those of the authors and should not be interpreted as representing official
+ * policies, either expressed or implied, of any organization.
  * #L%
  */
 
-package ome.xml.model.primitives;
+#include <ome/compat/module.h>
 
-/**
- * An integer whose constraints are bound to Java's 64-bit signed integer type
- * and a further positive restriction.
- *
- * @author callan
- */
-public class PositiveLong extends NonNegativeLong {
+#include <ome/xerces/EntityResolver.h>
+#include <ome/xerces/Platform.h>
 
-  public PositiveLong(Long value) {
-    super(value);
-    if (value == null || value.longValue() < 1) {
-      throw new IllegalArgumentException(
-          value + " must not be null and positive.");
-    }
+namespace
+{
+
+  // Register all OME-XML schemas.
+  ome::xerces::EntityResolver::RegisterCatalog
+  register_catalog()
+  {
+    ome::xerces::Platform platform;
+    return ome::xerces::EntityResolver::RegisterCatalog(ome::compat::module_runtime_path("bf-schema") / "catalog.xml");
   }
 
-  public Number getNumberValue() {
-    return value;
-  }
+  // Register of all OME-XML schemas.
+  ome::xerces::EntityResolver::RegisterCatalog
+  modelcatalog(register_catalog());
 
-  /**
-   * Returns an <code>PositiveLong</code> object holding the value of
-   * the specified string.
-   * @param s The string to be parsed.
-   * @return See above.
-   */
-  public static PositiveLong valueOf(String s) {
-    return new PositiveLong(Long.valueOf(s));
-  }
 }
