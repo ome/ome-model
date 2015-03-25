@@ -34,44 +34,26 @@
 # policies, either expressed or implied, of any organization.
 # #L%
 
-# Sphinx documentation generator
-find_program(SPHINX_BUILD sphinx-build)
-if (SPHINX_BUILD)
-  message(STATUS "Looking for sphinx-build - ${SPHINX_BUILD}")
-else()
-  message(STATUS "Looking for sphinx-build - not found")
-endif()
-if (SPHINX_BUILD)
-  message(STATUS "Generating manual pages with sphinx-build")
-  set(ENV{SOURCE_BRANCH})
-  set(ENV{SOURCE_USER} openmicroscopy)
-  set(ENV{BF_RELEASE} "${OME_VERSION}")
-  set(ENV{JENKINS_JOB})
-  set(ENV{JENKINS_CPP_JOB})
-  set(ENV{OMERODOC_URI})
-  set(ENV{SOURCE_BRANCH})
-  set(ENV{SOURCE_BRANCH})
-  file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/cpp/man")
-  execute_process(COMMAND ${SPHINX_BUILD} -q -b man
-                          "${PROJECT_SOURCE_DIR}/docs/sphinx" cpp/man
-                  RESULT_VARIABLE sphinx_man_fail
-                  ERROR_FILE cpp/man/sphinx.log)
-  if (sphinx_man_fail)
-    message(WARNING "Failed to generate manual pages; see cpp/man/sphinx.log")
-  else()
-    foreach(section 1 3 5 7 8)
-      file(GLOB manpages "${PROJECT_BINARY_DIR}/cpp/man/*.${section}")
-      if (manpages)
-      foreach (man ${manpages})
-        get_filename_component(manfile "${man}" NAME)
-        file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/cpp/man/man${section}")
-        file(RENAME "${man}" "${PROJECT_BINARY_DIR}/cpp/man/man${section}/${manfile}")
-        install(FILES "${PROJECT_BINARY_DIR}/cpp/man/man${section}/${manfile}"
-                DESTINATION "${CMAKE_INSTALL_FULL_MANDIR}/man${section}")
-        endforeach()
-      endif()
-    endforeach()
-  endif()
-else()
-  message(WARNING "Manual pages will not be generated or installed")
-endif()
+include_directories(${OME_TOPLEVEL_INCLUDES}
+                    ${Boost_INCLUDE_DIRS})
+
+set(exampledir "${PROJECT_SOURCE_DIR}/docs/sphinx/developers/cpp/examples")
+
+add_executable(model-io "${exampledir}/model-io.cpp")
+target_link_libraries(model-io ome-xml ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(metadata-io "${exampledir}/metadata-io.cpp")
+target_link_libraries(metadata-io ome-xml ome-bioformats ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(metadata-formatreader "${exampledir}/metadata-formatreader.cpp")
+target_link_libraries(metadata-formatreader ome-xml ome-bioformats ${CMAKE_THREAD_LIBS_INIT})
+
+add_executable(pixeldata "${exampledir}/pixeldata.cpp")
+target_link_libraries(pixeldata ome-bioformats ${CMAKE_THREAD_LIBS_INIT})
+
+if(BUILD_TESTS)
+  bf_add_test(examples/model-io model-io "${PROJECT_SOURCE_DIR}/components/specification/samples/${MODEL_VERSION}/18x24y1z5t1c8b-text.ome")
+  bf_add_test(examples/metadata-io metadata-io "${PROJECT_SOURCE_DIR}/components/specification/samples/${MODEL_VERSION}/18x24y1z5t1c8b-text.ome")
+  bf_add_test(examples/metadata-formatreader metadata-formatreader "${PROJECT_SOURCE_DIR}/components/specification/samples/${MODEL_VERSION}/set-1-meta-companion/18x24y5z1t1c8b-text-split-Z1.ome.tiff")
+  bf_add_test(examples/pixeldata pixeldata "${PROJECT_SOURCE_DIR}/components/specification/samples/${MODEL_VERSION}/18x24y1z5t1c8b-text.ome")
+endif(BUILD_TESTS)
