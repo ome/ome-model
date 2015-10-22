@@ -1,8 +1,8 @@
 /*
  * #%L
- * OME-COMMON C++ library for C++ compatibility/portability
+ * OME-XML C++ library for working with OME-XML metadata structures.
  * %%
- * Copyright © 2006 - 2015 Open Microscopy Environment:
+ * Copyright © 2015 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
  *   - University of Dundee
@@ -36,39 +36,51 @@
  * #L%
  */
 
-/**
- * @file ome/common/variant.h Variant type limit workaround.
- *
- * This header increases the Boost MPL size limits, if required.  Some
- * older versions of Boost.Variant throw runtime exceptions when using
- * Variant and MPL with a number of types over a compile-time limit.
- */
+#include <ome/xml/Document.h>
+#include <ome/xml/OMEEntityResolver.h>
 
-#ifndef OME_COMMON_VARIANT_H
-# define OME_COMMON_VARIANT_H
+namespace
+{
 
-# include <ome/common/config.h>
+  ome::xml::OMEEntityResolver&
+  get_resolver()
+  {
+    static ome::xml::OMEEntityResolver resolver;
+    return resolver;
+  }
 
-#include <boost/mpl/insert_range.hpp>
-#include <boost/mpl/joint_view.hpp>
-#include <boost/mpl/transform_view.hpp>
-#include <boost/mpl/vector.hpp>
-#include <boost/mpl/vector/vector0.hpp>
+}
 
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 105800
-# include <boost/type_traits/remove_cv.hpp>
-#endif
+namespace ome
+{
+  namespace xml
+  {
 
-#include <boost/variant/apply_visitor.hpp>
-//#include <boost/variant/multivisitors.hpp>
-#include <boost/variant/get.hpp>
-#include <boost/variant/variant.hpp>
+    ome::common::xml::dom::Document
+    createDocument(const boost::filesystem::path&                file,
+                   const ome::common::xml::dom::ParseParameters& params)
+    {
+      ome::xml::OMEEntityResolver& resolver = get_resolver();
+      return ome::common::xml::dom::createDocument(file, resolver, params);
+    }
 
-#endif // OME_COMMON_VARIANT_H
+    ome::common::xml::dom::Document
+    createDocument(const std::string&                            text,
+                   const ome::common::xml::dom::ParseParameters& params,
+                   const std::string&                            id)
+    {
+      ome::xml::OMEEntityResolver& resolver = get_resolver();
+      return ome::common::xml::dom::createDocument(text, resolver, params, id);
+    }
 
-/*
- * Local Variables:
- * mode:C++
- * End:
- */
+    ome::common::xml::dom::Document
+    createDocument(std::istream&                                 stream,
+                   const ome::common::xml::dom::ParseParameters& params,
+                   const std::string&                            id)
+    {
+      ome::xml::OMEEntityResolver& resolver = get_resolver();
+      return ome::common::xml::dom::createDocument(stream, resolver, params, id);
+    }
+
+  }
+}

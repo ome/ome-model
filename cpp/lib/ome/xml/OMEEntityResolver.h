@@ -1,8 +1,8 @@
 /*
  * #%L
- * OME-COMMON C++ library for C++ compatibility/portability
+ * OME-XML C++ library for working with OME-XML metadata structures.
  * %%
- * Copyright © 2006 - 2015 Open Microscopy Environment:
+ * Copyright © 2015 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
  *   - University of Dundee
@@ -36,36 +36,36 @@
  * #L%
  */
 
-/**
- * @file ome/common/variant.h Variant type limit workaround.
- *
- * This header increases the Boost MPL size limits, if required.  Some
- * older versions of Boost.Variant throw runtime exceptions when using
- * Variant and MPL with a number of types over a compile-time limit.
- */
+#ifndef OME_XML_MODEL_OMEENTITYRESOLVER_H
+#define OME_XML_MODEL_OMEENTITYRESOLVER_H
 
-#ifndef OME_COMMON_VARIANT_H
-# define OME_COMMON_VARIANT_H
+#include <ome/common/xml/EntityResolver.h>
 
-# include <ome/common/config.h>
+namespace ome
+{
+  namespace xml
+  {
 
-#include <boost/mpl/insert_range.hpp>
-#include <boost/mpl/joint_view.hpp>
-#include <boost/mpl/transform_view.hpp>
-#include <boost/mpl/vector.hpp>
-#include <boost/mpl/vector/vector0.hpp>
+    /**
+     * Entity resolver for the OME schemas.
+     *
+     * This resolver will resolve local copies of all the OME schemas
+     * distributed with Bio-Formats.
+     */
+    class OMEEntityResolver : public ome::common::xml::EntityResolver
+    {
+    public:
+      /// Constructor.
+      OMEEntityResolver();
 
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 105800
-# include <boost/type_traits/remove_cv.hpp>
-#endif
+      /// Destructor.
+      ~OMEEntityResolver();
+    };
 
-#include <boost/variant/apply_visitor.hpp>
-//#include <boost/variant/multivisitors.hpp>
-#include <boost/variant/get.hpp>
-#include <boost/variant/variant.hpp>
+  }
+}
 
-#endif // OME_COMMON_VARIANT_H
+#endif // OME_XML_MODEL_OMEENTITYRESOLVER_H
 
 /*
  * Local Variables:

@@ -1,8 +1,8 @@
 /*
  * #%L
- * OME-COMMON C++ library for C++ compatibility/portability
+ * OME-XML C++ library for working with OME-XML metadata structures.
  * %%
- * Copyright © 2006 - 2015 Open Microscopy Environment:
+ * Copyright © 2015 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
  *   - University of Dundee
@@ -36,39 +36,24 @@
  * #L%
  */
 
-/**
- * @file ome/common/variant.h Variant type limit workaround.
- *
- * This header increases the Boost MPL size limits, if required.  Some
- * older versions of Boost.Variant throw runtime exceptions when using
- * Variant and MPL with a number of types over a compile-time limit.
- */
+#include <ome/common/module.h>
 
-#ifndef OME_COMMON_VARIANT_H
-# define OME_COMMON_VARIANT_H
+#include <ome/xml/OMEEntityResolver.h>
 
-# include <ome/common/config.h>
+namespace ome
+{
+  namespace xml
+  {
 
-#include <boost/mpl/insert_range.hpp>
-#include <boost/mpl/joint_view.hpp>
-#include <boost/mpl/transform_view.hpp>
-#include <boost/mpl/vector.hpp>
-#include <boost/mpl/vector/vector0.hpp>
+    OMEEntityResolver::OMEEntityResolver():
+      ome::common::xml::EntityResolver()
+    {
+      registerCatalog(ome::common::module_runtime_path("bf-schema") / "catalog.xml");
+    }
 
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 105800
-# include <boost/type_traits/remove_cv.hpp>
-#endif
+    OMEEntityResolver::~OMEEntityResolver()
+    {
+    }
 
-#include <boost/variant/apply_visitor.hpp>
-//#include <boost/variant/multivisitors.hpp>
-#include <boost/variant/get.hpp>
-#include <boost/variant/variant.hpp>
-
-#endif // OME_COMMON_VARIANT_H
-
-/*
- * Local Variables:
- * mode:C++
- * End:
- */
+  }
+}
