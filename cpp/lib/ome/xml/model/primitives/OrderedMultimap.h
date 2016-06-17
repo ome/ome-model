@@ -36,10 +36,19 @@
  * #L%
  */
 
-#include <boost/format.hpp>
+#ifndef OME_XML_MODEL_PRIMITIVES_ORDEREDMULTIMAP_H
+#define OME_XML_MODEL_PRIMITIVES_ORDEREDMULTIMAP_H
 
-#include <ome/xml/model/ModelException.h>
-#include <ome/xml/model/detail/Parse.h>
+#include <string>
+#include <utility>
+
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/identity.hpp>
+#include <boost/multi_index/member.hpp>
+#include <boost/multi_index/indexed_by.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/hashed_index.hpp>
+#include <boost/multi_index/random_access_index.hpp>
 
 namespace ome
 {
@@ -47,20 +56,47 @@ namespace ome
   {
     namespace model
     {
-      namespace detail
+      namespace primitives
       {
 
-        void
-        parse_value_fail(const std::string& text,
-                         const std::string& klass,
-                         const std::string& property)
-        {
-          boost::format fmt("Failed to parse %1% %2% property value ‘%3%’");
-          fmt % klass % property % text;
-          throw ModelException(fmt.str());
-        }
+        /// Value type for ordered map (string key, string value).
+        typedef std::pair<std::string, std::string> ordered_map_value;
+
+        /// Type tag for ordered map insertion order index.
+        struct order_index{};
+
+        /// Type tag for ordered map key index.
+        struct key_index{};
+
+        /**
+         * Map preserving insertion order.
+         */
+        typedef boost::multi_index_container<
+          // value type
+          ordered_map_value,
+          // indexes
+          boost::multi_index::indexed_by<
+            // by insertion order
+            boost::multi_index::random_access<
+              boost::multi_index::tag<order_index>
+            >,
+            // by key
+            boost::multi_index::hashed_non_unique<
+              boost::multi_index::tag<key_index>,
+              boost::multi_index::member<ordered_map_value, std::string, &ordered_map_value::first>
+              >
+            >
+          > OrderedMultimap;
 
       }
     }
   }
 }
+
+#endif // OME_XML_MODEL_PRIMITIVES_ORDEREDMULTIMAP_H
+
+/*
+ * Local Variables:
+ * mode:C++
+ * End:
+ */
