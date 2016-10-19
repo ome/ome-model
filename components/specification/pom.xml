@@ -6,8 +6,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>ome</groupId>
-    <artifactId>pom-bio-formats</artifactId>
+    <groupId>org.openmicroscopy</groupId>
+    <artifactId>ome-model</artifactId>
     <version>5.3.0-SNAPSHOT</version>
     <relativePath>../..</relativePath>
   </parent>

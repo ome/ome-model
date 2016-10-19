@@ -5,37 +5,28 @@
     http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>ome</groupId>
-  <artifactId>pom-bio-formats</artifactId>
+  <groupId>org.openmicroscopy</groupId>
+  <artifactId>ome-model</artifactId>
   <version>5.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Bio-Formats projects</name>
-  <description>Umbrella project for the Bio-Formats software project.</description>
+  <name>OME Model</name>
+  <description>Contains the OME imaging metadata model specification, code generator and implementation</description>
   <url>http://www.openmicroscopy.org/site/products/bio-formats</url>
   <inceptionYear>2005</inceptionYear>
 
+  <licenses>
+    <license>
+      <name>Simplified BSD License</name>
+      <url>https://opensource.org/licenses/BSD-2-Clause</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
   <modules>
     <module>components/specification</module>
-    <module>components/forks/jai</module>
-    <module>components/forks/mdbtools</module>
-    <module>components/forks/poi</module>
-    <module>components/forks/turbojpeg</module>
-    <module>components/autogen</module>
-    <module>components/formats-api</module>
-    <module>components/formats-bsd</module>
-    <module>components/formats-gpl</module>
-    <module>components/bundles/bioformats_package</module>
-    <module>components/bio-formats-plugins</module>
-    <module>components/bundles/loci-tools</module>
-    <module>components/metakit</module>
-    <module>components/ome-xml</module>
-    <module>components/bio-formats-tools</module>
-    <module>components/test-suite</module>
-    <module>components/stubs/lwf-stubs</module>
-    <module>components/stubs/mipav</module>
     <module>components/xsd-fu</module>
-    <module>docs/sphinx</module>
+    <module>components/ome-xml</module>
   </modules>
 
   <properties>
