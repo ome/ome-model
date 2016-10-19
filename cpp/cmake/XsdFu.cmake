@@ -42,7 +42,7 @@ if(xsdfu-debug)
 endif()
 
 # The xsd-fu script
-set(XSD_FU_SCRIPT ${PROJECT_SOURCE_DIR}/components/xsd-fu/xsd-fu)
+set(XSD_FU_SCRIPT ${PROJECT_SOURCE_DIR}/xsd-fu/xsd-fu)
 
 # Command to invoke xsd-fu; python used explicitly to allow it to
 # function on windows
@@ -52,7 +52,7 @@ set(XSD_FU python ${XSD_FU_SCRIPT})
 set(MODEL_VERSION 2016-06)
 
 # Path to the model within the source tree
-set(MODEL_PATH ${PROJECT_SOURCE_DIR}/components/specification/released-schema/${MODEL_VERSION})
+set(MODEL_PATH ${PROJECT_SOURCE_DIR}/specification/released-schema/${MODEL_VERSION})
 
 # Files to use within the model directory
 set(MODEL_FILES

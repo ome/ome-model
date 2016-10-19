@@ -80,7 +80,7 @@ namespace
     ome::xml::OMETransformResolver tr;
     std::set<std::string> versions = tr.schema_versions();
 
-    path samplesdir(PROJECT_SOURCE_DIR "/components/specification/samples");
+    path samplesdir(PROJECT_SOURCE_DIR "/specification/samples");
     if (exists(samplesdir) && is_directory(samplesdir))
       {
         for (directory_iterator si(samplesdir); si != directory_iterator(); ++si)

@@ -239,34 +239,34 @@ add_custom_target(gensrc DEPENDS
   ${OME_XML_GENERATED_MODEL_ENUMS_HEADERS})
 
 # Find and install all schemas
-file(GLOB OME_SCHEMAS RELATIVE "${PROJECT_SOURCE_DIR}/components/specification/released-schema/"
-     "${PROJECT_SOURCE_DIR}/components/specification/released-schema/catalog.xml"
-     "${PROJECT_SOURCE_DIR}/components/specification/released-schema/2*/*.xsd"
-     "${PROJECT_SOURCE_DIR}/components/specification/released-schema/2*/catalog.xml"
-     "${PROJECT_SOURCE_DIR}/components/specification/released-schema/external/*.xsd"
-     "${PROJECT_SOURCE_DIR}/components/specification/released-schema/external/catalog.xml")
+file(GLOB OME_SCHEMAS RELATIVE "${PROJECT_SOURCE_DIR}/specification/released-schema/"
+     "${PROJECT_SOURCE_DIR}/specification/released-schema/catalog.xml"
+     "${PROJECT_SOURCE_DIR}/specification/released-schema/2*/*.xsd"
+     "${PROJECT_SOURCE_DIR}/specification/released-schema/2*/catalog.xml"
+     "${PROJECT_SOURCE_DIR}/specification/released-schema/external/*.xsd"
+     "${PROJECT_SOURCE_DIR}/specification/released-schema/external/catalog.xml")
 foreach(schema ${OME_SCHEMAS})
   get_filename_component(SCHEMA_RELEASE ${schema} PATH)
-  install(FILES "${PROJECT_SOURCE_DIR}/components/specification/released-schema/${schema}"
+  install(FILES "${PROJECT_SOURCE_DIR}/specification/released-schema/${schema}"
           DESTINATION "${OME_XML_INSTALL_SCHEMADIR}/${SCHEMA_RELEASE}"
           COMPONENT "runtime")
 endforeach(schema)
 
 # Find and install all transforms
-file(GLOB OME_TRANSFORMS RELATIVE "${PROJECT_SOURCE_DIR}/components/specification/transforms/"
-     "${PROJECT_SOURCE_DIR}/components/specification/transforms/*.xsl")
+file(GLOB OME_TRANSFORMS RELATIVE "${PROJECT_SOURCE_DIR}/specification/transforms/"
+     "${PROJECT_SOURCE_DIR}/specification/transforms/*.xsl")
 foreach(transform ${OME_TRANSFORMS})
   get_filename_component(TRANSFORM ${transform} PATH)
-  install(FILES "${PROJECT_SOURCE_DIR}/components/specification/transforms/${transform}"
+  install(FILES "${PROJECT_SOURCE_DIR}/specification/transforms/${transform}"
           DESTINATION "${OME_XML_INSTALL_TRANSFORMDIR}/${TRANSFORM}"
           COMPONENT "runtime")
 endforeach(transform)
 
 # Find and install all samples
-file(GLOB_RECURSE OME_SAMPLES RELATIVE "${PROJECT_SOURCE_DIR}/components/specification/samples/" "${PROJECT_SOURCE_DIR}/components/specification/samples/*")
+file(GLOB_RECURSE OME_SAMPLES RELATIVE "${PROJECT_SOURCE_DIR}/specification/samples/" "${PROJECT_SOURCE_DIR}/specification/samples/*")
 foreach(sample ${OME_SAMPLES})
   get_filename_component(SAMPLE_FILE ${sample} PATH)
-  install(FILES "${PROJECT_SOURCE_DIR}/components/specification/samples/${sample}"
+  install(FILES "${PROJECT_SOURCE_DIR}/specification/samples/${sample}"
           DESTINATION "${OME_XML_INSTALL_SAMPLEDIR}/${SAMPLE_FILE}"
           COMPONENT "runtime")
 endforeach(sample)

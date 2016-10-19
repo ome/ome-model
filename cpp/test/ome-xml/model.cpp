@@ -83,7 +83,7 @@ namespace
 
     /// @todo Use the correct model version when available.
     /// @todo Use all model versions when transforms available.
-    path dir(PROJECT_SOURCE_DIR "/components/specification/samples/" "2015-01");
+    path dir(PROJECT_SOURCE_DIR "/specification/samples/" "2015-01");
     if (exists(dir) && is_directory(dir))
       {
         for(directory_iterator i(dir); i != directory_iterator(); ++i)

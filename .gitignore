@@ -15,7 +15,6 @@ OME ReaderWriter Service Tests
 OMEXMLTests
 artifacts
 build
-components/*/utils/*.class
 emailable-report.html
 index.html
 target
