@@ -94,10 +94,10 @@
                 <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${basedir}/target/classes/released-schema</outputDirectory>
+              <outputDirectory>${basedir}/target/classes/src/main/resources/released-schema</outputDirectory>
               <resources>
               <resource>
-                <directory>${basedir}/released-schema</directory>
+                <directory>${basedir}/src/main/resources/released-schema</directory>
                 <includes>
                   <include>**/*</include>
                 </includes>

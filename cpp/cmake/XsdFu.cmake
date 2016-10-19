@@ -52,7 +52,7 @@ set(XSD_FU python ${XSD_FU_SCRIPT})
 set(MODEL_VERSION 2016-06)
 
 # Path to the model within the source tree
-set(MODEL_PATH ${PROJECT_SOURCE_DIR}/specification/released-schema/${MODEL_VERSION})
+set(MODEL_PATH ${PROJECT_SOURCE_DIR}/specification/src/main/resources/released-schema/${MODEL_VERSION})
 
 # Files to use within the model directory
 set(MODEL_FILES

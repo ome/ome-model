@@ -43,7 +43,7 @@ set(OME_TOPLEVEL_INCLUDES
 function(ome_xml_add_test)
   add_test(${ARGV})
   set_tests_properties(${ARGV0}
-    PROPERTIES ENVIRONMENT "OME_XML_SCHEMADIR=${PROJECT_SOURCE_DIR}/specification/released-schema;OME_XML_TRANSFORMDIR=${PROJECT_SOURCE_DIR}/specification/transforms;OME_XML_SAMPLEDIR=${PROJECT_SOURCE_DIR}/specification/samples")
+    PROPERTIES ENVIRONMENT "OME_XML_SCHEMADIR=${PROJECT_SOURCE_DIR}/specification/src/main/resources/released-schema;OME_XML_TRANSFORMDIR=${PROJECT_SOURCE_DIR}/specification/transforms;OME_XML_SAMPLEDIR=${PROJECT_SOURCE_DIR}/specification/samples")
 endfunction()
 
 add_subdirectory(lib)
