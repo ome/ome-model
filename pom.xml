@@ -586,15 +586,13 @@
   </pluginRepositories>
 
   <distributionManagement>
-    <repository>
-      <id>ome.staging</id>
-      <name>OME Staging Repository</name>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.staging</url>
-    </repository>
     <snapshotRepository>
-      <id>ome.snapshots</id>
-      <name>OME Snapshots Repository</name>
-      <url>http://artifacts.openmicroscopy.org/artifactory/ome.snapshots</url>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
     </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
   </distributionManagement>
 </project>
