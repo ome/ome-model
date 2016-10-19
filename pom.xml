@@ -527,10 +527,10 @@
   </mailingLists>
 
   <scm>
-    <connection>scm:git:git://github.com/openmicroscopy/bioformats</connection>
-    <developerConnection>scm:git:git@github.com:openmicroscopy/bioformats</developerConnection>
+    <connection>scm:git:https://github.com/ome/ome-common-java</connection>
+    <developerConnection>scm:git:git@github.com:ome/ome-common-java</developerConnection>
     <tag>HEAD</tag>
-    <url>http://github.com/openmicroscopy/bioformats</url>
+    <url>http://github.com/ome/ome-common-java</url>
   </scm>
 
   <!-- NB: for parent project -->
