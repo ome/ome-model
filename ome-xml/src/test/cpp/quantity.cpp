@@ -48,7 +48,7 @@ namespace
   test_map
   read_test_data()
   {
-    const boost::filesystem::path testdatafile(PROJECT_SOURCE_DIR "/cpp/test/ome-xml/data/units");
+    const boost::filesystem::path testdatafile(PROJECT_SOURCE_DIR "/ome-xml/src/test/cpp/data/units");
 
     boost::iostreams::stream<boost::iostreams::file_descriptor> is(testdatafile);
     is.imbue(std::locale::classic());

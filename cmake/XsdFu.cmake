@@ -59,7 +59,7 @@ set(MODEL_FILES
     ${MODEL_PATH}/ome.xsd)
 
 # Output directory for source generation
-set(GEN_DIR ${PROJECT_BINARY_DIR}/cpp/lib)
+set(GEN_DIR ${PROJECT_BINARY_DIR}/ome-xml/src/main/cpp)
 
 # Default arguments to use when running xsd-fu
 set(XSD_FU_ARGS ${XSDFU_DEBUG} --language=C++ --output-directory=${GEN_DIR} ${MODEL_FILES})

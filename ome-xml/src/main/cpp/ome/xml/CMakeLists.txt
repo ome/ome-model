@@ -163,8 +163,8 @@ add_library(ome-xml
             ${OME_XML_HEADERS})
 
 target_include_directories(ome-xml PUBLIC
-                           $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/cpp/lib>
-                           $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/cpp/lib>)
+                           $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/ome-xml/src/main/cpp>
+                           $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/ome-xml/src/main/cpp>)
 
 target_link_libraries(ome-xml OME::Compat OME::Common)
 target_link_libraries(ome-xml Boost::date_time)
@@ -228,7 +228,7 @@ install(FILES ${OME_XML_STATIC_PRIMITIVES_HEADERS} ${OME_XML_GENERATED_PRIMITIVE
 # Dump header list for testing
 header_include_list_write(OME_XML_PUBLIC_STATIC_HEADERS
                           OME_XML_PUBLIC_GENERATED_HEADERS
-                          ome/xml ${PROJECT_BINARY_DIR}/cpp/test/ome-xml)
+                          ome/xml ${PROJECT_BINARY_DIR}/ome-xml/src/test/cpp)
 
 # Add target to generate all xsd-fu sources
 add_custom_target(gensrc DEPENDS
@@ -253,11 +253,11 @@ foreach(schema ${OME_SCHEMAS})
 endforeach(schema)
 
 # Find and install all transforms
-file(GLOB OME_TRANSFORMS RELATIVE "${PROJECT_SOURCE_DIR}/specification/transforms/"
-     "${PROJECT_SOURCE_DIR}/specification/transforms/*.xsl")
+file(GLOB OME_TRANSFORMS RELATIVE "${PROJECT_SOURCE_DIR}/specification/src/main/resources/transforms/"
+     "${PROJECT_SOURCE_DIR}/specification/src/main/resources/transforms/*.xsl")
 foreach(transform ${OME_TRANSFORMS})
   get_filename_component(TRANSFORM ${transform} PATH)
-  install(FILES "${PROJECT_SOURCE_DIR}/specification/transforms/${transform}"
+  install(FILES "${PROJECT_SOURCE_DIR}/specification/src/main/resources/transforms/${transform}"
           DESTINATION "${OME_XML_INSTALL_TRANSFORMDIR}/${TRANSFORM}"
           COMPONENT "runtime")
 endforeach(transform)

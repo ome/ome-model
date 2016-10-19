@@ -172,7 +172,7 @@ public:
 
 TEST_F(TransformQueryTest, GraphViz)
 {
-  boost::filesystem::path dotfile = PROJECT_BINARY_DIR "/cpp/test/ome-xml/data/ome-transforms.dot";
+  boost::filesystem::path dotfile = PROJECT_BINARY_DIR "/ome-xml/src/test/cpp/data/ome-transforms.dot";
   boost::filesystem::path dotdir = dotfile.parent_path();
   if (!exists(dotdir) && !is_directory(dotdir) && !create_directories(dotdir))
     throw std::runtime_error("Data directory unavailable and could not be created");
@@ -185,7 +185,7 @@ TEST_F(TransformQueryTest, GraphViz)
 
 TEST_F(TransformQueryTest, OmeTransformsXML)
 {
-  boost::filesystem::path xmlfile = PROJECT_BINARY_DIR "/cpp/test/ome-xml/data/ome-transforms.xml";
+  boost::filesystem::path xmlfile = PROJECT_BINARY_DIR "/ome-xml/src/test/cpp/data/ome-transforms.xml";
   boost::filesystem::path xmldir = xmlfile.parent_path();
   if (!exists(xmldir) && !is_directory(xmldir) && !create_directories(xmldir))
     throw std::runtime_error("Data directory unavailable and could not be created");

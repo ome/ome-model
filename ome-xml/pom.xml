@@ -9,7 +9,7 @@
     <groupId>org.openmicroscopy</groupId>
     <artifactId>ome-model</artifactId>
     <version>5.3.0-SNAPSHOT</version>
-    <relativePath>../..</relativePath>
+    <relativePath>..</relativePath>
   </parent>
 
   <artifactId>ome-xml</artifactId>
@@ -28,11 +28,8 @@
   </licenses>
 
   <dependencies>
-    <dependency>
-      <groupId>org.openmicroscopy</groupId>
-      <artifactId>specification</artifactId>
-      <version>5.3.0-SNAPSHOT</version>
-    </dependency>
+    <!-- There should be a specification dependency here, but
+         there's a cyclic reference which needs to be resolved -->
 
     <dependency>
       <groupId>org.openmicroscopy</groupId>
@@ -81,7 +78,7 @@
   </dependencies>
 
   <properties>
-    <project.rootdir>${basedir}/../..</project.rootdir>
+    <project.rootdir>${basedir}/..</project.rootdir>
     <xsdfu.script>../xsd-fu/xsd-fu</xsdfu.script>
     <xsdfu.modelpath>${basedir}/target/generated-sources/xsd-fu</xsdfu.modelpath>
     <xsdfu.metadatapath>${basedir}/target/generated-sources/xsd-fu</xsdfu.metadatapath>
@@ -165,11 +162,8 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <suiteXmlFiles>
-            <suiteXmlFile>test/ome/testng.xml</suiteXmlFile>
+            <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
           </suiteXmlFiles>
-          <additionalClasspathElements>
-            <additionalClasspathElement>${basedir}/../../ant/</additionalClasspathElement>
-          </additionalClasspathElements>
         </configuration>
       </plugin>
       <plugin>

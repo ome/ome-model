@@ -55,8 +55,8 @@ if(BUILD_TESTS)
               ${ome_test_generated_headers})
 
   target_include_directories(ome-test PUBLIC
-                             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/cpp/lib>
-                             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/cpp/lib>)
+                             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/ome-xml/src/main/cpp>
+                             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/ome-xml/src/main/cpp>)
 
   target_link_libraries(ome-test OME::Common GTest::GTest ${CMAKE_THREAD_LIBS_INIT})
   set_target_properties(ome-test PROPERTIES LINKER_LANGUAGE CXX)
@@ -64,5 +64,5 @@ if(BUILD_TESTS)
   add_library(OME::Test ALIAS ome-test)
 
   # Dump header list for testing
-  header_include_list_write(ome_test_static_headers ome_test_generated_headers ome/test ${PROJECT_BINARY_DIR}/cpp/test/ome-test)
+  header_include_list_write(ome_test_static_headers ome_test_generated_headers ome/test ${PROJECT_BINARY_DIR}/ome-xml/src/test/cpp/ome-test)
 endif(BUILD_TESTS)

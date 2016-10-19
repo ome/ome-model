@@ -55,7 +55,7 @@ function(header_include_list_write source_headers binary_headers source_prefix t
 
   foreach(header ${${binary_headers}})
     get_filename_component(realpath "${header}" REALPATH)
-    file(RELATIVE_PATH header ${PROJECT_BINARY_DIR}/cpp/lib ${header})
+    file(RELATIVE_PATH header ${PROJECT_BINARY_DIR}/ome-xml/src/main/cpp ${header})
     list(APPEND includes "${header}")
     list(APPEND files "${realpath}")
   endforeach(header)
@@ -80,7 +80,7 @@ endfunction(header_include_list_write)
 
 function(header_test_from_file component library path)
   include(${CMAKE_CURRENT_BINARY_DIR}/Headers.cmake)
-  set(headerdir ${PROJECT_BINARY_DIR}/cpp/test/${component}/headers)
+  set(headerdir ${PROJECT_BINARY_DIR}/ome-xml/src/test/cpp/${component}/headers)
   file(MAKE_DIRECTORY ${headerdir})
 
   foreach(header ${TEST_INCLUDES})
@@ -91,7 +91,7 @@ function(header_test_from_file component library path)
     # class static member.
     foreach(repeat 1 2)
     string(REPLACE "/" "_" genheader ${header})
-      string(REPLACE "${PROJECT_SOURCE_DIR}/cpp/src/" "" include ${header})
+      string(REPLACE "${PROJECT_SOURCE_DIR}/src/" "" include ${header})
       string(REPLACE "${headerdir}/" "" include ${include})
       string(REGEX REPLACE "\\.h$" "-${repeat}.cpp" genheader ${genheader})
       string(REGEX REPLACE "[/.-]" "_" safeheader ${include})

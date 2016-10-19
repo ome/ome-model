@@ -45,11 +45,11 @@ enable_language(CXX)
 enable_language(C)
 
 list(APPEND CMAKE_MODULE_PATH
-     "${CMAKE_CURRENT_LIST_DIR}/cpp/cmake")
+     "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-include("${CMAKE_CURRENT_LIST_DIR}/cpp/cmake/BioFormatsCommon.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/cmake/BioFormatsCommon.cmake")
 
-include(cpp/cmake/Version.cmake)
+include(cmake/Version.cmake)
 ome_project_version("OME XML C++" "${CMAKE_CURRENT_SOURCE_DIR}")
 
 project(ome-xml
@@ -131,22 +131,22 @@ foreach(dir
 endforeach()
 
 add_subdirectory(docs/doxygen)
-add_subdirectory(cpp)
+add_subdirectory(ome-xml)
 
 set(LIBRARY_PREFIX OME)
-file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/cpp/bin")
-configure_file(${PROJECT_SOURCE_DIR}/cpp/cmake/TemplateShellConfig.cmake.in
+file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
+configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateShellConfig.cmake.in
                ${PROJECT_BINARY_DIR}/config @ONLY)
-configure_file(${PROJECT_SOURCE_DIR}/cpp/cmake/TemplateInternalShellWrapper.cmake.in
-               ${PROJECT_BINARY_DIR}/cpp/cmake/bf-test @ONLY)
-file(COPY ${PROJECT_BINARY_DIR}/cpp/cmake/bf-test
+configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateInternalShellWrapper.cmake.in
+               ${PROJECT_BINARY_DIR}/cmake/bf-test @ONLY)
+file(COPY ${PROJECT_BINARY_DIR}/cmake/bf-test
      DESTINATION ${PROJECT_BINARY_DIR}
      FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
      GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 if(WIN32)
-  configure_file(${PROJECT_SOURCE_DIR}/cpp/cmake/TemplateCmdConfig.cmake.in
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateCmdConfig.cmake.in
                  ${PROJECT_BINARY_DIR}/config.bat @ONLY)
-  configure_file(${PROJECT_SOURCE_DIR}/cpp/cmake/TemplateInternalCmdWrapper.cmake.in
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateInternalCmdWrapper.cmake.in
                  ${PROJECT_BINARY_DIR}/bf-test.bat @ONLY)
   endif()
 return()

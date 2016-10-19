@@ -311,7 +311,7 @@ class Java(Language):
         self.source_suffix = ".java"
         self.header_suffix = None
         self.converter_name = "MetadataConverter"
-        self.converter_dir = "ome-xml/src/ome/xml/meta"
+        self.converter_dir = "ome-xml/src/main/java/ome/xml/meta"
 
         self.omexml_model_package = "ome.xml.model"
         self.omexml_model_enums_package = "ome.xml.model.enums"
@@ -402,7 +402,7 @@ class CXX(Language):
         self.source_suffix = ".cpp"
         self.header_suffix = ".h"
         self.converter_name = "Convert"
-        self.converter_dir = "cpp/lib/ome/xml/meta"
+        self.converter_dir = "ome-xml/src/main/cpp/ome/xml/meta"
 
         self.omexml_model_package = "ome::xml::model"
         self.omexml_model_enums_package = "ome::xml::model::enums"

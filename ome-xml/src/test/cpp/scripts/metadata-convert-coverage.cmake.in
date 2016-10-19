@@ -9,9 +9,9 @@ set -e
 # Metadata store and retrieve symbols
 store_symbols()
 {
-    grep "^ *get" "@PROJECT_BINARY_DIR@/cpp/lib/ome/xml/meta/MetadataRetrieve.h" | \
+    grep "^ *get" "@PROJECT_BINARY_DIR@/ome-xml/src/main/cpp/ome/xml/meta/MetadataRetrieve.h" | \
       sed -e 's;^ *\(get[a-zA-Z0-9][a-zA-Z0-9]*\).*;\1;'
-    grep "^ *set" "@PROJECT_BINARY_DIR@/cpp/lib/ome/xml/meta/MetadataStore.h" | \
+    grep "^ *set" "@PROJECT_BINARY_DIR@/ome-xml/src/main/cpp/ome/xml/meta/MetadataStore.h" | \
        sed -e 's;^ *\(set[a-zA-Z0-9][a-zA-Z0-9]*\).*;\1;'
 }
 
@@ -20,7 +20,7 @@ convert_symbols()
 {
 	nl='\
 '
-    egrep "&M[RS]::|src\." "@PROJECT_SOURCE_DIR@/cpp/lib/ome/xml/meta/Convert.cpp" | sed -e "s;&M[RS]::;$nl;g" -e "s;src\.;$nl;g" | \
+    egrep "&M[RS]::|src\." "@PROJECT_SOURCE_DIR@/ome-xml/src/main/cpp/ome/xml/meta/Convert.cpp" | sed -e "s;&M[RS]::;$nl;g" -e "s;src\.;$nl;g" | \
       grep "^[gs]et" | \
       sed -e "s;^\([gs]et[a-zA-Z0-9][a-zA-Z0-9]*\).*;\1;"
 }

@@ -58,7 +58,7 @@ if(BUILD_TESTS)
     unset(GTEST_FLAG_LIST)
 
     # Build gtest using its own CMake support.
-    add_subdirectory("${GTEST_SOURCE}" "${PROJECT_BINARY_DIR}/cpp/ext/gtest")
+    add_subdirectory("${GTEST_SOURCE}" "${PROJECT_BINARY_DIR}/ext/gtest")
 
     # Restore saved flags.
     set(CMAKE_CXX_FLAGS "${SAVED_CMAKE_CXX_FLAGS}")
