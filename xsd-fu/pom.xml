@@ -10,7 +10,7 @@
   <version>5.3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>Code generator</name>
+  <name>xsd-fu code generator</name>
   <description>Metadata model code generation from XML schema</description>
   <url>http://www.openmicroscopy.org/site/products/bio-formats</url>
   <inceptionYear>2005</inceptionYear>
@@ -34,7 +34,7 @@
     <plugins>
       <plugin>
 	<artifactId>maven-clean-plugin</artifactId>
-	<version>2.5</version>
+	<version>3.0.0</version>
 	<configuration>
 	  <filesets>
 	    <fileset>
@@ -48,5 +48,9 @@
       </plugin>
     </plugins>
   </build>
+
+  <prerequisites>
+    <maven>3.0.4</maven>
+  </prerequisites>
 
 </project>

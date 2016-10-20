@@ -283,12 +283,12 @@
         </plugin>
 
         <!-- Exec Maven plugin -
-        http://mojo.codehaus.org/exec-maven-plugin/
+        http://www.mojohaus.org/exec-maven-plugin/
         This plugin launches a Java class using Maven. -->
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
-          <version>1.2.1</version>
+          <version>1.5.0</version>
         </plugin>
 
         <!-- Versions Maven plugin -
@@ -345,7 +345,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -379,7 +379,7 @@
   </reporting>
 
   <prerequisites>
-    <maven>3.0</maven>
+    <maven>3.0.4</maven>
   </prerequisites>
 
   <organization>

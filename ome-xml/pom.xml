@@ -14,7 +14,7 @@
 
   <artifactId>ome-xml</artifactId>
 
-  <name>OME-XML</name>
+  <name>OME XML library</name>
   <description>A library for working with OME-XML metadata structures.</description>
   <url>http://www.openmicroscopy.org/site/support/ome-model/ome-xml/java-library.html</url>
   <inceptionYear>2006</inceptionYear>
@@ -30,12 +30,6 @@
   <dependencies>
     <!-- There should be a specification dependency here, but
          there's a cyclic reference which needs to be resolved -->
-
-    <dependency>
-      <groupId>org.openmicroscopy</groupId>
-      <artifactId>xsd-fu</artifactId>
-      <version>5.3.0-SNAPSHOT</version>
-    </dependency>
 
     <dependency>
       <groupId>org.openmicroscopy</groupId>
@@ -89,6 +83,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
         <executions>
           <!-- Generate the OME model object classes -->
           <execution>
@@ -132,7 +127,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.4</version>
+        <version>1.12</version>
         <executions>
           <execution>
             <id>add-source</id>
