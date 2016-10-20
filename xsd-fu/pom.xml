@@ -5,16 +5,12 @@
     http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>org.openmicroscopy</groupId>
-    <artifactId>ome-model</artifactId>
-    <version>5.3.0-SNAPSHOT</version>
-    <relativePath>..</relativePath>
-  </parent>
-
+  <groupId>org.openmicroscopy</groupId>
   <artifactId>xsd-fu</artifactId>
+  <version>5.3.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
 
-  <name>XSD-FU</name>
+  <name>Code generator</name>
   <description>Metadata model code generation from XML schema</description>
   <url>http://www.openmicroscopy.org/site/products/bio-formats</url>
   <inceptionYear>2005</inceptionYear>
@@ -28,13 +24,11 @@
   </licenses>
 
   <dependencies>
-    <!-- There should be a specification dependency here, but
-         there's a cyclic reference which needs to be resolved -->
+    <!-- There should be a specification dependency here, especially
+         if we put any build logic here, but there's a cyclic
+         reference which needs to be resolved between specification
+         and ome-xml -->
   </dependencies>
-
-  <properties>
-    <project.rootdir>${basedir}/..</project.rootdir>
-  </properties>
 
   <build>
     <plugins>

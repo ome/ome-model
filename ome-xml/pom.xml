@@ -14,7 +14,7 @@
 
   <artifactId>ome-xml</artifactId>
 
-  <name>OME-XML Java library</name>
+  <name>OME-XML</name>
   <description>A library for working with OME-XML metadata structures.</description>
   <url>http://www.openmicroscopy.org/site/support/ome-model/ome-xml/java-library.html</url>
   <inceptionYear>2006</inceptionYear>
@@ -104,7 +104,7 @@
                 <argument>omexml_model_all</argument>
                 <argument>--output-directory=${xsdfu.modelpath}/</argument>
                 <argument>--print-generated</argument>
-                <argument>${project.rootdir}/${xsdfu.ome}</argument>
+                <argument>${project.rootdir}/${ome.model.omeschema}</argument>
               </arguments>
             </configuration>
           </execution>
@@ -123,7 +123,7 @@
                 <argument>omexml_metadata_all</argument>
                 <argument>--output-directory=${xsdfu.metadatapath}/</argument>
                 <argument>--print-generated</argument>
-                <argument>${project.rootdir}/${xsdfu.ome}</argument>
+                <argument>${project.rootdir}/${ome.model.omeschema}</argument>
               </arguments>
             </configuration>
           </execution>
@@ -181,51 +181,6 @@
         </configuration>
       </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>exec-maven-plugin</artifactId>
-                    <versionRange>[1.2.1,)</versionRange>
-                    <goals>
-                      <goal>exec</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <execute>
-                      <runOnIncremental>false</runOnIncremental>
-                    </execute>
-                  </action>
-                </pluginExecution>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>
-                      build-helper-maven-plugin
-                    </artifactId>
-                    <versionRange>[1.4,)</versionRange>
-                    <goals>
-                      <goal>add-source</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
   <developers>
