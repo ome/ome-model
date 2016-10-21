@@ -147,7 +147,7 @@ contains() {
 }
 
 devmarker="DEV"
-root=published
+root=target/published
 
 
 # Clean up
@@ -261,7 +261,7 @@ done
 
 # Transforms folder
 path="${root}/Transforms/"
-dir="transforms"
+dir="src/main/resources/transforms"
 mkdir -p "$path"
 for transform in "$dir"/*.xsl
 do
@@ -535,9 +535,9 @@ EOF
 }
 
 for type in $(find "${root}" -mindepth 1 -maxdepth 1 -type d | sed -e 's;^published/;;'); do
-    if [ $type != "Transforms" ]; then
+    if [ "$(basename $type)" != "Transforms" ]; then
         echo "HTML [2] -> $root/${type}/index.html"
-        createintermediateindex "$type" > "$root/${type}/index.html"
+        createintermediateindex "$(basename $type)" > "${type}/index.html"
     fi
 done
 
