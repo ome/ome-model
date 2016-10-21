@@ -120,7 +120,7 @@
     - Board of Regents of the University of Wisconsin-Madison
     - Glencoe Software, Inc.
     - University of Dundee</organizationName>
-            <projectName>Common package for I/O and related utilities</projectName>
+            <projectName>Contains the OME imaging metadata model specification, code generator and implementation</projectName>
             <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
             <canUpdateDescription>true</canUpdateDescription>
             <!-- NB: Avoid stomping on variant copyright holders. -->
@@ -415,10 +415,10 @@
   </mailingLists>
 
   <scm>
-    <connection>scm:git:https://github.com/ome/ome-common-java</connection>
-    <developerConnection>scm:git:git@github.com:ome/ome-common-java</developerConnection>
+    <connection>scm:git:https://github.com/ome/ome-model</connection>
+    <developerConnection>scm:git:git@github.com:ome/ome-model</developerConnection>
     <tag>HEAD</tag>
-    <url>http://github.com/ome/ome-common-java</url>
+    <url>http://github.com/ome/ome-model</url>
   </scm>
 
   <pluginRepositories>
