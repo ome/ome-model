@@ -48,6 +48,10 @@
       <resource>
         <directory>src/main/resources</directory>
         <filtering>false</filtering>
+        <excludes>
+          <exclude>transforms/internal/**</exclude>
+          <exclude>transforms/util/**</exclude>
+        </excludes>
       </resource>
     </resources>
     <plugins>
