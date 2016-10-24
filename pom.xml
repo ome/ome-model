@@ -25,7 +25,6 @@
 
   <modules>
     <module>specification</module>
-    <module>xsd-fu</module>
     <module>ome-xml</module>
   </modules>
 
