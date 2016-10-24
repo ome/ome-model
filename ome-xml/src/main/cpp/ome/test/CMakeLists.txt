@@ -34,27 +34,35 @@
 # policies, either expressed or implied, of any organization.
 # #L%
 
-if(BUILD_DOXYGEN)
-  set(OME_COMMON_TAGFILE "${CMAKE_INSTALL_FULL_DATADIR}/doc/ome-common/api/ome-common.tag")
+if(BUILD_TESTS)
+  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
+                 ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ome-xml.dox.cmake
-                 ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.dox @ONLY)
+  set(ome_test_static_headers
+      io.h
+      test.h)
 
-  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log
-                     COMMAND ${CMAKE_COMMAND} -E remove_directory ome-xml
-                     COMMAND ${CMAKE_COMMAND} -E make_directory ome-xml
-                     COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.dox
-                     DEPENDS gensrc ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.dox)
+  set(ome_test_generated_headers
+      ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-  add_custom_target(doc-check
-                    COMMAND ${CMAKE_COMMAND} -Dlogfile=${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log -P ${PROJECT_SOURCE_DIR}/cmake/DoxygenCheck.cmake
-                    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log)
+  set(ome_test_sources
+      io.cpp
+      main.cpp)
 
-  add_custom_target(doc-api ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log doc-check)
-  # For backward compatibility
-  add_custom_target(doc DEPENDS doc-api)
+  add_library(ome-test STATIC
+              ${ome_test_sources}
+              ${ome_test_static_headers}
+              ${ome_test_generated_headers})
 
-  install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/ome-xml/"
-          DESTINATION "${CMAKE_INSTALL_DOCDIR}/api"
-          COMPONENT "development")
-endif(BUILD_DOXYGEN)
+  target_include_directories(ome-test PUBLIC
+                             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/ome-xml/src/main/cpp>
+                             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/ome-xml/src/main/cpp>)
+
+  target_link_libraries(ome-test OME::Common GTest::GTest ${CMAKE_THREAD_LIBS_INIT})
+  set_target_properties(ome-test PROPERTIES LINKER_LANGUAGE CXX)
+
+  add_library(OME::Test ALIAS ome-test)
+
+  # Dump header list for testing
+  header_include_list_write(ome_test_static_headers ome_test_generated_headers ome/test ${PROJECT_BINARY_DIR}/ome-xml/src/test/cpp/ome-test)
+endif(BUILD_TESTS)

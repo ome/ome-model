@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -e
+
+export OME_XML_MANDIR="@PROJECT_BINARY_DIR@/man"
+export OME_XML_SCHEMADIR="@PROJECT_SOURCE_DIR@/specification/src/main/resources/released-schema"
+export OME_XML_TRANSFORMDIR="@PROJECT_SOURCE_DIR@/specification/transforms"
+export OME_XML_SAMPLEDIR="@PROJECT_SOURCE_DIR@/specification/samples"
+
+cmd=$1
+shift
+
+exec "$cmd" "$@"

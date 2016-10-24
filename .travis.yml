@@ -1,8 +1,5 @@
 language: java
 
-# This (sudo: false) is needed to "run on container-based infrastructure" on
-# which cache: is available
-# http://docs.travis-ci.com/user/workers/container-based-infrastructure/
 sudo: false
 
 # http://docs.travis-ci.com/user/caching/#Arbitrary-directories
@@ -10,26 +7,9 @@ cache:
   directories:
   - $HOME/.m2
 
-addons:
-  apt_packages:
-    - git
-
 jdk:
   - oraclejdk8
   - openjdk7
 
-env:
-  - BUILD=maven
-  - BUILD=ant
-
 matrix:
   fast_finish: true
-
-before_install:
-  - if [[ $BUILD == 'ant' ]]; then pip install --user flake8 Sphinx==1.2.3; fi
-
-install:
-  - if [[ $BUILD != 'ant' ]]; then git fetch --tags; fi
-
-script:
-  - ./tools/test-build $BUILD

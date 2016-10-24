@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+    http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.openmicroscopy</groupId>
+  <artifactId>xsd-fu</artifactId>
+  <version>5.3.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>xsd-fu code generator</name>
+  <description>Metadata model code generation from XML schema</description>
+  <url>http://www.openmicroscopy.org/site/products/bio-formats</url>
+  <inceptionYear>2005</inceptionYear>
+
+  <licenses>
+    <license>
+      <name>Simplified BSD License</name>
+      <url>https://opensource.org/licenses/BSD-2-Clause</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <dependencies>
+    <!-- There should be a specification dependency here, especially
+         if we put any build logic here, but there's a cyclic
+         reference which needs to be resolved between specification
+         and ome-xml -->
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+	<artifactId>maven-clean-plugin</artifactId>
+	<version>3.0.0</version>
+	<configuration>
+	  <filesets>
+	    <fileset>
+	      <directory>.</directory>
+	      <includes>
+		<include>**/*.pyc</include>
+	      </includes>
+	    </fileset>
+	  </filesets>
+	</configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <prerequisites>
+    <maven>3.0.4</maven>
+  </prerequisites>
+
+</project>

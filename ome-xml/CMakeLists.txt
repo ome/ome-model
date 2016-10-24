@@ -34,27 +34,13 @@
 # policies, either expressed or implied, of any organization.
 # #L%
 
-if(BUILD_DOXYGEN)
-  set(OME_COMMON_TAGFILE "${CMAKE_INSTALL_FULL_DATADIR}/doc/ome-common/api/ome-common.tag")
+# Add test, making sure it's run with a suitable environment.
+# If updated, make sure to update the wrappers in cpp/cmake.
+function(ome_xml_add_test)
+  add_test(${ARGV})
+  set_tests_properties(${ARGV0}
+    PROPERTIES ENVIRONMENT "OME_XML_SCHEMADIR=${PROJECT_SOURCE_DIR}/specification/src/main/resources/released-schema;OME_XML_TRANSFORMDIR=${PROJECT_SOURCE_DIR}/specification/src/main/resources/transforms;OME_XML_SAMPLEDIR=${PROJECT_SOURCE_DIR}/specification/src/main/resources/samples")
+endfunction()
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ome-xml.dox.cmake
-                 ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.dox @ONLY)
-
-  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log
-                     COMMAND ${CMAKE_COMMAND} -E remove_directory ome-xml
-                     COMMAND ${CMAKE_COMMAND} -E make_directory ome-xml
-                     COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.dox
-                     DEPENDS gensrc ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.dox)
-
-  add_custom_target(doc-check
-                    COMMAND ${CMAKE_COMMAND} -Dlogfile=${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log -P ${PROJECT_SOURCE_DIR}/cmake/DoxygenCheck.cmake
-                    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log)
-
-  add_custom_target(doc-api ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log doc-check)
-  # For backward compatibility
-  add_custom_target(doc DEPENDS doc-api)
-
-  install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/ome-xml/"
-          DESTINATION "${CMAKE_INSTALL_DOCDIR}/api"
-          COMPONENT "development")
-endif(BUILD_DOXYGEN)
+add_subdirectory(src/main/cpp)
+add_subdirectory(src/test/cpp)

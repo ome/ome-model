@@ -34,27 +34,45 @@
 # policies, either expressed or implied, of any organization.
 # #L%
 
-if(BUILD_DOXYGEN)
-  set(OME_COMMON_TAGFILE "${CMAKE_INSTALL_FULL_DATADIR}/doc/ome-common/api/ome-common.tag")
+enable_testing()
+option(test "Enable unit tests (requires gtest)" ON)
+set(BUILD_TESTS ${test})
+set(EXTENDED_TESTS ${extended-tests})
 
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/ome-xml.dox.cmake
-                 ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.dox @ONLY)
+# Unit tests
+find_package(Threads REQUIRED)
 
-  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log
-                     COMMAND ${CMAKE_COMMAND} -E remove_directory ome-xml
-                     COMMAND ${CMAKE_COMMAND} -E make_directory ome-xml
-                     COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.dox
-                     DEPENDS gensrc ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.dox)
+if(BUILD_TESTS)
+  if(GTEST_SOURCE)
+    # If not using a shared runtime, gtest hardcodes its own (which breaks linking)
+    set(gtest_force_shared_crt ON CACHE BOOL "Force gtest to use shared runtime")
 
-  add_custom_target(doc-check
-                    COMMAND ${CMAKE_COMMAND} -Dlogfile=${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log -P ${PROJECT_SOURCE_DIR}/cmake/DoxygenCheck.cmake
-                    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log)
+    # Remove warnings triggered by gtest since they aren't our responsibility.
+    set(SAVED_CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE " " ";" GTEST_FLAG_LIST "${CMAKE_CXX_FLAGS}")
+    list(REMOVE_ITEM GTEST_FLAG_LIST
+      -Wconversion
+      -Wctor-dtor-privacy
+      -Wmissing-declarations)
+    string(REPLACE ";" " " CMAKE_CXX_FLAGS "${GTEST_FLAG_LIST}")
+    unset(GTEST_FLAG_LIST)
 
-  add_custom_target(doc-api ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ome-xml.log doc-check)
-  # For backward compatibility
-  add_custom_target(doc DEPENDS doc-api)
+    # Build gtest using its own CMake support.
+    add_subdirectory("${GTEST_SOURCE}" "${PROJECT_BINARY_DIR}/ext/gtest")
 
-  install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/ome-xml/"
-          DESTINATION "${CMAKE_INSTALL_DOCDIR}/api"
-          COMPONENT "development")
-endif(BUILD_DOXYGEN)
+    # Restore saved flags.
+    set(CMAKE_CXX_FLAGS "${SAVED_CMAKE_CXX_FLAGS}")
+
+    set_property(TARGET gtest gtest_main PROPERTY FOLDER "External/Google Test")
+    add_library(GTest::GTest ALIAS gtest)
+    target_include_directories(gtest INTERFACE $<BUILD_INTERFACE:${GTEST_SOURCE}/include>)
+    set(GTEST_FOUND TRUE)
+  else()
+    find_package(GTest)
+  endif()
+
+  if(NOT GTEST_FOUND)
+    message(WARNING "GTest not found; tests disabled")
+    set(BUILD_TESTS OFF)
+  endif()
+endif()
