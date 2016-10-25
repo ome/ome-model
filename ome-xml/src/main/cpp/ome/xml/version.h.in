@@ -43,29 +43,19 @@
 
 // Version metadata as integers
 
-#define OME_XML_VERSION_MAJOR @OME_VERSION_MAJOR@U
-#define OME_XML_VERSION_MINOR @OME_VERSION_MINOR@U
-#define OME_XML_VERSION_PATCH @OME_VERSION_PATCH@U
+#define OME_XML_VERSION_MAJOR @ome-model_VERSION_MAJOR@U
+#define OME_XML_VERSION_MINOR @ome-model_VERSION_MINOR@U
+#define OME_XML_VERSION_PATCH @ome-model_VERSION_PATCH@U
 
 // Version metadata as strings
 
-#define OME_XML_VERSION_MAJOR_S "@OME_VERSION_MAJOR@"
-#define OME_XML_VERSION_MINOR_S "@OME_VERSION_MINOR@"
-#define OME_XML_VERSION_PATCH_S "@OME_VERSION_PATCH@"
-#define OME_XML_VERSION_EXTRA_S "@OME_VERSION_EXTRA@"
+#define OME_XML_VERSION_MAJOR_S "@ome-model_VERSION_MAJOR@"
+#define OME_XML_VERSION_MINOR_S "@ome-model_VERSION_MINOR@"
+#define OME_XML_VERSION_PATCH_S "@ome-model_VERSION_PATCH@"
+#define OME_XML_VERSION_EXTRA_S "@OME_VCS_DEV@"
 #ifndef OME_XML_VERSION_EXTRA_S
 # define OME_XML_VERSION_EXTRA_S ""
 #endif
-
-// Revision number in version control
-#define OME_XML_VCS_SHORTREVISION "@OME_VCS_SHORTREVISION@"
-#define OME_XML_VCS_REVISION "@OME_VCS_REVISION@"
-
-// Release date (seconds since the UNIX epoch)
-#define OME_XML_VCS_DATE @OME_VCS_DATE@
-
-// Release date as ISO-8601 string
-#define OME_XML_VCS_DATE_S "@OME_VCS_DATE_S@"
 
 // Current OME model version used by xsd-fu
 #define OME_XML_MODEL_VERSION "@MODEL_VERSION@"

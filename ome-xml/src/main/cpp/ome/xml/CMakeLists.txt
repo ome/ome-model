@@ -168,7 +168,7 @@ target_include_directories(ome-xml PUBLIC
 
 target_link_libraries(ome-xml OME::Compat OME::Common)
 target_link_libraries(ome-xml Boost::date_time)
-set_target_properties(ome-xml PROPERTIES VERSION ${OME_VERSION_SHORT})
+set_target_properties(ome-xml PROPERTIES VERSION ${ome-model_VERSION})
 
 add_library(OME::XML ALIAS ome-xml)
 

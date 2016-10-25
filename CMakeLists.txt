@@ -64,16 +64,22 @@ list(APPEND CMAKE_MODULE_PATH
 
 include("${CMAKE_CURRENT_LIST_DIR}/cmake/BioFormatsCommon.cmake")
 
-include(cmake/Version.cmake)
-ome_project_version("OME XML C++" "${CMAKE_CURRENT_SOURCE_DIR}")
+include(MavenVersion)
+maven_version("${CMAKE_CURRENT_LIST_DIR}/pom.xml" maven-project maven-version maven-snapshot)
 
-project(ome-model
-        VERSION "${OME_VERSION_MAJOR}.${OME_VERSION_MINOR}.${OME_VERSION_PATCH}"
+project("${maven-project}"
+        VERSION "${maven-version}"
         LANGUAGES CXX)
+
+include(cmake/Version.cmake)
+git_version_info("OME Model" "${CMAKE_CURRENT_SOURCE_DIR}")
 
 if("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
   message(FATAL_ERROR "In-tree builds are not supported; please run cmake from a separate build directory.")
 endif("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
+
+include(cmake/SourceArchive.cmake)
+source_archive("${PROJECT_NAME}" "${PROJECT_VERSION}${OME_VCS_DEV}")
 
 enable_language(CXX)
   set(BUILD_SHARED_LIBS_DEFAULT ON)
