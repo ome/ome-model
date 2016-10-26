@@ -1,6 +1,8 @@
 # OME Data Model
 
 [![Build Status](https://travis-ci.org/ome/ome-model.png)](http://travis-ci.org/ome/ome-model)
+[![Maven Central](https://img.shields.io/maven-central/v/org.openmicroscopy/ome-xml.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.openmicroscopy%22%20AND%20a%3A%22ome-xml%22)
+[![Javadocs](http://javadoc.io/badge/org.openmicroscopy/ome-xml.svg)](http://javadoc.io/doc/org.openmicroscopy/ome-xml) 
 
 OME data model specification, code generator and implementation.
 
