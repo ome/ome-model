@@ -14,6 +14,7 @@
 {% def counter(parent, obj, indexes) %}\
   public int get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}Count(${indexes_string(indexes[:-1])})
   {
+
     return -1;
   }
 {% end %}\
