@@ -306,8 +306,8 @@ createlink() {
     if [ "$4" = "false" ]; then
         reldesc=""
     fi
-    link=$(find published -name "$name" | grep "$release" | head -n1)
-    link=$(echo "$link" | sed -e 's;published/;;')
+    link=$(find $root -name "$name" | grep "$release" | head -n1)
+    link=$(echo "$link" | sed -e "s;$root/;;")
     if [ -n "$2" ]; then
         link=$(echo "$link" | sed -e "s;^${shortname}/;;")
     fi
@@ -381,7 +381,7 @@ download the file or view the source.</em></p>
 <ul>
 EOF
 
-    for schema in $(find published -name '*xsd' | xargs $XARGSOPTS -n1 basename | sort | uniq ); do
+    for schema in $(find $root -name '*xsd' | xargs $XARGSOPTS -n1 basename | sort | uniq ); do
         createlink "$schema" "" "current" "true" "current" "$1"
     done
 
@@ -391,7 +391,7 @@ EOF
 <ul>
 EOF
 
-    for schema in $(find published -name '*xsd' | xargs $XARGSOPTS -n1 basename | sort | uniq); do
+    for schema in $(find $root -name '*xsd' | xargs $XARGSOPTS -n1 basename | sort | uniq); do
         createlink "$schema" "" "legacy" "true" "current" "$1"
     done
     cat <<EOF
@@ -481,10 +481,10 @@ download the file or view the source.</em></p>
 <ul>
 EOF
 
-    for year in $(find published -name "$schema" | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | grep 20 | sort -r); do
+    for year in $(find $root -name "$schema" | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | grep 20 | sort -r); do
         createlink "$schema" "$year" "current" "false" "current"
     done
-    for year in $(find published -name "$schema" | grep 2003 | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | sort -r | grep FC) $(find published -name "$schema" | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | sort -r | grep -v 20 | grep -v FC); do
+    for year in $(find $root -name "$schema" | grep 2003 | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | sort -r | grep FC) $(find $root -name "$schema" | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | sort -r | grep -v 20 | grep -v FC); do
         createlink "$schema" "$year" "current" "false" "legacy"
     done
 
@@ -494,10 +494,10 @@ EOF
 <ul>
 EOF
 
-    for year in $(find published -name "$schema" | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | grep 20 | sort -r); do
+    for year in $(find $root -name "$schema" | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | grep 20 | sort -r); do
         createlink "$schema" "$year" "legacy" "false" "current"
     done
-    for year in $(find published -name "$schema" | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | sort -r | grep FC) $(find published -name "$schema" | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | sort -r | grep -v 20 | grep -v FC); do
+    for year in $(find $root -name "$schema" | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | sort -r | grep FC) $(find $root -name "$schema" | xargs $XARGSOPTS -n1 dirname | xargs $XARGSOPTS -n1 basename | grep -v $devmarker | grep -v html | sort -r | grep -v 20 | grep -v FC); do
         createlink "$schema" "$year" "legacy" "false" "legacy"
     done
 
@@ -536,7 +536,7 @@ EOF
 
 for type in $(find "${root}" -mindepth 1 -maxdepth 1 -type d | sed -e 's;^published/;;'); do
     if [ "$(basename $type)" != "Transforms" ]; then
-        echo "HTML [2] -> $root/${type}/index.html"
+        echo "HTML [2] -> ${type}/index.html"
         createintermediateindex "$(basename $type)" > "${type}/index.html"
     fi
 done
