@@ -43,34 +43,7 @@ set(EXTENDED_TESTS ${extended-tests})
 find_package(Threads REQUIRED)
 
 if(BUILD_TESTS)
-  if(GTEST_SOURCE)
-    # If not using a shared runtime, gtest hardcodes its own (which breaks linking)
-    set(gtest_force_shared_crt ON CACHE BOOL "Force gtest to use shared runtime")
-
-    # Remove warnings triggered by gtest since they aren't our responsibility.
-    set(SAVED_CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-    string(REPLACE " " ";" GTEST_FLAG_LIST "${CMAKE_CXX_FLAGS}")
-    list(REMOVE_ITEM GTEST_FLAG_LIST
-      -Wconversion
-      -Wctor-dtor-privacy
-      -Wmissing-declarations)
-    string(REPLACE ";" " " CMAKE_CXX_FLAGS "${GTEST_FLAG_LIST}")
-    unset(GTEST_FLAG_LIST)
-
-    # Build gtest using its own CMake support.
-    add_subdirectory("${GTEST_SOURCE}" "${PROJECT_BINARY_DIR}/ext/gtest")
-
-    # Restore saved flags.
-    set(CMAKE_CXX_FLAGS "${SAVED_CMAKE_CXX_FLAGS}")
-
-    set_property(TARGET gtest gtest_main PROPERTY FOLDER "External/Google Test")
-    add_library(GTest::GTest ALIAS gtest)
-    target_include_directories(gtest INTERFACE $<BUILD_INTERFACE:${GTEST_SOURCE}/include>)
-    set(GTEST_FOUND TRUE)
-  else()
-    find_package(GTest)
-  endif()
-
+  find_package(GTest)
   if(NOT GTEST_FOUND)
     message(WARNING "GTest not found; tests disabled")
     set(BUILD_TESTS OFF)
