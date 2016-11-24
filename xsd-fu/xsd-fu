@@ -34,6 +34,7 @@ Generate code to process OME-XML from an OME-XML schema.
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import itertools
 import logging
 import sys
 import os
@@ -646,7 +647,10 @@ def metadataMain(model, opts):
                 os.path.join(relpath, "DummyMetadata"),
                 model, opts)
 
-    if not opts.dryrun:
+    if ((isinstance(opts.lang, language.Java) or
+         (isinstance(opts.lang, language.CXX) and
+          opts.filetype == language.TYPE_HEADER)) and
+        not opts.dryrun):
         validateMetadataConverter()
 
 def docGenMain(model, opts):
@@ -714,25 +718,58 @@ def validateMetadataConverter():
     convertFilename = os.path.join(os.path.join(root, opts.lang.getConverterDir()), opts.lang.getConverterName())
     storeFile = file(os.path.join(opts.outdir, opts.lang.generatedFilename(storeFilename, opts.filetype)))
     retrieveFile = file(os.path.join(opts.outdir, opts.lang.generatedFilename(retrieveFilename, opts.filetype)))
-    convertFile = file(os.path.join(opts.outdir, opts.lang.generatedFilename(convertFilename, opts.filetype)))
-    white_list = ['Root', 'Datasets', 'Count', 'ShapeType', 'LightSourceType']
-    regexp = re.compile(r'(?<=[\s\.:][gs]et)((?:(?!'+'|'.join(white_list)+r')\w)*)[\(,]')
-    grepper = grep(regexp, lambda line: regexp.search(line))
-    storeSet = set(grepper(storeFile))
-    retrieveSet = set(grepper(retrieveFile))
-    convertSet = set(grepper(convertFile))
-    retrieveDiff = storeSet.symmetric_difference(set(retrieveSet))
-    converterDiff = storeSet.symmetric_difference(set(convertSet))
-    for match in retrieveDiff:
+    convertFile = file(os.path.join(opts.outdir, convertFilename + opts.lang.source_suffix))
+    storegrepper = None
+    retrievegrepper = None
+    convertgrepper = None
+    if isinstance(opts.lang, language.CXX):
+        storeregexp = re.compile('^ *([gs]et[a-zA-Z0-9][a-zA-Z0-9]*).*')
+        retrieveregexp = re.compile('^ *(get[a-zA-Z0-9][a-zA-Z0-9]*).*')
+        convertregexp = re.compile('(?:&M[RS]::|src\.|dest\.|src_store->)([gs]et[a-zA-Z0-9][a-zA-Z0-9]*)')
+        storegrepper = grep(storeregexp, lambda line: storeregexp.search(line))
+        retrievegrepper = grep(retrieveregexp, lambda line: retrieveregexp.search(line))
+        convertgrepper = grep(convertregexp, lambda line: convertregexp.findall(line))
+    if isinstance(opts.lang, language.Java):
+        regexp = re.compile(r'(?<=[\s\.:])([gs]et[a-zA-Z0-9]+)')
+        grepper = grep(regexp, lambda line: regexp.search(line))
+        storegrepper = grepper
+        retrievegrepper = grepper
+        convertgrepper = grepper
+    storeSet = set(itertools.chain.from_iterable(storegrepper(storeFile)))
+    retrieveSet = set(itertools.chain.from_iterable(retrievegrepper(retrieveFile)))
+    convertSet = set(itertools.chain.from_iterable(convertgrepper(convertFile)))
+    combinedSet = storeSet | retrieveSet
+    convertDiff = convertSet.difference(set(combinedSet))
+    combinedDiff = combinedSet.difference(set(convertSet))
+    if opts.debug:
+        print("STORE: %s" % ', '.join(storeSet), file=sys.stderr)
+        print("RETRIEVE: %s" % ', '.join(retrieveSet), file=sys.stderr)
+        print("CONVERT: %s" % ', '.join(convertSet), file=sys.stderr)
+        print("MetadataValidation: root=%s" % root, file=sys.stderr)
+        print("MetadataValidation: store=%s" % storeFilename, file=sys.stderr)
+        print("MetadataValidation: retrieve=%s" % retrieveFilename, file=sys.stderr)
+        print("MetadataValidation: convert=%s" % convertFilename, file=sys.stderr)
+        print("MetadataValidation: storef=%s" % storeFile, file=sys.stderr)
+        print("MetadataValidation: retrievef=%s" % retrieveFile, file=sys.stderr)
+        print("MetadataValidation: convertf=%s" % convertFile, file=sys.stderr)
+    fail = False
+    for match in combinedDiff:
+        if match == 'setRoot' or match == 'getRoot':
+            continue
         if match in retrieveSet:
-            print("MetadataValidation: %s is present in MetadataRetrieve but missing from MetadataStore" % match)
+            print("MetadataValidation: %s is present in MetadataRetrieve but missing from %s" % (match, opts.lang.getConverterName()), file=sys.stderr)
         else:
-            print("MetadataValidation: %s is present in MetadataStore but missing from MetadataRetrieve" % match)
-    for match in converterDiff:
-        if match in convertSet:
-            print("MetadataValidation: %s is present in %s but missing from MetadataStore" % (match, opts.lang.getConverterName()))
+            print("MetadataValidation: %s is present in MetadataStore but missing from %s" % (match, opts.lang.getConverterName()), file=sys.stderr)
+        fail = True
+    for match in convertDiff:
+        if match in retrieveSet:
+            print("MetadataValidation: %s is present in %s but missing from MetadataStore" % (match, opts.lang.getConverterName()), file=sys.stderr)
         else:
-            print("MetadataValidation: %s is present in MetadataStore but missing from %s" % (match, opts.lang.getConverterName()))
+            print("MetadataValidation: %s is present in %s but missing from MetadataRetrieve" % (match, opts.lang.getConverterName()), file=sys.stderr)
+        fail = True
+    if fail == True:
+        print("Source code generation failed: Inconsistency between MetadataStore, MetadataRetrieve and %s" % opts.lang.getConverterName(), file=sys.stderr)
+        sys.exit(1)
 
 def grep(regexp, *matches):
     def _do_grep_wrapper(*matches):
@@ -740,7 +777,7 @@ def grep(regexp, *matches):
             for line in lines:
                 for match in matches:
                     if match(line):
-                        yield re.findall(regexp, line)[0]
+                        yield re.findall(regexp, line)
                         break
         return _do_grep
     return _do_grep_wrapper(*matches)
