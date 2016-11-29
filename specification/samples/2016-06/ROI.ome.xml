@@ -22,6 +22,7 @@
     <ROIRef ID="ROI:1"/>
     <ROIRef ID="ROI:2"/>
     <ROIRef ID="ROI:3"/>
+    <ROIRef ID="ROI:4"/>
   </Image>
   <ROI ID="ROI:1">
     <Union>
@@ -40,6 +41,13 @@
     <Union>
       <Rectangle ID="Shape:3" FillRule="EvenOdd" Text="Hi There!" X="1" Y="2" Width="3" Height="4"/>
       <Label ID="Shape:4" FillRule="EvenOdd" FontStyle="Normal" FontFamily="serif" X="1" Y="1"/>
+    </Union>
+  </ROI>
+  <ROI ID="ROI:4">
+    <Union>
+      <Rectangle ID="Shape:6" FillRule="EvenOdd" Text="Transformed" X="0" Y="0" Width="1.5" Height="1.5">
+        <Transform A00="1.00" A01="0.00" A02="3.82" A10="0.00" A11="1.00" A12="2.21"/>
+      </Rectangle>
     </Union>
   </ROI>
 </OME>
