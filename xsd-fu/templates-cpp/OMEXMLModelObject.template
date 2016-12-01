@@ -248,6 +248,15 @@ namespace ome
         impl(ome::compat::make_shared<Impl>())
       {
         logger.add_attribute("ClassName", logging::attributes::constant<std::string>("${klass.name}"));
+{% if klass.name == "AffineTransform" %}\
+        // Set to identity
+        setA00(1.0);
+        setA01(0.0);
+        setA02(0.0);
+        setA10(0.0);
+        setA11(1.0);
+        setA12(0.0);
+{% end class is AffineTransform %}\
       }
 
 {% end source %}\

@@ -128,6 +128,15 @@ public class ${klass.name} extends ${klass.parentName}
 {% if klass.parentName is not None and klass.parentName != 'AbstractOMEModelObject' %}\
     super();
 {% end %}\
+{% if klass.name == "AffineTransform" %}\
+    // Set to identity
+    setA00(1.0);
+    setA01(0.0);
+    setA02(0.0);
+    setA10(0.0);
+    setA11(1.0);
+    setA12(0.0);
+{% end class is AffineTransform %}\
   }
 
   /**
