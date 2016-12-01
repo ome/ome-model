@@ -1277,9 +1277,13 @@
         </xsl:for-each>
       </xsl:variable>
 
-      <xsl:attribute name="Transform">
-        <xsl:value-of select="$trans"/>
-      </xsl:attribute>
+      <xsl:choose>
+        <xsl:when test="trans != ''">
+          <xsl:attribute name="Transform">
+            <xsl:value-of select="$trans"/>
+          </xsl:attribute>
+        </xsl:when>
+      </xsl:choose>
       <xsl:for-each select="*">
         <xsl:choose>
           <xsl:when test="name()='Channels'">
@@ -1299,6 +1303,7 @@
       </xsl:for-each>
     </xsl:element>
   </xsl:template>
+
 
   <!-- Rename attributes and link to Pixels -->
   <xsl:template name="maskTansformation">
