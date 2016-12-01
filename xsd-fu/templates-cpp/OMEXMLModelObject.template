@@ -334,11 +334,9 @@ namespace ome
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       bool
-      ${klass.name}::validElementName(const std::string& name) const
+      ${klass.name}::validElementName(const std::string& /* name */) const
       {
-        static const std::string expectedTagName("${klass.name}");
-
-        return expectedTagName == name || ${klass.parentName}::validElementName(name);
+        return true;
       }
 {% end source %}\
 
@@ -519,7 +517,7 @@ ${customUpdatePropertyContent[prop.name]}
           }
         else if (${prop.name}_nodeList.size() != 0)
           {
-{% if prop.isComplex() and not klass.isAbstract %}\
+{% if prop.isComplex() %}\
             // Element property ${prop.name} which is complex (has sub-elements)
 {% if prop.minOccurs == 0 or (not lang.hasPrimitiveType(prop.langType) and not prop.isEnumeration) %}\
             common::xml::dom::Element elem(${prop.name}_nodeList.at(0));
@@ -1245,26 +1243,6 @@ ${customUpdatePropertyContent[prop.name]}
 
 {% end %}\
 {% if fu.SOURCE_TYPE == "header" %}\
-        /// @copydoc ${lang.omexml_model_package}::OMEModelObject::asXMLElement
-        virtual common::xml::dom::Element
-        asXMLElement (common::xml::dom::Document& document) const;
-{% end header %}\
-{% if fu.SOURCE_TYPE == "source" %}\
-      common::xml::dom::Element
-      ${klass.name}::asXMLElement (common::xml::dom::Document& document) const
-      {
-{% if klass.name != "OME" %}\
-        common::xml::dom::Element element(document.createElementNS(getXMLNamespace(), "${klass.name}"));
-{% end if %}\
-{% if klass.name == "OME" %}\
-        common::xml::dom::Element element(document.getDocumentElement());
-{% end if %}\
-        return asXMLElementInternal(document, element);
-      }
-{% end source %}\
-
-{% if fu.SOURCE_TYPE == "header" %}\
-
       protected:
         // Documented in base class.
         virtual common::xml::dom::Element
@@ -1309,164 +1287,165 @@ ${customUpdatePropertyContent[prop.name]}
         element.setTextContent(this->impl->value);
 {% end %}\
 {% end %}\
-{% if klass.isAnnotation %}\
         // Ensure any base annotations add their Elements first
-        element = ${klass.parentName}::asXMLElementInternal(document, element);
-{% end if isAnnotation %}\
+        ${klass.parentName}::asXMLElementInternal(document, element);
+
 {% for prop in klass.properties.values() %}\
 {% if not prop.isUnitsEnumeration %}\
-{% if not klass.isAbstract or prop.isAttribute or not prop.isComplex() or (prop.name in fu.ANNOTATION_OVERRIDE) %}\
-        {
 {% choose %}\
 {% when prop.name in customAsXMLElementPropertyContent %}\
 {% if debug %}\
-          // -- BEGIN custom content from ${prop.name} property template --
+        // -- BEGIN custom content from ${prop.name} property template --
 {% end debug %}\
 ${customAsXMLElementPropertyContent[prop.name]}
 {% if debug %}\
-          // -- END custom content from ${prop.name} property template --
+        // -- END custom content from ${prop.name} property template --
 {% end debug %}\
 {% end when %}\
 {% when prop.hasBaseAttribute %}\
-          // Element's text data
+        // Element's text data
 {% if not prop.type == 'base64Binary' %}\
-          ${klass.name}_element.setTextContent(this->impl->${prop.instanceVariableName});
+        ${klass.name}_element.setTextContent(this->impl->${prop.instanceVariableName});
 {% end if not prop.type %}\
 {% if prop.type == 'base64Binary' %}\
-          std::string encodedString = ome::common::base64_encode(this->impl->${prop.instanceVariableName}.begin(),
-                                                                 this->impl->${prop.instanceVariableName}.end(),
+        std::string encodedString = ome::common::base64_encode(this->impl->${prop.instanceVariableName}.begin(),
+                                                               this->impl->${prop.instanceVariableName}.end(),
                                                                  0);
-          element.setTextContent(encodedString);
+        element.setTextContent(encodedString);
 {% end if prop.type %}\
 {% end when %}\
 {% when prop.isReference and prop.maxOccurs > 1 %}\
-          {
-            // Reference property ${prop.name} which occurs more than once
-            for (${prop.instanceVariableType}::const_iterator i = this->impl->${prop.instanceVariableName}.begin();
-                 i != this->impl->${prop.instanceVariableName}.end();
-                 ++i)
-              {
-                // Note that this doesn't strictly need to be a
-                // shared_ptr, but keep compatible with the rest of
-                // the API to allow consistency for future
-                // refactoring.
-                ome::compat::shared_ptr<${prop.name}> o(ome::compat::make_shared< ${prop.name}>());
-                ome::compat::shared_ptr<${prop.langTypeNS}> is(i->lock());
-                if (is)
-                  {
-                    o->setID(is->getID());
-                    common::xml::dom::Element child(o->asXMLElement(document));
-                    element.appendChild(child);
-                  }
-              }
-          }
+        {
+          // Reference property ${prop.name} which occurs more than once
+          for (${prop.instanceVariableType}::const_iterator i = this->impl->${prop.instanceVariableName}.begin();
+               i != this->impl->${prop.instanceVariableName}.end();
+               ++i)
+            {
+              // Note that this doesn't strictly need to be a
+              // shared_ptr, but keep compatible with the rest of
+              // the API to allow consistency for future
+              // refactoring.
+              ome::compat::shared_ptr<${prop.name}> o(ome::compat::make_shared< ${prop.name}>());
+              ome::compat::shared_ptr<${prop.langTypeNS}> is(i->lock());
+              if (is)
+                {
+                  o->setID(is->getID());
+{% if prop.isAbstractSubstitution %}\
+                  common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), o->get${prop.name}Type()));
+{% end if %}\
+{% if not prop.isAbstractSubstitution %}\
+                  common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
+{% end if %}\
+                  child = o->asXMLElement(document, child);
+                  element.appendChild(child);
+                }
+            }
+        }
 {% end %}\
 {% when prop.isReference %}\
-          {
-            // Reference property ${prop.name}
-            // Note that this doesn't strictly need to be a
-            // shared_ptr, but keep compatible with the rest of the
-            // API to allow consistency for future refactoring.
-            ome::compat::shared_ptr<${prop.name}> o(ome::compat::make_shared< ${prop.name}>());
-            ome::compat::shared_ptr<${prop.langTypeNS}> sv(this->impl->${prop.instanceVariableName}.lock());
-            if (sv)
-              {
-                o->setID(sv->getID());
-                common::xml::dom::Element child(o->asXMLElement(document));
-                element.appendChild(child);
-              }
-          }
+        {
+          // Reference property ${prop.name}
+          // Note that this doesn't strictly need to be a
+          // shared_ptr, but keep compatible with the rest of the
+          // API to allow consistency for future refactoring.
+          ome::compat::shared_ptr<${prop.name}> o(ome::compat::make_shared< ${prop.name}>());
+          ome::compat::shared_ptr<${prop.langTypeNS}> sv(this->impl->${prop.instanceVariableName}.lock());
+          if (sv)
+            {
+              o->setID(sv->getID());
+{% if prop.isAbstractSubstitution %}\
+              common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), o->get${prop.name}Type()));
+{% end if %}\
+{% if not prop.isAbstractSubstitution %}\
+              common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
+{% end if %}\
+              child = o->asXMLElement(document, child);
+              element.appendChild(child);
+            }
+        }
 {% end %}\
 {% when prop.isBackReference %}\
 {% if debug %}\
-          // *** IGNORING *** Skipped back reference ${prop.name}
+        // *** IGNORING *** Skipped back reference ${prop.name}
 {% end debug %}\
 {% end %}\
 {% when prop.hasUnitsCompanion and prop.isAttribute and prop.maxOccurs == 1%}\
 {% if prop.minOccurs == 1 %}\
+        {
+          // Attribute property ${prop.name} with units companion ${prop.unitsCompanion.name}
+          std::ostringstream os;
+          os.imbue(std::locale::classic());
+          os << this->impl->${prop.instanceVariableName}.getValue();
+          element.setAttribute("${prop.name}", os.str());
+          element.setAttribute("${prop.unitsCompanion.name}",
+                               this->impl->${prop.instanceVariableName}.getUnit());
+        }
+{% end prop.minOccurs == 0 %}\
+{% if prop.minOccurs == 0 %}\
+        if (this->impl->${prop.instanceVariableName})
           {
             // Attribute property ${prop.name} with units companion ${prop.unitsCompanion.name}
             std::ostringstream os;
             os.imbue(std::locale::classic());
-            os << this->impl->${prop.instanceVariableName}.getValue();
+            os << this->impl->${prop.instanceVariableName}->getValue();
             element.setAttribute("${prop.name}", os.str());
             element.setAttribute("${prop.unitsCompanion.name}",
-                                 this->impl->${prop.instanceVariableName}.getUnit());
+                                 this->impl->${prop.instanceVariableName}->getUnit());
           }
-{% end prop.minOccurs == 0 %}\
-{% if prop.minOccurs == 0 %}\
-          if (this->impl->${prop.instanceVariableName})
-            {
-              // Attribute property ${prop.name} with units companion ${prop.unitsCompanion.name}
-              std::ostringstream os;
-              os.imbue(std::locale::classic());
-              os << this->impl->${prop.instanceVariableName}->getValue();
-              element.setAttribute("${prop.name}", os.str());
-              element.setAttribute("${prop.unitsCompanion.name}",
-                                   this->impl->${prop.instanceVariableName}->getUnit());
-            }
 {% end prop.minOccurs == 0 %}\
 {% end when %}\
 {% when prop.maxOccurs == 1 and prop.isAttribute %}\
-          // Attribute property ${prop.name}
-          {
-            std::ostringstream os;
-            os.imbue(std::locale::classic());
+        // Attribute property ${prop.name}
+        {
+          std::ostringstream os;
+          os.imbue(std::locale::classic());
 {% if prop.minOccurs == 1 %}\
 {% if prop.langTypeNS != 'bool' %}\
-          os << this->impl->${prop.instanceVariableName};
+        os << this->impl->${prop.instanceVariableName};
 {% end %}\
 {% if prop.langTypeNS == 'bool' %}\
-          os << std::boolalpha << this->impl->${prop.instanceVariableName};
+        os << std::boolalpha << this->impl->${prop.instanceVariableName};
 {% end %}\
-            element.setAttribute("${prop.name}", os.str());
+          element.setAttribute("${prop.name}", os.str());
 {% end %}\
 {% if prop.minOccurs == 0 %}\
-            if (this->impl->${prop.instanceVariableName})
-              {
-{% if prop.langTypeNS != 'bool' %}\
-                os << *this->impl->${prop.instanceVariableName};
-{% end %}\
-{% if prop.langTypeNS == 'bool' %}\
-                os << std::boolalpha << *this->impl->${prop.instanceVariableName};
-{% end %}\
-                element.setAttribute("${prop.name}", os.str());
-              }
-{% end %}\
-          }
-{% end %}\
-{% when prop.maxOccurs == 1 and prop.isComplex() %}\
-          // Element property ${prop.name} which is complex (has
-          // sub-elements)
-{% if prop.langTypeNS != 'ome::xml::model::primitives::OrderedMultimap' %}\
           if (this->impl->${prop.instanceVariableName})
             {
-              common::xml::dom::Element child(this->impl->${prop.instanceVariableName}->asXMLElement(document));
-              element.appendChild(child);
+{% if prop.langTypeNS != 'bool' %}\
+              os << *this->impl->${prop.instanceVariableName};
+{% end %}\
+{% if prop.langTypeNS == 'bool' %}\
+              os << std::boolalpha << *this->impl->${prop.instanceVariableName};
+{% end %}\
+              element.setAttribute("${prop.name}", os.str());
             }
 {% end %}\
-{% if prop.langTypeNS == 'ome::xml::model::primitives::OrderedMultimap' %}\
-              typedef ome::xml::model::primitives::OrderedMultimap::index<ome::xml::model::primitives::order_index>::type order_index_type;
-{% if prop.minOccurs == 0 %}\
-          if (this->impl->${prop.instanceVariableName})
-            {
-              common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
-              for (order_index_type::const_iterator i = this->impl->${prop.instanceVariableName}->get<0>().begin();
-                   i != this->impl->${prop.instanceVariableName}->get<0>().end();
-                   ++i)
-                {
-                  common::xml::dom::Element pair = document.createElementNS(getXMLNamespace(), "M");
-                  pair.setAttribute("K", i->first);
-                  pair.setTextContent(i->second);
-                  child.appendChild(pair);
-                }
-              element.appendChild(child);
-           }
+        }
 {% end %}\
-{% if prop.minOccurs != 0 %}\
+{% when prop.maxOccurs == 1 and prop.isComplex() %}\
+        // Element property ${prop.name} which is complex (has
+        // sub-elements)
+{% if prop.langTypeNS != 'ome::xml::model::primitives::OrderedMultimap' %}\
+        if (this->impl->${prop.instanceVariableName})
+          {
+{% if prop.isAbstractSubstitution %}\
+            common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), this->impl->${prop.instanceVariableName}->get${prop.name}Type()));
+{% end if %}\
+{% if not prop.isAbstractSubstitution %}\
             common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
-            for (order_index_type::const_iterator i = this->impl->${prop.instanceVariableName}.get<0>().begin();
-                 i != this->impl->${prop.instanceVariableName}.get<0>().end();
+{% end if %}\
+            child = this->impl->${prop.instanceVariableName}->asXMLElement(document, child);
+            element.appendChild(child);
+          }
+{% end %}\
+{% if prop.langTypeNS == 'ome::xml::model::primitives::OrderedMultimap' %}\
+            typedef ome::xml::model::primitives::OrderedMultimap::index<ome::xml::model::primitives::order_index>::type order_index_type;
+{% if prop.minOccurs == 0 %}\
+        if (this->impl->${prop.instanceVariableName})
+          {
+            common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
+            for (order_index_type::const_iterator i = this->impl->${prop.instanceVariableName}->get<0>().begin();
+                 i != this->impl->${prop.instanceVariableName}->get<0>().end();
                  ++i)
               {
                 common::xml::dom::Element pair = document.createElementNS(getXMLNamespace(), "M");
@@ -1475,102 +1454,113 @@ ${customAsXMLElementPropertyContent[prop.name]}
                 child.appendChild(pair);
               }
             element.appendChild(child);
+         }
+{% end %}\
+{% if prop.minOccurs != 0 %}\
+          common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
+          for (order_index_type::const_iterator i = this->impl->${prop.instanceVariableName}.get<0>().begin();
+               i != this->impl->${prop.instanceVariableName}.get<0>().end();
+               ++i)
+            {
+              common::xml::dom::Element pair = document.createElementNS(getXMLNamespace(), "M");
+              pair.setAttribute("K", i->first);
+              pair.setTextContent(i->second);
+              child.appendChild(pair);
+            }
+          element.appendChild(child);
 {% end %}\
 {% end %}\
 {% end %}\
 {% when prop.maxOccurs == 1 %}\
-          // Element property ${prop.name} which is not complex (has no
-          // sub-elements)
-          {
+        // Element property ${prop.name} which is not complex (has no
+        // sub-elements)
+        {
 {% if prop.minOccurs == 1 %}\
-            common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
-            std::ostringstream os;
-            os.imbue(std::locale::classic());
+          common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
+          std::ostringstream os;
+          os.imbue(std::locale::classic());
 {% if prop.langTypeNS != 'bool' %}\
-            os << this->impl->${prop.instanceVariableName};
+          os << this->impl->${prop.instanceVariableName};
 {% end %}\
 {% if prop.langTypeNS == 'bool' %}\
-            os << std::boolalpha << this->impl->${prop.instanceVariableName};
+          os << std::boolalpha << this->impl->${prop.instanceVariableName};
 {% end %}\
-            child.setTextContent(os.str());
-            element.appendChild(child);
+          child.setTextContent(os.str());
+          element.appendChild(child);
 {% end %}\
 {% if prop.minOccurs == 0 %}\
-            if (this->impl->${prop.instanceVariableName})
-              {
-                common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
-                std::ostringstream os;
-                os.imbue(std::locale::classic());
+          if (this->impl->${prop.instanceVariableName})
+            {
+              common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
+              std::ostringstream os;
+              os.imbue(std::locale::classic());
 {% if prop.langTypeNS != 'bool' %}\
-                os << *this->impl->${prop.instanceVariableName};
+              os << *this->impl->${prop.instanceVariableName};
 {% end %}\
 {% if prop.langTypeNS == 'bool' %}\
-                os << std::boolalpha << *this->impl->${prop.instanceVariableName};
+              os << std::boolalpha << *this->impl->${prop.instanceVariableName};
 {% end %}\
-                child.setTextContent(os.str());
-                element.appendChild(child);
-              }
-{% end %}\
-          }
-{% end %}\
-{% when prop.maxOccurs > 1 and prop.isComplex() %}\
-          {
-            // Element property ${prop.name} which is complex (has
-            // sub-elements) and occurs more than once
-            for (${prop.instanceVariableType}::const_iterator i = this->impl->${prop.instanceVariableName}.begin();
-                 i != this->impl->${prop.instanceVariableName}.end();
-                 ++i)
-              {
-                if (*i)
-                  {
-                    common::xml::dom::Element child((*i)->asXMLElement(document));
-                    element.appendChild(child);
-                  }
-              }
-          }
-{% end %}\
-{% when prop.maxOccurs > 1 %}\
-          {
-            // Element property ${prop.name} which is not complex (has no
-            // sub-elements) which occurs more than once
-            for (${prop.instanceVariableType}::const_iterator i = this->impl->${prop.instanceVariableName}.begin();
-                 i != this->impl->${prop.instanceVariableName}.end();
-                 ++i)
-              {
-                common::xml::dom::Element this->impl->${prop.instanceVariableName}_element =
-                                                                   document.createElementNS(getXMLNamespace(), "${prop.name}");
-                std::ostringstream os;
-                os.imbue(std::locale::classic());
-{% if prop.langTypeNS != 'bool' %}\
-                os << *i;
-{% end %}\
-{% if prop.langTypeNS == 'bool' %}\
-                os << std::boolalpha << *i;
-{% end %}\
-                this->impl->${prop.instanceVariableName}_element.setTextContent(os.str());
-                common::xml::dom::Element child(this->impl->${prop.instanceVariableName}_element);
-                element.appendChild(child);
-              }
-          }
-{% end %}\
-{% otherwise %}\
-{% if debug %}\
-          // *** WARNING *** Unhandled or skipped property ${prop.name}
-{% end debug %}\
-{% end %}\
+              child.setTextContent(os.str());
+              element.appendChild(child);
+            }
 {% end %}\
         }
 {% end %}\
+{% when prop.maxOccurs > 1 and prop.isComplex() %}\
+        {
+          // Element property ${prop.name} which is complex (has
+          // sub-elements) and occurs more than once
+          for (${prop.instanceVariableType}::const_iterator i = this->impl->${prop.instanceVariableName}.begin();
+               i != this->impl->${prop.instanceVariableName}.end();
+               ++i)
+            {
+              if (*i)
+                {
+{% if prop.isAbstractSubstitution %}\
+                  common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), (*i)->get${prop.name}Type()));
+{% end if %}\
+{% if not prop.isAbstractSubstitution %}\
+                  common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
+{% end if %}\
+                  child = (*i)->asXMLElement(document, child);
+                  element.appendChild(child);
+                }
+            }
+        }
+{% end %}\
+{% when prop.maxOccurs > 1 %}\
+        {
+          // Element property ${prop.name} which is not complex (has no
+          // sub-elements) which occurs more than once
+          for (${prop.instanceVariableType}::const_iterator i = this->impl->${prop.instanceVariableName}.begin();
+               i != this->impl->${prop.instanceVariableName}.end();
+               ++i)
+            {
+              common::xml::dom::Element this->impl->${prop.instanceVariableName}_element =
+                                                                 document.createElementNS(getXMLNamespace(), "${prop.name}");
+              std::ostringstream os;
+              os.imbue(std::locale::classic());
+{% if prop.langTypeNS != 'bool' %}\
+              os << *i;
+{% end %}\
+{% if prop.langTypeNS == 'bool' %}\
+              os << std::boolalpha << *i;
+{% end %}\
+              this->impl->${prop.instanceVariableName}_element.setTextContent(os.str());
+              common::xml::dom::Element child(this->impl->${prop.instanceVariableName}_element);
+              element.appendChild(child);
+            }
+        }
+{% end %}\
+{% otherwise %}\
+{% if debug %}\
+        // *** WARNING *** Unhandled or skipped property ${prop.name}
+{% end debug %}\
+{% end %}\
+{% end %}\
 {% end %}\
 {% end for %}\
-{% choose %}\
-{% when klass.isAnnotation %}\
         return element;
-{% end when isAnnotation %}\
-{% otherwise %}\
-        return ${klass.parentName}::asXMLElementInternal(document, element);
-{% end otherwise %}\
-{% end choose %}\
       }
 {% end source %}\
 

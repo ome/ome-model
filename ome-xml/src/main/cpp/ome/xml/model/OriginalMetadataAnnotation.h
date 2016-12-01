@@ -151,10 +151,6 @@ namespace ome
         void
         setMetadata (const metadata_type& map);
 
-        /// @copydoc ome::xml::model::OMEModelObject::asXMLElement
-        virtual common::xml::dom::Element
-        asXMLElement (common::xml::dom::Document& document) const;
-
       protected:
         // Documented in base class.
         virtual common::xml::dom::Element

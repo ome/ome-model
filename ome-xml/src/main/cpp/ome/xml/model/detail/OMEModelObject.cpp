@@ -74,6 +74,24 @@ namespace ome
         }
 
         common::xml::dom::Element
+        OMEModelObject::asXMLElement (common::xml::dom::Document& document) const
+        {
+          common::xml::dom::Element element;
+          if(elementName() != "OME")
+            element = document.createElementNS(getXMLNamespace(), "${klass.name}");
+          else
+            element = document.getDocumentElement();
+          return asXMLElementInternal(document, element);
+        }
+
+        common::xml::dom::Element
+        OMEModelObject::asXMLElement (common::xml::dom::Document& document,
+                                      common::xml::dom::Element&  element) const
+        {
+          return asXMLElementInternal(document, element);
+        }
+
+        common::xml::dom::Element
         OMEModelObject::asXMLElementInternal (common::xml::dom::Document& /* document */,
                                               common::xml::dom::Element&  element) const
         {

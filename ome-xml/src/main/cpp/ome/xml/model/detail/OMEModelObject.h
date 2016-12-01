@@ -85,12 +85,23 @@ namespace ome
           bool
           validElementName(const std::string& name) const = 0;
 
+          /// @copydoc ome::xml::model::OMEModelObject::asXMLElement
+          virtual common::xml::dom::Element
+          asXMLElement (common::xml::dom::Document& document) const;
+
+          /// @copydoc ome::xml::model::OMEModelObject::asXMLElement
+          virtual common::xml::dom::Element
+          asXMLElement (common::xml::dom::Document& document,
+                        common::xml::dom::Element&  element) const;
         protected:
           /**
            * Transform the object hierarchy rooted at this element to
            * XML.  This internal implementation of asXMLelement also
            * requires an XML element, which must not be null, or may
            * be instantiated and passed from superclasses.
+           *
+           * Concrete model object implementations should override
+           * this method.
            *
            * @param document XML document for element creation.
            * @param element XML element for setting model data.

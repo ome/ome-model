@@ -203,10 +203,6 @@ ${customContent}\
     }
 {% end %}\
     String tagName = element.getTagName();
-    if (!"${klass.name}".equals(tagName))
-    {
-      LOGGER.debug("Expecting node name of ${klass.name} got {}", tagName);
-    }
 {% for prop in klass.properties.values() %}\
 {% choose %}\
 {% when prop.name in customUpdatePropertyContent %}\
@@ -336,7 +332,7 @@ ${customUpdatePropertyContent[prop.name]}
     }
     else if (${prop.name}_nodeList.size() != 0)
     {
-{% if prop.isComplex() and not klass.isAbstract %}\
+{% if prop.isComplex() %}\
       // Element property ${prop.name} which is complex (has
       // sub-elements)
 {% if prop.langTypeNS != 'List<MapPair>' %}\
@@ -644,7 +640,7 @@ ${customUpdatePropertyContent[prop.name]}
     return asXMLElement(document, null);
   }
 
-  protected Element asXMLElement(Document document, Element ${klass.name}_element)
+  public Element asXMLElement(Document document, Element ${klass.name}_element)
   {
     // Creating XML block for ${klass.name}
     if (${klass.name}_element == null)
@@ -660,10 +656,8 @@ ${customUpdatePropertyContent[prop.name]}
     }
 
 {% end if NOT Object %}\
-{% if klass.isAnnotation %}\
     // Ensure any base annotations add their Elements first
-    ${klass.name}_element = super.asXMLElement(document, ${klass.name}_element);
-{% end if isAnnotation %}\
+    super.asXMLElement(document, ${klass.name}_element);
 
 {% for prop in klass.properties.values() %}\
 {% if not prop.isUnitsEnumeration %}\
@@ -695,14 +689,30 @@ ${customAsXMLElementPropertyContent[prop.name]}
       {
         ${prop.name} o = new ${prop.name}();
         o.setID(${prop.instanceVariableName}_value.getID());
-        ${klass.name}_element.appendChild(o.asXMLElement(document));
+{% if prop.isAbstractSubstitution %}\
+        Element child =
+          document.createElementNS(NAMESPACE, o.getClass().getSimpleName());
+{% end if %}\
+{% if not prop.isAbstractSubstitution %}\
+        Element child =
+          document.createElementNS(NAMESPACE, "${prop.name}");
+{% end if %}\
+        ${klass.name}_element.appendChild(o.asXMLElement(document, child));
       }
 {% end when %}\
 {% when prop.isReference %}\
       // Reference property ${prop.name}
       ${prop.name} o = new ${prop.name}();
       o.setID(${prop.instanceVariableName}.getID());
-      ${klass.name}_element.appendChild(o.asXMLElement(document));
+{% if prop.isAbstractSubstitution %}\
+      Element child =
+        document.createElementNS(NAMESPACE, o.getClass().getSimpleName());
+{% end if %}\
+{% if not prop.isAbstractSubstitution %}\
+      Element child =
+        document.createElementNS(NAMESPACE, "${prop.name}");
+{% end if %}\
+      ${klass.name}_element.appendChild(o.asXMLElement(document, child));
 {% end when %}\
 {% when prop.isBackReference %}\
       // *** IGNORING *** Skipped back reference ${prop.name}
@@ -744,7 +754,15 @@ ${customAsXMLElementPropertyContent[prop.name]}
       // Element property ${prop.name} which is complex (has
       // sub-elements)
 {% if prop.langTypeNS != 'List<MapPair>' %}\
-      ${klass.name}_element.appendChild(${prop.instanceVariableName}.asXMLElement(document));
+{% if prop.isAbstractSubstitution %}\
+      Element child =
+        document.createElementNS(NAMESPACE, ${prop.instanceVariableName}.getClass().getSimpleName());
+{% end if %}\
+{% if not prop.isAbstractSubstitution %}\
+      Element child =
+        document.createElementNS(NAMESPACE, "${prop.name}");
+{% end if %}\
+      ${klass.name}_element.appendChild(${prop.instanceVariableName}.asXMLElement(document, child));
 {% end %}\
 {% if prop.langTypeNS == 'List<MapPair>' %}\
       Element ${prop.instanceVariableName}_child =
@@ -772,7 +790,15 @@ ${customAsXMLElementPropertyContent[prop.name]}
       // sub-elements) and occurs more than once
       for (${prop.langType} ${prop.instanceVariableName}_value : ${prop.instanceVariableName})
       {
-        ${klass.name}_element.appendChild(${prop.instanceVariableName}_value.asXMLElement(document));
+{% if prop.isAbstractSubstitution %}\
+        Element child =
+          document.createElementNS(NAMESPACE, ${prop.instanceVariableName}_value.getClass().getSimpleName());
+{% end if %}\
+{% if not prop.isAbstractSubstitution %}\
+        Element child =
+          document.createElementNS(NAMESPACE, "${prop.name}");
+{% end if %}\
+        ${klass.name}_element.appendChild(${prop.instanceVariableName}_value.asXMLElement(document, child));
       }
 {% end when %}\
 {% when prop.maxOccurs > 1 %}\
@@ -796,13 +822,6 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% end if %}\
 {% end for %}\
 
-{% choose %}\
-{% when klass.isAnnotation %}\
     return ${klass.name}_element;
-{% end when isAnnotation %}\
-{% otherwise %}\
-    return super.asXMLElement(document, ${klass.name}_element);
-{% end otherwise %}\
-{% end choose %}\
   }
 }

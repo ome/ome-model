@@ -123,6 +123,8 @@ namespace ome
          * @param name the element name to check.
          *
          * @returns @c true if valid, @c false if invalid.
+         * @deprecated Always returns true since any element name is
+         * now regarded as being valid.
          */
         virtual bool
         validElementName(const std::string& name) const = 0;
@@ -145,6 +147,20 @@ namespace ome
          */
         virtual common::xml::dom::Element
         asXMLElement (common::xml::dom::Document& document) const = 0;
+
+          /**
+           * Transform the object hierarchy rooted at this element to
+           * XML.  This internal implementation of asXMLelement also
+           * requires an XML element, which must not be null, or may
+           * be instantiated and passed from superclasses.
+           *
+           * @param document XML document for element creation.
+           * @param element XML element for setting model data.
+           * @returns an XML DOM tree root element for this model object.
+           */
+        virtual common::xml::dom::Element
+        asXMLElement (common::xml::dom::Document& document,
+                      common::xml::dom::Element&  element) const = 0;
 
         /**
          * Update the object hierarchy recursively from an XML DOM tree.
