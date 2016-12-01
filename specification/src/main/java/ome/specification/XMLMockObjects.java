@@ -749,7 +749,7 @@ public class XMLMockObjects
       shape.setTheC(new NonNegativeInteger(c));
       shape.setTheZ(new NonNegativeInteger(z));
       shape.setTheT(new NonNegativeInteger(t));
-      //shape.setTransform(createTransform());
+      shape.setTransform(createTransform());
       shape.setFillColor(new ome.xml.model.primitives.Color(100));
       shape.setStrokeColor(new ome.xml.model.primitives.Color(100));
     }
@@ -759,6 +759,9 @@ public class XMLMockObjects
   private AffineTransform createTransform()
   {
     AffineTransform at = new AffineTransform();
+    // simple translation
+    at.setA02(2.0);
+    at.setA12(3.0);
 
     return at;
   }
