@@ -23,6 +23,7 @@
     <ROIRef ID="ROI:2"/>
     <ROIRef ID="ROI:3"/>
     <ROIRef ID="ROI:4"/>
+    <ROIRef ID="ROI:5"/>
   </Image>
   <ROI ID="ROI:1">
     <Union>
@@ -48,6 +49,14 @@
       <Rectangle ID="Shape:6" FillRule="EvenOdd" Text="Transformed" X="0" Y="0" Width="1.5" Height="1.5">
         <Transform A00="1.00" A01="0.00" A02="3.82" A10="0.00" A11="1.00" A12="2.21"/>
       </Rectangle>
+    </Union>
+  </ROI>
+  <ROI ID="ROI:5">
+    <Union>
+      <Mask ID="Shape:7" Height="2" Width="2" X="1" Y="1">
+        <Transform A00="1.00" A01="0.00" A02="2.0" A10="0.00" A11="1.00" A12="2.0"/>
+        <BinData BigEndian="true" Length="4">AOnpAA==</BinData>
+      </Mask>
     </Union>
   </ROI>
 </OME>
