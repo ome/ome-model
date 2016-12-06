@@ -442,52 +442,28 @@
 
   <developers>
     <developer>
-      <id>hinerm</id>
-      <name>Mark Hiner</name>
-      <email>hinerm@gmail.edu</email>
-      <url>http://developer.imagej.net/users/hinerm</url>
-      <organization>UW-Madison LOCI</organization>
-      <organizationUrl>http://loci.wisc.edu/</organizationUrl>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-      <timezone>-6</timezone>
-      <properties>
-        <picUrl>http://developer.imagej.net/files/imagej/profile-pictures/Mark.jpg?1305649677</picUrl>
-      </properties>
-    </developer>
-    <developer>
-      <id>melissa</id>
-      <name>Melissa Linkert</name>
-      <email>melissa@glencoesoftware.com</email>
-      <url>http://openmicroscopy.org/site/about/development-teams/glencoe-software</url>
-      <organization>Glencoe Software</organization>
-      <organizationUrl>http://glencoesoftware.com/</organizationUrl>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-      <timezone>-6</timezone>
-      <properties>
-        <picUrl>http://openmicroscopy.org/site/about/development-teams/glencoe-software/melissalinkert.png</picUrl>
-      </properties>
-    </developer>
-    <developer>
-      <id>curtis</id>
-      <name>Curtis Rueden</name>
-      <email>ctrueden@wisc.edu</email>
-      <url>http://loci.wisc.edu/people/curtis-rueden</url>
-      <organization>UW-Madison LOCI</organization>
-      <organizationUrl>http://loci.wisc.edu/</organizationUrl>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-      <timezone>-6</timezone>
-      <properties>
-        <picUrl>http://loci.wisc.edu/files/loci/images/people/curtis-2010.jpg</picUrl>
-      </properties>
+      <name>The OME Team</name>
+      <email>ome-devel@lists.openmicroscopy.org.uk</email>
     </developer>
   </developers>
+  <contributors>
+    <contributor><name>Chris Allan</name></contributor>
+    <contributor><name>Sébastien Besson</name></contributor>
+    <contributor><name>Jean-Marie Burel</name></contributor>
+    <contributor><name>Colin Blackburn</name></contributor>
+    <contributor><name>Mark Carroll</name></contributor>
+    <contributor><name>Helen Flynn</name></contributor>
+    <contributor><name>David Gault</name></contributor>
+    <contributor><name>Alexander Görtz</name></contributor>
+    <contributor><name>Mark Hiner</name></contributor>
+    <contributor><name>Simone Leo</name></contributor>
+    <contributor><name>Roger Leigh</name></contributor>
+    <contributor><name>Melissa Linkert</name></contributor>
+    <contributor><name>Josh Moore</name></contributor>
+    <contributor><name>Andrew Patterson</name></contributor>
+    <contributor><name>Curtis Rueden</name></contributor>
+    <contributor><name>Paul van Schayck</name></contributor>
+    <contributor><name>Christoph Sommer</name></contributor>
+    <contributor><name>Bjoern Thiel</name></contributor>
+  </contributors>
 </project>
