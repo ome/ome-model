@@ -706,7 +706,8 @@ ${customAsXMLElementPropertyContent[prop.name]}
         Element child =
           document.createElementNS(NAMESPACE, "${prop.name}");
 {% end if %}\
-        ${klass.name}_element.appendChild(o.asXMLElement(document, child));
+        o.asXMLElement(document, child);
+        ${klass.name}_element.appendChild(child);
       }
 {% end when %}\
 {% when prop.isReference %}\
@@ -721,7 +722,8 @@ ${customAsXMLElementPropertyContent[prop.name]}
       Element child =
         document.createElementNS(NAMESPACE, "${prop.name}");
 {% end if %}\
-      ${klass.name}_element.appendChild(o.asXMLElement(document, child));
+      o.asXMLElement(document, child);
+      ${klass.name}_element.appendChild(child);
 {% end when %}\
 {% when prop.isBackReference %}\
       // *** IGNORING *** Skipped back reference ${prop.name}
@@ -771,7 +773,8 @@ ${customAsXMLElementPropertyContent[prop.name]}
       Element child =
         document.createElementNS(NAMESPACE, "${prop.name}");
 {% end if %}\
-      ${klass.name}_element.appendChild(${prop.instanceVariableName}.asXMLElement(document, child));
+      ${prop.instanceVariableName}.asXMLElement(document, child);
+      ${klass.name}_element.appendChild(child);
 {% end %}\
 {% if prop.langTypeNS == 'List<MapPair>' %}\
       Element ${prop.instanceVariableName}_child =
@@ -807,7 +810,8 @@ ${customAsXMLElementPropertyContent[prop.name]}
         Element child =
           document.createElementNS(NAMESPACE, "${prop.name}");
 {% end if %}\
-        ${klass.name}_element.appendChild(${prop.instanceVariableName}_value.asXMLElement(document, child));
+        ${prop.instanceVariableName}_value.asXMLElement(document, child);
+        ${klass.name}_element.appendChild(child);
       }
 {% end when %}\
 {% when prop.maxOccurs > 1 %}\

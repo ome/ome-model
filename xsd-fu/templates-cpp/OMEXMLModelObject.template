@@ -1345,7 +1345,7 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% if not prop.isAbstractSubstitution %}\
                   common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
 {% end if %}\
-                  child = o->asXMLElement(document, child);
+                  o->asXMLElement(document, child);
                   element.appendChild(child);
                 }
             }
@@ -1368,7 +1368,7 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% if not prop.isAbstractSubstitution %}\
               common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
 {% end if %}\
-              child = o->asXMLElement(document, child);
+              o->asXMLElement(document, child);
               element.appendChild(child);
             }
         }
@@ -1443,7 +1443,7 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% if not prop.isAbstractSubstitution %}\
             common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
 {% end if %}\
-            child = this->impl->${prop.instanceVariableName}->asXMLElement(document, child);
+            this->impl->${prop.instanceVariableName}->asXMLElement(document, child);
             element.appendChild(child);
           }
 {% end %}\
@@ -1531,7 +1531,7 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% if not prop.isAbstractSubstitution %}\
                   common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
 {% end if %}\
-                  child = (*i)->asXMLElement(document, child);
+                  (*i)->asXMLElement(document, child);
                   element.appendChild(child);
                 }
             }
