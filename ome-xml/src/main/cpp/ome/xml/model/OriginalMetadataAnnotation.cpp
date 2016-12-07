@@ -178,12 +178,12 @@ namespace ome
         return false;
       }
 
-      common::xml::dom::Element
+      void
       OriginalMetadataAnnotation::asXMLElementInternal (common::xml::dom::Document& document,
                                                         common::xml::dom::Element&  element) const
       {
 
-        return XMLAnnotation::asXMLElementInternal(document, element);
+        XMLAnnotation::asXMLElementInternal(document, element);
       }
 
       OriginalMetadataAnnotation::metadata_type&

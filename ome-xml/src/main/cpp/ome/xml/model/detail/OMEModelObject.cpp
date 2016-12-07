@@ -81,21 +81,21 @@ namespace ome
             element = document.createElementNS(getXMLNamespace(), "${klass.name}");
           else
             element = document.getDocumentElement();
-          return asXMLElementInternal(document, element);
+          asXMLElementInternal(document, element);
+          return element;
         }
 
-        common::xml::dom::Element
+        void
         OMEModelObject::asXMLElement (common::xml::dom::Document& document,
                                       common::xml::dom::Element&  element) const
         {
-          return asXMLElementInternal(document, element);
+          asXMLElementInternal(document, element);
         }
 
-        common::xml::dom::Element
+        void
         OMEModelObject::asXMLElementInternal (common::xml::dom::Document& /* document */,
-                                              common::xml::dom::Element&  element) const
+                                              common::xml::dom::Element&  /* element */) const
         {
-          return element;
         }
 
         void

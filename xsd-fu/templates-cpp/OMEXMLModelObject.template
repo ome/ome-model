@@ -1254,12 +1254,12 @@ ${customUpdatePropertyContent[prop.name]}
 {% if fu.SOURCE_TYPE == "header" %}\
       protected:
         // Documented in base class.
-        virtual common::xml::dom::Element
+        virtual void
         asXMLElementInternal (common::xml::dom::Document& document,
                               common::xml::dom::Element&  element) const;
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
-      common::xml::dom::Element
+      void
       ${klass.name}::asXMLElementInternal (common::xml::dom::Document& document,
                                            common::xml::dom::Element&  element) const
       {
@@ -1569,7 +1569,6 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% end %}\
 {% end %}\
 {% end for %}\
-        return element;
       }
 {% end source %}\
 

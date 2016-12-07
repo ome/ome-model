@@ -153,7 +153,7 @@ namespace ome
 
       protected:
         // Documented in base class.
-        virtual common::xml::dom::Element
+        virtual void
         asXMLElementInternal (common::xml::dom::Document& document,
                               common::xml::dom::Element&  element) const;
       };

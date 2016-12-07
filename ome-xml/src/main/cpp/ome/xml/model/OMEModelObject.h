@@ -156,9 +156,8 @@ namespace ome
            *
            * @param document XML document for element creation.
            * @param element XML element for setting model data.
-           * @returns an XML DOM tree root element for this model object.
            */
-        virtual common::xml::dom::Element
+        virtual void
         asXMLElement (common::xml::dom::Document& document,
                       common::xml::dom::Element&  element) const = 0;
 
