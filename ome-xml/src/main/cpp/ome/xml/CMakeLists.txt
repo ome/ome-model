@@ -59,6 +59,7 @@ set(OME_XML_STATIC_SOURCES
   OMETransformResolver.cpp
   meta/MetadataException.cpp
   meta/OMEXMLMetadataRoot.cpp
+  meta/OMEXMLMetadataModel.cpp
   meta/Convert.cpp
   model/ModelException.cpp
   model/OriginalMetadataAnnotation.cpp
@@ -83,7 +84,9 @@ set(OME_XML_META_STATIC_HEADERS
     meta/Convert.h
     meta/Metadata.h
     meta/MetadataException.h
+    meta/MetadataModel.h
     meta/MetadataRoot.h
+    meta/OMEXMLMetadataModel.h
     meta/OMEXMLMetadataRoot.h)
 
 set(OME_XML_STATIC_HEADERS

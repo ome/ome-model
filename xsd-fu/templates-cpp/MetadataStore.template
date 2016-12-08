@@ -114,6 +114,7 @@
 #include <ome/compat/memory.h>
 
 #include <ome/xml/meta/BaseMetadata.h>
+#include <ome/xml/meta/MetadataModel.h>
 #include <ome/xml/meta/MetadataRoot.h>
 #include <ome/xml/model/AffineTransform.h>
 
@@ -206,11 +207,44 @@ namespace ome
 
       public:
         /**
-         * Create root node.  The action taken here is specific to the
-         * concrete metadata implementation.
+         * Create underlying data model.  The action taken here is
+         * specific to the concrete metadata implementation.
+         */
+        virtual void
+        createModel() = 0;
+
+        /**
+         * Create root node within the underlying data model.  The
+         * action taken here is specific to the concrete metadata
+         * implementation.
          */
         virtual void
         createRoot() = 0;
+
+        /**
+         * Get the underlying model storing the metadata.  Note that
+         * the model type will be specific to the concrete metadata
+         * implementation.
+         *
+         * @returns a pointer to the model.
+         *
+         * @todo should this be a reference or shared_ptr?
+         */
+        virtual ome::compat::shared_ptr<MetadataModel>
+        getModel() = 0;
+
+        /**
+         * Set the underlying model storing the metadata.  Note that
+         * the model type will be specific to the concrete metadata
+         * implementation.  An exception will be thrown if the model
+         * node is of an incompatible type.
+         *
+         * @param model a pointer to the model.
+         *
+         * @todo should this be a reference or shared_ptr?
+         */
+        virtual void
+        setModel(ome::compat::shared_ptr<MetadataModel> model) = 0;
 
         /**
          * Get the root node of the metadata.  Note that the root node
@@ -221,7 +255,7 @@ namespace ome
          *
          * @todo should this be a reference or shared_ptr?
          */
-        virtual ome::compat::shared_ptr<MetadataRoot>&
+        virtual ome::compat::shared_ptr<MetadataRoot>
         getRoot() = 0;
 
         /**
@@ -235,7 +269,7 @@ namespace ome
          * @todo should this be a reference or shared_ptr?
          */
         virtual void
-        setRoot(ome::compat::shared_ptr<MetadataRoot>& root) = 0;
+        setRoot(ome::compat::shared_ptr<MetadataRoot> root) = 0;
 
 {% if debug %}\
         // -- Entity storage (manual definitions) --

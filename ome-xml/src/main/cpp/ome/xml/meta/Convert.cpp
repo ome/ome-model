@@ -1597,6 +1597,7 @@ namespace ome
         MetadataStore *src_store(dynamic_cast<MetadataStore *>(&src));
         if (typeid(src) == typeid(dest) && src_store && skip)
           {
+            dest.setModel(src_store->getModel());
             dest.setRoot(src_store->getRoot());
           }
         else

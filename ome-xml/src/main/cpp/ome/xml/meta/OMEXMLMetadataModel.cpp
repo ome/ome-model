@@ -1,7 +1,8 @@
 /*
  * #%L
  * OME-XML C++ library for working with OME-XML metadata structures.
- * Copyright © 2006 - 2016 Open Microscopy Environment:
+ * %%
+ * Copyright © 2016 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
  *   - University of Dundee
@@ -35,13 +36,10 @@
  * #L%
  */
 
-#ifndef OME_XML_OME_OMEXMLMETADATAROOT_H
-#define OME_XML_OME_OMEXMLMETADATAROOT_H
-
-#include <ome/compat/cstdint.h>
-
 #include <ome/xml/meta/OMEXMLMetadataModel.h>
-#include <ome/xml/meta/MetadataRoot.h>
+
+using ome::xml::model::OMEModel;
+using ome::xml::meta::MetadataModel;
 
 namespace ome
 {
@@ -50,41 +48,34 @@ namespace ome
     namespace meta
     {
 
-      /**
-       * OME-XML metadata root node.
-       */
-      class OMEXMLMetadataRoot : public ::ome::xml::meta::OMEXMLMetadataModel,
-				 virtual public ::ome::xml::meta::MetadataRoot
+      OMEXMLMetadataModel::OMEXMLMetadataModel():
+        ome::xml::model::OMEModelObject(),
+        ome::xml::model::OMEModel(),
+	MetadataModel(),
+	ome::xml::model::OME()
       {
-      public:
-        /// Constructor.
-        OMEXMLMetadataRoot();
+      }
 
-	/// Copy constructor.
-	OMEXMLMetadataRoot(const OMEXMLMetadataRoot& copy);
+      OMEXMLMetadataModel::~OMEXMLMetadataModel()
+      {
+      }
 
-	/// Copy constructor.
-	OMEXMLMetadataRoot(const xml::model::OME& copy);
+      OMEXMLMetadataModel::OMEXMLMetadataModel(const OMEXMLMetadataModel& copy):
+        ome::xml::model::OMEModelObject(),
+        ome::xml::model::OMEModel(),
+	MetadataModel(),
+	ome::xml::model::OME(copy)
+      {
+      }
 
-      public:
-        /// Destructor.
-        virtual
-        ~OMEXMLMetadataRoot();
-
-      private:
-        /// Assignment operator (deleted).
-        OMEXMLMetadataRoot&
-        operator= (const OMEXMLMetadataRoot&);
-      };
+      OMEXMLMetadataModel::OMEXMLMetadataModel(const ome::xml::model::OME& copy):
+        ome::xml::model::OMEModelObject(),
+        ome::xml::model::OMEModel(),
+	MetadataModel(),
+	ome::xml::model::OME(copy)
+      {
+      }
 
     }
   }
 }
-
-#endif // OME_XML_OME_OMEXMLMETADATAROOT_H
-
-/*
- * Local Variables:
- * mode:C++
- * End:
- */
