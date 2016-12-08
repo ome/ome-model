@@ -14,7 +14,10 @@
   <description>Contains the OME imaging metadata model specification, code generator and implementation</description>
   <url>http://www.openmicroscopy.org/site/products/bio-formats</url>
   <inceptionYear>2005</inceptionYear>
-
+  <organization>
+    <name>Open Microscopy Environment</name>
+    <url>http://www.openmicroscopy.org/</url>
+  </organization>
   <licenses>
     <license>
       <name>Simplified BSD License</name>
@@ -23,10 +26,83 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+      <name>The OME Team</name>
+      <email>ome-devel@lists.openmicroscopy.org.uk</email>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor><name>Chris Allan</name></contributor>
+    <contributor><name>Sébastien Besson</name></contributor>
+    <contributor><name>Jean-Marie Burel</name></contributor>
+    <contributor><name>Colin Blackburn</name></contributor>
+    <contributor><name>Mark Carroll</name></contributor>
+    <contributor><name>Helen Flynn</name></contributor>
+    <contributor><name>David Gault</name></contributor>
+    <contributor><name>Alexander Görtz</name></contributor>
+    <contributor><name>Mark Hiner</name></contributor>
+    <contributor><name>Simone Leo</name></contributor>
+    <contributor><name>Roger Leigh</name></contributor>
+    <contributor><name>Melissa Linkert</name></contributor>
+    <contributor><name>Josh Moore</name></contributor>
+    <contributor><name>Andrew Patterson</name></contributor>
+    <contributor><name>Curtis Rueden</name></contributor>
+    <contributor><name>Paul van Schayck</name></contributor>
+    <contributor><name>Christoph Sommer</name></contributor>
+    <contributor><name>Bjoern Thiel</name></contributor>
+  </contributors>
+
+  <mailingLists>
+    <mailingList>
+      <name>OME-users</name>
+      <subscribe>http://lists.openmicroscopy.org.uk/mailman/listinfo/ome-users/</subscribe>
+      <unsubscribe>http://lists.openmicroscopy.org.uk/mailman/listinfo/ome-users/</unsubscribe>
+      <post>ome-users@lists.openmicroscopy.org.uk</post>
+      <archive>http://lists.openmicroscopy.org.uk/pipermail/ome-users/</archive>
+    </mailingList>
+    <mailingList>
+      <name>OME-devel</name>
+      <subscribe>http://lists.openmicroscopy.org.uk/mailman/listinfo/ome-devel/</subscribe>
+      <unsubscribe>http://lists.openmicroscopy.org.uk/mailman/listinfo/ome-devel/</unsubscribe>
+      <post>ome-devel@lists.openmicroscopy.org.uk</post>
+      <archive>http://lists.openmicroscopy.org.uk/pipermail/ome-devel/</archive>
+    </mailingList>
+  </mailingLists>
+
+  <prerequisites>
+    <maven>3.0.4</maven>
+  </prerequisites>
+
   <modules>
     <module>specification</module>
     <module>ome-xml</module>
   </modules>
+
+  <scm>
+    <connection>scm:git:https://github.com/ome/ome-model</connection>
+    <developerConnection>scm:git:git@github.com:ome/ome-model</developerConnection>
+    <tag>HEAD</tag>
+    <url>http://github.com/ome/ome-model</url>
+  </scm>
+  <issueManagement>
+    <system>Trac</system>
+    <url>https://trac.openmicroscopy.org/ome</url>
+  </issueManagement>
+  <ciManagement>
+    <system>Jenkins</system>
+    <url>https://ci.openmicroscopy.org/</url>
+  </ciManagement>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
 
   <properties>
     <!-- If two artifacts on the classpath use two different versions of the
@@ -55,6 +131,15 @@
     <!-- NB: Override argLine property for extra maven-surefire-plugin args. -->
     <argLine/>
   </properties>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>http://repo.maven.apache.org/maven2</url>
+      <layout>default</layout>
+    </pluginRepository>
+  </pluginRepositories>
 
   <build>
     <!-- It is nice for "mvn" with no arguments to do something reasonable. -->
@@ -376,94 +461,4 @@
       </plugin>
     </plugins>
   </reporting>
-
-  <prerequisites>
-    <maven>3.0.4</maven>
-  </prerequisites>
-
-  <organization>
-    <name>Open Microscopy Environment</name>
-    <url>http://www.openmicroscopy.org/</url>
-  </organization>
-
-  <issueManagement>
-    <system>Trac</system>
-    <url>https://trac.openmicroscopy.org/ome</url>
-  </issueManagement>
-
-  <ciManagement>
-    <system>Jenkins</system>
-    <url>https://ci.openmicroscopy.org/</url>
-  </ciManagement>
-
-  <mailingLists>
-    <mailingList>
-      <name>OME-users</name>
-      <subscribe>http://lists.openmicroscopy.org.uk/mailman/listinfo/ome-users/</subscribe>
-      <unsubscribe>http://lists.openmicroscopy.org.uk/mailman/listinfo/ome-users/</unsubscribe>
-      <post>ome-users@lists.openmicroscopy.org.uk</post>
-      <archive>http://lists.openmicroscopy.org.uk/pipermail/ome-users/</archive>
-    </mailingList>
-    <mailingList>
-      <name>OME-devel</name>
-      <subscribe>http://lists.openmicroscopy.org.uk/mailman/listinfo/ome-devel/</subscribe>
-      <unsubscribe>http://lists.openmicroscopy.org.uk/mailman/listinfo/ome-devel/</unsubscribe>
-      <post>ome-devel@lists.openmicroscopy.org.uk</post>
-      <archive>http://lists.openmicroscopy.org.uk/pipermail/ome-devel/</archive>
-    </mailingList>
-  </mailingLists>
-
-  <scm>
-    <connection>scm:git:https://github.com/ome/ome-model</connection>
-    <developerConnection>scm:git:git@github.com:ome/ome-model</developerConnection>
-    <tag>HEAD</tag>
-    <url>http://github.com/ome/ome-model</url>
-  </scm>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>central</id>
-      <name>Central Repository</name>
-      <url>http://repo.maven.apache.org/maven2</url>
-      <layout>default</layout>
-    </pluginRepository>
-  </pluginRepositories>
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-    </snapshotRepository>
-    <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
-  <developers>
-    <developer>
-      <name>The OME Team</name>
-      <email>ome-devel@lists.openmicroscopy.org.uk</email>
-    </developer>
-  </developers>
-  <contributors>
-    <contributor><name>Chris Allan</name></contributor>
-    <contributor><name>Sébastien Besson</name></contributor>
-    <contributor><name>Jean-Marie Burel</name></contributor>
-    <contributor><name>Colin Blackburn</name></contributor>
-    <contributor><name>Mark Carroll</name></contributor>
-    <contributor><name>Helen Flynn</name></contributor>
-    <contributor><name>David Gault</name></contributor>
-    <contributor><name>Alexander Görtz</name></contributor>
-    <contributor><name>Mark Hiner</name></contributor>
-    <contributor><name>Simone Leo</name></contributor>
-    <contributor><name>Roger Leigh</name></contributor>
-    <contributor><name>Melissa Linkert</name></contributor>
-    <contributor><name>Josh Moore</name></contributor>
-    <contributor><name>Andrew Patterson</name></contributor>
-    <contributor><name>Curtis Rueden</name></contributor>
-    <contributor><name>Paul van Schayck</name></contributor>
-    <contributor><name>Christoph Sommer</name></contributor>
-    <contributor><name>Bjoern Thiel</name></contributor>
-  </contributors>
 </project>
