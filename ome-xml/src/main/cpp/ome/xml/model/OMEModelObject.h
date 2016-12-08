@@ -162,7 +162,7 @@ namespace ome
          */
         virtual void
         update (const common::xml::dom::Element& element,
-                OMEModel&                   model) = 0;
+                OMEModel&                        model) = 0;
 
         /**
          * Link a given OME model object to this model object.

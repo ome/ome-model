@@ -54,6 +54,7 @@ namespace ome
     namespace model
     {
 
+      class OME;
       class Reference;
 
       /**
@@ -76,12 +77,6 @@ namespace ome
         OMEModel ()
         {}
 
-      public:
-        /// Destructor.
-        virtual
-        ~OMEModel ()
-        {}
-
       private:
         /// Copy constructor (deleted).
         OMEModel (const OMEModel&);
@@ -91,6 +86,11 @@ namespace ome
         operator= (const OMEModel&);
 
       public:
+        /// Destructor.
+        virtual
+        ~OMEModel ()
+        {}
+
         /**
          * Add a model object to the model.  Note that the concrete
          * implementation will not add types derived from Reference.
