@@ -756,6 +756,8 @@ def validateMetadataConverter():
     for match in combinedDiff:
         if match == 'setRoot' or match == 'getRoot':
             continue
+        if match == 'setModel' or match == 'getModel':
+            continue
         if match in retrieveSet:
             print("MetadataValidation: %s is present in MetadataRetrieve but missing from %s" % (match, opts.lang.getConverterName()), file=sys.stderr)
         else:
