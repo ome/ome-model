@@ -272,6 +272,19 @@ public class AggregateMetadata implements IMetadata
 
   // -- MetadataStore API methods --
 
+  /* @see MetadataStore#createModel() */
+  public void createModel()
+  {
+    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    {
+      Object o = iter.next();
+      if (o instanceof MetadataStore)
+      {
+        ((MetadataStore) o).createModel();
+      }
+    }
+  }
+
   /* @see MetadataStore#createRoot() */
   public void createRoot()
   {
@@ -283,6 +296,24 @@ public class AggregateMetadata implements IMetadata
         ((MetadataStore) o).createRoot();
       }
     }
+  }
+
+  /**
+   * Unsupported with an AggregateMetadata.
+   * @throws RuntimeException Always.
+   */
+  public MetadataModel getModel()
+  {
+    throw new RuntimeException("Unsupported by AggregateMetadata");
+  }
+
+  /**
+   * Unsupported with an AggregateMetadata.
+   * @throws RuntimeException Always.
+   */
+  public void setModel(MetadataModel model)
+  {
+    throw new RuntimeException("Unsupported by AggregateMetadata");
   }
 
   /**

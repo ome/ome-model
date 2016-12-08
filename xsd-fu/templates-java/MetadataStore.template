@@ -166,6 +166,13 @@ import ${lang.units_package}.unit.Unit;
  */
 public interface MetadataStore extends BaseMetadata
 {
+
+  /**
+   * Create underlying data model.  The action taken here is specific
+   * to the concrete metadata implementation.
+   */
+  void createModel();
+
   /**
    * Create root node.  The action taken here is specific to the
    * concrete metadata implementation.
@@ -190,6 +197,25 @@ public interface MetadataStore extends BaseMetadata
    * @param root the root node.
    */
   void setRoot(MetadataRoot root);
+
+  /**
+   * Get the underlying model storing the metadata.  Note that the
+   * model type will be specific to the concrete metadata
+   * implementation.
+   *
+   * @return the model node.
+   */
+  MetadataModel getModel();
+
+  /**
+   * Set the underlying model storing the metadata. Set the model node
+   * of the metadata.  Note that the model type will be specific to
+   * the concrete metadata implementation.  An exception will be
+   * thrown if the model node is of an incompatible type.
+   *
+   * @param model the model node.
+   */
+  void setModel(MetadataModel model);
 
   // -- Entity storage (manual definitions) --
 

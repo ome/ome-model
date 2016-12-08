@@ -175,7 +175,20 @@ public class DummyMetadata implements IMetadata
 {
   // -- MetadataStore API methods --
 
+  public void createModel()
+  {
+  }
+
   public void createRoot()
+  {
+  }
+
+  public MetadataModel getModel()
+  {
+    return null;
+  }
+
+  public void setModel(MetadataModel model)
   {
   }
 

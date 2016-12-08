@@ -190,10 +190,28 @@ public class FilterMetadata implements MetadataStore
 
   // -- MetadataStore API methods --
 
+  /* @see MetadataStore#createModel() */
+  public void createModel()
+  {
+    store.createModel();
+  }
+
   /* @see MetadataStore#createRoot() */
   public void createRoot()
   {
     store.createRoot();
+  }
+
+  /* @see MetadataStore#getModel() */
+  public MetadataModel getModel()
+  {
+    return store.getModel();
+  }
+
+  /* @see MetadataStore#setModel(MetadataModel) */
+  public void setModel(MetadataModel model)
+  {
+    store.setModel(model);
   }
 
   /* @see MetadataStore#getRoot() */

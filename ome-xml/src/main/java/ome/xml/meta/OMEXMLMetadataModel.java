@@ -45,10 +45,10 @@ import ome.xml.model.enums.EnumerationException;
  *
  * @author Roger Leigh rleigh at dundee.ac.uk
  */
-public class OMEXMLMetadataRoot extends OMEXMLMetadataModel implements MetadataRoot {
+public class OMEXMLMetadataModel extends OME implements MetadataModel {
 
   /** Default constructor. */
-  public OMEXMLMetadataRoot()
+  public OMEXMLMetadataModel()
   {
     super();
   }
@@ -60,7 +60,7 @@ public class OMEXMLMetadataRoot extends OMEXMLMetadataModel implements MetadataR
    * @throws EnumerationException If there is an error instantiating an
    * enumeration during model object creation.
    */
-  public OMEXMLMetadataRoot(Element element)
+  public OMEXMLMetadataModel(Element element)
     throws EnumerationException
   {
     super(element);
@@ -75,10 +75,10 @@ public class OMEXMLMetadataRoot extends OMEXMLMetadataModel implements MetadataR
    * (ignored--now provided directly by this class).
    * @throws EnumerationException If there is an error instantiating an
    * enumeration during model object creation.
-   * @deprecated Use {@link OMEXMLMetadataRoot#OMEXMLMetadataRoot(Element) instead}.
+   * @deprecated Use {@link OMEXMLMetadataModel#OMEXMLMetadataModel(Element) instead}.
    */
   @Deprecated
-  public OMEXMLMetadataRoot(Element element, OMEModel model)
+  public OMEXMLMetadataModel(Element element, OMEModel model)
     throws EnumerationException
   {
     super(element, model);
@@ -89,7 +89,7 @@ public class OMEXMLMetadataRoot extends OMEXMLMetadataModel implements MetadataR
    *
    * @param ome the OME instance to copy.
    */
-  public OMEXMLMetadataRoot(OME ome)
+  public OMEXMLMetadataModel(OME ome)
   {
     super(ome);
   }

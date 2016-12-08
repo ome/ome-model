@@ -34,64 +34,12 @@
 
 package ome.xml.meta;
 
-import org.w3c.dom.Element;
-
-import ome.xml.model.OME;
-import ome.xml.model.OMEModel;
-import ome.xml.model.enums.EnumerationException;
-
 /**
- * A utility class for constructing and manipulating OME-XML DOMs.
+ * Abstract metadata model node.
  *
- * @author Roger Leigh rleigh at dundee.ac.uk
+ * <p>The <code>MetadataModel</code> interface is implemented by the
+ * model storage implementations.
+ *
+ * @author Roger Leigh r.leigh at dundee.ac.uk
  */
-public class OMEXMLMetadataRoot extends OMEXMLMetadataModel implements MetadataRoot {
-
-  /** Default constructor. */
-  public OMEXMLMetadataRoot()
-  {
-    super();
-  }
-
-  /**
-   * Constructs OME recursively from an XML DOM tree.
-   * @param element Root of the XML DOM tree to construct a model object
-   * graph from.
-   * @throws EnumerationException If there is an error instantiating an
-   * enumeration during model object creation.
-   */
-  public OMEXMLMetadataRoot(Element element)
-    throws EnumerationException
-  {
-    super(element);
-  }
-
-  /**
-   * Constructs OME recursively from an XML DOM tree.
-   * @param element Root of the XML DOM tree to construct a model object
-   * graph from.
-   * @param model Handler for the OME model which keeps track of
-   * instances and references seen during object population
-   * (ignored--now provided directly by this class).
-   * @throws EnumerationException If there is an error instantiating an
-   * enumeration during model object creation.
-   * @deprecated Use {@link OMEXMLMetadataRoot#OMEXMLMetadataRoot(Element) instead}.
-   */
-  @Deprecated
-  public OMEXMLMetadataRoot(Element element, OMEModel model)
-    throws EnumerationException
-  {
-    super(element, model);
-  }
-
-  /**
-   * Construct from existing OME instance.
-   *
-   * @param ome the OME instance to copy.
-   */
-  public OMEXMLMetadataRoot(OME ome)
-  {
-    super(ome);
-  }
-
-}
+public interface MetadataModel { }
