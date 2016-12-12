@@ -18,7 +18,10 @@
   <description>The OME Data Model specification</description>
   <url>http://www.openmicroscopy.org/site/support/ome-model/</url>
   <inceptionYear>2003</inceptionYear>
-
+  <organization>
+    <name>Open Microscopy Environment</name>
+    <url>http://www.openmicroscopy.org/</url>
+  </organization>
   <licenses>
     <license>
       <name>Simplified BSD License</name>
@@ -61,5 +64,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
