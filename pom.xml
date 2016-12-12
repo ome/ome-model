@@ -77,6 +77,7 @@
   <modules>
     <module>specification</module>
     <module>ome-xml</module>
+    <module>docs/sphinx</module>
   </modules>
 
   <scm>
