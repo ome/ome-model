@@ -35,3 +35,18 @@ if (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
 endif (DOXYGEN_FOUND AND DOXYGEN_DOT_FOUND)
 option(doxygen "Enable doxygen documentation" ${DOXYGEN_DEFAULT})
 set(BUILD_DOXYGEN ${doxygen})
+
+# Sphinx documentation generator
+find_program(SPHINX_BUILD sphinx-build)
+if (SPHINX_BUILD)
+  message(STATUS "Looking for sphinx-build - ${SPHINX_BUILD}")
+else()
+  message(STATUS "Looking for sphinx-build - not found")
+endif()
+
+set(SPHINX_DEFAULT OFF)
+if(SPHINX_BUILD)
+  set(SPHINX_DEFAULT ON)
+endif()
+option(sphinx "Enable sphinx manual page and HTML documentation" ${SPHINX_DEFAULT})
+option(sphinx-linkcheck "Check sphinx documentation links by default" OFF)
