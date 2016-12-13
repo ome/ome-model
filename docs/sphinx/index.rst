@@ -1,6 +1,6 @@
-#############################################
-OME Model and Formats |release| Documentation
-#############################################
+########################################################
+OME Data Model and File Formats  |release| Documentation
+########################################################
 
 This documentation covers the OME Data Model, OME-XML and OME-TIFF. 
 
