@@ -178,13 +178,13 @@ extlinks = {
     # Doc links
     'omero_doc' : (oo_site_root + '/support/omero/%s', ''),
     'bf_doc' : (oo_site_root + '/support/bio-formats/%s', ''),
-    'schema_doc' : (oo_root + '/Schemas/Documentation/Generated/OME-' + release + '/%s', ''),
+    'schema_doc' : (oo_root + '/Schemas/Documentation/Generated/OME-' + model_version + '/%s', ''),
     # Downloads
     'bf_downloads' : (downloads_root + '/latest/bio-formats/%s', ''),
     'cpp_downloads' : (downloads_root + '/latest/ome-files-cpp/%s', ''),
     'image_downloads' : (downloads_root + '/images/%s', ''),
-    'ometiff_downloads' : (downloads_root + '/images/OME-TIFF/' + release + '/%s', ''),
-    'omexml_downloads' : (downloads_root + '/images/OME-XML/' + release + '/%s', ''),
+    'ometiff_downloads' : (downloads_root + '/images/OME-TIFF/' + model_version + '/%s', ''),
+    'omexml_downloads' : (downloads_root + '/images/OME-XML/' + model_version + '/%s', ''),
     }
 
 rst_epilog = """
