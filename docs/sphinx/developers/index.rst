@@ -119,9 +119,10 @@ Additional tools
 
 There are two Python applications to aid working with OME-XML - 
 :doc:`EnumTool`, which is designed to digest OME-XML schema and
-produce meaningful output about enumerations, and :bf_doc:`XSD Fu <developers/xsd-fu.html>`,
-which digests OME XML schema and produces an object oriented Java
-infrastructure to ease  work with an XML DOM tree.
+produce meaningful output about enumerations, and the
+:program:`xsd-fu` code generator, which digests OME XML schema and
+produces an object oriented C++ and Java infrastructure to ease working
+with an XML DOM tree.
 
 |
 
