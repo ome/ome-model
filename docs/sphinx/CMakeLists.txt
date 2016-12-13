@@ -54,6 +54,7 @@ if (BUILD_SPHINX AND SPHINX_BUILD)
   # Create build directory and conf.py
   set(sphinx_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
   set(sphinx_builddir "${CMAKE_CURRENT_BINARY_DIR}")
+  set(model_version "${MODEL_VERSION}")
   file(MAKE_DIRECTORY "${sphinx_builddir}")
   file(MAKE_DIRECTORY "${sphinx_builddir}/_static")
   configure_file("${sphinx_srcdir}/conf.py"
@@ -74,8 +75,8 @@ if (BUILD_SPHINX AND SPHINX_BUILD)
                        COMMAND ${CMAKE_COMMAND} -E make_directory "${sphinx_builddir}/cache"
                        COMMAND ${CMAKE_COMMAND} -E make_directory "${PROJECT_BINARY_DIR}/man"
                        COMMAND ${SPHINX_BUILD}
-                               -D "release=${OME_VERSION_SHORT}"
-                               -D "version=${OME_VERSION_MAJOR}.${OME_VERSION_MINOR}"
+                               -D "release=${ome-xml_VERSION}"
+                               -D "version=${ome-xml_VERSION_MAJOR}.${ome-xml_VERSION_MINOR}"
                                -c "${sphinx_builddir}"
                                -d "${sphinx_builddir}/cache"
                                -b man
@@ -101,8 +102,8 @@ if (BUILD_SPHINX AND SPHINX_BUILD)
                      COMMAND ${CMAKE_COMMAND} -E make_directory "${sphinx_builddir}/cache"
                      COMMAND ${CMAKE_COMMAND} -E make_directory "${sphinx_builddir}/html"
                      COMMAND ${SPHINX_BUILD}
-                             -D "release=${OME_VERSION_SHORT}"
-                             -D "version=${OME_VERSION_MAJOR}.${OME_VERSION_MINOR}"
+                             -D "release=${ome-xml_VERSION}"
+                             -D "version=${ome-xml_VERSION_MAJOR}.${ome-xml_VERSION_MINOR}"
                              -c "${sphinx_builddir}"
                              -d "${sphinx_builddir}/cache"
                              -b html
@@ -124,8 +125,8 @@ if (BUILD_SPHINX AND SPHINX_BUILD)
                     COMMAND ${CMAKE_COMMAND} -E make_directory "${sphinx_builddir}/cache"
                     COMMAND ${CMAKE_COMMAND} -E make_directory "${sphinx_builddir}/linkcheck"
                     COMMAND ${SPHINX_BUILD}
-                            -D "release=${OME_VERSION_SHORT}"
-                            -D "version=${OME_VERSION_MAJOR}.${OME_VERSION_MINOR}"
+                            -D "release=${ome-xml_VERSION}"
+                            -D "version=${ome-xml_VERSION_MAJOR}.${ome-xml_VERSION_MINOR}"
                             -c "${sphinx_builddir}"
                             -d "${sphinx_builddir}/cache"
                             -b linkcheck
