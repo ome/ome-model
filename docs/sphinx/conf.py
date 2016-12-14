@@ -302,17 +302,17 @@ htmlhelp_basename = 'projstandardsdoc'
 
 # -- Options for LaTeX output --------------------------------------------------
 
-latex_elements = {}
+#latex_elements = {}
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
-latex_use_parts = True
+#latex_use_parts = True
 
 # If true, show page references after internal links.
 #latex_show_pagerefs = False
 
 # If true, show URL addresses after external links.
-latex_show_urls = 'footnote'
+#latex_show_urls = 'footnote'
 
 # Documents to append as an appendix to all manuals.
 #latex_appendices = []
