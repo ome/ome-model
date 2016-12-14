@@ -150,6 +150,7 @@
               <descriptors>
                 <descriptor>assembly.xml</descriptor>
               </descriptors>
+              <tarLongFileMode>posix</tarLongFileMode>
             </configuration>
             <executions>
               <execution>
