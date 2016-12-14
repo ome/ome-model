@@ -12,7 +12,11 @@
     <relativePath>..</relativePath>
   </parent>
 
+  <groupId>org.openmicroscopy</groupId>
+  <version>5.3.2-SNAPSHOT</version>
+
   <artifactId>ome-model-docs</artifactId>
+  <packaging>pom</packaging>
 
   <name>OME Model documentation</name>
   <description>Documentation for the OME imaging metadata model specification and implementation.</description>
@@ -31,6 +35,8 @@
     <sphinx_srcdir>${basedir}</sphinx_srcdir>
     <sphinx_builddir>${project.build.directory}/sphinx</sphinx_builddir>
     <model_version>${ome.model.schemaver}</model_version>
+    <sphinx.builder>html</sphinx.builder>
+    <sphinx.theme>sphinxdoc</sphinx.theme>
   </properties>
 
   <build>
@@ -40,7 +46,7 @@
         <version>3.0.1</version>
         <executions>
           <execution>
-            <id>copy-resources</id>
+            <id>copy-configuration</id>
             <!-- here the phase you need -->
             <phase>validate</phase>
             <goals>
@@ -48,6 +54,7 @@
             </goals>
             <configuration>
               <outputDirectory>${sphinx_builddir}</outputDirectory>
+              <includeEmptyDirs>true</includeEmptyDirs>
               <resources>
                 <resource>
                   <directory>${basedir}</directory>
@@ -55,6 +62,16 @@
                   <includes>
                     <include>conf.py</include>
                   </includes>
+                </resource>
+                <resource>
+                  <directory>${basedir}/</directory>
+                  <filtering>false</filtering>
+                  <includes>
+                    <include>_static/**</include>
+                  </includes>
+                  <excludes>
+                    <exclude>_static/.*</exclude>
+                  </excludes>
                 </resource>
               </resources>
             </configuration>
@@ -98,83 +115,54 @@
                 <argument>-d</argument>
                 <argument>${sphinx_builddir}/cache</argument>
                 <argument>-b</argument>
-                <argument>html</argument>
+                <argument>${sphinx.builder}</argument>
+                <argument>-W</argument>
+                <argument>-D</argument>
+                <argument>html_theme=${sphinx.theme}</argument>
                 <argument>${basedir}</argument>
-                <argument>${sphinx_builddir}/html</argument>
+                <argument>${sphinx_builddir}/${sphinx.builder}</argument>
               </arguments>
             </configuration>
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.6</version>
-        <configuration>
-          <descriptors>
-            <descriptor>assembly.xml</descriptor>
-          </descriptors>
-          <executions>
-            <execution>
-              <id>make-zip</id>
-              <phase>package</phase>
-              <goals>
-                <goal>single</goal>
-              </goals>
-            </execution>
-          </executions>
-        </configuration>
-      </plugin>
     </plugins>
   </build>
 
-  <developers>
-    <developer>
-      <id>curtis</id>
-      <name>Curtis Rueden</name>
-      <email>ctrueden@wisc.edu</email>
-      <url>http://loci.wisc.edu/people/curtis-rueden</url>
-      <organization>UW-Madison LOCI</organization>
-      <organizationUrl>http://loci.wisc.edu/</organizationUrl>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-      <timezone>-6</timezone>
-      <properties>
-        <picUrl>http://loci.wisc.edu/files/loci/images/people/curtis-2010.jpg</picUrl>
-      </properties>
-    </developer>
-    <developer>
-      <id>callan</id>
-      <name>Chris Allan</name>
-      <email>callan@lifesci.dundee.ac.uk</email>
-      <url>http://www.openmicroscopy.org/site/about/development-teams/jason</url>
-      <organization>Swedlow Lab, University of Dundee</organization>
-      <organizationUrl>http://www.lifesci.dundee.ac.uk/groups/jason_swedlow/</organizationUrl>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-      <timezone>0</timezone>
-      <properties>
-        <picUrl>http://www.openmicroscopy.org/site/about/development-teams/jason/chrisallan.jpg</picUrl>
-      </properties>
-    </developer>
-    <developer>
-      <id>melissa</id>
-      <name>Melissa Linkert</name>
-      <email>melissa@glencoesoftware.com</email>
-      <url>http://www.openmicroscopy.org/site/about/development-teams/glencoe-software</url>
-      <organization>Glencoe Software</organization>
-      <organizationUrl>http://glencoesoftware.com/</organizationUrl>
-      <roles>
-        <role>architect</role>
-        <role>developer</role>
-      </roles>
-      <timezone>-6</timezone>
-      <properties>
-        <picUrl>http://www.openmicroscopy.org/site/about/development-teams/glencoe-software/melissalinkert.png</picUrl>
-      </properties>
-    </developer>
-  </developers>
+   <profiles>
+    <profile>
+      <!-- Build javadocs by default, but not when running tests -->
+      <id>package-html</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+        <property>
+          <name>sphinx.builder</name>
+          <value>html</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.6</version>
+            <configuration>
+              <descriptors>
+                <descriptor>assembly.xml</descriptor>
+              </descriptors>
+            </configuration>
+            <executions>
+              <execution>
+                <id>make-zip</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+   </profiles>
 </project>
