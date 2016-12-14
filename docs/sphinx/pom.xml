@@ -36,7 +36,7 @@
     <sphinx_builddir>${project.build.directory}/sphinx</sphinx_builddir>
     <model_version>${ome.model.schemaver}</model_version>
     <sphinx.builder>html</sphinx.builder>
-    <sphinx.theme>sphinxdoc</sphinx.theme>
+    <sphinx.html.theme>sphinxdoc</sphinx.html.theme>
   </properties>
 
   <build>
@@ -118,7 +118,7 @@
                 <argument>${sphinx.builder}</argument>
                 <argument>-W</argument>
                 <argument>-D</argument>
-                <argument>html_theme=${sphinx.theme}</argument>
+                <argument>html_theme=${sphinx.html.theme}</argument>
                 <argument>${basedir}</argument>
                 <argument>${sphinx_builddir}/${sphinx.builder}</argument>
               </arguments>
