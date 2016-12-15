@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(srcdir, '_ext')))
 # -- General configuration -----------------------------------------------------
 
 # General information about the project.
-project = u'OME ' + model_version + u' Data Model and File Formats'
+project = u'OME Data Model and File Formats'
 title = project + u' Documentation'
 
 # The version info for the project you're documenting, acts as replacement for
