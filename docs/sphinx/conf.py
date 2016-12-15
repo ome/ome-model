@@ -13,9 +13,9 @@
 # serve to show the default.
 
 # Substitutions from external build system.
-srcdir = '@sphinx_srcdir@'
-builddir = '@sphinx_builddir@'
-model_version='@model_version@'
+srcdir = u'@sphinx_srcdir@'
+builddir = u'@sphinx_builddir@'
+model_version=u'@model_version@'
 
 import datetime
 import sys, os
@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(srcdir, '_ext')))
 # -- General configuration -----------------------------------------------------
 
 # General information about the project.
-project = u'OME Data Model and File Formats'
+project = u'OME ' + model_version + u' Data Model and File Formats'
 title = project + u' Documentation'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -204,6 +204,7 @@ rst_epilog = """
 .. _Libjpeg: http://libjpeg.sourceforge.net/
 .. _Django: https://www.djangoproject.com/
 
+.. |model_version| replace:: %s
 .. |SSH| replace:: :abbr:`SSH (Secure Shell)`
 .. |VM| replace:: :abbr:`VM (Virtual Machine)`
 .. |OS| replace:: :abbr:`OS (Operating System)`
@@ -218,7 +219,7 @@ rst_epilog = """
 
 .. |OME| replace:: `Open Microscopy Environment`_
 .. |Glencoe| replace:: `Glencoe Software, Inc.`_
-"""
+""" % (model_version)
 
 # -- Options for HTML output ---------------------------------------------------
 
