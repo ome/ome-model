@@ -13,3 +13,6 @@ jdk:
 
 matrix:
   fast_finish: true
+
+before_install:
+  pip install --user -r requirements.txt
