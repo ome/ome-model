@@ -52,7 +52,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/cmake/BioFormatsCommon.cmake")
 include(cmake/Version.cmake)
 ome_project_version("OME XML C++" "${CMAKE_CURRENT_SOURCE_DIR}")
 
-project(ome-xml
+project(ome-model
         VERSION "${OME_VERSION_MAJOR}.${OME_VERSION_MINOR}.${OME_VERSION_PATCH}"
         LANGUAGES CXX)
 
