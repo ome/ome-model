@@ -15,7 +15,7 @@
   <groupId>org.openmicroscopy</groupId>
   <version>5.3.2-SNAPSHOT</version>
 
-  <artifactId>ome-model-docs</artifactId>
+  <artifactId>ome-model-doc</artifactId>
   <packaging>pom</packaging>
 
   <name>OME Model documentation</name>
@@ -98,7 +98,7 @@
         <executions>
           <!-- Generate the OME model object classes -->
           <execution>
-            <id>sphinx-docs</id>
+            <id>sphinx-doc</id>
             <phase>compile</phase>
             <goals>
               <goal>exec</goal>
