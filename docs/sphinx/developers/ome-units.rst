@@ -169,7 +169,7 @@ And from this are derived the following units:
 -  **°R** - degree Rankine
 
 The degree sign and word was dropped from kelvin in 1968. 
-http://en.wikipedia.org/wiki/Kelvin
+https://en.wikipedia.org/wiki/Kelvin
 
 All temperature units are freely convertible.
 
