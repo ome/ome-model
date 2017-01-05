@@ -14,12 +14,7 @@ concept. It was designed to allow the naming or identifying of data and
 associated metadata that can be stored in multiple, distributed data
 stores.
 
-For further information see
-`http://en.wikipedia.org/wiki/LSID <http://en.wikipedia.org/wiki/LSID>`_.
-
-The full specification document is available at
-`http://www.omg.org/cgi-bin/doc?dtc/04-10-08 <http://www.omg.org/cgi-bin/doc?dtc/04-10-08>`_
-[pdf].
+For further information see https://en.wikipedia.org/wiki/LSID.
 
 The format of a valid LSID is:
 

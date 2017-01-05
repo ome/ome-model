@@ -10,11 +10,11 @@ in many cases, never recorded at all).
 
 The term "OME-XML" applies to two interrelated but distinct things:
 
-#. A `data model <http://en.wikipedia.org/wiki/Data_model>`_ for
+#. A `data model <https://en.wikipedia.org/wiki/Data_model>`_ for
    representing microscopy metadata, for use with microscopy file
-   formats, expressed as an `XML <http://en.wikipedia.org/wiki/XML>`_
+   formats, expressed as an `XML <https://en.wikipedia.org/wiki/XML>`_
    schema.
-#. A `file format <http://en.wikipedia.org/wiki/File_format>`_ for
+#. A `file format <https://en.wikipedia.org/wiki/File_format>`_ for
    storing microscopy information (both pixels and metadata) using the
    OME-XML data model.
 

@@ -303,7 +303,7 @@ entire multidimensional image series in one master OME-TIFF file.
 
 Alternatively, a collection of multiple OME-TIFF files may be used. Using
 the TiffData attributes outlined above together with
-`UUID <http://en.wikipedia.org/wiki/Universally_Unique_Identifier>`_
+`UUID <https://en.wikipedia.org/wiki/Universally_Unique_Identifier>`_
 elements and attributes, the OME-XML metadata block can unambiguously
 define which dimensional positions correspond to which IFDs from which
 files. Each OME-TIFF need not contain the same number of images.
