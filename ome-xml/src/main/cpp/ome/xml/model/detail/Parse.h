@@ -73,7 +73,7 @@ namespace ome
 
         /// Type trait for shared_ptr.
         template <class T>
-        struct is_shared_ptr<ome::compat::shared_ptr<T> >
+        struct is_shared_ptr<std::shared_ptr<T> >
           : boost::true_type {};
 
         /**
@@ -198,7 +198,7 @@ namespace ome
         {
           typedef typename boost::remove_const<typename boost::remove_reference<T>::type>::type raw_type;
 
-          raw_type attr(ome::compat::make_shared<typename raw_type::element_type>());
+          raw_type attr(std::make_shared<typename raw_type::element_type>());
           parse_value(text, *attr, klass, property);
           return attr;
         }
@@ -286,7 +286,7 @@ namespace ome
           typename raw_type::element_type::value_type v;
           parse_value(text, v, klass, property);
           typename raw_type::element_type::unit_type u(unit);
-          raw_type attr(ome::compat::make_shared<typename raw_type::element_type>(v, u));
+          raw_type attr(std::make_shared<typename raw_type::element_type>(v, u));
           return attr;
         }
 

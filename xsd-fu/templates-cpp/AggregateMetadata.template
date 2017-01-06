@@ -25,7 +25,7 @@
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             /// TODO: No handling of -1 as for Java.  Callee must throw.
             if (retrieve)
               return retrieve->get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}Count(${indexes_name_string(indexes[:-1])});
@@ -52,7 +52,7 @@
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}(${indexes_name_string(indexes)}, ${index_name_string(prop.name)});
           }
@@ -75,7 +75,7 @@
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}(${indexes_name_string(indexes)});
           }
@@ -98,7 +98,7 @@
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}();
           }
@@ -126,7 +126,7 @@
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataStore> store = ome::compat::dynamic_pointer_cast<MetadataStore>(*i);
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(*i);
             if (store)
               store->set{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}${prop.name}(${prop.argumentName}, ${indexes_name_string(indexes)}, ${index_name_string(prop.name)});
           }
@@ -149,7 +149,7 @@
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataStore> store = ome::compat::dynamic_pointer_cast<MetadataStore>(*i);
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(*i);
             if (store)
               store->set{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}(${prop.argumentName}, ${indexes_name_string(indexes)});
           }
@@ -172,7 +172,7 @@
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataStore> store = ome::compat::dynamic_pointer_cast<MetadataStore>(*i);
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(*i);
             if (store)
               store->set{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}(${prop.argumentName});
           }
@@ -305,7 +305,7 @@ namespace ome
       {
       public:
         /// A list of MetadataStore and MetadataRetrieve instances.
-        typedef std::vector<ome::compat::shared_ptr<BaseMetadata> > delegate_list_type;
+        typedef std::vector<std::shared_ptr<BaseMetadata> > delegate_list_type;
 
       private:
         /** The active metadata store delegates. */
@@ -351,7 +351,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataStore> store = ome::compat::dynamic_pointer_cast<MetadataStore>(*i);
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(*i);
             if (store)
               store->createModel();
           }
@@ -371,7 +371,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataStore> store = ome::compat::dynamic_pointer_cast<MetadataStore>(*i);
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(*i);
             if (store)
               store->createRoot();
           }
@@ -385,11 +385,11 @@ namespace ome
          * exception if called.
          * @throws MetadataException always.
          */
-        ome::compat::shared_ptr<MetadataModel>
+        std::shared_ptr<MetadataModel>
         getModel();
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
-      ome::compat::shared_ptr<MetadataModel>
+      std::shared_ptr<MetadataModel>
       AggregateMetadata::getModel()
       {
         throw MetadataException("AggregateMetadata", "getModel",
@@ -405,11 +405,11 @@ namespace ome
          * @throws MetadataException always.
          */
         void
-        setModel(ome::compat::shared_ptr<MetadataModel> model);
+        setModel(std::shared_ptr<MetadataModel> model);
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       void
-      AggregateMetadata::setModel(ome::compat::shared_ptr<MetadataModel> /* model */)
+      AggregateMetadata::setModel(std::shared_ptr<MetadataModel> /* model */)
       {
         throw MetadataException("AggregateMetadata", "setModel",
                                 "unsupported");
@@ -423,11 +423,11 @@ namespace ome
          * exception if called.
          * @throws MetadataException always.
          */
-        ome::compat::shared_ptr<MetadataRoot>
+        std::shared_ptr<MetadataRoot>
         getRoot();
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
-      ome::compat::shared_ptr<MetadataRoot>
+      std::shared_ptr<MetadataRoot>
       AggregateMetadata::getRoot()
       {
         throw MetadataException("AggregateMetadata", "getRoot",
@@ -443,11 +443,11 @@ namespace ome
          * @throws MetadataException always.
          */
         void
-        setRoot(ome::compat::shared_ptr<MetadataRoot> root);
+        setRoot(std::shared_ptr<MetadataRoot> root);
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       void
-      AggregateMetadata::setRoot(ome::compat::shared_ptr<MetadataRoot> /* root */)
+      AggregateMetadata::setRoot(std::shared_ptr<MetadataRoot> /* root */)
       {
         throw MetadataException("AggregateMetadata", "setRoot",
                                 "unsupported");
@@ -471,7 +471,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getBooleanAnnotationAnnotationCount(booleanAnnotationIndex);
           }
@@ -493,7 +493,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getCommentAnnotationAnnotationCount(commentAnnotationIndex);
           }
@@ -515,7 +515,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getDoubleAnnotationAnnotationCount(doubleAnnotationIndex);
           }
@@ -537,7 +537,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getFileAnnotationAnnotationCount(fileAnnotationIndex);
           }
@@ -559,7 +559,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getListAnnotationAnnotationCount(listAnnotationIndex);
           }
@@ -581,7 +581,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getLongAnnotationAnnotationCount(longAnnotationIndex);
           }
@@ -603,7 +603,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getMapAnnotationAnnotationCount(mapAnnotationIndex);
           }
@@ -625,7 +625,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getTagAnnotationAnnotationCount(tagAnnotationIndex);
           }
@@ -647,7 +647,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getTermAnnotationAnnotationCount(termAnnotationIndex);
           }
@@ -669,7 +669,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getTimestampAnnotationAnnotationCount(timestampAnnotationIndex);
           }
@@ -691,7 +691,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getXMLAnnotationAnnotationCount(xmlAnnotationIndex);
           }
@@ -720,7 +720,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->get${abstractClass}Type(${indexes_name_string(v)});
           }
@@ -742,7 +742,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->get${abstractClass}Count(${indexes_name_string(v[:-1])});
           }
@@ -777,7 +777,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataStore> store = ome::compat::dynamic_pointer_cast<MetadataStore>(*i);
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(*i);
             if (store)
               store->set${o.name}Value(value, ${indexes_name_string(indexes[o.name].items()[0][1])});
           }
@@ -798,7 +798,7 @@ namespace ome
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->get${o.name}Value(${indexes_name_string(indexes[o.name].items()[0][1])});
           }
@@ -843,7 +843,7 @@ ${counter(k, o, v)}\
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getUUID();
           }
@@ -865,7 +865,7 @@ ${counter(k, o, v)}\
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getMapAnnotationValue(mapAnnotationIndex);
           }
@@ -889,7 +889,7 @@ ${counter(k, o, v)}\
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getGenericExcitationSourceMap(instrumentIndex, lightSourceIndex);
           }
@@ -911,7 +911,7 @@ ${counter(k, o, v)}\
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataRetrieve> retrieve = ome::compat::dynamic_pointer_cast<MetadataRetrieve>(*i);
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(*i);
             if (retrieve)
               return retrieve->getImagingEnvironmentMap(imageIndex);
           }
@@ -1027,7 +1027,7 @@ ${getter(k, o, prop, v)}\
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataStore> store = ome::compat::dynamic_pointer_cast<MetadataStore>(*i);
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(*i);
             if (store)
               store->setUUID(uuid);
           }
@@ -1051,7 +1051,7 @@ ${getter(k, o, prop, v)}\
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataStore> store = ome::compat::dynamic_pointer_cast<MetadataStore>(*i);
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(*i);
             if (store)
               store->setMapAnnotationValue(value, mapAnnotationIndex);
           }
@@ -1077,7 +1077,7 @@ ${getter(k, o, prop, v)}\
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataStore> store = ome::compat::dynamic_pointer_cast<MetadataStore>(*i);
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(*i);
             if (store)
               store->setGenericExcitationSourceMap(value, instrumentIndex, lightSourceIndex);
           }
@@ -1101,7 +1101,7 @@ ${getter(k, o, prop, v)}\
              i != delegates.end();
              ++i)
           {
-            ome::compat::shared_ptr<MetadataStore> store = ome::compat::dynamic_pointer_cast<MetadataStore>(*i);
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(*i);
             if (store)
               store->setImagingEnvironmentMap(value, imageIndex);
           }

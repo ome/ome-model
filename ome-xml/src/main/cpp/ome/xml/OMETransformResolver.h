@@ -39,6 +39,7 @@
 #ifndef OME_XML_MODEL_OMETRANSFORMRESOLVER_H
 #define OME_XML_MODEL_OMETRANSFORMRESOLVER_H
 
+#include <memory>
 #include <ostream>
 #include <set>
 #include <string>
@@ -47,7 +48,6 @@
 #include <boost/filesystem.hpp>
 
 #include <ome/compat/cstdint.h>
-#include <ome/compat/memory.h>
 
 namespace ome
 {
@@ -253,7 +253,7 @@ namespace ome
 
     private:
       /// Private implementation details.
-      ome::compat::shared_ptr<OMETransformResolverImpl> impl;
+      std::shared_ptr<OMETransformResolverImpl> impl;
     };
 
     /**
