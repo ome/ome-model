@@ -38,7 +38,7 @@
 #ifndef OME_XML_OME_OMEXMLMETADATAMODEL_H
 #define OME_XML_OME_OMEXMLMETADATAMODEL_H
 
-#include <ome/compat/cstdint.h>
+#include <cstdint>
 
 #include <ome/xml/meta/MetadataModel.h>
 #include <ome/xml/model/OME.h>

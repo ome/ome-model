@@ -38,7 +38,7 @@
 #ifndef OME_XML_META_METADATAROOT_H
 #define OME_XML_META_METADATAROOT_H
 
-#include <ome/compat/cstdint.h>
+#include <cstdint>
 
 #include <ome/xml/meta/MetadataModel.h>
 

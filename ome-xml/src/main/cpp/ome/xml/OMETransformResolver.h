@@ -39,6 +39,7 @@
 #ifndef OME_XML_MODEL_OMETRANSFORMRESOLVER_H
 #define OME_XML_MODEL_OMETRANSFORMRESOLVER_H
 
+#include <cstdint>
 #include <memory>
 #include <ostream>
 #include <set>
@@ -46,8 +47,6 @@
 #include <utility>
 
 #include <boost/filesystem.hpp>
-
-#include <ome/compat/cstdint.h>
 
 namespace ome
 {

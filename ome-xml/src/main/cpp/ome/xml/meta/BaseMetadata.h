@@ -39,9 +39,8 @@
 #define OME_XML_META_BASEMETADATA_H
 
 #include <cstddef>
+#include <cstdint>
 #include <vector>
-
-#include <ome/compat/cstdint.h>
 
 namespace ome
 {

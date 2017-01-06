@@ -39,7 +39,7 @@
 #ifndef OME_XML_MODEL_PRIMITIVES_POSITIVEINTEGER_H
 #define OME_XML_MODEL_PRIMITIVES_POSITIVEINTEGER_H
 
-#include <ome/compat/cstdint.h>
+#include <cstdint>
 
 #include <ome/xml/model/primitives/ConstrainedNumeric.h>
 #include <ome/xml/model/primitives/NumericConstraints.h>
