@@ -61,7 +61,7 @@ namespace ome
                                  boost::dividable2<Quantity<Unit, Value>, Value,
                                  boost::multipliable2<Quantity<Unit, Value>, Value,
                                  boost::incrementable<Quantity<Unit, Value>,
-                                 boost::decrementable<Quantity<Unit, Value> > > > > > > > >
+                                 boost::decrementable<Quantity<Unit, Value>>>>>>>>>
         {
         public:
           /// The type of a unit.
