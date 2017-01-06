@@ -12,16 +12,12 @@
 
             std::string text;
 
-            for (common::xml::dom::NodeList::iterator i = nodes.begin();
-                 i != nodes.end();
-                 ++i)
+            for (auto& e : nodes)
               {
                 try
                   {
-                    common::xml::dom::Element e(*i);
-
                     std::string textvalue;
-                    ome::common::xml::dom::writeNode(*i, textvalue);
+                    ome::common::xml::dom::writeNode(e, textvalue);
 
                     // Trim leading and trailing whitespace
                     std::string::size_type start(textvalue.find_first_of('<'));
@@ -48,7 +44,7 @@
                         if (element->lookupNamespaceURI(0) != 0)
                           {
                             common::xml::String currentNS(element->lookupNamespaceURI(0));
-                            if ((*i)->isDefaultNamespace(currentNS))
+                            if (e->isDefaultNamespace(currentNS))
                               {
                                 std::string stripNS(static_cast<std::string>(currentNS));
                                 std::string::size_type stripStart(textvalue.find(stripNS));

@@ -479,15 +479,13 @@ namespace ome
       {
         size_type unhandledReferences = 0;
 
-        for (reference_map_type::iterator i = this->impl->references.begin();
-             i != this->impl->references.end();
-             ++i)
+        for (auto& i : this->impl->references)
           {
-            const std::shared_ptr<const ::ome::xml::model::OMEModelObject>& a(i->first);
+            const std::shared_ptr<const ::ome::xml::model::OMEModelObject>& a(i.first);
 
             if (!a)
               {
-                const reference_list_type& references(i->second);
+                const reference_list_type& references(i.second);
 
                 if (references.empty())
                   {
@@ -504,13 +502,11 @@ namespace ome
               }
             else
               {
-                reference_list_type& references(i->second);
+                reference_list_type& references(i.second);
 
-                for (reference_list_type::iterator ref = references.begin();
-                     ref != references.end();
-                     ++ref)
+                for (auto& ref : references)
                   {
-                    if (!(*ref))
+                    if (!ref)
                       {
                         BOOST_LOG_SEV(logger, ome::logging::trivial::warning)
                           << typeid(*a).name() << "@" << a
@@ -518,7 +514,7 @@ namespace ome
                       }
                     else
                       {
-                        const std::string& referenceID = (*ref)->getID();
+                        const std::string& referenceID = ref->getID();
 
                         std::shared_ptr<::ome::xml::model::OMEModelObject> b = getModelObject(referenceID);
                         if (!b)
@@ -532,7 +528,7 @@ namespace ome
                         else
                           {
                             std::shared_ptr<::ome::xml::model::OMEModelObject> aw(std::const_pointer_cast<::ome::xml::model::OMEModelObject>(a));
-                            aw->link(*ref, b);
+                            aw->link(ref, b);
                           }
                       }
                   }
@@ -677,12 +673,10 @@ ${customUpdatePropertyContent[prop.name]}
 {% when prop.isReference %}\
         // Element reference ${prop.name}
         std::vector<common::xml::dom::Element> ${prop.name}_nodeList(getChildrenByTagName(element, "${prop.name}"));
-        for (std::vector<common::xml::dom::Element>::iterator elem = ${prop.name}_nodeList.begin();
-             elem != ${prop.name}_nodeList.end();
-             ++elem)
+        for (auto& elem : ${prop.name}_nodeList)
           {
             std::shared_ptr<${prop.name}> rcptr(std::make_shared<${prop.name}>());
-            rcptr->setID(elem->getAttribute("ID"));
+            rcptr->setID(elem.getAttribute("ID"));
             std::shared_ptr<Reference> rptr(std::static_pointer_cast<Reference>(rcptr));
             std::shared_ptr<${lang.omexml_model_package}::OMEModelObject> optr(std::static_pointer_cast<${lang.omexml_model_package}::OMEModelObject>(shared_from_this()));
             model.addReference(optr, rptr);
@@ -787,14 +781,12 @@ ${customUpdatePropertyContent[prop.name]}
             ${prop.instanceVariableType} p(std::make_shared<${prop.langTypeNS}>());
 
             std::vector<common::xml::dom::Element> children(getChildrenByTagName(elem, "M"));
-            for (std::vector<common::xml::dom::Element>::iterator child = children.begin();
-                 child != children.end();
-                 ++child)
+            for (auto& child : children)
               {
-                if (child->hasAttribute("K"))
+                if (child.hasAttribute("K"))
                   p->get<0>().insert(p->end(),
-                                     ome::xml::model::primitives::OrderedMultimap::value_type(child->getAttribute("K"),
-                                                                                              child->getTextContent()));
+                                     ome::xml::model::primitives::OrderedMultimap::value_type(child.getAttribute("K"),
+                                                                                              child.getTextContent()));
                 else
                   {
                     BOOST_LOG_SEV(logger, ome::logging::trivial::warning)
@@ -860,10 +852,9 @@ ${customUpdatePropertyContent[prop.name]}
       // each "subclass".
 {% for subClass in prop.concreteClasses %}\
       std::vector<common::xml::dom::Element> ${subClass}_nodeList(getChildrenByTagName(element, "${subClass}"));
-      for (std::vector<common::xml::dom::Element>::iterator elem = ${subClass}_nodeList.begin();
-           elem != ${subClass}_nodeList.end();++elem)
+      for (auto& elem : ${subClass}_nodeList)
         {
-          std::shared_ptr<${prop.methodName}> object(${subClass}::create(*elem, model));
+          std::shared_ptr<${prop.methodName}> object(${subClass}::create(elem, model));
           add${prop.methodName}(object);
         }
 {% end %}\
@@ -874,24 +865,20 @@ ${customUpdatePropertyContent[prop.name]}
         // object type is also abstract so we need to have a handler for
         // each "subclass".
         std::vector<common::xml::dom::Element> ${prop.name}_nodeList(getChildrenByTagName(element, "${prop.name}"));
-        for (std::vector<common::xml::dom::Element>::iterator elem = ${prop.name}_nodeList.begin();
-             elem != ${prop.name}_nodeList.end();
-             ++elem)
+        for (const auto& elem : ${prop.name}_nodeList)
           {
 {% for inner_prop in model.getObjectByName(prop.name).properties.values() %}\
 {% if not inner_prop.isAttribute and inner_prop.isComplex() and not inner_prop.isReference and inner_prop.isChoice %}\
-            std::vector<common::xml::dom::Element> ${inner_prop.name}_nodeList(getChildrenByTagName(*elem, "${inner_prop.name}"));
-                 for (std::vector<common::xml::dom::Element>::iterator inner_elem = ${inner_prop.name}_nodeList.begin();
-                 inner_elem != ${inner_prop.name}_nodeList.end();
-                 ++inner_elem)
-                   {
-                     // While std::make_shared<> works, here,
-                     // boost::make_shared<> does not, so use new
-                     // directly.
-                     std::shared_ptr<${prop.methodName}> object(${inner_prop.langTypeNS}::create(*elem, model));
-                     object->update(*inner_elem, model);
-                     add${prop.methodName}(object);
-                   }
+            std::vector<common::xml::dom::Element> ${inner_prop.name}_nodeList(getChildrenByTagName(elem, "${inner_prop.name}"));
+            for (auto& inner_elem : ${inner_prop.name}_nodeList)
+              {
+                // While std::make_shared<> works, here,
+                // boost::make_shared<> does not, so use new
+                // directly.
+                std::shared_ptr<${prop.methodName}> object(${inner_prop.langTypeNS}::create(elem, model));
+                object->update(inner_elem, model);
+                add${prop.methodName}(object);
+              }
 {% end %}\
 {% end %}\
           }
@@ -901,13 +888,11 @@ ${customUpdatePropertyContent[prop.name]}
         // Element property ${prop.name} which is complex (has
         // sub-elements) and occurs more than once
         std::vector<common::xml::dom::Element> ${prop.name}_nodeList(getChildrenByTagName(element, "${prop.name}"));
-        for (std::vector<common::xml::dom::Element>::iterator elem = ${prop.name}_nodeList.begin();
-             elem != ${prop.name}_nodeList.end();
-             ++elem)
+        for (auto& elem : ${prop.name}_nodeList)
           {
             // While std::make_shared<> works, here,
             // boost::make_shared<> does not, so use new directly.
-            std::shared_ptr<${prop.methodName}> object(${prop.langTypeNS}::create(*elem, model));
+            std::shared_ptr<${prop.methodName}> object(${prop.langTypeNS}::create(elem, model));
             add${prop.methodName}(object);
           }
 {% end %}\
@@ -916,11 +901,9 @@ ${customUpdatePropertyContent[prop.name]}
         // Element property ${prop.name} which is not complex (has no
         // sub-elements) which occurs more than once
         std::vector<common::xml::dom::Element> ${prop.name}_nodeList(getChildrenByTagName("${prop.name}"));
-        for (std::vector<common::xml::dom::Element>::iterator elem = ${prop.name}_nodeList.begin();
-             elem != ${prop.name}_nodeList.end();
-             ++elem)
+        for (auto& elem : ${prop.name}_nodeList)
           {
-            std::string text(element.getTextContent());
+            std::string text(element.getTextContent()); /// @todo should this be elem?
             std::shared_ptr<${prop.methodName}> object(${prop.langTypeNS}::create(text, model));
             add${prop.methodName}(object);
           }
@@ -1574,16 +1557,14 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% when prop.isReference and prop.maxOccurs > 1 %}\
         {
           // Reference property ${prop.name} which occurs more than once
-          for (${prop.instanceVariableType}::const_iterator i = this->impl->${prop.instanceVariableName}.begin();
-               i != this->impl->${prop.instanceVariableName}.end();
-               ++i)
+          for (auto& i : this->impl->${prop.instanceVariableName})
             {
               // Note that this doesn't strictly need to be a
               // shared_ptr, but keep compatible with the rest of
               // the API to allow consistency for future
               // refactoring.
               std::shared_ptr<${prop.name}> o(std::make_shared<${prop.name}>());
-              std::shared_ptr<${prop.langTypeNS}> is(i->lock());
+              std::shared_ptr<${prop.langTypeNS}> is(i.lock());
               if (is)
                 {
                   o->setID(is->getID());
@@ -1701,13 +1682,11 @@ ${customAsXMLElementPropertyContent[prop.name]}
         if (this->impl->${prop.instanceVariableName})
           {
             common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
-            for (order_index_type::const_iterator i = this->impl->${prop.instanceVariableName}->get<0>().begin();
-                 i != this->impl->${prop.instanceVariableName}->get<0>().end();
-                 ++i)
+            for (const auto& i : this->impl->${prop.instanceVariableName}->get<0>())
               {
                 common::xml::dom::Element pair = document.createElementNS(getXMLNamespace(), "M");
-                pair.setAttribute("K", i->first);
-                pair.setTextContent(i->second);
+                pair.setAttribute("K", i.first);
+                pair.setTextContent(i.second);
                 child.appendChild(pair);
               }
             element.appendChild(child);
@@ -1715,13 +1694,11 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% end %}\
 {% if prop.minOccurs != 0 %}\
           common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
-          for (order_index_type::const_iterator i = this->impl->${prop.instanceVariableName}.get<0>().begin();
-               i != this->impl->${prop.instanceVariableName}.get<0>().end();
-               ++i)
+          for (const auto& i : this->impl->${prop.instanceVariableName}.get<0>())
             {
               common::xml::dom::Element pair = document.createElementNS(getXMLNamespace(), "M");
-              pair.setAttribute("K", i->first);
-              pair.setTextContent(i->second);
+              pair.setAttribute("K", i.first);
+              pair.setTextContent(i.second);
               child.appendChild(pair);
             }
           element.appendChild(child);
@@ -1767,19 +1744,17 @@ ${customAsXMLElementPropertyContent[prop.name]}
         {
           // Element property ${prop.name} which is complex (has
           // sub-elements) and occurs more than once
-          for (${prop.instanceVariableType}::const_iterator i = this->impl->${prop.instanceVariableName}.begin();
-               i != this->impl->${prop.instanceVariableName}.end();
-               ++i)
+          for (const auto& i : this->impl->${prop.instanceVariableName})
             {
-              if (*i)
+              if (i)
                 {
 {% if prop.isAbstractSubstitution %}\
-                  common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), (*i)->get${prop.name}Type()));
+                  common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), i->get${prop.name}Type()));
 {% end if %}\
 {% if not prop.isAbstractSubstitution %}\
                   common::xml::dom::Element child(document.createElementNS(getXMLNamespace(), "${prop.name}"));
 {% end if %}\
-                  (*i)->asXMLElement(document, child);
+                  i->asXMLElement(document, child);
                   element.appendChild(child);
                 }
             }
@@ -1789,9 +1764,7 @@ ${customAsXMLElementPropertyContent[prop.name]}
         {
           // Element property ${prop.name} which is not complex (has no
           // sub-elements) which occurs more than once
-          for (${prop.instanceVariableType}::const_iterator i = this->impl->${prop.instanceVariableName}.begin();
-               i != this->impl->${prop.instanceVariableName}.end();
-               ++i)
+          for (const auto& i : this->impl->${prop.instanceVariableName})
             {
               common::xml::dom::Element this->impl->${prop.instanceVariableName}_element =
                                                                  document.createElementNS(getXMLNamespace(), "${prop.name}");
@@ -1801,7 +1774,7 @@ ${customAsXMLElementPropertyContent[prop.name]}
               os << *i;
 {% end %}\
 {% if prop.langTypeNS == 'bool' %}\
-              os << std::boolalpha << *i;
+              os << std::boolalpha << i;
 {% end %}\
               this->impl->${prop.instanceVariableName}_element.setTextContent(os.str());
               common::xml::dom::Element child(this->impl->${prop.instanceVariableName}_element);
