@@ -83,14 +83,6 @@
 using boost::trim;
 using boost::format;
 
-namespace
-{
-
-  typedef std::pair<std::string,${klass.langTypeNS}::enum_value> smap;
-  typedef std::pair<${klass.langTypeNS}::enum_value,std::string> vmap;
-
-}
-
 {% end %}\
 namespace ome
 {
@@ -322,30 +314,27 @@ namespace ome
         const ${klass.langType}::string_map_type&
         ${klass.langType}::strings()
         {
-          const smap init_string_values[] =
+          static const string_map_type string_map
             {
 {% for value in klass.possibleValues %}\
 {% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('enum', None) is not None %}\
 {% if value == klass.possibleValues[-1] %}\
-              smap("${value}", ${klass.langTypeNS}::${klass.enumProperties[value].enum}),
+              { "${value}", ${klass.langTypeNS}::${klass.enumProperties[value].enum} }
 {% end %}\
 {% if value != klass.possibleValues[-1] %}\
-              smap("${value}", ${klass.langTypeNS}::${klass.enumProperties[value].enum}),
+              { "${value}", ${klass.langTypeNS}::${klass.enumProperties[value].enum} },
 {% end %}\
 {% end %}\
 {% if klass.enumProperties is None or not value in klass.enumProperties or klass.enumProperties[value].get('enum', None) is None %}\
 {% if value == klass.possibleValues[-1] %}\
-              smap("${value}", ${klass.langTypeNS}::${enum_value_name(value, False).upper()}),
+              { "${value}", ${klass.langTypeNS}::${enum_value_name(value, False).upper()} }
 {% end %}\
 {% if value != klass.possibleValues[-1] %}\
-              smap("${value}", ${klass.langTypeNS}::${enum_value_name(value, False).upper()}),
+              { "${value}", ${klass.langTypeNS}::${enum_value_name(value, False).upper()} },
 {% end %}\
 {% end %}\
 {% end for %}\
             };
-
-          static const string_map_type string_map(init_string_values,
-                                                  init_string_values + (sizeof(init_string_values) / sizeof(init_string_values[0])));
 
           return string_map;
         }
@@ -353,30 +342,27 @@ namespace ome
         const ${klass.langType}::value_map_type&
         ${klass.langType}::values()
         {
-          vmap init_value_values[] =
+          static const value_map_type value_map
             {
 {% for value in klass.possibleValues %}\
 {% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('enum', None) is not None %}\
 {% if value == klass.possibleValues[-1] %}\
-              vmap(${klass.langTypeNS}::${klass.enumProperties[value].enum}, "${value}")
+              { ${klass.langTypeNS}::${klass.enumProperties[value].enum}, "${value}" }
 {% end %}\
 {% if value != klass.possibleValues[-1] %}\
-              vmap(${klass.langTypeNS}::${klass.enumProperties[value].enum}, "${value}"),
+              { ${klass.langTypeNS}::${klass.enumProperties[value].enum}, "${value}" },
 {% end %}\
 {% end %}\
 {% if klass.enumProperties is None or not value in klass.enumProperties or klass.enumProperties[value].get('enum', None) is None %}\
 {% if value == klass.possibleValues[-1] %}\
-              vmap(${klass.langTypeNS}::${enum_value_name(value, False).upper()}, "${value}")
+              { ${klass.langTypeNS}::${enum_value_name(value, False).upper()}, "${value}" }
 {% end %}\
 {% if value != klass.possibleValues[-1] %}\
-              vmap(${klass.langTypeNS}::${enum_value_name(value, False).upper()}, "${value}"),
+              { ${klass.langTypeNS}::${enum_value_name(value, False).upper()}, "${value}" },
 {% end %}\
 {% end %}\
 {% end for %}\
             };
-
-          static const value_map_type value_map(init_value_values,
-                                                init_value_values + (sizeof(init_value_values) / sizeof(init_value_values[0])));
 
           return value_map;
         }
@@ -384,25 +370,25 @@ namespace ome
         const ${klass.langType}::string_map_type&
         ${klass.langType}::lowercase_strings()
         {
-          smap init_lcase_string_values[] =
+          static const string_map_type lcase_string_map
             {
 {% if klass.isUnitsEnumeration %}\
 {% for value in klass.possibleValues %}\
 {% if klass.enumProperties is not None and value in klass.enumProperties %}\
 {% if klass.enumProperties[value].get('name', None) is not None %}\
-              smap("${klass.enumProperties[value].name.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum}),
+              { "${klass.enumProperties[value].name.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum} },
 {% end %}\
 {% if klass.enumProperties[value].get('plural', None) is not None %}\
-              smap("${klass.enumProperties[value].plural.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum}),
+              { "${klass.enumProperties[value].plural.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum} },
 {% end %}\
 {% if klass.enumProperties[value].get('altname', None) is not None %}\
-              smap("${klass.enumProperties[value].altname.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum}),
+              { "${klass.enumProperties[value].altname.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum} },
 {% end %}\
 {% if klass.enumProperties[value].get('altplural', None) is not None %}\
-              smap("${klass.enumProperties[value].altplural.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum}),
+              { "${klass.enumProperties[value].altplural.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum} },
 {% end %}\
 {% if klass.enumProperties is None or not value in klass.enumProperties or klass.enumProperties[value].get('enum', None) is None %}\
-              smap("${enum_value_name(value, False).lower()}", ${klass.langTypeNS}::${enum_value_name(value, False).upper()}),
+              { "${enum_value_name(value, False).lower()}", ${klass.langTypeNS}::${enum_value_name(value, False).upper()} },
 {% end %}\
 {% end %}\
 {% end for %}\
@@ -410,25 +396,22 @@ namespace ome
 {% for value in klass.possibleValues %}\
 {% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('enum', None) is not None %}\
 {% if value == klass.possibleValues[-1] %}\
-              smap("${value.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum})
+              { "${value.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum} }
 {% end %}\
 {% if value != klass.possibleValues[-1] %}\
-              smap("${value.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum}),
+              { "${value.lower()}", ${klass.langTypeNS}::${klass.enumProperties[value].enum} },
 {% end %}\
 {% end %}\
 {% if klass.enumProperties is None or not value in klass.enumProperties or klass.enumProperties[value].get('enum', None) is None %}\
 {% if value == klass.possibleValues[-1] %}\
-              smap("${value.lower()}", ${klass.langTypeNS}::${enum_value_name(value, False).upper()})
+              { "${value.lower()}", ${klass.langTypeNS}::${enum_value_name(value, False).upper()} }
 {% end %}\
 {% if value != klass.possibleValues[-1] %}\
-              smap("${value.lower()}", ${klass.langTypeNS}::${enum_value_name(value, False).upper()}),
+              { "${value.lower()}", ${klass.langTypeNS}::${enum_value_name(value, False).upper()} },
 {% end %}\
 {% end %}\
 {% end for %}\
             };
-
-          static const string_map_type lcase_string_map(init_lcase_string_values,
-                                                        init_lcase_string_values + (sizeof(init_lcase_string_values) / sizeof(init_lcase_string_values[0])));
 
           return lcase_string_map;
         }
