@@ -167,10 +167,8 @@ namespace ome
                                   // Check that the next 4 characters are only numeric
                                   std::string inchars(4, ' ');
                                   is.read(&inchars[0], 4);
-                                  for (std::string::const_iterator i = inchars.begin();
-                                       i != inchars.end();
-                                       ++i)
-                                    if (*i < '0' || *i > '9')
+                                  for (const auto& i : inchars)
+                                    if (i < '0' || i > '9')
                                       is.setstate(std::ios::failbit);
 
                                   if (is)

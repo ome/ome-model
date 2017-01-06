@@ -149,15 +149,13 @@ namespace ome
         {
           size_type unhandledReferences = 0;
 
-          for (reference_map_type::iterator i = references.begin();
-               i != references.end();
-               ++i)
+          for (auto& i : references)
             {
-              const std::shared_ptr<const ::ome::xml::model::OMEModelObject>& a(i->first);
+              const std::shared_ptr<const ::ome::xml::model::OMEModelObject>& a(i.first);
 
               if (!a)
                 {
-                  const reference_list_type& references(i->second);
+                  const reference_list_type& references(i.second);
 
                   if (references.empty())
                     {
@@ -174,13 +172,11 @@ namespace ome
                 }
               else
                 {
-                  reference_list_type& references(i->second);
+                  reference_list_type& references(i.second);
 
-                  for (reference_list_type::iterator ref = references.begin();
-                       ref != references.end();
-                       ++ref)
+                  for (auto& ref : references)
                     {
-                      if (!(*ref))
+                      if (!ref)
                         {
                           BOOST_LOG_SEV(logger, ome::logging::trivial::warning)
                             << typeid(*a).name() << "@" << a
@@ -188,7 +184,7 @@ namespace ome
                         }
                       else
                         {
-                          const std::string& referenceID = (*ref)->getID();
+                          const std::string& referenceID = ref->getID();
 
                           std::shared_ptr<::ome::xml::model::OMEModelObject> b = getModelObject(referenceID);
                           if (!b)
@@ -202,7 +198,7 @@ namespace ome
                           else
                             {
                               std::shared_ptr<::ome::xml::model::OMEModelObject> aw(std::const_pointer_cast<::ome::xml::model::OMEModelObject>(a));
-                              aw->link(*ref, b);
+                              aw->link(ref, b);
                             }
                         }
                     }
