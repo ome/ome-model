@@ -354,14 +354,14 @@ namespace ome
 {% if klass.name == "OME" %}\
 {% if fu.SOURCE_TYPE == "header" %}\
         /// @copydoc ome::xml::model::OMEModel::addModelObject
-        std::shared_ptr< ::ome::xml::model::OMEModelObject>
+        std::shared_ptr<::ome::xml::model::OMEModelObject>
         addModelObject (const std::string&                                           id,
-                        std::shared_ptr< ::ome::xml::model::OMEModelObject>& object);
+                        std::shared_ptr<::ome::xml::model::OMEModelObject>& object);
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
-      std::shared_ptr< ::ome::xml::model::OMEModelObject>
+      std::shared_ptr<::ome::xml::model::OMEModelObject>
       OME::addModelObject(const std::string&                                           id,
-                          std::shared_ptr< ::ome::xml::model::OMEModelObject>& object)
+                          std::shared_ptr<::ome::xml::model::OMEModelObject>& object)
       {
         // Don't store references.
         if (std::dynamic_pointer_cast<Reference>(object))
@@ -379,14 +379,14 @@ namespace ome
 
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in parent.
-        std::shared_ptr< ::ome::xml::model::OMEModelObject>
+        std::shared_ptr<::ome::xml::model::OMEModelObject>
         removeModelObject (const std::string& id);
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
-      std::shared_ptr< ::ome::xml::model::OMEModelObject>
+      std::shared_ptr<::ome::xml::model::OMEModelObject>
       OME::removeModelObject(const std::string& id)
       {
-        std::shared_ptr< ::ome::xml::model::OMEModelObject> ret;
+        std::shared_ptr<::ome::xml::model::OMEModelObject> ret;
 
         object_map_type::iterator i = this->impl->modelObjects.find(id);
         if (i != this->impl->modelObjects.end())
@@ -401,14 +401,14 @@ namespace ome
 
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in parent.
-        std::shared_ptr< ::ome::xml::model::OMEModelObject>
+        std::shared_ptr<::ome::xml::model::OMEModelObject>
         getModelObject (const std::string& id) const;
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
-      std::shared_ptr< ::ome::xml::model::OMEModelObject>
+      std::shared_ptr<::ome::xml::model::OMEModelObject>
       OME::getModelObject(const std::string& id) const
       {
-        std::shared_ptr< ::ome::xml::model::OMEModelObject> ret;
+        std::shared_ptr<::ome::xml::model::OMEModelObject> ret;
 
         object_map_type::const_iterator i = this->impl->modelObjects.find(id);
         if (i != this->impl->modelObjects.end())
@@ -434,12 +434,12 @@ namespace ome
 {% if fu.SOURCE_TYPE == "header" %}\
         /// @copydoc ome::xml::model::OMEModel::addReference
         bool
-        addReference (std::shared_ptr< ::ome::xml::model::OMEModelObject>& a,
+        addReference (std::shared_ptr<::ome::xml::model::OMEModelObject>& a,
                       std::shared_ptr<Reference>&                          b);
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       bool
-      OME::addReference (std::shared_ptr< ::ome::xml::model::OMEModelObject>& a,
+      OME::addReference (std::shared_ptr<::ome::xml::model::OMEModelObject>& a,
                          std::shared_ptr<Reference>&                          b)
       {
         reference_map_type::iterator i = this->impl->references.find(a);
@@ -520,7 +520,7 @@ namespace ome
                       {
                         const std::string& referenceID = (*ref)->getID();
 
-                        std::shared_ptr< ::ome::xml::model::OMEModelObject> b = getModelObject(referenceID);
+                        std::shared_ptr<::ome::xml::model::OMEModelObject> b = getModelObject(referenceID);
                         if (!b)
                           {
                             BOOST_LOG_SEV(logger, ome::logging::trivial::warning)
@@ -531,7 +531,7 @@ namespace ome
                           }
                         else
                           {
-                            std::shared_ptr< ::ome::xml::model::OMEModelObject> aw(std::const_pointer_cast< ::ome::xml::model::OMEModelObject>(a));
+                            std::shared_ptr<::ome::xml::model::OMEModelObject> aw(std::const_pointer_cast<::ome::xml::model::OMEModelObject>(a));
                             aw->link(*ref, b);
                           }
                       }
