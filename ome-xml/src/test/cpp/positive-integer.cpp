@@ -46,107 +46,96 @@ using ome::xml::model::primitives::PositiveInteger;
 
 INSTANTIATE_TYPED_TEST_CASE_P(PositiveInteger, NumericTest, PositiveInteger);
 
-namespace
-{
-
-  NumericTest<PositiveInteger>::test_str init_strings[] =
-    { // str      pos  strpass pospass
-      {"23",       23, true,   true},
-      {"-42",     -42, false,  false},
-      {"1",       -53, true,   false},
-      {"82",       82, true,   true},
-      {"0",         0, false,  false},
-      {"1",         0, true,   false},
-      {"invalid",   1, false,  true},
-    };
-
-  NumericTest<PositiveInteger>::test_op init_ops[] =
-    { // v1   v2    expected    operation         pass   except rhsexcept
-      {   23,   23,          1, EQUAL,            true,  false, false},
-      {   23,  432,          0, EQUAL,            false, false, false},
-      {   23,   35,          1, NOT_EQUAL,        true,  false, false},
-      {   54,   54,          0, NOT_EQUAL,        false, false, false},
-
-      { 5432, 8272,          1, LESS,             true,  false, false},
-      {  534,  534,          0, LESS,             false, false, false},
-      {  947,   34,          0, LESS,             false, false, false},
-      { 5432, 8272,          1, LESS_OR_EQUAL,    true,  false, false},
-      {  534,  534,          1, LESS_OR_EQUAL,    true,  false, false},
-      {  947,   34,          0, LESS_OR_EQUAL,    false, false, false},
-
-      {10873, 8420,          1, GREATER,          true,  false, false},
-      { 3622, 3622,          0, GREATER,          false, false, false},
-      {  872, 2701,          0, GREATER,          false, false, false},
-      {10873, 8420,          1, GREATER_OR_EQUAL, true,  false, false},
-      { 3622, 3622,          1, GREATER_OR_EQUAL, true,  false, false},
-      {  872, 2701,          0, GREATER_OR_EQUAL, false, false, false},
-
-      {  432,  743, 432 +  743, ADD,              true,  false, false},
-      {  432,  -74, 432 -   74, ADD,              true,  false, true},
-      {  432, -743, 432 -  743, ADD,              false, true,  true},
-      {  432,  743,          1, ADD,              false, false, false},
-      {  823,   93, 823 +   93, ADD_ASSIGN,       true,  false, false},
-      {  823,  -93, 823 -   93, ADD_ASSIGN,       true,  false, true},
-      {  823, -932, 823 -  932, ADD_ASSIGN,       false, true,  true},
-      {  823,   93,          1, ADD_ASSIGN,       false, false, false},
-
-      {  432,  285, 432 -  285, SUBTRACT,         true,  false, false},
-      {  432, -285, 432 +  285, SUBTRACT,         true,  false, true},
-      {  432,  763, 432 -  763, SUBTRACT,         false, true,  false},
-      {  432,  285,          1, SUBTRACT,         false, false, false},
-      {  432,  431,          1, SUBTRACT,         true,  false, false},
-      {  432,  432,          0, SUBTRACT,         false, true,  false},
-      {  823,   93, 823 -   93, SUBTRACT_ASSIGN,  true,  false, false},
-      {  823, -932, 823 +  932, SUBTRACT_ASSIGN,  true,  false, true},
-      {  823, 1393, 823 - 1393, SUBTRACT_ASSIGN,  false, true,  false},
-      {  823,   93,          1, SUBTRACT_ASSIGN,  false, false, false},
-      {  823,  822,          1, SUBTRACT_ASSIGN,  true,  false, false},
-      {  823,  823,          0, SUBTRACT_ASSIGN,  false, true,  false},
-
-      {   40,   12,  40 *   12, MULTIPLY,         true,  false, false},
-      {   23,   -8,  23 *   -8, MULTIPLY,         false, true,  true},
-      {   40,   12,          1, MULTIPLY,         false, false, false},
-      {   18,    4,  18 *    4, MULTIPLY_ASSIGN,  true,  false, false},
-      {    2, -232,   2 * -232, MULTIPLY_ASSIGN,  false, true,  true},
-      {   18,    4,          1, MULTIPLY_ASSIGN,  false, false, false},
-
-      {  900,    5, 900 /    5, DIVIDE,           true,  false, false},
-      {  900,   -5, 900 /   -5, DIVIDE,           false, true,  true},
-      {  900,  900, 900 /  900, DIVIDE,           true,  false, false},
-      {  900,  901,          0, DIVIDE,           false, true,  false},
-      {  900,  900,          2, DIVIDE,           false, false, false},
-      {  480,   20, 480 /   20, DIVIDE_ASSIGN,    true,  false, false},
-      {  480,  -20, 480 /  -20, DIVIDE_ASSIGN,    false, true,  true},
-      {  480,  480, 480 /  480, DIVIDE_ASSIGN,    true,  false, false},
-      {  480,  481,          0, DIVIDE_ASSIGN,    false, true,  false},
-      {  480,  480,          2, DIVIDE_ASSIGN,    false, false, false},
-
-      {  901,  900,          1, MODULO,           true,  false, false},
-      {  901,  900,          2, MODULO,           false, false, false},
-      {   43,   43,          0, MODULO,           false, true,  false},
-      {  901,  900,          1, MODULO_ASSIGN,    true,  false, false},
-      {  901,  900,          2, MODULO_ASSIGN,    false, false, false},
-      {   43,   43,          0, MODULO_ASSIGN,    false, true,  false},
-
-      {  33,     1,         34, INCREMENT,        true,  false, false},
-      {  33,     1,         33, INCREMENT,        false, false, false},
-      {   1,     1,          2, INCREMENT,        true,  false, false},
-      {  33,     1,         32, DECREMENT,        true,  false, false},
-      {  33,     1,         33, DECREMENT,        false, false, false},
-      {   1,     1,          0, DECREMENT,        false, true,  false}
-    };
-
-}
-
 template<>
 const std::vector<NumericTest<PositiveInteger>::test_str>
-NumericTest<PositiveInteger>::strings(init_strings,
-                                      init_strings + boost::size(init_strings));
+NumericTest<PositiveInteger>::strings =
+  { // str      pos  strpass pospass
+    {"23",       23, true,   true},
+    {"-42",     -42, false,  false},
+    {"1",       -53, true,   false},
+    {"82",       82, true,   true},
+    {"0",         0, false,  false},
+    {"1",         0, true,   false},
+    {"invalid",   1, false,  true},
+  };
 
 template<>
 const std::vector<NumericTest<PositiveInteger>::test_op>
-NumericTest<PositiveInteger>::ops(init_ops,
-                                  init_ops + boost::size(init_ops));
+NumericTest<PositiveInteger>::ops =
+  { // v1   v2    expected    operation         pass   except rhsexcept
+    {   23,   23,          1, EQUAL,            true,  false, false},
+    {   23,  432,          0, EQUAL,            false, false, false},
+    {   23,   35,          1, NOT_EQUAL,        true,  false, false},
+    {   54,   54,          0, NOT_EQUAL,        false, false, false},
+
+    { 5432, 8272,          1, LESS,             true,  false, false},
+    {  534,  534,          0, LESS,             false, false, false},
+    {  947,   34,          0, LESS,             false, false, false},
+    { 5432, 8272,          1, LESS_OR_EQUAL,    true,  false, false},
+    {  534,  534,          1, LESS_OR_EQUAL,    true,  false, false},
+    {  947,   34,          0, LESS_OR_EQUAL,    false, false, false},
+
+    {10873, 8420,          1, GREATER,          true,  false, false},
+    { 3622, 3622,          0, GREATER,          false, false, false},
+    {  872, 2701,          0, GREATER,          false, false, false},
+    {10873, 8420,          1, GREATER_OR_EQUAL, true,  false, false},
+    { 3622, 3622,          1, GREATER_OR_EQUAL, true,  false, false},
+    {  872, 2701,          0, GREATER_OR_EQUAL, false, false, false},
+
+    {  432,  743, 432 +  743, ADD,              true,  false, false},
+    {  432,  -74, 432 -   74, ADD,              true,  false, true},
+    {  432, -743, 432 -  743, ADD,              false, true,  true},
+    {  432,  743,          1, ADD,              false, false, false},
+    {  823,   93, 823 +   93, ADD_ASSIGN,       true,  false, false},
+    {  823,  -93, 823 -   93, ADD_ASSIGN,       true,  false, true},
+    {  823, -932, 823 -  932, ADD_ASSIGN,       false, true,  true},
+    {  823,   93,          1, ADD_ASSIGN,       false, false, false},
+
+    {  432,  285, 432 -  285, SUBTRACT,         true,  false, false},
+    {  432, -285, 432 +  285, SUBTRACT,         true,  false, true},
+    {  432,  763, 432 -  763, SUBTRACT,         false, true,  false},
+    {  432,  285,          1, SUBTRACT,         false, false, false},
+    {  432,  431,          1, SUBTRACT,         true,  false, false},
+    {  432,  432,          0, SUBTRACT,         false, true,  false},
+    {  823,   93, 823 -   93, SUBTRACT_ASSIGN,  true,  false, false},
+    {  823, -932, 823 +  932, SUBTRACT_ASSIGN,  true,  false, true},
+    {  823, 1393, 823 - 1393, SUBTRACT_ASSIGN,  false, true,  false},
+    {  823,   93,          1, SUBTRACT_ASSIGN,  false, false, false},
+    {  823,  822,          1, SUBTRACT_ASSIGN,  true,  false, false},
+    {  823,  823,          0, SUBTRACT_ASSIGN,  false, true,  false},
+
+    {   40,   12,  40 *   12, MULTIPLY,         true,  false, false},
+    {   23,   -8,  23 *   -8, MULTIPLY,         false, true,  true},
+    {   40,   12,          1, MULTIPLY,         false, false, false},
+    {   18,    4,  18 *    4, MULTIPLY_ASSIGN,  true,  false, false},
+    {    2, -232,   2 * -232, MULTIPLY_ASSIGN,  false, true,  true},
+    {   18,    4,          1, MULTIPLY_ASSIGN,  false, false, false},
+
+    {  900,    5, 900 /    5, DIVIDE,           true,  false, false},
+    {  900,   -5, 900 /   -5, DIVIDE,           false, true,  true},
+    {  900,  900, 900 /  900, DIVIDE,           true,  false, false},
+    {  900,  901,          0, DIVIDE,           false, true,  false},
+    {  900,  900,          2, DIVIDE,           false, false, false},
+    {  480,   20, 480 /   20, DIVIDE_ASSIGN,    true,  false, false},
+    {  480,  -20, 480 /  -20, DIVIDE_ASSIGN,    false, true,  true},
+    {  480,  480, 480 /  480, DIVIDE_ASSIGN,    true,  false, false},
+    {  480,  481,          0, DIVIDE_ASSIGN,    false, true,  false},
+    {  480,  480,          2, DIVIDE_ASSIGN,    false, false, false},
+
+    {  901,  900,          1, MODULO,           true,  false, false},
+    {  901,  900,          2, MODULO,           false, false, false},
+    {   43,   43,          0, MODULO,           false, true,  false},
+    {  901,  900,          1, MODULO_ASSIGN,    true,  false, false},
+    {  901,  900,          2, MODULO_ASSIGN,    false, false, false},
+    {   43,   43,          0, MODULO_ASSIGN,    false, true,  false},
+
+    {  33,     1,         34, INCREMENT,        true,  false, false},
+    {  33,     1,         33, INCREMENT,        false, false, false},
+    {   1,     1,          2, INCREMENT,        true,  false, false},
+    {  33,     1,         32, DECREMENT,        true,  false, false},
+    {  33,     1,         33, DECREMENT,        false, false, false},
+    {   1,     1,          0, DECREMENT,        false, true,  false}
+  };
 
 template<>
 const PositiveInteger::value_type NumericTest<PositiveInteger>::error(0);
