@@ -57,35 +57,29 @@ TEST(Enum, LaserTypeAssign)
 
 TEST(Enum, LaserStrings)
 {
-  const LaserType::string_map_type& strings = LaserType::strings();
-  for(LaserType::string_map_type::const_iterator i = strings.begin();
-      i != strings.end();
-      ++i)
+  for(const auto& s: LaserType::strings())
     {
-      LaserType l1(i->first);
-      LaserType l2(i->second);
+      LaserType l1(s.first);
+      LaserType l2(s.second);
       ASSERT_EQ(l1, l2);
-      ASSERT_EQ(l1, i->first);
-      ASSERT_EQ(l1, i->second);
-      ASSERT_EQ(l2, i->first);
-      ASSERT_EQ(l2, i->second);
+      ASSERT_EQ(l1, s.first);
+      ASSERT_EQ(l1, s.second);
+      ASSERT_EQ(l2, s.first);
+      ASSERT_EQ(l2, s.second);
     }
 }
 
 TEST(Enum, LaserValues)
 {
-  const LaserType::value_map_type& values = LaserType::values();
-  for(LaserType::value_map_type::const_iterator i = values.begin();
-      i != values.end();
-      ++i)
+  for(const auto& v: LaserType::values())
     {
-      LaserType l1(i->first);
-      LaserType l2(i->second);
+      LaserType l1(v.first);
+      LaserType l2(v.second);
       ASSERT_EQ(l1, l2);
-      ASSERT_EQ(l1, i->first);
-      ASSERT_EQ(l1, i->second);
-      ASSERT_EQ(l2, i->first);
-      ASSERT_EQ(l2, i->second);
+      ASSERT_EQ(l1, v.first);
+      ASSERT_EQ(l1, v.second);
+      ASSERT_EQ(l2, v.first);
+      ASSERT_EQ(l2, v.second);
     }
 }
 

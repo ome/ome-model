@@ -341,204 +341,166 @@ TYPED_TEST_P(NumericTest, DefaultConstruct)
 
 TYPED_TEST_P(NumericTest, Stream)
 {
-  for (typename std::vector<typename TestFixture::test_str>::const_iterator i = this->strings.begin();
-       i != this->strings.end();
-       ++i)
+  for (const auto& string : this->strings)
     {
-      if (i->v1pass)
-        ASSERT_NO_THROW(TypeParam(i->v1));
+      if (string.v1pass)
+        ASSERT_NO_THROW(TypeParam(string.v1));
       else
-        ASSERT_THROW(TypeParam(i->v1), std::invalid_argument);
+        ASSERT_THROW(TypeParam(string.v1), std::invalid_argument);
 
-      if (i->v2pass)
-        ASSERT_NO_THROW(TypeParam(i->v2));
+      if (string.v2pass)
+        ASSERT_NO_THROW(TypeParam(string.v2));
       else
-        ASSERT_THROW(TypeParam(i->v2), std::invalid_argument);
+        ASSERT_THROW(TypeParam(string.v2), std::invalid_argument);
 
-      if (!i->v1pass || !i->v2pass) // deliberate failure
+      if (!string.v1pass || !string.v2pass) // deliberate failure
         continue;
 
-      TypeParam v1(i->v1);
-      TypeParam v2(i->v2);
+      TypeParam v1(string.v1);
+      TypeParam v2(string.v2);
 
       CompareEqual<TypeParam> c;
 
       ASSERT_TRUE(c.compare(v1, v2));
       ASSERT_TRUE(c.compare(v2, v2));
-      ASSERT_TRUE(c.compare(v1, i->v2));
-      ASSERT_TRUE(c.compare(v2, i->v2));
+      ASSERT_TRUE(c.compare(v1, string.v2));
+      ASSERT_TRUE(c.compare(v2, string.v2));
 
-      std::istringstream is(i->v1);
+      std::istringstream is(string.v1);
       TypeParam v3(TestFixture::safedefault);
       ASSERT_NO_THROW(is >> v3);
-      ASSERT_TRUE(c.compare(i->v2, v3));
+      ASSERT_TRUE(c.compare(string.v2, v3));
 
       std::ostringstream os;
       ASSERT_NO_THROW(os << v1);
-      ASSERT_EQ(i->v1, os.str());
+      ASSERT_EQ(string.v1, os.str());
     }
 }
 
 TYPED_TEST_P(NumericTest, OperatorEqual)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == EQUAL)
-      compare_test<CompareEqual<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == EQUAL)
+      compare_test<CompareEqual<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorNotEqual)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == NOT_EQUAL)
-      compare_test<CompareNotEqual<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == NOT_EQUAL)
+      compare_test<CompareNotEqual<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorLess)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == LESS)
-      compare_test<CompareLess<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == LESS)
+      compare_test<CompareLess<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorLessOrEqual)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == LESS_OR_EQUAL)
-      compare_test<CompareLessOrEqual<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == LESS_OR_EQUAL)
+      compare_test<CompareLessOrEqual<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorGreater)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == GREATER)
-      compare_test<CompareGreater<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == GREATER)
+      compare_test<CompareGreater<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorGreaterOrEqual)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == GREATER_OR_EQUAL)
-      compare_test<CompareGreaterOrEqual<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == GREATER_OR_EQUAL)
+      compare_test<CompareGreaterOrEqual<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorAdd)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == ADD)
-      operation_test<OperationAdd<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == ADD)
+      operation_test<OperationAdd<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorAddAssign)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == ADD_ASSIGN)
-      operation_test<OperationAddAssign<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == ADD_ASSIGN)
+      operation_test<OperationAddAssign<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorSubtract)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == SUBTRACT)
-      operation_test<OperationSubtract<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == SUBTRACT)
+      operation_test<OperationSubtract<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorSubtractAssign)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == SUBTRACT_ASSIGN)
-      operation_test<OperationSubtractAssign<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == SUBTRACT_ASSIGN)
+      operation_test<OperationSubtractAssign<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorMultiply)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == MULTIPLY)
-      operation_test<OperationMultiply<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == MULTIPLY)
+      operation_test<OperationMultiply<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorMultiplyAssign)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == MULTIPLY_ASSIGN)
-      operation_test<OperationMultiplyAssign<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == MULTIPLY_ASSIGN)
+      operation_test<OperationMultiplyAssign<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorDivide)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == DIVIDE)
-      operation_test<OperationDivide<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == DIVIDE)
+      operation_test<OperationDivide<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorDivideAssign)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == DIVIDE_ASSIGN)
-      operation_test<OperationDivideAssign<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == DIVIDE_ASSIGN)
+      operation_test<OperationDivideAssign<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorModulo)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == MODULO)
-      operation_test<OperationModulo<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == MODULO)
+      operation_test<OperationModulo<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorModuloAssign)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == MODULO_ASSIGN)
-      operation_test<OperationModuloAssign<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == MODULO_ASSIGN)
+      operation_test<OperationModuloAssign<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorIncrement)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == INCREMENT)
-      operation_test<OperationIncrement<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == INCREMENT)
+      operation_test<OperationIncrement<TypeParam>>(*this, op);
 }
 
 TYPED_TEST_P(NumericTest, OperatorDecrement)
 {
-  for (typename std::vector<typename TestFixture::test_op>::const_iterator i = this->ops.begin();
-       i != this->ops.end();
-       ++i)
-    if (i->op == DECREMENT)
-      operation_test<OperationDecrement<TypeParam>>(*this, *i);
+  for (const auto& op : this->ops)
+    if (op.op == DECREMENT)
+      operation_test<OperationDecrement<TypeParam>>(*this, op);
 }
 
 REGISTER_TYPED_TEST_CASE_P(NumericTest,
