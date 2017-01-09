@@ -95,14 +95,14 @@
     // ${prop.name} is abstract and is a reference
     ${prop.name} ${prop.instanceVariableName}_reference = new ${prop.name}();
     ${prop.instanceVariableName}_reference.setID(${prop.argumentName});
-    model.addReference(
-      model.${".".join(accessor(obj.name, parent, prop)[:-1])},
+    root.addReference(
+      root.${".".join(accessor(obj.name, parent, prop)[:-1])},
       ${prop.instanceVariableName}_reference);
     // ${parent} is abstract
 {% end %}\
 {% when is_abstract(parent) %}\
     // ${parent} is abstract and not a reference
-    OME o0 = this.model;
+    OME o0 = this.root;
 {% for i, v in enumerate(accessor(obj.name, parent, prop, accessor_string_complex)[:-1]) %}\
 {% choose %}\
 {% when v['level'] == 2 %}\
@@ -127,7 +127,7 @@
     ${v['name']} o${i + 1} = o${i}.${v['accessor']};
 {% if v['level'] == 2 %}\
 {% if "ID" == prop.name %}\
-    model.addModelObject(${prop.argumentName}, o${i + 1});
+    root.addModelObject(${prop.argumentName}, o${i + 1});
 {% end %}\
     ((${obj.name})o${i + 1}).set${prop.methodName}(${prop.argumentName});
 {% end %}\
@@ -137,13 +137,13 @@
     // ${prop.name} is reference and occurs more than once
     ${prop.name} ${prop.instanceVariableName}_reference = new ${prop.name}();
     ${prop.instanceVariableName}_reference.setID(${prop.argumentName});
-    model.addReference(
+    root.addReference(
       ${join_accessors(obj.name, parent, prop)},
       ${prop.instanceVariableName}_reference);
 {% end %}\
 {% otherwise %}\
     // ${prop.name} is not a reference
-    OME o0 = this.model;
+    OME o0 = this.root;
 {% for i, v in enumerate(accessor(obj.name, parent, prop, accessor_string_complex)) %}\
 {% choose %}\
 {% when v['max_occurs'] > 1 %}\
@@ -167,7 +167,7 @@
 {% end %}\
 {% if v['level'] == 1 %}\
 {% if "ID" == prop.name %}\
-    model.addModelObject(${prop.argumentName}, o${i + 1});
+    root.addModelObject(${prop.argumentName}, o${i + 1});
 {% end %}\
     o${i + 1}.set${prop.methodName}(${prop.argumentName});
 {% end %}\
@@ -196,7 +196,7 @@ ${customContent[obj.name][prop.name]}
 
   def join_accessors(name, parent, prop=None, accessorIndex=None, additionalJoins=None):
     results = dict()
-    to_return = "model"
+    to_return = "root"
     o = model.getObjectByName(parent)
     results = accessor(name, parent, prop, accessor_string_complex)
     if accessorIndex is not None:
@@ -325,7 +325,7 @@ import ${lang.units_package}.unit.Unit;
 public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
 {
   /** OME-XML model and root node. */
-  private OMEXMLMetadataRoot model; // OME
+  private OMEXMLMetadataRoot root; // OME
 
   public OMEXMLMetadataImpl()
   {
@@ -334,7 +334,7 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
 
   public void createModel()
   {
-    model = new OMEXMLMetadataRoot();
+    root = new OMEXMLMetadataRoot();
   }
 
   public void createRoot()
@@ -344,26 +344,26 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
 
   public MetadataRoot getRoot()
   {
-    return model;
+    return root;
   }
 
   public void setModel(MetadataModel model)
   {
     if (model instanceof OMEXMLMetadataRoot)
-      this.model = (OMEXMLMetadataRoot) model;
+      this.root = (OMEXMLMetadataRoot) model;
     else
       throw new IllegalArgumentException("Expecting OMEXMLMetadataRoot class or subclass.");
   }
 
   public MetadataModel getModel()
   {
-    return model;
+    return root;
   }
 
   public void setRoot(MetadataRoot root)
   {
     if (root instanceof OMEXMLMetadataRoot)
-      this.model = (OMEXMLMetadataRoot) root;
+      this.root = (OMEXMLMetadataRoot) root;
     else
       throw new IllegalArgumentException("Expecting OMEXMLMetadataRoot class or subclass.");
   }
@@ -376,61 +376,61 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
 
   public int resolveReferences()
   {
-    return model.resolveReferences();
+    return root.resolveReferences();
   }
 
   // -- Entity counting (manual definitions) --
 
   public int getBooleanAnnotationAnnotationCount(int booleanAnnotationIndex) {
-    return model.getStructuredAnnotations().getBooleanAnnotation(booleanAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getBooleanAnnotation(booleanAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
   public int getCommentAnnotationAnnotationCount(int commentAnnotationIndex) {
-    return model.getStructuredAnnotations().getCommentAnnotation(commentAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getCommentAnnotation(commentAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
   public int getDoubleAnnotationAnnotationCount(int doubleAnnotationIndex) {
-    return model.getStructuredAnnotations().getDoubleAnnotation(doubleAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getDoubleAnnotation(doubleAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
   public int getFileAnnotationAnnotationCount(int fileAnnotationIndex) {
-    return model.getStructuredAnnotations().getFileAnnotation(fileAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getFileAnnotation(fileAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
   public int getListAnnotationAnnotationCount(int listAnnotationIndex) {
-    return model.getStructuredAnnotations().getListAnnotation(listAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getListAnnotation(listAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
   public int getLongAnnotationAnnotationCount(int longAnnotationIndex) {
-    return model.getStructuredAnnotations().getLongAnnotation(longAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getLongAnnotation(longAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
   public int getMapAnnotationAnnotationCount(int mapAnnotationIndex) {
-    return model.getStructuredAnnotations().getMapAnnotation(mapAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getMapAnnotation(mapAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
   public int getTagAnnotationAnnotationCount(int tagAnnotationIndex) {
-    return model.getStructuredAnnotations().getTagAnnotation(tagAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getTagAnnotation(tagAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
   public int getTermAnnotationAnnotationCount(int termAnnotationIndex) {
-    return model.getStructuredAnnotations().getTermAnnotation(termAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getTermAnnotation(termAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
   public int getTimestampAnnotationAnnotationCount(int timestampAnnotationIndex)
   {
-    return model.getStructuredAnnotations().getTimestampAnnotation(timestampAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getTimestampAnnotation(timestampAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
   public int getXMLAnnotationAnnotationCount(int xmlAnnotationIndex) {
-    return model.getStructuredAnnotations().getXMLAnnotation(xmlAnnotationIndex).sizeOfLinkedAnnotationList();
+    return root.getStructuredAnnotations().getXMLAnnotation(xmlAnnotationIndex).sizeOfLinkedAnnotationList();
   }
 
 {% for abstractClass in model.opts.lang.getSubstitutionTypes() %}\
 {% for k, v in indexes[abstractClass].items() %}\
   public String get${abstractClass}Type(${indexes_string(v)})
   {
-    ${abstractClass} o = (${abstractClass}) model.${".".join(basic_accessor(abstractClass))};
+    ${abstractClass} o = (${abstractClass}) root.${".".join(basic_accessor(abstractClass))};
     String className = o.getClass().getName();
     return className.substring(
       className.lastIndexOf('.') + 1, className.length());
@@ -447,7 +447,7 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
   // ${repr(indexes[o.name])}
   public void set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])})
   {
-    OME o0 = this.model;
+    OME o0 = this.root;
     if (o0.sizeOfImageList() == imageIndex)
     {
       o0.addImage(new Image());
@@ -473,7 +473,7 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
 
   public ${o.langBaseType} get${o.name}Value(${indexes_string(indexes[o.name].items()[0][1])})
   {
-    return model.getImage(imageIndex).getPixels().getTiffData(tiffDataIndex).getUUID().getValue();
+    return root.getImage(imageIndex).getPixels().getTiffData(tiffDataIndex).getUUID().getValue();
   }
 
 {% end %}\
@@ -494,26 +494,26 @@ ${counter(k, o, v)}\
   /** Gets the UUID associated with this collection of metadata. */
   public String getUUID()
   {
-    return model.getUUID();
+    return root.getUUID();
   }
 
   /** Gets the Map value associated with this annotation */
   public List<MapPair> getMapAnnotationValue(int mapAnnotationIndex)
   {
-    return model.getStructuredAnnotations().getMapAnnotation(mapAnnotationIndex).getValue();
+    return root.getStructuredAnnotations().getMapAnnotation(mapAnnotationIndex).getValue();
   }
 
   /** Gets the Map value associated with this generic light source */
   public List<MapPair> getGenericExcitationSourceMap(int instrumentIndex, int lightSourceIndex)
   {
-    GenericExcitationSource o = (GenericExcitationSource) model.getInstrument(instrumentIndex).getLightSource(lightSourceIndex);
+    GenericExcitationSource o = (GenericExcitationSource) root.getInstrument(instrumentIndex).getLightSource(lightSourceIndex);
     return o.getMap();
   }
 
   /** Gets the Map value associated with this imaging environment */
   public List<MapPair> getImagingEnvironmentMap(int imageIndex)
   {
-    return model.getImage(imageIndex).getImagingEnvironment().getMap();
+    return root.getImage(imageIndex).getImagingEnvironment().getMap();
   }
 
   // -- Entity retrieval (code generated definitions) --
@@ -598,13 +598,13 @@ ${getter(k, o, prop, v)}\
   /** Sets the UUID associated with this collection of metadata. */
   public void setUUID(String uuid)
   {
-    model.setUUID(uuid);
+    root.setUUID(uuid);
   }
 
   /** Sets the Map value associated with this annotation */
   public void setMapAnnotationValue(List<MapPair> value, int mapAnnotationIndex)
   {
-    OME o0 = this.model;
+    OME o0 = this.root;
     if (o0.getStructuredAnnotations() == null)
     {
       o0.setStructuredAnnotations(new StructuredAnnotations());
@@ -621,7 +621,7 @@ ${getter(k, o, prop, v)}\
   /** Sets the Map value associated with this generic light source */
   public void setGenericExcitationSourceMap(List<MapPair> map, int instrumentIndex, int lightSourceIndex)
   {
-    OME o0 = this.model;
+    OME o0 = this.root;
     if (o0.sizeOfInstrumentList() == instrumentIndex)
     {
       o0.addInstrument(new Instrument());
@@ -638,7 +638,7 @@ ${getter(k, o, prop, v)}\
   /** Sets the Map value associated with this imaging environment */
   public void setImagingEnvironmentMap(List<MapPair> map, int imageIndex)
   {
-    OME o0 = this.model;
+    OME o0 = this.root;
     if (o0.sizeOfImageList() == imageIndex)
     {
       o0.addImage(new Image());
