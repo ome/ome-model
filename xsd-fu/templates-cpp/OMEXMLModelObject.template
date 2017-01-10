@@ -1677,7 +1677,6 @@ ${customAsXMLElementPropertyContent[prop.name]}
           }
 {% end %}\
 {% if prop.langTypeNS == 'ome::xml::model::primitives::OrderedMultimap' %}\
-            typedef ome::xml::model::primitives::OrderedMultimap::index<ome::xml::model::primitives::order_index>::type order_index_type;
 {% if prop.minOccurs == 0 %}\
         if (this->impl->${prop.instanceVariableName})
           {
