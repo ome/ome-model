@@ -56,6 +56,11 @@ package ${lang.omexml_model_package};
 
 import java.util.ArrayList;
 import java.util.List;
+{% if klass.name == "OME" %}\
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+{% end if %}\
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +93,12 @@ import ${lang.omexml_model_package}.primitives.*;
 public abstract class ${klass.name} extends ${klass.parentName}
 {% end %}\
 {% when not klass.isAbstract %}\
+{% if klass.name != "OME" %}\
 public class ${klass.name} extends ${klass.parentName}
+{% end if %}\
+{% if klass.name == "OME" %}\
+public class ${klass.name} extends ${klass.parentName} implements OMEModel
+{% end if %}\
 {% end %}\
 {% end %}\
 {
@@ -119,6 +129,15 @@ public class ${klass.name} extends ${klass.parentName}
 {% end %}\
 {% end %}\
 {% end %}\
+{% if klass.name == "OME" %}\
+
+  // OMEModel fields
+  private Map<String, OMEModelObject> modelObjects =
+    new HashMap<String, OMEModelObject>();
+
+  private Map<OMEModelObject, List<Reference>> references =
+    new HashMap<OMEModelObject, List<Reference>>();
+{% end if %}\
 
   // -- Constructors --
 
@@ -139,6 +158,7 @@ public class ${klass.name} extends ${klass.parentName}
 {% end class is AffineTransform %}\
   }
 
+{% if klass.name == "OME" %}\
   /**
    * Constructs ${klass.name} recursively from an XML DOM tree.
    * @param element Root of the XML DOM tree to construct a model object
@@ -148,6 +168,28 @@ public class ${klass.name} extends ${klass.parentName}
    * @throws EnumerationException If there is an error instantiating an
    * enumeration during model object creation.
    */
+  public ${klass.name}(Element element)
+    throws EnumerationException
+  {
+    update(element);
+  }
+
+{% end if%}\
+  /**
+   * Constructs ${klass.name} recursively from an XML DOM tree.
+   * @param element Root of the XML DOM tree to construct a model object
+   * graph from.
+   * @param model Handler for the OME model which keeps track of instances
+   * and references seen during object population.
+   * @throws EnumerationException If there is an error instantiating an
+   * enumeration during model object creation.
+{% if klass.name == "OME" %}\
+   * @deprecated Use {@link #${klass.name}(Element)}.
+{% end if%}\
+   */
+{% if klass.name == "OME" %}\
+  @Deprecated
+{% end if%}\
   public ${klass.name}(Element element, OMEModel model)
     throws EnumerationException
   {
@@ -184,8 +226,114 @@ public class ${klass.name} extends ${klass.parentName}
 {% end %}\
   }
 
-  // -- Custom content from ${klass.name} specific template --
+{% if klass.name == "OME" %}\
+  /* (non-Javadoc)
+   * @see ome.xml.model.OMEModel#removeModelObject(java.lang.String)
+   */
+  @Override
+  public OMEModelObject removeModelObject(String id) {
+    return modelObjects.remove(id);
+  }
 
+  /* (non-Javadoc)
+   * @see ome.xml.model.OMEModel#addModelObject(java.lang.String, ome.xml.model.OMEModelObject)
+   */
+  @Override
+  public OMEModelObject addModelObject(String id, OMEModelObject object) {
+    if (Reference.class.isAssignableFrom(object.getClass())) {
+      return object;
+    }
+    return modelObjects.put(id, object);
+  }
+
+  /* (non-Javadoc)
+   * @see ome.xml.model.OMEModel#getModelObject(java.lang.String)
+   */
+  @Override
+  public OMEModelObject getModelObject(String id) {
+    return modelObjects.get(id);
+  }
+
+  /* (non-Javadoc)
+   * @see ome.xml.model.OMEModel#getModelObjects()
+   */
+  @Override
+  public Map<String, OMEModelObject> getModelObjects() {
+    return modelObjects;
+  }
+
+  /* (non-Javadoc)
+   * @see ome.xml.model.OMEModel#addReference(java.lang.String, ome.xml.model.Reference)
+   */
+  @Override
+  public boolean addReference(OMEModelObject a, Reference b) {
+    List<Reference> bList = references.get(a);
+    if (bList == null) {
+      bList = new ArrayList<Reference>();
+      references.put(a, bList);
+    }
+    return bList.add(b);
+  }
+
+  /* (non-Javadoc)
+   * @see ome.xml.model.OMEModel#getReferences()
+   */
+  @Override
+  public Map<OMEModelObject, List<Reference>> getReferences() {
+    return references;
+  }
+
+  /* (non-Javadoc)
+   * @see ome.xml.model.OMEModel#resolveReferences()
+   */
+  @Override
+  public int resolveReferences() {
+    int unhandledReferences = 0;
+    for (Entry<OMEModelObject, List<Reference>> entry : references.entrySet())
+    {
+      OMEModelObject a = entry.getKey();
+      if (a == null) {
+        List<Reference> references = entry.getValue();
+        if (references == null) {
+          LOGGER.error("Null reference to null object, continuing.");
+          continue;
+        }
+        LOGGER.error("Null reference to {} objects, continuing.",
+                     references.size());
+        unhandledReferences += references.size();
+        continue;
+      }
+      for (Reference reference : entry.getValue()) {
+        String referenceID = reference.getID();
+        OMEModelObject b = getModelObject(referenceID);
+        if (b == null) {
+          LOGGER.warn("{} reference to {} missing from object hierarchy.",
+                      a, referenceID);
+          unhandledReferences++;
+          continue;
+        }
+        a.link(reference, b);
+      }
+    }
+    return unhandledReferences;
+  }
+
+  /**
+   * Updates ${klass.name} recursively from an XML DOM tree. <b>NOTE:</b> No
+   * properties are removed, only added or updated.
+   * @param element Root of the XML DOM tree to construct a model object
+   * graph from.
+   * @throws EnumerationException If there is an error instantiating an
+   * enumeration during model object creation.
+   */
+  public void update(Element element)
+    throws EnumerationException
+  {
+    update(element, this);
+  }
+{% end if %}\
+
+  // -- Custom content from ${klass.name} specific template --
 ${customContent}\
 
   // -- OMEModelObject API methods --

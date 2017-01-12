@@ -35,13 +35,13 @@
  * #L%
  */
 
-#ifndef OME_XML_OME_OMEXMLMETADATAROOT_H
-#define OME_XML_OME_OMEXMLMETADATAROOT_H
+#ifndef OME_XML_OME_OMEXMLMETADATAMODEL_H
+#define OME_XML_OME_OMEXMLMETADATAMODEL_H
 
 #include <ome/compat/cstdint.h>
 
-#include <ome/xml/meta/OMEXMLMetadataModel.h>
-#include <ome/xml/meta/MetadataRoot.h>
+#include <ome/xml/meta/MetadataModel.h>
+#include <ome/xml/model/OME.h>
 
 namespace ome
 {
@@ -53,35 +53,35 @@ namespace ome
       /**
        * OME-XML metadata root node.
        */
-      class OMEXMLMetadataRoot : public ::ome::xml::meta::OMEXMLMetadataModel,
-				 virtual public ::ome::xml::meta::MetadataRoot
+      class OMEXMLMetadataModel : public ::ome::xml::model::OME,
+                                  virtual public ::ome::xml::meta::MetadataModel
       {
       public:
         /// Constructor.
-        OMEXMLMetadataRoot();
+        OMEXMLMetadataModel();
 
 	/// Copy constructor.
-	OMEXMLMetadataRoot(const OMEXMLMetadataRoot& copy);
+	OMEXMLMetadataModel(const OMEXMLMetadataModel& copy);
 
 	/// Copy constructor.
-	OMEXMLMetadataRoot(const xml::model::OME& copy);
+	OMEXMLMetadataModel(const xml::model::OME& copy);
+
+      private:
+        /// Assignment operator (deleted).
+        OMEXMLMetadataModel&
+        operator= (const OMEXMLMetadataModel&);
 
       public:
         /// Destructor.
         virtual
-        ~OMEXMLMetadataRoot();
-
-      private:
-        /// Assignment operator (deleted).
-        OMEXMLMetadataRoot&
-        operator= (const OMEXMLMetadataRoot&);
+        ~OMEXMLMetadataModel();
       };
 
     }
   }
 }
 
-#endif // OME_XML_OME_OMEXMLMETADATAROOT_H
+#endif // OME_XML_OME_OMEXMLMETADATAMODEL_H
 
 /*
  * Local Variables:

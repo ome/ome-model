@@ -40,6 +40,8 @@
 
 #include <ome/compat/cstdint.h>
 
+#include <ome/xml/meta/MetadataModel.h>
+
 namespace ome
 {
   namespace xml
@@ -52,11 +54,12 @@ namespace ome
        * functionality; its purpose is to provide a common base type
        * for the root node type of metadata storage implementations.
        */
-      class MetadataRoot
+      class MetadataRoot : virtual public ::ome::xml::meta::MetadataModel
       {
       protected:
         /// Constructor.
-        MetadataRoot()
+        MetadataRoot():
+          MetadataModel()
         {}
 
       public:

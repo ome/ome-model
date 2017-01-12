@@ -61,6 +61,14 @@ namespace ome
         {
         }
 
+        OMEModel::OMEModel (const OMEModel& copy):
+          ::ome::xml::model::OMEModel(),
+          logger(ome::common::createLogger("OMEModel")),
+          modelObjects(copy.modelObjects),
+          references(copy.references)
+        {
+        }
+
         OMEModel::~OMEModel ()
         {
         }
