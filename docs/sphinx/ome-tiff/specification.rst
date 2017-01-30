@@ -3,7 +3,7 @@ OME-TIFF specification
 
 The following provides technical details on the OME-TIFF
 format. It assumes familiarity with both the
-`TIFF <http://partners.adobe.com/public/developer/tiff/index.html>`_ and
+`TIFF <https://en.wikipedia.org/wiki/TIFF>`_ and
 :schema_plone:`OME-XML <>` formats, although there is some review of both.
 
 An OME-TIFF dataset consists of:

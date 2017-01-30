@@ -15,7 +15,8 @@ OME-TIFF is a multi-plane tiff file that contains OME metadata in the header,
 in the form of OME-XML. This allows the pixels to be read with any
 TIFF-compatible program, and the metadata to be extracted with any OME-aware
 application. Our `paper describing the design and implementation of the OME-XML file 
-<http://genomebiology.com/2005/6/5/R47>`_ appeared in Genome Biology.
+<http://genomebiology.biomedcentral.com/articles/10.1186/gb-2005-6-5-r47>`_
+appeared in Genome Biology.
 
 The OME consortium currently provides three major tools capable of working
 with OME-XML and OME-TIFF:

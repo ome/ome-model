@@ -49,8 +49,9 @@ The OME-XML file serves as a convenient file format for data migration
 from one site or user to another. The OME-XML file captures all image
 acquisition and experimental metadata, along with the binary image data,
 and packages it into an easily readable package. The
-`paper <http://genomebiology.com/2005/6/5/R47>`_ describing the design
-and implementation of the OME-XML file appeared in Genome Biology.
+`paper <http://genomebiology.biomedcentral.com/articles/10.1186/gb-2005-6-5-r47>`_
+describing the design and implementation of the OME-XML file appeared in
+Genome Biology.
 
 .. note::
 
