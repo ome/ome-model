@@ -161,18 +161,20 @@ TEST_P(ModelTest, Update)
 {
   // Read into OME model objects.
   ome::xml::meta::OMEXMLMetadata meta;
-  std::shared_ptr<ome::xml::meta::OMEXMLMetadataRoot> model(std::dynamic_pointer_cast<ome::xml::meta::OMEXMLMetadataRoot>(meta.getRoot()));
+  ome::xml::model::detail::OMEModel model;
+  std::shared_ptr<ome::xml::meta::OMEXMLMetadataRoot> root(std::dynamic_pointer_cast<ome::xml::meta::OMEXMLMetadataRoot>(meta.getRoot()));
   ome::common::xml::dom::Element docroot(doc.getDocumentElement());
-  model->update(docroot);
+  root->update(docroot, model);
 }
 
 TEST_P(ModelTest, CreateXML)
 {
   // Read into OME model objects.
   ome::xml::meta::OMEXMLMetadata meta;
-  std::shared_ptr<ome::xml::meta::OMEXMLMetadataRoot> model(std::dynamic_pointer_cast<ome::xml::meta::OMEXMLMetadataRoot>(meta.getRoot()));
+  ome::xml::model::detail::OMEModel model;
+  std::shared_ptr<ome::xml::meta::OMEXMLMetadataRoot> root(std::dynamic_pointer_cast<ome::xml::meta::OMEXMLMetadataRoot>(meta.getRoot()));
   ome::common::xml::dom::Element docroot(doc.getDocumentElement());
-  model->update(docroot);
+  root->update(docroot, model);
 
   // Dump as XML string.
   std::string omexml(meta.dumpXML());
@@ -185,9 +187,10 @@ TEST_P(ModelTest, CreateXMLRoundTrip)
 {
   // Read into OME model objects.
   ome::xml::meta::OMEXMLMetadata meta;
-  std::shared_ptr<ome::xml::meta::OMEXMLMetadataRoot> model(std::dynamic_pointer_cast<ome::xml::meta::OMEXMLMetadataRoot>(meta.getRoot()));
+  ome::xml::model::detail::OMEModel model;
+  std::shared_ptr<ome::xml::meta::OMEXMLMetadataRoot> root(std::dynamic_pointer_cast<ome::xml::meta::OMEXMLMetadataRoot>(meta.getRoot()));
   ome::common::xml::dom::Element docroot(doc.getDocumentElement());
-  model->update(docroot);
+  root->update(docroot, model);
 
   // Dump as XML string.
   std::string omexml(meta.dumpXML());
@@ -200,9 +203,10 @@ TEST_P(ModelTest, CreateXMLRoundTrip)
   // Read into OME model objects.
   ome::common::xml::dom::Document doc2(ome::xml::createDocument(omexml));
   ome::xml::meta::OMEXMLMetadata meta2;
-  std::shared_ptr<ome::xml::meta::OMEXMLMetadataRoot> model2(std::dynamic_pointer_cast<ome::xml::meta::OMEXMLMetadataRoot>(meta2.getRoot()));
+  ome::xml::model::detail::OMEModel model2;
+  std::shared_ptr<ome::xml::meta::OMEXMLMetadataRoot> root2(std::dynamic_pointer_cast<ome::xml::meta::OMEXMLMetadataRoot>(meta2.getRoot()));
   ome::common::xml::dom::Element docroot2(doc2.getDocumentElement());
-  model2->update(docroot2);
+  root2->update(docroot2, model2);
 
   // Dump as XML string.
   std::string omexml2(meta2.dumpXML());
