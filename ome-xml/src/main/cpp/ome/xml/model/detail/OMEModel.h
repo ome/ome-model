@@ -55,9 +55,6 @@ namespace ome
 
         /**
          * OME model (concrete implementation).
-         *
-         * @deprecated Use the OME class directly, since it implements
-         * ome::xml::model::OMEModel.
          */
         class OMEModel : virtual public ::ome::xml::model::OMEModel
         {
@@ -72,9 +69,6 @@ namespace ome
         public:
           /// Constructor.
           OMEModel ();
-
-          /// Copy constructor.
-          OMEModel (const OMEModel& copy);
 
           /// Destructor.
           ~OMEModel ();
