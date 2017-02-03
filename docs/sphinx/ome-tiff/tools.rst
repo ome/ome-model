@@ -28,7 +28,7 @@ If you are looking for a solution in Java, there are several options.
 Bio-Formats can read OME-TIFF files, as well as convert from many
 third-party formats into OME-TIFF format—see the :doc:`example source code
 page <code>` for specific examples. Alternatively, the open
-source `ImageJ <http://rsb.info.nih.gov/ij/>`_ application reads
+source `ImageJ <https://imagej.nih.gov/ij/>`_ application reads
 multi-page TIFF files, storing the TIFF comment into the associated
 FileInfo object's "description" field.
 

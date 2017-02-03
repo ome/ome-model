@@ -141,5 +141,5 @@ which Enum Tool makes heavy use of internally.
 
 .. SeeAlso::
 
-    - `http://genshi.edgewall.org/ <http://genshi.edgewall.org/>`_
+    - `https://genshi.edgewall.org/ <https://genshi.edgewall.org/>`_
 

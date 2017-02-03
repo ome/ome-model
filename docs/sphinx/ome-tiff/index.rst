@@ -32,20 +32,20 @@ OME-TIFF is supported by:
 * `Accelrys Inc. <http://accelrys.com/>`_
 * `GE Healthcare Life Sciences (formerly Applied Precision) <http://www.gelifesciences.com/webapp/wcs/stores/servlet/catalog/en/GELifeSciences-UK/brands/deltavision/>`_
 * `Bitplane AG <http://www.bitplane.com/>`_
-* `Carl Zeiss Microscopy GmbH <http://www.zeiss.com/microscopy/int/home.html>`_
+* `Carl Zeiss Microscopy GmbH <https://www.zeiss.com/microscopy/int/home.html>`_
 * `Definiens <http://www.definiens.com>`_
 * `DRVision Technologies LLC <http://www.svisionllc.com/>`_
 * `iMagic <http://www.imagic.ch/index.php?id=15&L=2/>`_
-* `Intelligent Imaging Innovations, Inc. <http://www.intelligent-imaging.com>`_
+* `Intelligent Imaging Innovations, Inc. <https://www.intelligent-imaging.com>`_
 * `Leica Inc. <http://www.leica-microsystems.com/>`_
 * `Mayachitra Inc. <http://www.mayachitra.com/>`_
-* `Micro-Manager <http://valelab.ucsf.edu/~MM/MMwiki/>`_
-* `Molecular Devices Inc. <http://www.moleculardevices.com>`_
+* `Micro-Manager <https://micro-manager.org/wiki/>`_
+* `Molecular Devices Inc. <https://www.moleculardevices.com>`_
 * `PerkinElmer <http://www.perkinelmer.com/>`_
 * `Scientifica <http://www.scientifica.uk.com>`_
-* `Scientific Volume Imaging B.V. <http://www.svi.nl/>`_
-* `Strand Life Sciences <http://www.strandls.com>`_
-* `TILL Photonics GmbH, now FEI Munich <http://www.fei.com/>`_
+* `Scientific Volume Imaging B.V. <https://svi.nl/HomePage>`_
+* `Strand Life Sciences <http://strandls.com>`_
+* `TILL Photonics GmbH, now FEI Munich <https://www.fei.com/home/>`_
 
 Public image repositories allowing image downloads as OME-TIFF
 --------------------------------------------------------------
@@ -53,7 +53,7 @@ Public image repositories allowing image downloads as OME-TIFF
 * `ASCB CELL Image Library <http://www.cellimagelibrary.org/>`_
 * `Harvard Medical School LINCS Project <http://lincs.hms.harvard.edu/>`_
 * `JCB DataViewer <http://jcb-dataviewer.rupress.org/>`_
-* `Stowers Institute Original Data Repository <http://odr.stowers.org/>`_
+* `Stowers Institute Original Data Repository <http://www.stowers.org/research/publications/odr>`_
 
 |
 
