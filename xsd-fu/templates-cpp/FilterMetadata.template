@@ -160,7 +160,6 @@
 #ifndef ${fu.GUARD}
 #define ${fu.GUARD}
 
-#include <ome/xml/meta/MetadataModel.h>
 #include <ome/xml/meta/MetadataStore.h>
 {% end header%}\
 {% if fu.SOURCE_TYPE == "source" %}\
@@ -228,19 +227,6 @@ namespace ome
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in base class.
         void
-        createModel();
-{% end header %}\
-{% if fu.SOURCE_TYPE == "source" %}\
-      void
-      FilterMetadata::createModel()
-      {
-        store->createModel();
-      }
-{% end source %}\
-
-{% if fu.SOURCE_TYPE == "header" %}\
-        // Documented in base class.
-        void
         createRoot();
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
@@ -248,32 +234,6 @@ namespace ome
       FilterMetadata::createRoot()
       {
         store->createRoot();
-      }
-{% end source %}\
-
-{% if fu.SOURCE_TYPE == "header" %}\
-        // Documented in base class.
-        std::shared_ptr<MetadataModel>
-        getModel();
-{% end header %}\
-{% if fu.SOURCE_TYPE == "source" %}\
-      std::shared_ptr<MetadataModel>
-      FilterMetadata::getModel()
-      {
-        return store->getModel();
-      }
-{% end source %}\
-
-{% if fu.SOURCE_TYPE == "header" %}\
-        // Documented in base class.
-        void
-        setModel(std::shared_ptr<MetadataModel> model);
-{% end header %}\
-{% if fu.SOURCE_TYPE == "source" %}\
-      void
-      FilterMetadata::setModel(std::shared_ptr<MetadataModel> model)
-      {
-        store->setModel(model);
       }
 {% end source %}\
 

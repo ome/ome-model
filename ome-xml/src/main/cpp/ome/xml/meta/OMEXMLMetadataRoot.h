@@ -40,8 +40,8 @@
 
 #include <cstdint>
 
-#include <ome/xml/meta/OMEXMLMetadataModel.h>
 #include <ome/xml/meta/MetadataRoot.h>
+#include <ome/xml/model/OME.h>
 
 namespace ome
 {
@@ -53,7 +53,7 @@ namespace ome
       /**
        * OME-XML metadata root node.
        */
-      class OMEXMLMetadataRoot : public ::ome::xml::meta::OMEXMLMetadataModel,
+      class OMEXMLMetadataRoot : public ::ome::xml::model::OME,
 				 virtual public ::ome::xml::meta::MetadataRoot
       {
       public:
