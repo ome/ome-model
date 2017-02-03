@@ -42,4 +42,4 @@ package ome.xml.meta;
  *
  * @author Roger Leigh r.leigh at dundee.ac.uk
  */
-public interface MetadataRoot extends MetadataModel { }
+public interface MetadataRoot { }
