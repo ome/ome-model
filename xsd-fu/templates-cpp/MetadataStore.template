@@ -109,9 +109,8 @@
 #ifndef ${fu.GUARD}
 #define ${fu.GUARD}
 
+#include <memory>
 #include <string>
-
-#include <ome/compat/memory.h>
 
 #include <ome/xml/meta/BaseMetadata.h>
 #include <ome/xml/meta/MetadataModel.h>
@@ -230,7 +229,7 @@ namespace ome
          *
          * @todo should this be a reference or shared_ptr?
          */
-        virtual ome::compat::shared_ptr<MetadataModel>
+        virtual std::shared_ptr<MetadataModel>
         getModel() = 0;
 
         /**
@@ -244,7 +243,7 @@ namespace ome
          * @todo should this be a reference or shared_ptr?
          */
         virtual void
-        setModel(ome::compat::shared_ptr<MetadataModel> model) = 0;
+        setModel(std::shared_ptr<MetadataModel> model) = 0;
 
         /**
          * Get the root node of the metadata.  Note that the root node
@@ -255,7 +254,7 @@ namespace ome
          *
          * @todo should this be a reference or shared_ptr?
          */
-        virtual ome::compat::shared_ptr<MetadataRoot>
+        virtual std::shared_ptr<MetadataRoot>
         getRoot() = 0;
 
         /**
@@ -269,7 +268,7 @@ namespace ome
          * @todo should this be a reference or shared_ptr?
          */
         virtual void
-        setRoot(ome::compat::shared_ptr<MetadataRoot> root) = 0;
+        setRoot(std::shared_ptr<MetadataRoot> root) = 0;
 
 {% if debug %}\
         // -- Entity storage (manual definitions) --

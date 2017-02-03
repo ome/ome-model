@@ -57,35 +57,29 @@ TEST(Enum, LaserTypeAssign)
 
 TEST(Enum, LaserStrings)
 {
-  const LaserType::string_map_type& strings = LaserType::strings();
-  for(LaserType::string_map_type::const_iterator i = strings.begin();
-      i != strings.end();
-      ++i)
+  for(const auto& s: LaserType::strings())
     {
-      LaserType l1(i->first);
-      LaserType l2(i->second);
+      LaserType l1(s.first);
+      LaserType l2(s.second);
       ASSERT_EQ(l1, l2);
-      ASSERT_EQ(l1, i->first);
-      ASSERT_EQ(l1, i->second);
-      ASSERT_EQ(l2, i->first);
-      ASSERT_EQ(l2, i->second);
+      ASSERT_EQ(l1, s.first);
+      ASSERT_EQ(l1, s.second);
+      ASSERT_EQ(l2, s.first);
+      ASSERT_EQ(l2, s.second);
     }
 }
 
 TEST(Enum, LaserValues)
 {
-  const LaserType::value_map_type& values = LaserType::values();
-  for(LaserType::value_map_type::const_iterator i = values.begin();
-      i != values.end();
-      ++i)
+  for(const auto& v: LaserType::values())
     {
-      LaserType l1(i->first);
-      LaserType l2(i->second);
+      LaserType l1(v.first);
+      LaserType l2(v.second);
       ASSERT_EQ(l1, l2);
-      ASSERT_EQ(l1, i->first);
-      ASSERT_EQ(l1, i->second);
-      ASSERT_EQ(l2, i->first);
-      ASSERT_EQ(l2, i->second);
+      ASSERT_EQ(l1, v.first);
+      ASSERT_EQ(l1, v.second);
+      ASSERT_EQ(l2, v.first);
+      ASSERT_EQ(l2, v.second);
     }
 }
 
@@ -176,20 +170,6 @@ TEST_P(EnumString, Compare)
     }
 }
 
-EnumStringParameters string_params[] =
-  {
-    EnumStringParameters("SolidState",             true,  false, false),
-    EnumStringParameters("solidstate",             false, true,  false),
-    EnumStringParameters("soLidsTaTe",             false, true,  false),
-    EnumStringParameters("    \tsolidstate",       false, true,  false),
-    EnumStringParameters("SolidState      \n",     false, true,  false),
-    EnumStringParameters("\f\f  solidstate    \v", false, true,  false),
-    EnumStringParameters("InvalidName",            false, false, false),
-    EnumStringParameters("--invalid--",            false, false, true),
-    EnumStringParameters("invalid3",               false, false, true)
-  };
-
-
 // This enum test is intentionally setting an invalid value, so don't
 // warn about it.
 #ifdef __GNUC__
@@ -230,7 +210,7 @@ public:
  {}
 };
 
-class LaserTypeValue : public ::testing::TestWithParam<EnumValueParameters<LaserType> >
+class LaserTypeValue : public ::testing::TestWithParam<EnumValueParameters<LaserType>>
 {
 public:
   typedef LaserType enum_type;
@@ -340,33 +320,6 @@ TEST_P(LaserTypeValue, StreamInputFail)
   ASSERT_EQ(LaserType::OTHER, e); // Unchanged.
   ASSERT_NE(params.valueneg, e);
 }
-
-typedef EnumValueParameters<LaserType> lts_param;
-lts_param lt_value_params[] =
-  {
-    lts_param(LaserType(LaserType::METALVAPOR),
-              LaserType::METALVAPOR, LaserType::EXCIMER,
-              "MetalVapor", "Excimer"),
-    lts_param(LaserType(LaserType::EXCIMER),
-              LaserType::EXCIMER, LaserType::GAS,
-              "Excimer", "Gas"),
-    lts_param(LaserType(LaserType::SOLIDSTATE),
-              LaserType::SOLIDSTATE, LaserType::FREEELECTRON,
-              "SolidState", "FreeElectron"),
-    lts_param(LaserType(LaserType::OTHER),
-              LaserType::OTHER, LaserType::FREEELECTRON,
-              "Other", "FreeElectron"),
-    lts_param(LaserType("SolidState"),
-              LaserType::SOLIDSTATE, LaserType::FREEELECTRON,
-              "SolidState", "FreeElectron"),
-    lts_param(LaserType("SolidState", true),
-              LaserType::SOLIDSTATE, LaserType::FREEELECTRON,
-              "SolidState", "FreeElectron"),
-    lts_param(LaserType("\tSOLIDStaTe ", false),
-              LaserType::SOLIDSTATE, LaserType::FREEELECTRON,
-              "SolidState", "FreeElectron"),
-  };
-
 
 template<typename E>
 void
@@ -574,6 +527,44 @@ TEST(Enum, PixelTypePreprocessNested)
 #undef NESTED_TEST
 
 #endif // !_MSC_VER
+
+std::vector<EnumStringParameters> string_params =
+  {
+    { "SolidState",             true,  false, false },
+    { "solidstate",             false, true,  false },
+    { "soLidsTaTe",             false, true,  false },
+    { "    \tsolidstate",       false, true,  false },
+    { "SolidState      \n",     false, true,  false },
+    { "\f\f  solidstate    \v", false, true,  false },
+    { "InvalidName",            false, false, false },
+    { "--invalid--",            false, false, true },
+    { "invalid3",               false, false, true }
+  };
+
+std::vector<EnumValueParameters<LaserType>> lt_value_params =
+  {
+    { LaserType(LaserType::METALVAPOR),
+      LaserType::METALVAPOR, LaserType::EXCIMER,
+      "MetalVapor", "Excimer" },
+    { LaserType(LaserType::EXCIMER),
+      LaserType::EXCIMER, LaserType::GAS,
+      "Excimer", "Gas" },
+    { LaserType(LaserType::SOLIDSTATE),
+      LaserType::SOLIDSTATE, LaserType::FREEELECTRON,
+      "SolidState", "FreeElectron" },
+    { LaserType(LaserType::OTHER),
+      LaserType::OTHER, LaserType::FREEELECTRON,
+      "Other", "FreeElectron" },
+    { LaserType("SolidState"),
+      LaserType::SOLIDSTATE, LaserType::FREEELECTRON,
+      "SolidState", "FreeElectron" },
+    { LaserType("SolidState", true),
+      LaserType::SOLIDSTATE, LaserType::FREEELECTRON,
+      "SolidState", "FreeElectron" },
+    { LaserType("\tSOLIDStaTe ", false),
+      LaserType::SOLIDSTATE, LaserType::FREEELECTRON,
+      "SolidState", "FreeElectron" }
+  };
 
 // Disable missing-prototypes warning for INSTANTIATE_TEST_CASE_P;
 // this is solely to work around a missing prototype in gtest.

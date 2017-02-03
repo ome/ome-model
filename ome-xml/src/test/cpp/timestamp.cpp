@@ -76,27 +76,6 @@ operator<< (std::basic_ostream<charT,traits>& os,
   return os << params.input;
 }
 
-TimestampTestParameters params[] =
-  {
-    //                      input                           throws seconds     ms   output
-    TimestampTestParameters("2003-08-26T19:46:38",          false, 1061927198,   0, "2003-08-26T19:46:38Z"),
-    TimestampTestParameters("2003-08-26T19:46:38.762",      false, 1061927198, 762, "2003-08-26T19:46:38.762000Z"),
-    TimestampTestParameters("2003-08-26T19:46:38.762Z",     false, 1061927198, 762, "2003-08-26T19:46:38.762000Z"),
-    TimestampTestParameters("2003-08-26T19:46:38.762-0300", false, 1061937998, 762, "2003-08-26T22:46:38.762000Z"),
-    TimestampTestParameters("2003-08-26T19:46:38.762+0400", false, 1061912798, 762, "2003-08-26T15:46:38.762000Z"),
-    TimestampTestParameters("2003-08-26T19:46:38.762-1130", false, 1061968598, 762, "2003-08-27T07:16:38.762000Z"),
-    TimestampTestParameters("2003-08-26T19:46:38.762+",     true,  0,          762, ""), // Time difference is invalid
-    TimestampTestParameters("2003-08-26T19:46:38.762-",     true,  0,          762, ""), // Time difference is invalid
-    TimestampTestParameters("invalid",                      true,  0,            0, ""), // Invalid
-    TimestampTestParameters("2011-10-20T09:30:10-05:00",    true,  0,            0, ""), // Time difference is invalid
-    TimestampTestParameters("2011-10-20T15:07:14",          false, 1319123234,   0, "2011-10-20T15:07:14Z"),
-    TimestampTestParameters("2011-10-20T15:07:14.312",      false, 1319123234, 312, "2011-10-20T15:07:14.312000Z"),
-    TimestampTestParameters("2011-10-20T15:07:14Z",         false, 1319123234,   0, "2011-10-20T15:07:14Z"),
-    TimestampTestParameters("2011-10-20T15:07:14.632Z",     false, 1319123234, 632, "2011-10-20T15:07:14.632000Z"),
-    TimestampTestParameters("1200-12-04T13:12:12",          true,  0,            0, ""), // Too far in the past
-    TimestampTestParameters("20111020T093010.654",          true,  0,            0, "")  // Invalid
-  };
-
 class TimestampTest : public ::testing::TestWithParam<TimestampTestParameters>
 {
 };
@@ -168,6 +147,27 @@ TEST_P(TimestampTest, TimeFromEpoch)
       ASSERT_EQ(milliseconds, params.milliseconds);
     }
 }
+
+std::vector<TimestampTestParameters> params =
+  {
+    // input                          throws seconds     ms   output
+    { "2003-08-26T19:46:38",          false, 1061927198,   0, "2003-08-26T19:46:38Z" },
+    { "2003-08-26T19:46:38.762",      false, 1061927198, 762, "2003-08-26T19:46:38.762000Z" },
+    { "2003-08-26T19:46:38.762Z",     false, 1061927198, 762, "2003-08-26T19:46:38.762000Z" },
+    { "2003-08-26T19:46:38.762-0300", false, 1061937998, 762, "2003-08-26T22:46:38.762000Z" },
+    { "2003-08-26T19:46:38.762+0400", false, 1061912798, 762, "2003-08-26T15:46:38.762000Z" },
+    { "2003-08-26T19:46:38.762-1130", false, 1061968598, 762, "2003-08-27T07:16:38.762000Z" },
+    { "2003-08-26T19:46:38.762+",     true,  0,          762, "" }, // Time difference is invalid
+    { "2003-08-26T19:46:38.762-",     true,  0,          762, "" }, // Time difference is invalid
+    { "invalid",                      true,  0,            0, "" }, // Invalid
+    { "2011-10-20T09:30:10-05:00",    true,  0,            0, "" }, // Time difference is invalid
+    { "2011-10-20T15:07:14",          false, 1319123234,   0, "2011-10-20T15:07:14Z" },
+    { "2011-10-20T15:07:14.312",      false, 1319123234, 312, "2011-10-20T15:07:14.312000Z" },
+    { "2011-10-20T15:07:14Z",         false, 1319123234,   0, "2011-10-20T15:07:14Z" },
+    { "2011-10-20T15:07:14.632Z",     false, 1319123234, 632, "2011-10-20T15:07:14.632000Z" },
+    { "1200-12-04T13:12:12",          true,  0,            0, "" }, // Too far in the past
+    { "20111020T093010.654",          true,  0,            0, "" }// Invalid
+  };
 
 // Disable missing-prototypes warning for INSTANTIATE_TEST_CASE_P;
 // this is solely to work around a missing prototype in gtest.

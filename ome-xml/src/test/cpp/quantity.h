@@ -83,7 +83,7 @@ struct test_op
 };
 
 // From unit name, to unit name, test data
-typedef std::map<std::pair<std::string, std::string>, std::vector<test_op> > test_map;
+typedef std::map<std::pair<std::string, std::string>, std::vector<test_op>> test_map;
 
 extern test_map test_data;
 

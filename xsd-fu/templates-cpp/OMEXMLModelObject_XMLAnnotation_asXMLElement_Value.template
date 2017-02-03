@@ -11,11 +11,9 @@
         common::xml::dom::Element value_element = document.createElementNS(getXMLNamespace(), "Value");
         common::xml::dom::NodeList Value_subNodes = Value_document.getDocumentElement().getChildNodes();
 
-        for (common::xml::dom::NodeList::iterator elem = Value_subNodes.begin();
-             elem != Value_subNodes.end();
-             ++elem)
+        for (auto& elem : Value_subNodes)
           {
-            common::xml::dom::Node Value_subNode(document->importNode(elem->get(), true), false);
+            common::xml::dom::Node Value_subNode(document->importNode(elem.get(), true), false);
             value_element.appendChild(Value_subNode);
           }
         element.appendChild(value_element);

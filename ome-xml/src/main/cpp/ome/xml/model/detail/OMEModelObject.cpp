@@ -105,8 +105,8 @@ namespace ome
         }
 
         bool
-        OMEModelObject::link (ome::compat::shared_ptr<Reference>&                          /* reference */,
-                              ome::compat::shared_ptr< ::ome::xml::model::OMEModelObject>& /* object */)
+        OMEModelObject::link (std::shared_ptr<Reference>&                         /* reference */,
+                              std::shared_ptr<::ome::xml::model::OMEModelObject>& /* object */)
         {
           return false;
         }
@@ -120,9 +120,7 @@ namespace ome
 
           common::xml::dom::NodeList children(parent->getChildNodes());
           // TODO: correct type for iteration.
-          for (common::xml::dom::NodeList::iterator pos = children.begin();
-               pos != children.end();
-               ++pos)
+          for (auto& pos : children)
             {
               try
                 {
@@ -130,9 +128,9 @@ namespace ome
                   // class would throw; but this avoids the need to
                   // throw and catch many std::logic_error exceptions
                   // during document processing.
-                  if (dynamic_cast<const xercesc::DOMElement *>(pos->get()))
+                  if (dynamic_cast<const xercesc::DOMElement *>(pos.get()))
                     {
-                      common::xml::dom::Element child(pos->get(), false);
+                      common::xml::dom::Element child(pos.get(), false);
                       if (child && name == stripNamespacePrefix(common::xml::String(child->getNodeName())))
                         {
                           ret.push_back(child);

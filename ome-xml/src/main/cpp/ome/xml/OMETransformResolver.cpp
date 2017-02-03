@@ -281,7 +281,7 @@ namespace ome
     };
 
     OMETransformResolver::OMETransformResolver():
-      impl(ome::compat::make_shared<OMETransformResolverImpl>())
+      impl(std::make_shared<OMETransformResolverImpl>())
     {
       // Hack to force module registration when static linking.
       register_module_paths();
@@ -290,7 +290,7 @@ namespace ome
     }
 
     OMETransformResolver::OMETransformResolver(const boost::filesystem::path& transformdir):
-      impl(ome::compat::make_shared<OMETransformResolverImpl>())
+      impl(std::make_shared<OMETransformResolverImpl>())
     {
       impl->fill_graph(transformdir);
     }

@@ -254,18 +254,18 @@ TEST_P(ColorTest, StreamOutput)
   ASSERT_EQ(os.str(), params.str);
 }
 
-ColorTestParameters params[] =
+const std::vector<ColorTestParameters> params =
   {
-    ColorTestParameters(255,   0,   0, 255, 0xFF0000FFU,  -16776961,  "-16776961"), // Red
-    ColorTestParameters(  0, 255,   0, 255, 0x00FF00FFU,   16711935,   "16711935"), // Green
-    ColorTestParameters(  0,   0, 255, 255, 0x0000FFFFU,      65535,      "65535"), // Blue
-    ColorTestParameters(  0, 255, 255, 255, 0x00FFFFFFU,   16777215,   "16777215"), // Cyan
-    ColorTestParameters(255,   0, 255, 255, 0xFF00FFFFU,  -16711681,  "-16711681"), // Magenta
-    ColorTestParameters(255, 255,   0, 255, 0xFFFF00FFU,     -65281,     "-65281"), // Yellow
-    ColorTestParameters(  0,   0,   0, 255, 0x000000FFU,        255,        "255"), // Black
-    ColorTestParameters(255, 255, 255, 255, 0xFFFFFFFFU,         -1,         "-1"), // White
-    ColorTestParameters(  0,   0,   0, 127, 0x0000007FU,        127,        "127"), // Transparent black
-    ColorTestParameters(127, 127, 127, 127, 0x7F7F7F7FU, 2139062143, "2139062143"), // Grey
+    { 255,   0,   0, 255, 0xFF0000FFU,  -16776961,  "-16776961" }, // Red
+    {   0, 255,   0, 255, 0x00FF00FFU,   16711935,   "16711935" }, // Green
+    {   0,   0, 255, 255, 0x0000FFFFU,      65535,      "65535" }, // Blue
+    {   0, 255, 255, 255, 0x00FFFFFFU,   16777215,   "16777215" }, // Cyan
+    { 255,   0, 255, 255, 0xFF00FFFFU,  -16711681,  "-16711681" }, // Magenta
+    { 255, 255,   0, 255, 0xFFFF00FFU,     -65281,     "-65281" }, // Yellow
+    {   0,   0,   0, 255, 0x000000FFU,        255,        "255" }, // Black
+    { 255, 255, 255, 255, 0xFFFFFFFFU,         -1,         "-1" }, // White
+    {   0,   0,   0, 127, 0x0000007FU,        127,        "127" }, // Transparent black
+    { 127, 127, 127, 127, 0x7F7F7F7FU, 2139062143, "2139062143" }  // Grey
   };
 
 // Disable missing-prototypes warning for INSTANTIATE_TEST_CASE_P;

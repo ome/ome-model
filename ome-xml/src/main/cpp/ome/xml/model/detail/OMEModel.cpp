@@ -37,9 +37,8 @@
  */
 
 #include <map>
+#include <memory>
 #include <string>
-
-#include <ome/compat/memory.h>
 
 #include <ome/xml/model/detail/OMEModel.h>
 #include <ome/xml/model/Reference.h>
@@ -73,12 +72,12 @@ namespace ome
         {
         }
 
-        ome::compat::shared_ptr< ::ome::xml::model::OMEModelObject>
-        OMEModel::addModelObject(const std::string&                                   id,
-                                 ome::compat::shared_ptr< ::ome::xml::model::OMEModelObject>& object)
+        std::shared_ptr<::ome::xml::model::OMEModelObject>
+        OMEModel::addModelObject(const std::string&                                  id,
+                                 std::shared_ptr<::ome::xml::model::OMEModelObject>& object)
         {
           // Don't store references.
-          if (ome::compat::dynamic_pointer_cast<Reference>(object))
+          if (std::dynamic_pointer_cast<Reference>(object))
             return object;
 
           object_map_type::iterator i = modelObjects.find(id);
@@ -90,10 +89,10 @@ namespace ome
           return object;
         }
 
-        ome::compat::shared_ptr< ::ome::xml::model::OMEModelObject>
+        std::shared_ptr<::ome::xml::model::OMEModelObject>
         OMEModel::removeModelObject(const std::string& id)
         {
-          ome::compat::shared_ptr< ::ome::xml::model::OMEModelObject> ret;
+          std::shared_ptr<::ome::xml::model::OMEModelObject> ret;
 
           object_map_type::iterator i = modelObjects.find(id);
           if (i != modelObjects.end())
@@ -105,10 +104,10 @@ namespace ome
           return ret;
         }
 
-        ome::compat::shared_ptr< ::ome::xml::model::OMEModelObject>
+        std::shared_ptr<::ome::xml::model::OMEModelObject>
         OMEModel::getModelObject(const std::string& id) const
         {
-          ome::compat::shared_ptr< ::ome::xml::model::OMEModelObject> ret;
+          std::shared_ptr<::ome::xml::model::OMEModelObject> ret;
 
           object_map_type::const_iterator i = modelObjects.find(id);
           if (i != modelObjects.end())
@@ -124,8 +123,8 @@ namespace ome
         }
 
         bool
-        OMEModel::addReference (ome::compat::shared_ptr< ::ome::xml::model::OMEModelObject>& a,
-                                    ome::compat::shared_ptr<Reference>&                      b)
+        OMEModel::addReference (std::shared_ptr<::ome::xml::model::OMEModelObject>& a,
+                                std::shared_ptr<Reference>&                         b)
         {
           reference_map_type::iterator i = references.find(a);
 
@@ -150,15 +149,13 @@ namespace ome
         {
           size_type unhandledReferences = 0;
 
-          for (reference_map_type::iterator i = references.begin();
-               i != references.end();
-               ++i)
+          for (auto& i : references)
             {
-              const ome::compat::shared_ptr<const ::ome::xml::model::OMEModelObject>& a(i->first);
+              const std::shared_ptr<const ::ome::xml::model::OMEModelObject>& a(i.first);
 
               if (!a)
                 {
-                  const reference_list_type& references(i->second);
+                  const reference_list_type& references(i.second);
 
                   if (references.empty())
                     {
@@ -175,13 +172,11 @@ namespace ome
                 }
               else
                 {
-                  reference_list_type& references(i->second);
+                  reference_list_type& references(i.second);
 
-                  for (reference_list_type::iterator ref = references.begin();
-                       ref != references.end();
-                       ++ref)
+                  for (auto& ref : references)
                     {
-                      if (!(*ref))
+                      if (!ref)
                         {
                           BOOST_LOG_SEV(logger, ome::logging::trivial::warning)
                             << typeid(*a).name() << "@" << a
@@ -189,9 +184,9 @@ namespace ome
                         }
                       else
                         {
-                          const std::string& referenceID = (*ref)->getID();
+                          const std::string& referenceID = ref->getID();
 
-                          ome::compat::shared_ptr< ::ome::xml::model::OMEModelObject> b = getModelObject(referenceID);
+                          std::shared_ptr<::ome::xml::model::OMEModelObject> b = getModelObject(referenceID);
                           if (!b)
                             {
                               BOOST_LOG_SEV(logger, ome::logging::trivial::warning)
@@ -202,8 +197,8 @@ namespace ome
                             }
                           else
                             {
-                              ome::compat::shared_ptr< ::ome::xml::model::OMEModelObject> aw(ome::compat::const_pointer_cast< ::ome::xml::model::OMEModelObject>(a));
-                              aw->link(*ref, b);
+                              std::shared_ptr<::ome::xml::model::OMEModelObject> aw(std::const_pointer_cast<::ome::xml::model::OMEModelObject>(a));
+                              aw->link(ref, b);
                             }
                         }
                     }
