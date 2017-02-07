@@ -113,13 +113,12 @@ namespace ome
 
         std::vector<common::xml::dom::Element>
         OMEModelObject::getChildrenByTagName (const common::xml::dom::Element& parent,
-                                              const std::string&          name)
+                                              const std::string&               name)
         {
-          // TODO: May need to be a shared_ptr<element> if element is not refcounting.
           std::vector<common::xml::dom::Element> ret;
 
           common::xml::dom::NodeList children(parent->getChildNodes());
-          // TODO: correct type for iteration.
+          common::xml::String xmlname(name);
           for (auto& pos : children)
             {
               try
@@ -131,7 +130,7 @@ namespace ome
                   if (dynamic_cast<const xercesc::DOMElement *>(pos.get()))
                     {
                       common::xml::dom::Element child(pos.get(), false);
-                      if (child && name == stripNamespacePrefix(common::xml::String(child->getNodeName())))
+                      if (child && xmlname == common::xml::String(child->getNodeName()))
                         {
                           ret.push_back(child);
                         }

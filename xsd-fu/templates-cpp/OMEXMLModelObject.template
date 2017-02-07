@@ -638,7 +638,7 @@ ${customContent}\
 {% end %}\
         }
 {% end %}\
-        const std::string tagName(stripNamespacePrefix(element.getTagName()));
+        const std::string tagName(element.getTagName());
         if (!validElementName(tagName))
           {
             BOOST_LOG_SEV(logger, ome::logging::trivial::warning)
