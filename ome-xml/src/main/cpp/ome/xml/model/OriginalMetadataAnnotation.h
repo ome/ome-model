@@ -46,7 +46,6 @@
 #include <ome/common/xml/dom/Document.h>
 #include <ome/common/xml/dom/Element.h>
 #include <ome/common/xml/dom/Node.h>
-#include <ome/common/xml/dom/NodeList.h>
 
 #include <ome/xml/model/XMLAnnotation.h>
 

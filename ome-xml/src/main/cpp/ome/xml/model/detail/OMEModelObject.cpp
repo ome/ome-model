@@ -36,7 +36,6 @@
  * #L%
  */
 
-#include <ome/common/xml/dom/NodeList.h>
 #include <ome/common/xml/String.h>
 
 #include <ome/xml/model/detail/OMEModelObject.h>
@@ -117,9 +116,10 @@ namespace ome
         {
           std::vector<common::xml::dom::Element> ret;
 
-          common::xml::dom::NodeList children(parent->getChildNodes());
           common::xml::String xmlname(name);
-          for (auto& pos : children)
+          for (xercesc::DOMNode *pos = parent.get()->getFirstChild();
+               pos != 0;
+               pos = pos->getNextSibling())
             {
               try
                 {
@@ -127,9 +127,9 @@ namespace ome
                   // class would throw; but this avoids the need to
                   // throw and catch many std::logic_error exceptions
                   // during document processing.
-                  if (dynamic_cast<const xercesc::DOMElement *>(pos.get()))
+                  if (dynamic_cast<const xercesc::DOMElement *>(pos))
                     {
-                      common::xml::dom::Element child(pos.get(), false);
+                      common::xml::dom::Element child(pos, false);
                       if (child && xmlname == common::xml::String(child->getNodeName()))
                         {
                           ret.push_back(child);
