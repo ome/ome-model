@@ -58,7 +58,6 @@
 #include <ome/common/xml/dom/Document.h>
 #include <ome/common/xml/dom/Element.h>
 #include <ome/common/xml/dom/Node.h>
-#include <ome/common/xml/dom/NodeList.h>
 
 #include <ome/xml/model/primitives/Quantity.h>
 
@@ -394,7 +393,7 @@ ${customContent}\
 {% end %}\
         }
 {% end %}\
-        const std::string tagName(stripNamespacePrefix(element.getTagName()));
+        const std::string tagName(element.getTagName());
         if (!validElementName(tagName))
           {
             BOOST_LOG_SEV(logger, ome::logging::trivial::warning)

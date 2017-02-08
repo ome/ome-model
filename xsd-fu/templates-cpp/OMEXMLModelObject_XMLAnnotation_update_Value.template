@@ -8,15 +8,17 @@
         else if (Value_nodeList.size() != 0)
           {
             common::xml::dom::Element elem(Value_nodeList.at(0));
-            common::xml::dom::NodeList nodes(elem.getChildNodes());
 
             std::string text;
 
-            for (auto& e : nodes)
+            for (xercesc::DOMNode *node = elem.get()->getFirstChild();
+                 node != 0;
+                 node = node->getNextSibling())
               {
                 try
                   {
                     std::string textvalue;
+                    common::xml::dom::Node e(node, false);
                     ome::common::xml::dom::writeNode(e, textvalue);
 
                     // Trim leading and trailing whitespace

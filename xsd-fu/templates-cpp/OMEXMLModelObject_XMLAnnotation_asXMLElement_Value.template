@@ -9,11 +9,12 @@
         params.validationScheme = xercesc::XercesDOMParser::Val_Never;
         common::xml::dom::Document Value_document(ome::xml::createDocument(wrappedValue, params));
         common::xml::dom::Element value_element = document.createElementNS(getXMLNamespace(), "Value");
-        common::xml::dom::NodeList Value_subNodes = Value_document.getDocumentElement().getChildNodes();
 
-        for (auto& elem : Value_subNodes)
+        for (xercesc::DOMNode *elem = Value_document.getDocumentElement().get()->getFirstChild();
+             elem != 0;
+             elem = elem->getNextSibling())
           {
-            common::xml::dom::Node Value_subNode(document->importNode(elem.get(), true), false);
+            common::xml::dom::Node Value_subNode(document->importNode(elem, true), false);
             value_element.appendChild(Value_subNode);
           }
         element.appendChild(value_element);
