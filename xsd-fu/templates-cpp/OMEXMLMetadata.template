@@ -202,7 +202,7 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
         std::shared_ptr<::${lang.omexml_model_package}::OMEModelObject> o_base(std::static_pointer_cast<::${lang.omexml_model_package}::OMEModelObject>(${safe_accessor([{'accessor':'root'}]+accessor(obj.name, parent, prop, func=accessor_string_complex)[:-1], setPropMethod(is_multi_path[o.name], parent, obj.name, prop))}));
         std::shared_ptr<::${lang.omexml_model_package}::Reference> ref(std::static_pointer_cast<::${lang.omexml_model_package}::Reference>(${prop.instanceVariableName}_reference));
 
-        root->addReference(o_base, ref);
+        model->addReference(o_base, ref);
         // ${parent} is abstract
 {% end %}\
 {% when is_abstract(parent) %}\
@@ -211,7 +211,7 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% choose %}\
 {% when v['level'] == 2 %}\
 {% if i == 0 %}\
-        std::shared_ptr<OMEXMLMetadataRoot>& o0(this->root);
+        std::shared_ptr<OMEXMLMetadataRoot>& o0(root);
 {% end %}\
         if (o${i}->sizeOf${v['name']}List() == ${index_name_string(v['name'])})
           {
@@ -221,7 +221,7 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% end %}\
 {% when v['max_occurs'] > 1 %}\
 {% if i == 0 %}\
-        std::shared_ptr<OMEXMLMetadataRoot>& o0(this->root);
+        std::shared_ptr<OMEXMLMetadataRoot>& o0(root);
 {% end %}\
         if (o${i}->sizeOf${v['name']}List() == ${index_name_string(v['name'])})
           {
@@ -231,7 +231,7 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% end %}\
 {% when v['max_occurs'] == 1 %}\
 {% if i == 0 %}\
-        std::shared_ptr<OMEXMLMetadataRoot>& o0(this->root);
+        std::shared_ptr<OMEXMLMetadataRoot>& o0(root);
 {% end %}\
         if (!o${i}->${v['accessor']}) // null
           {
@@ -250,7 +250,7 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% if v['level'] == 2 %}\
 {% if "ID" == prop.name %}\
         std::shared_ptr<::${lang.omexml_model_package}::OMEModelObject> o${i + 1}_base(std::static_pointer_cast<::${lang.omexml_model_package}::OMEModelObject>(o${i + 1}));
-        root->addModelObject(${prop.argumentName}, o${i + 1}_base);
+        model->addModelObject(${prop.argumentName}, o${i + 1}_base);
 {% end %}\
         std::shared_ptr<${obj.langTypeNS}> o${i + 1}_mostderived(std::static_pointer_cast<${obj.langTypeNS}>(o${i + 1}));
         if (!o${i + 1}_mostderived)
@@ -274,7 +274,7 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
         std::shared_ptr<::${lang.omexml_model_package}::OMEModelObject> modelObject(std::static_pointer_cast<::${lang.omexml_model_package}::OMEModelObject>(${safe_accessor([{'accessor':'root'}]+accessor(obj.name, parent, prop, func=accessor_string_complex), setPropMethod(is_multi_path[o.name], parent, obj.name, prop))}));
         std::shared_ptr<::${lang.omexml_model_package}::Reference> ref(std::static_pointer_cast<::${lang.omexml_model_package}::Reference>(${prop.instanceVariableName}_reference));
 
-        root->addReference(modelObject, ref);
+        model->addReference(modelObject, ref);
 {% end %}\
 {% otherwise %}\
         // ${prop.name} is not a reference
@@ -282,7 +282,7 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% choose %}\
 {% when v['max_occurs'] > 1 %}\
 {% if i == 0 %}\
-        std::shared_ptr<OMEXMLMetadataRoot>& o0(this->root);
+        std::shared_ptr<OMEXMLMetadataRoot>& o0(root);
 {% end %}\
         if (o${i}->sizeOf${v['name']}List() == ${index_name_string(v['name'])})
           {
@@ -292,7 +292,7 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% end %}\
 {% when v['max_occurs'] == 1 %}\
 {% if i == 0 %}\
-        std::shared_ptr<OMEXMLMetadataRoot>& o0(this->root);
+        std::shared_ptr<OMEXMLMetadataRoot>& o0(root);
 {% end %}\
         if (!o${i}->${v['accessor']}) // null
           {
@@ -310,7 +310,7 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% if v['level'] == 1 %}\
 {% if "ID" == prop.name %}\
         std::shared_ptr<::${lang.omexml_model_package}::OMEModelObject> o${i + 1}_base(std::static_pointer_cast<::${lang.omexml_model_package}::OMEModelObject>(o${i + 1}));
-        root->addModelObject(${prop.argumentName}, o${i + 1}_base);
+        model->addModelObject(${prop.argumentName}, o${i + 1}_base);
 {% end %}\
         std::shared_ptr<${obj.langTypeNS}> o${i + 1}_mostderived(std::static_pointer_cast<${obj.langTypeNS}>(o${i + 1}));
         if (!o${i + 1}_mostderived)
@@ -408,7 +408,7 @@ ${customContent[obj.name][prop.name]}
           ret = "safe_fetch(%s->%s, \"%s [%s]\")" % (ret, calls[call]['accessor'], method, calls[call]['accessor'])
           if 'isAbstractSub' in calls[call]:
             if calls[call]['isAbstractSub']:
-              ret = "(std::dynamic_pointer_cast< ome::xml::model::"+calls[call]['concreteName']+">("+ret+"))"
+              ret = "(std::dynamic_pointer_cast<ome::xml::model::"+calls[call]['concreteName']+">("+ret+"))"
     return ret
 
   def getCounterMethod(multipath, parent, name):
@@ -489,7 +489,6 @@ ${customContent[obj.name][prop.name]}
 #define ${fu.GUARD}
 
 #include <ome/xml/meta/Metadata.h>
-#include <ome/xml/meta/MetadataModel.h>
 #include <ome/xml/meta/MetadataException.h>
 #include <ome/xml/meta/OMEXMLMetadataRoot.h>
 #include <ome/xml/model/detail/OMEModel.h>
@@ -563,8 +562,12 @@ namespace ome
       class OMEXMLMetadata : virtual public Metadata
       {
       private:
-        /// OME-XML model and root node.
+        /// OME-XML root node.
         std::shared_ptr<OMEXMLMetadataRoot> root; // OME
+        /// Generic root node.
+        std::shared_ptr<MetadataRoot> genericRoot; // OME
+        /// OME-XML model.
+        std::shared_ptr<::${lang.omexml_model_package}::OMEModel> model;
 
       public:
 {% end header %}\
@@ -574,9 +577,10 @@ namespace ome
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       OMEXMLMetadata::OMEXMLMetadata():
-        root()
+        root(),
+        model()
       {
-        createModel();
+        createRoot();
       }
 {% end source %}\
 
@@ -594,66 +598,14 @@ namespace ome
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in base class.
         void
-        createModel();
-{% end header %}\
-{% if fu.SOURCE_TYPE == "source" %}\
-      void
-      OMEXMLMetadata::createModel()
-      {
-        std::shared_ptr<MetadataModel> newmodel(std::make_shared<OMEXMLMetadataRoot>());
-        setModel(newmodel);
-      }
-{% end source %}\
-
-{% if fu.SOURCE_TYPE == "header" %}\
-        // Documented in base class.
-        std::shared_ptr<MetadataModel>
-        getModel();
-{% end header %}\
-{% if fu.SOURCE_TYPE == "source" %}\
-      std::shared_ptr<MetadataModel>
-      OMEXMLMetadata::getModel()
-      {
-        return std::dynamic_pointer_cast<MetadataModel>(this->root);
-      }
-{% end source %}\
-
-{% if fu.SOURCE_TYPE == "header" %}\
-{% if debug %}\
-        // @copydoc only needed due to doxygen bug; should
-        // automatically inherit base method documentation.
-{% end debug %}\
-        /**
-         * @copydoc ::${lang.metadata_package}::MetadataStore::setModel()
-         */
-        void
-        setModel(std::shared_ptr<MetadataModel> model);
-{% end header %}\
-{% if fu.SOURCE_TYPE == "source" %}\
-      void
-      OMEXMLMetadata::setModel(std::shared_ptr<MetadataModel> model)
-      {
-        std::shared_ptr<OMEXMLMetadataRoot> newmodel =
-          std::dynamic_pointer_cast<OMEXMLMetadataRoot>(model);
-
-        if (!newmodel)
-          throw MetadataException("OMEXMLMetadata", "setModel",
-                                  "model must be of type OMEXMLMetadataRoot");
-
-        this->root = newmodel;
-      }
-{% end source %}\
-
-{% if fu.SOURCE_TYPE == "header" %}\
-        // Documented in base class.
-        void
         createRoot();
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       void
       OMEXMLMetadata::createRoot()
       {
-        createModel();
+        std::shared_ptr<MetadataRoot> newroot(std::make_shared<OMEXMLMetadataRoot>());
+        setRoot(newroot);
       }
 {% end source %}\
 
@@ -666,7 +618,7 @@ namespace ome
       std::shared_ptr<MetadataRoot>
       OMEXMLMetadata::getRoot()
       {
-        return std::dynamic_pointer_cast<MetadataRoot>(this->root);
+        return std::static_pointer_cast<MetadataRoot>(this->root);
       }
 {% end source %}\
 
@@ -693,6 +645,8 @@ namespace ome
                                   "root must be of type OMEXMLMetadataRoot");
 
         this->root = newroot;
+        this->genericRoot = std::static_pointer_cast<MetadataRoot>(this->root);
+        model = std::make_shared<::${lang.omexml_model_package}::detail::OMEModel>();
       }
 {% end source %}\
 
@@ -751,7 +705,7 @@ namespace ome
       OMEXMLMetadata::index_type
       OMEXMLMetadata::resolveReferences()
       {
-        return root->resolveReferences();
+        return model->resolveReferences();
       }
 {% end source %}\
 

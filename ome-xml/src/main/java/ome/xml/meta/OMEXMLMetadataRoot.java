@@ -45,7 +45,7 @@ import ome.xml.model.enums.EnumerationException;
  *
  * @author Roger Leigh rleigh at dundee.ac.uk
  */
-public class OMEXMLMetadataRoot extends OMEXMLMetadataModel implements MetadataRoot {
+public class OMEXMLMetadataRoot extends OME implements MetadataRoot {
 
   /** Default constructor. */
   public OMEXMLMetadataRoot()
@@ -57,27 +57,11 @@ public class OMEXMLMetadataRoot extends OMEXMLMetadataModel implements MetadataR
    * Constructs OME recursively from an XML DOM tree.
    * @param element Root of the XML DOM tree to construct a model object
    * graph from.
+   * @param model Handler for the OME model which keeps track of instances
+   * and references seen during object population.
    * @throws EnumerationException If there is an error instantiating an
    * enumeration during model object creation.
    */
-  public OMEXMLMetadataRoot(Element element)
-    throws EnumerationException
-  {
-    super(element);
-  }
-
-  /**
-   * Constructs OME recursively from an XML DOM tree.
-   * @param element Root of the XML DOM tree to construct a model object
-   * graph from.
-   * @param model Handler for the OME model which keeps track of
-   * instances and references seen during object population
-   * (ignored--now provided directly by this class).
-   * @throws EnumerationException If there is an error instantiating an
-   * enumeration during model object creation.
-   * @deprecated Use {@link OMEXMLMetadataRoot#OMEXMLMetadataRoot(Element) instead}.
-   */
-  @Deprecated
   public OMEXMLMetadataRoot(Element element, OMEModel model)
     throws EnumerationException
   {

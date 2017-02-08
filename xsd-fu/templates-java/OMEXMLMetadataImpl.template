@@ -95,14 +95,14 @@
     // ${prop.name} is abstract and is a reference
     ${prop.name} ${prop.instanceVariableName}_reference = new ${prop.name}();
     ${prop.instanceVariableName}_reference.setID(${prop.argumentName});
-    root.addReference(
+    model.addReference(
       root.${".".join(accessor(obj.name, parent, prop)[:-1])},
       ${prop.instanceVariableName}_reference);
     // ${parent} is abstract
 {% end %}\
 {% when is_abstract(parent) %}\
     // ${parent} is abstract and not a reference
-    OME o0 = this.root;
+    OME o0 = root;
 {% for i, v in enumerate(accessor(obj.name, parent, prop, accessor_string_complex)[:-1]) %}\
 {% choose %}\
 {% when v['level'] == 2 %}\
@@ -127,7 +127,7 @@
     ${v['name']} o${i + 1} = o${i}.${v['accessor']};
 {% if v['level'] == 2 %}\
 {% if "ID" == prop.name %}\
-    root.addModelObject(${prop.argumentName}, o${i + 1});
+    model.addModelObject(${prop.argumentName}, o${i + 1});
 {% end %}\
     ((${obj.name})o${i + 1}).set${prop.methodName}(${prop.argumentName});
 {% end %}\
@@ -137,13 +137,13 @@
     // ${prop.name} is reference and occurs more than once
     ${prop.name} ${prop.instanceVariableName}_reference = new ${prop.name}();
     ${prop.instanceVariableName}_reference.setID(${prop.argumentName});
-    root.addReference(
+    model.addReference(
       ${join_accessors(obj.name, parent, prop)},
       ${prop.instanceVariableName}_reference);
 {% end %}\
 {% otherwise %}\
     // ${prop.name} is not a reference
-    OME o0 = this.root;
+    OME o0 = root;
 {% for i, v in enumerate(accessor(obj.name, parent, prop, accessor_string_complex)) %}\
 {% choose %}\
 {% when v['max_occurs'] > 1 %}\
@@ -167,7 +167,7 @@
 {% end %}\
 {% if v['level'] == 1 %}\
 {% if "ID" == prop.name %}\
-    root.addModelObject(${prop.argumentName}, o${i + 1});
+    model.addModelObject(${prop.argumentName}, o${i + 1});
 {% end %}\
     o${i + 1}.set${prop.methodName}(${prop.argumentName});
 {% end %}\
@@ -324,38 +324,22 @@ import ${lang.units_package}.unit.Unit;
  */
 public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
 {
-  /** OME-XML model and root node. */
   private OMEXMLMetadataRoot root; // OME
+
+  private OMEModel model;
 
   public OMEXMLMetadataImpl()
   {
-    createModel();
-  }
-
-  public void createModel()
-  {
-    root = new OMEXMLMetadataRoot();
+    createRoot();
   }
 
   public void createRoot()
   {
-    createModel();
+    root = new OMEXMLMetadataRoot();
+    model = new OMEModelImpl();
   }
 
   public MetadataRoot getRoot()
-  {
-    return root;
-  }
-
-  public void setModel(MetadataModel model)
-  {
-    if (model instanceof OMEXMLMetadataRoot)
-      this.root = (OMEXMLMetadataRoot) model;
-    else
-      throw new IllegalArgumentException("Expecting OMEXMLMetadataRoot class or subclass.");
-  }
-
-  public MetadataModel getModel()
   {
     return root;
   }
@@ -366,6 +350,7 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
       this.root = (OMEXMLMetadataRoot) root;
     else
       throw new IllegalArgumentException("Expecting OMEXMLMetadataRoot class or subclass.");
+    model = new OMEModelImpl();
   }
 
   public String dumpXML()
@@ -376,7 +361,7 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
 
   public int resolveReferences()
   {
-    return root.resolveReferences();
+    return model.resolveReferences();
   }
 
   // -- Entity counting (manual definitions) --
@@ -447,7 +432,7 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
   // ${repr(indexes[o.name])}
   public void set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])})
   {
-    OME o0 = this.root;
+    OME o0 = root;
     if (o0.sizeOfImageList() == imageIndex)
     {
       o0.addImage(new Image());
@@ -604,7 +589,7 @@ ${getter(k, o, prop, v)}\
   /** Sets the Map value associated with this annotation */
   public void setMapAnnotationValue(List<MapPair> value, int mapAnnotationIndex)
   {
-    OME o0 = this.root;
+    OME o0 = root;
     if (o0.getStructuredAnnotations() == null)
     {
       o0.setStructuredAnnotations(new StructuredAnnotations());
@@ -621,7 +606,7 @@ ${getter(k, o, prop, v)}\
   /** Sets the Map value associated with this generic light source */
   public void setGenericExcitationSourceMap(List<MapPair> map, int instrumentIndex, int lightSourceIndex)
   {
-    OME o0 = this.root;
+    OME o0 = root;
     if (o0.sizeOfInstrumentList() == instrumentIndex)
     {
       o0.addInstrument(new Instrument());
@@ -638,7 +623,7 @@ ${getter(k, o, prop, v)}\
   /** Sets the Map value associated with this imaging environment */
   public void setImagingEnvironmentMap(List<MapPair> map, int imageIndex)
   {
-    OME o0 = this.root;
+    OME o0 = root;
     if (o0.sizeOfImageList() == imageIndex)
     {
       o0.addImage(new Image());

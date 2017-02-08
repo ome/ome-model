@@ -46,9 +46,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author callan
  *
- * @deprecated Use the ome.xml.model.OME class directly.
  */
-@Deprecated
 public class OMEModelImpl implements OMEModel {
 
   private Map<String, OMEModelObject> modelObjects = 

@@ -206,7 +206,6 @@
 
 #include <ome/xml/meta/Metadata.h>
 #include <ome/xml/meta/MetadataException.h>
-#include <ome/xml/meta/MetadataModel.h>
 {% end header%}\
 {% if fu.SOURCE_TYPE == "source" %}\
 #include <ome/xml/meta/DummyMetadata.h>
@@ -258,49 +257,11 @@ namespace ome
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in base class.
         void
-        createModel();
-{% end header %}\
-{% if fu.SOURCE_TYPE == "source" %}\
-      void
-      DummyMetadata::createModel()
-      {
-      }
-{% end source %}\
-
-{% if fu.SOURCE_TYPE == "header" %}\
-        // Documented in base class.
-        void
         createRoot();
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       void
       DummyMetadata::createRoot()
-      {
-      }
-{% end source %}\
-
-{% if fu.SOURCE_TYPE == "header" %}\
-        // Documented in base class.
-        std::shared_ptr<MetadataModel>
-        getModel();
-{% end header %}\
-{% if fu.SOURCE_TYPE == "source" %}\
-      std::shared_ptr<MetadataModel>
-      DummyMetadata::getModel()
-      {
-        throw MetadataException("DummyMetadata", "getModel",
-                                "intentionally not implemented");
-      }
-{% end source %}\
-
-{% if fu.SOURCE_TYPE == "header" %}\
-        // Documented in base class.
-        void
-        setModel(std::shared_ptr<MetadataModel> model);
-{% end header %}\
-{% if fu.SOURCE_TYPE == "source" %}\
-      void
-      DummyMetadata::setModel(std::shared_ptr<MetadataModel> /* model */)
       {
       }
 {% end source %}\

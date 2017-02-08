@@ -40,7 +40,6 @@
 
 using ome::xml::model::OME;
 using ome::xml::meta::MetadataRoot;
-using ome::xml::meta::MetadataModel;
 
 namespace ome
 {
@@ -51,10 +50,8 @@ namespace ome
 
       OMEXMLMetadataRoot::OMEXMLMetadataRoot():
         ome::xml::model::OMEModelObject(),
-	ome::xml::model::OMEModel(),
-	MetadataModel(),
 	MetadataRoot(),
-	OMEXMLMetadataModel()
+	OME()
       {
       }
 
@@ -64,19 +61,15 @@ namespace ome
 
       OMEXMLMetadataRoot::OMEXMLMetadataRoot(const OMEXMLMetadataRoot& copy):
         ome::xml::model::OMEModelObject(),
-	ome::xml::model::OMEModel(),
-	MetadataModel(),
 	MetadataRoot(),
-	OMEXMLMetadataModel(copy)
+	OME(copy)
       {
       }
 
       OMEXMLMetadataRoot::OMEXMLMetadataRoot(const xml::model::OME& copy):
         ome::xml::model::OMEModelObject(),
-	ome::xml::model::OMEModel(),
-	MetadataModel(),
 	MetadataRoot(),
-	OMEXMLMetadataModel(copy)
+	OME(copy)
       {
       }
 

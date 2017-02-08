@@ -80,7 +80,6 @@ import ome.xml.model.OMEModelObject;
 import ome.xml.model.Objective;
 import ome.xml.model.ObjectiveSettings;
 import ome.xml.model.OME;
-import ome.xml.model.OMEModel;
 import ome.xml.model.Pixels;
 import ome.xml.model.Plane;
 import ome.xml.model.Plate;
@@ -806,13 +805,6 @@ public class XMLMockObjects
    * @return See above.
    */
   public OME getRoot() { return ome; }
-
-  /**
-   * Returns the root of the XML file.
-   *
-   * @return See above.
-   */
-  public OMEModel getModel() { return ome; }
 
   /**
    * Creates a project.
