@@ -154,24 +154,3 @@ endforeach()
 add_subdirectory(docs/doxygen)
 add_subdirectory(docs/sphinx)
 add_subdirectory(ome-xml)
-
-set(LIBRARY_PREFIX OME)
-file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
-configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateShellConfig.cmake.in
-               ${PROJECT_BINARY_DIR}/config @ONLY)
-configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateInternalShellWrapper.cmake.in
-               ${PROJECT_BINARY_DIR}/cmake/bf-test @ONLY)
-file(COPY ${PROJECT_BINARY_DIR}/cmake/bf-test
-     DESTINATION ${PROJECT_BINARY_DIR}
-     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
-     GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-if(WIN32)
-  configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateCmdConfig.cmake.in
-                 ${PROJECT_BINARY_DIR}/config.bat @ONLY)
-  configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateInternalCmdWrapper.cmake.in
-                 ${PROJECT_BINARY_DIR}/bf-test.bat @ONLY)
-  endif()
-return()
-
-message("NOTE: The Bio-Formats ${OME_VERSION_SHORT} C++ library is new in version 5.1")
-message("NOTE: API stability will not be guaranteed until version 5.2")
