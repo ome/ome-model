@@ -64,16 +64,22 @@ list(APPEND CMAKE_MODULE_PATH
 
 include("${CMAKE_CURRENT_LIST_DIR}/cmake/BioFormatsCommon.cmake")
 
-include(cmake/Version.cmake)
-ome_project_version("OME XML C++" "${CMAKE_CURRENT_SOURCE_DIR}")
+include(MavenVersion)
+maven_version("${CMAKE_CURRENT_LIST_DIR}/pom.xml" maven-project maven-version maven-snapshot)
 
-project(ome-model
-        VERSION "${OME_VERSION_MAJOR}.${OME_VERSION_MINOR}.${OME_VERSION_PATCH}"
+project("${maven-project}"
+        VERSION "${maven-version}"
         LANGUAGES CXX)
+
+include(cmake/Version.cmake)
+git_version_info("OME Model" "${CMAKE_CURRENT_SOURCE_DIR}")
 
 if("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
   message(FATAL_ERROR "In-tree builds are not supported; please run cmake from a separate build directory.")
 endif("${PROJECT_SOURCE_DIR}" STREQUAL "${PROJECT_BINARY_DIR}")
+
+include(cmake/SourceArchive.cmake)
+source_archive("${PROJECT_NAME}" "${PROJECT_VERSION}${OME_VCS_DEV}")
 
 enable_language(CXX)
   set(BUILD_SHARED_LIBS_DEFAULT ON)
@@ -148,24 +154,3 @@ endforeach()
 add_subdirectory(docs/doxygen)
 add_subdirectory(docs/sphinx)
 add_subdirectory(ome-xml)
-
-set(LIBRARY_PREFIX OME)
-file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
-configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateShellConfig.cmake.in
-               ${PROJECT_BINARY_DIR}/config @ONLY)
-configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateInternalShellWrapper.cmake.in
-               ${PROJECT_BINARY_DIR}/cmake/bf-test @ONLY)
-file(COPY ${PROJECT_BINARY_DIR}/cmake/bf-test
-     DESTINATION ${PROJECT_BINARY_DIR}
-     FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ
-     GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-if(WIN32)
-  configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateCmdConfig.cmake.in
-                 ${PROJECT_BINARY_DIR}/config.bat @ONLY)
-  configure_file(${PROJECT_SOURCE_DIR}/cmake/TemplateInternalCmdWrapper.cmake.in
-                 ${PROJECT_BINARY_DIR}/bf-test.bat @ONLY)
-  endif()
-return()
-
-message("NOTE: The Bio-Formats ${OME_VERSION_SHORT} C++ library is new in version 5.1")
-message("NOTE: API stability will not be guaranteed until version 5.2")

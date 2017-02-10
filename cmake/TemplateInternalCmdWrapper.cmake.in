@@ -1,8 +1,0 @@
-@echo off
-
-set "OME_XML_MANDIR=@PROJECT_SOURCE_DIR@/man"
-set "OME_XML_SCHEMADIR=@PROJECT_SOURCE_DIR@/specification/src/main/resources/released-schema"
-set "OME_XML_TRANSFORMDIR=@PROJECT_SOURCE_DIR@/specification/transforms"
-set "OME_XML_SAMPLEDIR=@PROJECT_SOURCE_DIR@/specification/samples"
-
-%*

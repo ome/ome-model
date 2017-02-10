@@ -34,7 +34,7 @@ PROJECT_NAME           = ome-xml
 # This could be handy for archiving the generated documentation or
 # if some version control system is used.
 
-PROJECT_NUMBER         = @OME_VERSION@
+PROJECT_NUMBER         = @ome-model_VERSION@@OME_VCS_DEV@
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer
