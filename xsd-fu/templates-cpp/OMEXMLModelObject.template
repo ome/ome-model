@@ -718,7 +718,7 @@ ${customUpdatePropertyContent[prop.name]}
 {% if prop.isReference or prop.isBackReference %}\
                 typedef OMEModelObject::indexed_container<${prop.langTypeNS}, std::weak_ptr>::type::nth_index<1>::type container_set_type;
                 container_set_type::iterator it(this->impl->${prop.instanceVariableName}.get<1>().find(o_casted));
-                if (it != this->impl->${prop.instanceVariableName}.get<1>().end())
+                if (it == this->impl->${prop.instanceVariableName}.get<1>().end())
                   {
                     this->impl->${prop.instanceVariableName}.push_back(o_casted);
                   }
