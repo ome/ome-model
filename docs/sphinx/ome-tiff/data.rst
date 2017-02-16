@@ -10,17 +10,68 @@ support for OME-TIFF within your software.
 All the OME-TIFF sample data discussed below are available from our
 :ometiff_downloads:`OME-TIFF sample images resource <>`.
 
-Single file OME-TIFF
---------------------
+Biological datasets
+-------------------
 
-This section lists various examples of single file OME-TIFF. For examples of
-OME-TIFF dataset distributed across multiple TIFF files, see
-:ref:`multifile_samples`.
+.. _tubhiswt_samples:
+
+Tubhiswt
+^^^^^^^^
+
+The following OME-TIFF datasets consist of tubulin histone GFP coexpressing
+*C. elegans* embryos. Many thanks to
+`Josh Bembenek <http://loci.wisc.edu/people/josh-bembenek>`_ for preparing
+and imaging this sample data.
+
+The datasets were acquired on a multiphoton workstation (2.1 GHz Athlon
+XP 3200+ with 1GB of RAM) using
+`WiscScan <http://loci.wisc.edu/software/wiscscan>`_. All image
+planes were collected at 512x512 resolution in 8-bit grayscale, with an
+integration value of 2.
+
+The files available for download have been updated to the current schema
+version since their initial creation.
+
+.. list-table::
+  :header-rows: 1
+  :widths: 20, 20, 15, 15, 15, 15
+
+  -  * Fileset
+     * Zipped fileset
+     * Channels
+     * Focal planes
+     * Time points
+     * Number of files
+
+  -  * :ometiff_downloads:`tubhiswt-2D <tubhiswt-2D>`
+     * :ometiff_downloads:`tubhiswt-2D.zip <tubhiswt-2D.zip>`
+     * 2
+     * 1
+     * 1
+     * 2
+
+  -  * :ometiff_downloads:`tubhiswt-3D <tubhiswt-3D>`
+     * :ometiff_downloads:`tubhiswt-3D.zip <tubhiswt-3D.zip>`
+     * 2
+     * 1
+     * 20
+     * 2
+
+  -  * :ometiff_downloads:`tubhiswt-4D <tubhiswt-4D>`
+     * :ometiff_downloads:`tubhiswt-4D.zip <tubhiswt-4D.zip>`
+     * 2
+     * 10
+     * 43
+     * 86
+
 
 .. _artificial-datasets:
 
 Artificial datasets
-^^^^^^^^^^^^^^^^^^^
+-------------------
+
+Bio-Formats generated
+^^^^^^^^^^^^^^^^^^^^^
 
 All datasets in the following table were :source:`artificially
 generated <components/formats-bsd/src/loci/formats/tools/MakeTestOmeTiff.java>`
@@ -113,63 +164,9 @@ FLIM
 .. _multifile_samples:
 
 Multi-file OME-TIFF filesets
-----------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This section lists various examples of OME-TIFF datasets distributed across multiple TIFF files.
-
-.. _tubhiswt_samples:
-
-Sample biological dataset
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-The following OME-TIFF datasets consist of tubulin histone GFP coexpressing 
-*C. elegans* embryos. Many thanks to
-`Josh Bembenek <http://loci.wisc.edu/people/josh-bembenek>`_ for preparing
-and imaging this sample data.
-
-The datasets were acquired on a multiphoton workstation (2.1 GHz Athlon
-XP 3200+ with 1GB of RAM) using
-`WiscScan <http://loci.wisc.edu/software/wiscscan>`_. All image
-planes were collected at 512x512 resolution in 8-bit grayscale, with an
-integration value of 2.
-
-The files available for download have been updated to the current schema
-version since their initial creation.
-
-.. list-table::
-  :header-rows: 1
-  :widths: 20, 20, 15, 15, 15, 15
-
-  -  * Fileset
-     * Zipped fileset
-     * Channels
-     * Focal planes
-     * Time points
-     * Number of files
-  
-  -  * :ometiff_downloads:`tubhiswt-2D <tubhiswt-2D>`
-     * :ometiff_downloads:`tubhiswt-2D.zip <tubhiswt-2D.zip>`
-     * 2
-     * 1
-     * 1
-     * 2
-
-  -  * :ometiff_downloads:`tubhiswt-3D <tubhiswt-3D>`
-     * :ometiff_downloads:`tubhiswt-3D.zip <tubhiswt-3D.zip>`
-     * 2
-     * 1
-     * 20
-     * 2
-
-  -  * :ometiff_downloads:`tubhiswt-4D <tubhiswt-4D>`
-     * :ometiff_downloads:`tubhiswt-4D.zip <tubhiswt-4D.zip>`
-     * 2
-     * 10
-     * 43
-     * 86
-
-Partial OME-XML metadata filesets
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The :ometiff_downloads:`master OME-TIFF fileset <binaryonly>` and
 :ometiff_downloads:`companion OME-XML fileset <companion>` both contain a set
