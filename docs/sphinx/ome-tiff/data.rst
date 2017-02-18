@@ -57,63 +57,51 @@ version since their initial creation.
 Artificial datasets
 -------------------
 
-Bio-Formats generated
-^^^^^^^^^^^^^^^^^^^^^
+5D datasets
+^^^^^^^^^^^
 
-All datasets in the following table were :source:`artificially
-generated <components/formats-bsd/src/loci/formats/tools/MakeTestOmeTiff.java>`
-with each plane labeled according to its dimensional position for easy
-testing. Each one consists of a single OME-TIFF file (2016-06 schema
-version) containing every constituent image plane. 
+All datasets in the following table are single OME-TIFF files generated using
+Bio-Formats ``loci.formats.tools.MakeTestOmeTiff``. Each plane is labeled
+according to its dimensional position for easy testing.
 
 .. list-table::
   :header-rows: 1
-  :widths: 40, 20, 20, 20
 
-  -  * Sample
-     * Channels
-     * Focal planes
-     * Time points
+  -  * Name
+     * Image dimensions (XYZCT)
+     * Available extensions
   
-  -  * :ometiff_downloads:`single-channel.ome.tif <bioformats-artificial/single-channel.ome.tif>`
-     * 1
-     * 1
-     * 1
+  -  * Single channel
+     * 439 x 167 x 1 x 1 x 1
+     * :ometiff_downloads:`ome.tif <bioformats-artificial/single-channel.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/single-channel.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/single-channel.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/single-channel.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/single-channel.ome.tf2>`
 
-  -  * :ometiff_downloads:`multi-channel.ome.tif <bioformats-artificial/multi-channel.ome.tif>`
-     * 3
-     * 1
-     * 1
+  -  * Multi channel
+     * 439 x 167 x 1 x 3 x 1
+     * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/multi-channel.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel.ome.tf2>`
 
-  -  * :ometiff_downloads:`z-series.ome.tif <bioformats-artificial/z-series.ome.tif>`
-     * 1
-     * 5
-     * 1
+  -  * Z series
+     * 439 x 167 x 5 x 1 x 1
+     * :ometiff_downloads:`ome.tif <bioformats-artificial/z-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/z-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/z-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/z-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/z-series.ome.tf2>`
 
-  -  * :ometiff_downloads:`time-series.ome.tif <bioformats-artificial/time-series.ome.tif>`
-     * 1
-     * 1
-     * 7
+  -  * Time series
+     * 439 x 167 x 1 x 1 x 7
+     * :ometiff_downloads:`ome.tif <bioformats-artificial/time-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/time-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/time-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/time-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/time-series.ome.tf2>`
 
-  -  * :ometiff_downloads:`multi-channel-z-series.ome.tif <bioformats-artificial/multi-channel-z-series.ome.tif>`
-     * 3
-     * 5
-     * 1
+  -  * Multi channel Z series
+     * 439 x 167 x 5 x 3 x 1
+     * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel-z-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel-z-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel-z-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/timulti-channel-z-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel-z-series.ome.tf2>`
 
-  -  * :ometiff_downloads:`multi-channel-time-series.ome.tif <bioformats-artificial/multi-channel-time-series.ome.tif>`
-     * 3
-     * 1
-     * 7
+  -  * Multi channel time series
+     * 439 x 167 x 1 x 3 x 7
+     * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel-time-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel-time-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel-time-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/multi-channel-timee-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel-time-series.ome.tf2>`
 
-  -  * :ometiff_downloads:`4D-series.ome.tif <bioformats-artificial/4D-series.ome.tif>`
-     * 1
-     * 5
-     * 7
+  -  * 4D series
+     * 439 x 167 x 5 x 1 x 7
+     * :ometiff_downloads:`ome.tif <bioformats-artificial/4D-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/4D-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/4D-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/4D-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/4D-series.ome.tf2>`
 
-  -  * :ometiff_downloads:`multi-channel-4D-series.ome.tif <bioformats-artificial/multi-channel-4D-series.ome.tif>`
-     * 3
-     * 5
-     * 7
+  -  * Multi channel 4D series
+     * 439 x 167 x 5 x 3 x 7
+     * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel-4D-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel-4D-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel-4D-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/multi-channel-4D-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel-4D-series.ome.tf2>`
 
 .. _modulo-datasets:
 
