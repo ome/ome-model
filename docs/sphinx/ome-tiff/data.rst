@@ -2,7 +2,7 @@ OME-TIFF sample data
 ====================
 
 This section provides some sample data in OME-TIFF format. They include data
-produced from an acquisition system as well as artificial sample datasets (i.e.
+produced from an acquisition system as well as artificial sample datasets i.e.
 designed for developer testing that illustrate some possible data
 organizations, which should be useful if you are interested in implementing
 support for OME-TIFF within your software.
@@ -34,34 +34,21 @@ version since their initial creation.
 
 .. list-table::
   :header-rows: 1
-  :widths: 20, 20, 15, 15, 15, 15
 
-  -  * Fileset
-     * Zipped fileset
-     * Channels
-     * Focal planes
-     * Time points
+  -  * Dataset (zip bundle)
+     * Image dimensions (XYZCT)
      * Number of files
 
-  -  * :ometiff_downloads:`tubhiswt-2D <tubhiswt-2D>`
-     * :ometiff_downloads:`tubhiswt-2D.zip <tubhiswt-2D.zip>`
-     * 2
-     * 1
-     * 1
+  -  * :ometiff_downloads:`Tubhiswt 2D <tubhiswt-2D>` (:ometiff_downloads:`tubhiswt-2D.zip <tubhiswt-2D.zip>`)
+     * 512 x 512 x 1 x 2 x 1
      * 2
 
-  -  * :ometiff_downloads:`tubhiswt-3D <tubhiswt-3D>`
-     * :ometiff_downloads:`tubhiswt-3D.zip <tubhiswt-3D.zip>`
-     * 2
-     * 1
-     * 20
+  -  * :ometiff_downloads:`Tubhiswt 3D <tubhiswt-3D>` (:ometiff_downloads:`tubhiswt-3D.zip <tubhiswt-3D.zip>`)
+     * 512 x 512 x 1 x 2 x 20
      * 2
 
-  -  * :ometiff_downloads:`tubhiswt-4D <tubhiswt-4D>`
-     * :ometiff_downloads:`tubhiswt-4D.zip <tubhiswt-4D.zip>`
-     * 2
-     * 10
-     * 43
+  -  * :ometiff_downloads:`Tubhiswt 4D <tubhiswt-4D>` (:ometiff_downloads:`tubhiswt-4D.zip <tubhiswt-4D.zip>`)
+     * 512 x 512 x 10 x 2 x 43
      * 86
 
 
