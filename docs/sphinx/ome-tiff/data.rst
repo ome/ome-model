@@ -108,8 +108,9 @@ according to its dimensional position for easy testing.
 Modulo datasets
 ^^^^^^^^^^^^^^^
 
-Sample files implementing the :doc:`/developers/6d-7d-and-8d-storage` are available from the
-:ometiff_downloads:`Modulo <modulo>` folder of the image downloads resource.
+Sample files implementing the :doc:`/developers/6d-7d-and-8d-storage` are
+available from the :ometiff_downloads:`Modulo <modulo>` folder of the image
+downloads resource.
 
 SPIM
 """"
@@ -141,35 +142,30 @@ FLIM
 Multi-file OME-TIFF filesets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This section lists various examples of OME-TIFF datasets distributed across multiple TIFF files.
+This section lists various examples of OME-TIFF datasets distributed across multiple TIFF files. Both datasets contain a set of 18 by 24 pixel images with black and white text on each plane giving its time, z-depth and channel. Each of the five focal planes is saved as a separate OME-TIFF named :file:`multifile-Zxx.ome.tiff` where `xx` is the index of the focal plane.
 
-The :ometiff_downloads:`master OME-TIFF fileset <binaryonly>` and
-:ometiff_downloads:`companion OME-XML fileset <companion>` both contain a set
-of 18 by 24 pixel images with black and white text on each plane giving
-its time, z-depth and channel. Each of the five focal planes is saved as a
-separate OME-TIFF named :file:`multifile-Zxx.ome.tiff` where `xx` is the index
-of the focal plane.
+.. list-table::
+  :header-rows: 1
 
-.. _master-sample:
+  -  * Dataset
+     * Image dimensions (XYZCT)
+     * Full metadata file*
+     * Partial metadata files†
 
-Master OME-TIFF fileset
-"""""""""""""""""""""""
+  -  * :ometiff_downloads:`Master OME-TIFF fileset <binaryonly>`
+     * 18 x 24 x 5 x 1 x 1
+     * :file:`multifile-Z1.ome.tiff`
+     * :file:`multifile-Z[2-5].ome.tiff`
 
-For this sample, the full OME-XML metadata describing the whole fileset is
-embedded into a
-:ometiff_downloads:`master OME-TIFF file <binaryonly/multifile-Z1.ome.tiff>`.
-Partial OME-XML metadata blocks are embedded into the four other OME-TIFF
-files and refer to the master OME-TIFF file as described in the
-:ref:`specification <binary_only>`.
+  -  * :ometiff_downloads:`Companion OME-XML fileset <companion>`
+     * 18 x 24 x 5 x 1 x 1
+     * :file:`multifile.companion.ome`
+     * :file:`multifile-Z[1-5].ome.tiff`
 
-.. _companion-sample:
-
-Companion OME-XML fileset
-"""""""""""""""""""""""""
-
-For this sample, the full OME-XML metadata describing the whole fileset is
-stored into a separate
-:ometiff_downloads:`companion OME-XML file<companion/multifile.companion.ome>`.
-Partial OME-XML metadata blocks are embedded into the five OME-TIFF
-files and refer to the companion OME-XML file as described in the
-:ref:`specification <binary_only>`.
+\*
+  The full OME-XML metadata describing the whole fileset is either embedded
+  into an OME-TIFF or stored in a companion OME-XML file
+†
+  Partial OME-XML metadata blocks are embedded into the OME-TIFF files
+  and refer to the file containing the full OME-XML metadata as described
+  in the :ref:`specification <binary_only>`.

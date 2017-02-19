@@ -73,9 +73,8 @@ is possible to store partial OME-XML metadata blocks in some or all of the
 TIFF files pointing to a master file containing the full OME-XML metadata (see
 the :ref:`technical specification<binary_only>` for more details).
 
-The master file can be either a master OME-TIFF file  (see the
-:ref:`master-sample`) or a companion OME-XML file (see the
-:ref:`companion-sample`).
+The master file can be either a master OME-TIFF file or a companion OME-XML
+file (see the :ref:`multifile_samples`).
 
 Using a companion OME-XML file allows information that can only be generated
 at the end of the acquisition to be easily appended without the need to
