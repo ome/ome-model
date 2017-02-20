@@ -89,11 +89,11 @@ according to its dimensional position for easy testing.
 
   -  * Multi channel Z series
      * 439 x 167 x 5 x 3 x 1
-     * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel-z-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel-z-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel-z-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/timulti-channel-z-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel-z-series.ome.tf2>`
+     * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel-z-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel-z-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel-z-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/multi-channel-z-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel-z-series.ome.tf2>`
 
   -  * Multi channel time series
      * 439 x 167 x 1 x 3 x 7
-     * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel-time-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel-time-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel-time-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/multi-channel-timee-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel-time-series.ome.tf2>`
+     * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel-time-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel-time-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel-time-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/multi-channel-time-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel-time-series.ome.tf2>`
 
   -  * 4D series
      * 439 x 167 x 5 x 1 x 7
