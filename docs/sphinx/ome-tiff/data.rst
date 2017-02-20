@@ -66,6 +66,7 @@ according to its dimensional position for easy testing.
 
 .. list-table::
   :header-rows: 1
+  :widths: 15 15 20
 
   -  * Name
      * Image dimensions (XYZCT)
@@ -113,6 +114,7 @@ available from the :ometiff_downloads:`modulo` folder of the image downloads
 resource.
 
 .. list-table::
+  :widths: 25 15 40
   :header-rows: 1
 
   -  * Name
