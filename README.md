@@ -6,6 +6,15 @@
 
 OME data model specification, code generator and implementation.
 
+Links
+-----
+
+- [Documentation] (http://www.openmicroscopy.org/site/support/ome-model/)
+- [C++ API reference](http://www.openmicroscopy.org/site/support/ome-files-cpp/ome-xml/api/html/namespaces.html)
+- [Java API reference](http://javadoc.io/doc/org.openmicroscopy/ome-xml/)
+- [OME-TIFF sample images](http://downloads.openmicroscopy.org/images/OME-TIFF/)
+- [OME-XML sample images](http://downloads.openmicroscopy.org/images/OME-XML/)
+
 More information
 ----------------
 
