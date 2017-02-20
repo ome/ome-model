@@ -109,33 +109,38 @@ Modulo datasets
 ^^^^^^^^^^^^^^^
 
 Sample files implementing the :doc:`/developers/6d-7d-and-8d-storage` are
-available from the :ometiff_downloads:`Modulo <modulo>` folder of the image
-downloads resource.
+available from the :ometiff_downloads:`modulo` folder of the image downloads
+resource.
 
-SPIM
-""""
+.. list-table::
+  :header-rows: 1
 
-- :ometiff_downloads:`SPIM-ModuloAlongZ.ome.tiff <modulo/SPIM-ModuloAlongZ.ome.tiff>` - 4 tiles each recorded at 4 angles.
+  -  * Name
+     * Image dimensions (XYZCT)
+     * Modulo description
 
-Big lambda
-""""""""""
+  -  * :ometiff_downloads:`SPIM-ModuloAlongZ.ome.tiff <modulo/SPIM-ModuloAlongZ.ome.tiff>`
+     * 160 x 220 x 8 x 2 x 12
+     * 4 tiles interleaved as ModuloAlongT each recorded at 4 angles
+       interleaved as ModuloAlongZ
 
-- :ometiff_downloads:`LAMBDA-ModuloAlongZ-ModuloAlongT.ome.tiff <modulo/LAMBDA-ModuloAlongZ-ModuloAlongT.ome.tiff>` -
-  excitation of 5 wavelength [Λ, big-lambda] each recorded at 10 emission
-  wavelength ranges [λ, lambda].
+  -  * :ometiff_downloads:`LAMBDA-ModuloAlongZ-ModuloAlongT.ome.tiff <modulo/LAMBDA-ModuloAlongZ-ModuloAlongT.ome.tiff>`
+     * 200 x 200 x 5 x 1 x 10
+     * excitation of 5 wavelength [Λ, big-lambda] interleaved as ModuloAlongZ,
+       each recorded at 10 emission wavelength ranges [λ, lambda] interleaved
+       as ModuloAlongT
 
-FLIM
-""""
+  -  * :ometiff_downloads:`FLIM-ModuloAlongT-TSCPC.ome.tiff <modulo/FLIM-ModuloAlongT-TSCPC.ome.tiff>`
+     * 180 x 220 x 1 x 2 x 16
+     * 2 channels and 8 histogram bins each recorded at 2 'real-time' points T,
+       with additional relative-time points (time relative to the
+       excitation pulse) interleaved as ModuloAlongT
 
-- :ometiff_downloads:`FLIM-ModuloAlongT-TSCPC.ome.tiff <modulo/FLIM-ModuloAlongT-TSCPC.ome.tiff>` -
-  2 channels and 8 histogram bins each recorded at 2 'real-time' points T,
-  with additional relative-time points (time relative to the
-  excitation pulse) interleaved as ModuloAlongT.
-
-- :ometiff_downloads:`FLIM-ModuloAlongC.ome.tiff <modulo/FLIM-ModuloAlongC.ome.tiff>` -
-  2 real channels and 8 histogram bins each recorded at 2 timepoints, with
-  additional relative-time points interleaved between channels as
-  ModuloAlongC. 
+  -  * :ometiff_downloads:`FLIM-ModuloAlongC.ome.tiff <modulo/FLIM-ModuloAlongC.ome.tiff>`
+     * 180 x 150 x 1 x 16 x 1
+     * 2 real channels and 8 histogram bins each recorded at 2 timepoints, with
+       additional relative-time points interleaved between channels as
+       ModuloAlongC
 
 .. _multifile_samples:
 
