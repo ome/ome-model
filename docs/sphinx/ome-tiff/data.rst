@@ -2,7 +2,7 @@ OME-TIFF sample data
 ====================
 
 This section provides some sample data in OME-TIFF format. They include data
-produced from an acquisition system as well as artificial sample datasets i.e.
+produced from an acquisition system as well as artificial sample datasets, i.e.
 designed for developer testing that illustrate some possible data
 organizations, which should be useful if you are interested in implementing
 support for OME-TIFF within your software.
