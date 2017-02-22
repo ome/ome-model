@@ -149,7 +149,7 @@ resource.
 Multi-file OME-TIFF filesets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This section lists various examples of OME-TIFF datasets distributed across multiple TIFF files. Both datasets contain a set of 18 by 24 pixel images with black and white text on each plane giving its time, z-depth and channel. Each of the five focal planes is saved as a separate OME-TIFF named :file:`multifile-Zxx.ome.tiff` where `xx` is the index of the focal plane.
+This section lists various examples of OME-TIFF datasets distributed across multiple TIFF files. Both datasets contain a set of 18 × 24 pixel images with black and white text on each plane giving its time, z-depth and channel. Each of the five focal planes is saved as a separate OME-TIFF named :file:`multifile-Zxx.ome.tiff` where `xx` is the index of the focal plane.
 
 .. list-table::
   :header-rows: 1
