@@ -53,7 +53,7 @@ Common reasons for this situation include:
 - having many structured annotations in the OME-XML.
 
 For example, if you have a dataset with 1,000 time points, with each plane
-recorded at 512x512 as uint8 pixel type, storing each plane in its own file
+recorded at 512 × 512 as uint8 pixel type, storing each plane in its own file
 uncompressed requires ~256KB of disk per file, and ~256MB total. But if you
 have 5MB of corresponding OME-XML metadata, embedding a copy of that metadata
 in every file would result in a dataset nearly 20 times larger than before,
