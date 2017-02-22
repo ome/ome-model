@@ -26,7 +26,7 @@ and imaging this sample data.
 The datasets were acquired on a multiphoton workstation (2.1 GHz Athlon
 XP 3200+ with 1GB of RAM) using
 `WiscScan <http://loci.wisc.edu/software/wiscscan>`_. All image
-planes were collected at 512x512 resolution in 8-bit grayscale, with an
+planes were collected at 512 × 512 resolution in 8-bit grayscale, with an
 integration value of 2.
 
 The files available for download have been updated to the current schema
@@ -40,15 +40,15 @@ version since their initial creation.
      * Number of files
 
   -  * :ometiff_downloads:`Tubhiswt 2D <tubhiswt-2D>` (:ometiff_downloads:`tubhiswt-2D.zip <tubhiswt-2D.zip>`)
-     * 512 x 512 x 1 x 2 x 1
+     * 512 × 512 × 1 × 2 × 1
      * 2
 
   -  * :ometiff_downloads:`Tubhiswt 3D <tubhiswt-3D>` (:ometiff_downloads:`tubhiswt-3D.zip <tubhiswt-3D.zip>`)
-     * 512 x 512 x 1 x 2 x 20
+     * 512 × 512 × 1 × 2 × 20
      * 2
 
   -  * :ometiff_downloads:`Tubhiswt 4D <tubhiswt-4D>` (:ometiff_downloads:`tubhiswt-4D.zip <tubhiswt-4D.zip>`)
-     * 512 x 512 x 10 x 2 x 43
+     * 512 × 512 × 10 × 2 × 43
      * 86
 
 
@@ -73,35 +73,35 @@ according to its dimensional position for easy testing.
      * Available extensions
   
   -  * Single channel
-     * 439 x 167 x 1 x 1 x 1
+     * 439 × 167 × 1 × 1 × 1
      * :ometiff_downloads:`ome.tif <bioformats-artificial/single-channel.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/single-channel.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/single-channel.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/single-channel.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/single-channel.ome.tf2>`
 
   -  * Multi channel
-     * 439 x 167 x 1 x 3 x 1
+     * 439 × 167 × 1 × 3 × 1
      * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/multi-channel.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel.ome.tf2>`
 
   -  * Z series
-     * 439 x 167 x 5 x 1 x 1
+     * 439 × 167 × 5 × 1 × 1
      * :ometiff_downloads:`ome.tif <bioformats-artificial/z-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/z-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/z-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/z-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/z-series.ome.tf2>`
 
   -  * Time series
-     * 439 x 167 x 1 x 1 x 7
+     * 439 × 167 × 1 × 1 × 7
      * :ometiff_downloads:`ome.tif <bioformats-artificial/time-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/time-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/time-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/time-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/time-series.ome.tf2>`
 
   -  * Multi channel Z series
-     * 439 x 167 x 5 x 3 x 1
+     * 439 × 167 × 5 × 3 × 1
      * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel-z-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel-z-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel-z-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/multi-channel-z-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel-z-series.ome.tf2>`
 
   -  * Multi channel time series
-     * 439 x 167 x 1 x 3 x 7
+     * 439 × 167 × 1 × 3 × 7
      * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel-time-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel-time-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel-time-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/multi-channel-time-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel-time-series.ome.tf2>`
 
   -  * 4D series
-     * 439 x 167 x 5 x 1 x 7
+     * 439 × 167 × 5 × 1 × 7
      * :ometiff_downloads:`ome.tif <bioformats-artificial/4D-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/4D-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/4D-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/4D-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/4D-series.ome.tf2>`
 
   -  * Multi channel 4D series
-     * 439 x 167 x 5 x 3 x 7
+     * 439 × 167 × 5 × 3 × 7
      * :ometiff_downloads:`ome.tif <bioformats-artificial/multi-channel-4D-series.ome.tif>`, :ometiff_downloads:`ome.tiff <bioformats-artificial/multi-channel-4D-series.ome.tiff>`, :ometiff_downloads:`ome.tf8 <bioformats-artificial/multi-channel-4D-series.ome.tf8>`, :ometiff_downloads:`ome.btf <bioformats-artificial/multi-channel-4D-series.ome.btf>`, :ometiff_downloads:`ome.tf2 <bioformats-artificial/multi-channel-4D-series.ome.tf2>`
 
 .. _modulo-datasets:
@@ -122,24 +122,24 @@ resource.
      * Modulo description
 
   -  * :ometiff_downloads:`SPIM-ModuloAlongZ.ome.tiff <modulo/SPIM-ModuloAlongZ.ome.tiff>`
-     * 160 x 220 x 8 x 2 x 12
+     * 160 × 220 × 8 × 2 × 12
      * 4 tiles interleaved as ModuloAlongT each recorded at 4 angles
        interleaved as ModuloAlongZ
 
   -  * :ometiff_downloads:`LAMBDA-ModuloAlongZ-ModuloAlongT.ome.tiff <modulo/LAMBDA-ModuloAlongZ-ModuloAlongT.ome.tiff>`
-     * 200 x 200 x 5 x 1 x 10
+     * 200 × 200 × 5 × 1 × 10
      * excitation of 5 wavelength [Λ, big-lambda] interleaved as ModuloAlongZ,
        each recorded at 10 emission wavelength ranges [λ, lambda] interleaved
        as ModuloAlongT
 
   -  * :ometiff_downloads:`FLIM-ModuloAlongT-TSCPC.ome.tiff <modulo/FLIM-ModuloAlongT-TSCPC.ome.tiff>`
-     * 180 x 220 x 1 x 2 x 16
+     * 180 × 220 × 1 × 2 × 16
      * 2 channels and 8 histogram bins each recorded at 2 'real-time' points T,
        with additional relative-time points (time relative to the
        excitation pulse) interleaved as ModuloAlongT
 
   -  * :ometiff_downloads:`FLIM-ModuloAlongC.ome.tiff <modulo/FLIM-ModuloAlongC.ome.tiff>`
-     * 180 x 150 x 1 x 16 x 1
+     * 180 × 150 × 1 × 16 × 1
      * 2 real channels and 8 histogram bins each recorded at 2 timepoints, with
        additional relative-time points interleaved between channels as
        ModuloAlongC
@@ -160,12 +160,12 @@ This section lists various examples of OME-TIFF datasets distributed across mult
      * Partial metadata files†
 
   -  * :ometiff_downloads:`Master OME-TIFF fileset <binaryonly>`
-     * 18 x 24 x 5 x 1 x 1
+     * 18 × 24 × 5 × 1 × 1
      * :file:`multifile-Z1.ome.tiff`
      * :file:`multifile-Z[2-5].ome.tiff`
 
   -  * :ometiff_downloads:`Companion OME-XML fileset <companion>`
-     * 18 x 24 x 5 x 1 x 1
+     * 18 × 24 × 5 × 1 × 1
      * :file:`multifile.companion.ome`
      * :file:`multifile-Z[1-5].ome.tiff`
 
