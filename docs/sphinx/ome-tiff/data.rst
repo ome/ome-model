@@ -51,6 +51,24 @@ version since their initial creation.
      * 512 × 512 × 10 × 2 × 43
      * 86
 
+BBBC
+^^^^
+
+OME-TIFF datasets representative of the :doc:`High Content Screening </developers/screen-plate-well>` section of the OME Data Model were derived from the public `Broad Bioimage Benchmark Collection <https://data.broadinstitute.org/bbbc/>`_. See Ljosa V, Sokolnicki KL, Carpenter AE (2012). Annotated high-throughput microscopy image sets for validation. Nature Methods 9(7):637.
+
+
+.. list-table::
+  :header-rows: 1
+
+  -  * Dataset
+     * Image dimensions (XYZCT)
+     * Provenance
+     * Copyright
+
+  -  * :ometiff_downloads:`BBBC/NIRHTa-001.ome.tiff`
+     * 512 × 512 × 1 × 3 × 1
+     * `BBBC017 <https://data.broadinstitute.org/bbbc/BBBC017/>`_
+     * `CC-BY-NC-SA 3.0 <https://creativecommons.org/licenses/by-nc-sa/3.0>`_
 
 .. _artificial-datasets:
 
