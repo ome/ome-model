@@ -53,7 +53,7 @@ Common reasons for this situation include:
 - having many structured annotations in the OME-XML.
 
 For example, if you have a dataset with 1,000 time points, with each plane
-recorded at 512x512 as uint8 pixel type, storing each plane in its own file
+recorded at 512 × 512 as uint8 pixel type, storing each plane in its own file
 uncompressed requires ~256KB of disk per file, and ~256MB total. But if you
 have 5MB of corresponding OME-XML metadata, embedding a copy of that metadata
 in every file would result in a dataset nearly 20 times larger than before,
@@ -73,9 +73,8 @@ is possible to store partial OME-XML metadata blocks in some or all of the
 TIFF files pointing to a master file containing the full OME-XML metadata (see
 the :ref:`technical specification<binary_only>` for more details).
 
-The master file can be either a master OME-TIFF file  (see the
-:ref:`master-sample`) or a companion OME-XML file (see the
-:ref:`companion-sample`).
+The master file can be either a master OME-TIFF file or a companion OME-XML
+file (see the :ref:`multifile_samples`).
 
 Using a companion OME-XML file allows information that can only be generated
 at the end of the acquisition to be easily appended without the need to

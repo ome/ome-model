@@ -429,9 +429,7 @@ OME-XML metadata  block and
 :schema_doc:`UUID <ome_xsd.html#OME_OME_BinaryOnly_UUID>`
 should contain the UUID of this master file.
 
-The master file containing the full OME-XML metadata should be:
-
-- either an OME-XML companion file with the extension :file:`.companion.ome`
-  (see the :ref:`companion-sample`)
-- or a master OME-TIFF file containing the full metadata (see the
-  :ref:`master-sample`)
+The master file containing the full OME-XML metadata should be either an
+OME-XML companion file with the extension :file:`.companion.ome` or a master
+OME-TIFF file containing the full metadata (see :ref:`multifile_samples` for
+representative samples).
