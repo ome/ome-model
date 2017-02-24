@@ -9,7 +9,7 @@ support for OME-TIFF within your software.
 
 All the OME-TIFF sample data discussed below are available from our
 :ometiff_downloads:`OME-TIFF sample images resource <>` and licensed under
-`Creative Commons Attribution 4.0 International License <http://creativecommons.org/licenses/by/4.0/>`_
+`Creative Commons Attribution 4.0 International License <https://creativecommons.org/licenses/by/4.0/>`_
 unless specified otherwise.
 
 Biological datasets
@@ -95,7 +95,7 @@ See `Neumann B et al. (2010). Phenotypic profiling of the human genome by time-l
   -  * :ometiff_downloads:`00001_01.ome.tiff <MitoCheck/00001_01.ome.tiff>`
      * 1344 × 1024 × 1 × 1 × 93
      * `IDR <http://idr-demo.openmicroscopy.org/webclient/?show=well-771034>`_
-     * `Public Domain <http://creativecommons.org/publicdomain/mark/1.0/>`_
+     * `Public Domain <https://creativecommons.org/publicdomain/mark/1.0/>`_
 
 
 .. _artificial-datasets:
