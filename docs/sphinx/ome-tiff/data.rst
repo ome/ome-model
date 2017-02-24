@@ -60,7 +60,8 @@ An OME-TIFF dataset representative of the
 :doc:`High Content Screening </developers/screen-plate-well>` section of the
 OME Data Model were derived from the public `Broad Bioimage Benchmark Collection <https://data.broadinstitute.org/bbbc/>`_.
 
-See `Neumann B et al. (2010). Phenotypic profiling of the human genome by time-lapse microscopy reveals cell division genes. Nature464(7289):721 <http://www.nature.com/nature/journal/v464/n7289/full/nature08869.html>`__.
+See `Ljosa V, Sokolnicki KL, Carpenter AE (2012). Annotated high-throughput microscopy image sets for validation. Nature Methods 9(7):637 <http://www.nature.com/nmeth/journal/v9/n7/full/nmeth.2083.html>`__.
+
 
 .. list-table::
   :header-rows: 1
@@ -81,7 +82,7 @@ MitoCheck
 An OME-TIFF dataset representative of the :doc:`ROI </developers/roi>`
 section of the OME Data Model was derived from the public `MitoCheck <http://www.mitocheck.org/>`_ project.
 
-See `Ljosa V, Sokolnicki KL, Carpenter AE (2012). Annotated high-throughput microscopy image sets for validation. Nature Methods 9(7):637 <http://www.nature.com/nmeth/journal/v9/n7/full/nmeth.2083.html>`__.
+See `Neumann B et al. (2010). Phenotypic profiling of the human genome by time-lapse microscopy reveals cell division genes. Nature464(7289):721 <http://www.nature.com/nature/journal/v464/n7289/full/nature08869.html>`__.
 
 .. list-table::
   :header-rows: 1
