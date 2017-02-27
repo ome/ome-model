@@ -58,7 +58,8 @@ BBBC
 
 An OME-TIFF dataset representative of the
 :doc:`High Content Screening </developers/screen-plate-well>` section of the
-OME Data Model were derived from the public `Broad Bioimage Benchmark Collection <https://data.broadinstitute.org/bbbc/>`_.
+OME Data Model, derived from the public
+`Broad Bioimage Benchmark Collection <https://data.broadinstitute.org/bbbc/>`_.
 
 .. list-table::
   :header-rows: 1
@@ -79,7 +80,8 @@ MitoCheck
 ^^^^^^^^^
 
 An OME-TIFF dataset representative of the :doc:`ROI </developers/roi>`
-section of the OME Data Model was derived from the public `MitoCheck <http://www.mitocheck.org/>`_ project.
+section of the OME Data Model, derived from the public
+`MitoCheck <http://www.mitocheck.org/>`_ project.
 
 .. list-table::
   :header-rows: 1
