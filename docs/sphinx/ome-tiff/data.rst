@@ -69,7 +69,7 @@ OME Data Model, derived from the public
      * Provenance
      * Copyright
 
-  -  * :ometiff_downloads:`BBBC/NIRHTa-001.ome.tiff`
+  -  * :ometiff_downloads:`NIRHTa-001.ome.tiff <BBBC/NIRHTa-001.ome.tiff>`
      * 512 × 512 × 1 × 3 × 1
      * `BBBC017 <https://data.broadinstitute.org/bbbc/BBBC017/>`_
      * `CC-BY-NC-SA 3.0 <https://creativecommons.org/licenses/by-nc-sa/3.0>`_
