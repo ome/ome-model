@@ -23,6 +23,7 @@
       BaseMetadata::index_type
       DummyMetadata::get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}Count(${indexes_string_dummy(indexes[:-1])}) const
       {
+
         throw MetadataException("DummyMetadata", "get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}Count",
                                 "intentionally not implemented");
       }
