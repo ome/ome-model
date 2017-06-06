@@ -75,13 +75,12 @@ namespace ome
         ~BaseMetadata()
         {}
 
-      private:
-        /// Copy constructor (deleted).
-        BaseMetadata (const BaseMetadata&);
+        /// @cond SKIP
+        BaseMetadata (const BaseMetadata&) = delete;
 
-        /// Assignment operator (deleted).
         BaseMetadata&
-        operator= (const BaseMetadata&);
+        operator= (const BaseMetadata&) = delete;
+        /// @endcond SKIP
       };
 
     }

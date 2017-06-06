@@ -195,15 +195,13 @@ namespace ome
         ~MetadataStore()
         {}
 
-      private:
-        /// Copy constructor (deleted).
-        MetadataStore (const MetadataStore&);
+        /// @cond SKIP
+        MetadataStore (const MetadataStore&) = delete;
 
-        /// Assignment operator (deleted).
         MetadataStore&
-        operator= (const MetadataStore&);
+        operator= (const MetadataStore&) = delete;
+        /// @endcond SKIP
 
-      public:
         /**
          * Create root node.  The action taken here is specific to the
          * concrete metadata implementation.

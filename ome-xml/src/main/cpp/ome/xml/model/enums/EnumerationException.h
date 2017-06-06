@@ -76,6 +76,8 @@ namespace ome
         public:
           /**
            * Construct an EnumerationException from a string.
+           *
+           * @param error the error message.
            */
           EnumerationException(std::string const& error);
 

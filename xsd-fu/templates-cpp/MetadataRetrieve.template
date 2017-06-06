@@ -191,15 +191,13 @@ namespace ome
         ~MetadataRetrieve()
         {}
 
-      private:
-        /// Copy constructor (deleted).
-        MetadataRetrieve (const MetadataRetrieve&);
+        /// @cond SKIP
+        MetadataRetrieve (const MetadataRetrieve&) = delete;
 
-        /// Assignment operator (deleted).
         MetadataRetrieve&
-        operator= (const MetadataRetrieve&);
+        operator= (const MetadataRetrieve&) = delete;
+        /// @endcond SKIP
 
-      public:
 {% if debug %}\
         // -- Entity counting (manual definitions) --
 

@@ -65,13 +65,12 @@ namespace ome
         ~MetadataRoot()
         {}
 
-      private:
-        /// Copy constructor (deleted).
-        MetadataRoot (const MetadataRoot&);
+        /// @cond SKIP
+        MetadataRoot (const MetadataRoot&) = delete;
 
-        /// Assignment operator (deleted).
         MetadataRoot&
-        operator= (const MetadataRoot&);
+        operator= (const MetadataRoot&) = delete;
+        /// @endcond SKIP
       };
 
     }

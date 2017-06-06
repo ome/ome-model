@@ -128,15 +128,13 @@ namespace ome
         virtual bool
         validElementName(const std::string& name) const = 0;
 
-      private:
-        /// Copy constructor (deleted).
-        OMEModelObject (const OMEModelObject&);
+        /// @cond SKIP
+        OMEModelObject (const OMEModelObject&) = delete;
 
-        /// Assignment operator (deleted).
         OMEModelObject&
-        operator= (const OMEModelObject&);
+        operator= (const OMEModelObject&) = delete;
+        /// @endcond SKIP
 
-      public:
         /**
          * Transform the object hierarchy rooted at this element to
          * XML.

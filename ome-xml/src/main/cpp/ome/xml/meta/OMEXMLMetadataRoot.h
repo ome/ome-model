@@ -60,10 +60,18 @@ namespace ome
         /// Constructor.
         OMEXMLMetadataRoot();
 
-	/// Copy constructor.
+	/**
+         * Copy constructor.
+         *
+         * @param copy the instance to copy.
+         */
 	OMEXMLMetadataRoot(const OMEXMLMetadataRoot& copy);
 
-	/// Copy constructor.
+	/**
+         * Copy constructor.
+         *
+         * @param copy the instance to copy.
+         */
 	OMEXMLMetadataRoot(const xml::model::OME& copy);
 
       public:
@@ -71,10 +79,10 @@ namespace ome
         virtual
         ~OMEXMLMetadataRoot();
 
-      private:
-        /// Assignment operator (deleted).
+        /// @cond SKIP
         OMEXMLMetadataRoot&
-        operator= (const OMEXMLMetadataRoot&);
+        operator= (const OMEXMLMetadataRoot&) = delete;
+        /// @endcond SKIP
       };
 
     }

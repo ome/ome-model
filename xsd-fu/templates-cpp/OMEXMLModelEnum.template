@@ -164,6 +164,8 @@ namespace ome
           /**
            * Assignment operator.
            *
+           * @param rhs the value to assign.
+           * @returns the assigned value.
            */
           inline ${klass.langType}&
           operator=  (const ${klass.langType}& rhs)

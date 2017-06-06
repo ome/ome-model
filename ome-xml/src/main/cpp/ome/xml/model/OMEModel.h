@@ -81,15 +81,13 @@ namespace ome
         ~OMEModel ()
         {}
 
-      private:
-        /// Copy constructor (deleted).
-        OMEModel (const OMEModel&);
+        /// @cond SKIP
+        OMEModel (const OMEModel&) = delete;
 
-        /// Assignment operator (deleted).
         OMEModel&
-        operator= (const OMEModel&);
+        operator= (const OMEModel&) = delete;
+        /// @endcond SKIP
 
-      public:
         /**
          * Add a model object to the model.  Note that the concrete
          * implementation will not add types derived from Reference.

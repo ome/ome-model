@@ -72,13 +72,12 @@ namespace ome
         ~Metadata()
         {}
 
-      private:
-        /// Copy constructor (deleted).
-        Metadata (const Metadata&);
+        /// @cond SKIP
+        Metadata (const Metadata&) = delete;
 
-        /// Assignment operator (deleted).
         Metadata&
-        operator= (const Metadata&);
+        operator= (const Metadata&) = delete;
+        /// @endcond SKIP
       };
 
     }
