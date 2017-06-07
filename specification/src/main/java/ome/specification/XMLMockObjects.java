@@ -1101,12 +1101,25 @@ public class XMLMockObjects
    * Creates a new image.
    *
    * @param index The identifier of the image.
+   * @param sizeZ The number of z-sections.
+   * @param sizeC The number of channels.
+   * @param sizeZT The number of timepoints.
    * @param metadata Pass <code>true</code> to create channel with acquisition
    *                  metadata, <code>false</code> otherwise.
    * @return See above.
    */
-  public Image createImage(int index, boolean metadata)
+  public Image createImage(int index, int sizeZ, int sizeC, int sizeT,
+          boolean metadata)
   {
+    if (sizeZ < SIZE_Z) {
+      sizeZ = SIZE_Z;
+    }
+    if (sizeC < SIZE_C) {
+      sizeC = SIZE_C;
+    }
+    if (sizeT < SIZE_T) {
+      sizeT = SIZE_T;
+    }
     if (metadata && instrument == null) {
       populateInstrument();
     }
@@ -1122,9 +1135,9 @@ public class XMLMockObjects
     pixels.setID("Pixels:"+index);
     pixels.setSizeX(new PositiveInteger(SIZE_X));
     pixels.setSizeY(new PositiveInteger(SIZE_Y));
-    pixels.setSizeZ(new PositiveInteger(SIZE_Z));
-    pixels.setSizeC(new PositiveInteger(SIZE_C));
-    pixels.setSizeT(new PositiveInteger(SIZE_T));
+    pixels.setSizeZ(new PositiveInteger(sizeZ));
+    pixels.setSizeC(new PositiveInteger(sizeC));
+    pixels.setSizeT(new PositiveInteger(sizeT));
     pixels.setPhysicalSizeX(new Length(1, UNITS.MICROMETER));
     pixels.setPhysicalSizeY(new Length(1, UNITS.MICROMETER));
     pixels.setPhysicalSizeZ(new Length(1, UNITS.MICROMETER));
@@ -1132,14 +1145,14 @@ public class XMLMockObjects
     pixels.setType(PIXEL_TYPE);
     if (!metadata) {
       BinData data;
-      for (int i = 0; i < SIZE_Z*SIZE_C*SIZE_T; i++) {
+      for (int i = 0; i < sizeZ*sizeC*sizeT; i++) {
         data = createBinData(SIZE_X, SIZE_Y, BYTES_PER_PIXEL);
         pixels.addBinData(data);
       }
     }
-    for (int z = 0; z < SIZE_Z; z++) {
-      for (int t = 0; t < SIZE_T; t++) {
-        for (int c = 0; c < SIZE_C; c++) {
+    for (int z = 0; z < sizeZ; z++) {
+      for (int t = 0; t < sizeT; t++) {
+        for (int c = 0; c < sizeC; c++) {
           pixels.addPlane(createPlane(z, c, t));
         }
       }
@@ -1148,21 +1161,34 @@ public class XMLMockObjects
     int j = 0;
     int n = LIGHT_SOURCES.length-1;
     DetectorSettings ds = createDetectorSettings(0);
-    for (int i = 0; i < SIZE_C; i++) {
+    for (int i = 0; i < sizeC; i++) {
       channel = createChannel(i);
       channel.setID("Channel:" + index + ":" + i);
       if (metadata) {
         if (j == n) j = 0;
-        channel.setLightSourceSettings(createLightSourceSettings(j));
-        channel.setLightPath(createLightPath());
-        channel.setDetectorSettings(ds);
-        j++;
-      }
+          channel.setLightSourceSettings(createLightSourceSettings(j));
+          channel.setLightPath(createLightPath());
+          channel.setDetectorSettings(ds);
+          j++;
+        }
       pixels.addChannel(channel);
     }
 
     image.setPixels(pixels);
     return image;
+  }
+
+  /**
+   * Creates a new image.
+   *
+   * @param index The identifier of the image.
+   * @param metadata Pass <code>true</code> to create channel with acquisition
+   *                  metadata, <code>false</code> otherwise.
+   * @return See above.
+   */
+  public Image createImage(int index, boolean metadata)
+  {
+    return createImage(index, SIZE_Z, SIZE_C, SIZE_T, metadata);
   }
 
   /**
