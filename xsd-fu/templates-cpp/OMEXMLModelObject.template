@@ -159,8 +159,12 @@ namespace ome
          {
          }
 
-        /// Copy constructor
 {% if len(klass.instanceVariables) > 0 %}\
+         /**
+          * Copy constructor.
+          *
+          * @param copy the instance to copy.
+          */
         Impl(const Impl& copy):
 {% for prop in klass.instanceVariables %}\
 {% if prop[0] is not None %}\
@@ -184,6 +188,7 @@ namespace ome
 {% end for %}\
 {% end has instanceVariables %}\
 {% if len(klass.instanceVariables) == 0 %}\
+        /// Copy constructor.
         Impl(const Impl& /* copy */)
 {% end no instanceVariables %}\
         {
@@ -349,12 +354,11 @@ namespace ome
 {% end source %}\
 
 {% if fu.SOURCE_TYPE == "header" %}\
-      private:
-        /// Assignment operator (deleted).
+        /// @cond SKIP
         ${klass.name}&
-        operator= (const ${klass.name}&);
+        operator= (const ${klass.name}&) = delete;
+        /// @endcond SKIP
 
-      public:
 {% end header %}\
 {% if len(customContent) > 0 %}\
         // -- Custom content from ${klass.name} specific template --

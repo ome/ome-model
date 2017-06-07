@@ -64,7 +64,11 @@ namespace ome
         class OMEModelObject : virtual public ::ome::xml::model::OMEModelObject
         {
         protected:
-          /// Constructor.
+          /** Constructor.
+           *
+           * @param objectType the type of the model object, used for
+           * information purposes such as logging.
+           */
           OMEModelObject (const std::string& objectType = "OMEModelObject");
 
         public:
@@ -89,7 +93,18 @@ namespace ome
           virtual common::xml::dom::Element
           asXMLElement (common::xml::dom::Document& document) const;
 
-          /// @copydoc ome::xml::model::OMEModelObject::asXMLElement
+          // @copydoc doesn't work here due to doxygen issues with
+          // overloading and parameter namespaces, so duplicate
+          // entirely.
+          /**
+           * Transform the object hierarchy rooted at this element to
+           * XML.  This internal implementation of asXMLelement also
+           * requires an XML element, which must not be null, or may
+           * be instantiated and passed from superclasses.
+           *
+           * @param document XML document for element creation.
+           * @param element XML element for setting model data.
+           */
           virtual void
           asXMLElement (common::xml::dom::Document& document,
                         common::xml::dom::Element&  element) const;

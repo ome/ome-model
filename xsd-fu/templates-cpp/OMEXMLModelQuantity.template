@@ -139,9 +139,11 @@ namespace ome
           /**
            * Assignment operator.
            *
+           * @param rhs the quantity to assign.
+           * @returns the assigned quantity.
            */
           inline ${klass.langType}&
-          operator=  (const ${klass.langType}& rhs)
+          operator= (const ${klass.langType}& rhs)
           {
             this->value = rhs.value;
             this->name = rhs.name;
