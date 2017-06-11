@@ -44,7 +44,7 @@ extensions = ['sphinx.ext.extlinks', 'edit_on_github']
 
 # Configuration for the edit_on_github extension
 edit_on_github_project = 'openmicroscopy/ome-documentation'
-edit_on_github_branch = 'develop'
+edit_on_github_branch = 'master'
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = [os.path.abspath(os.path.join(srcdir, '_templates'))]
@@ -100,7 +100,7 @@ pygments_style = 'sphinx'
 if "SOURCE_BRANCH" in os.environ and len(os.environ.get('SOURCE_BRANCH')) > 0:
     branch = os.environ.get('SOURCE_BRANCH')
 else:
-    branch = 'develop'
+    branch = 'master'
 
 if "SOURCE_USER" in os.environ and len(os.environ.get('SOURCE_USER')) > 0:
     user = os.environ.get('SOURCE_USER')
