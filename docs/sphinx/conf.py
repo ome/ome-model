@@ -43,7 +43,7 @@ version = 'UNKNOWN'
 extensions = ['sphinx.ext.extlinks', 'edit_on_github']
 
 # Configuration for the edit_on_github extension
-edit_on_github_project = 'openmicroscopy/ome-documentation'
+edit_on_github_project = 'openmicroscopy/ome-files'
 edit_on_github_branch = 'master'
 
 # Add any paths that contain templates here, relative to this directory.
@@ -103,14 +103,16 @@ else:
     branch = 'master'
 
 if "SOURCE_USER" in os.environ and len(os.environ.get('SOURCE_USER')) > 0:
-    user = os.environ.get('SOURCE_USER')
+    ome_user = os.environ.get('SOURCE_USER')
+    openmicroscopy_user = os.environ.get('SOURCE_USER')
 else:
-    user = 'openmicroscopy'
+    ome_user = 'ome'
+    openmicroscopy_user = 'openmicroscopy'
 
 github_root = 'https://github.com/'
-omero_github_root = github_root + user + '/openmicroscopy/'
-bf_github_root = github_root + user + '/bioformats/'
-doc_github_root = github_root + user + '/ome-documentation/'
+bf_github_root = github_root + openmicroscopy_user + '/bioformats/'
+model_github_root = github_root + ome_user + '/bioformats/'
+files_github_root = github_root + ome_user + '/ome-files/'
 
 # Variables used to define Jenkins extlinks
 jenkins_root = 'https://ci.openmicroscopy.org'
@@ -172,7 +174,8 @@ extlinks = {
     # Github links
     'source' : (bf_github_root + 'blob/'+ branch + '/%s', ''),
     'sourcedir' : (bf_github_root + 'tree/'+ branch + '/%s', ''),
-    'omero_source' : (omero_github_root + 'blob/'+ branch + '/%s', ''),
+    'bf_source' : (bf_github_root + 'blob/'+ branch + '/%s', ''),
+    'bf_sourcedir' : (bf_github_root + 'tree/'+ branch + '/%s', ''),
     # API
     'javadoc' : (downloads_root + '/latest/bio-formats/api/%s', ''),
     # Doc links

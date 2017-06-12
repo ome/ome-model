@@ -55,7 +55,7 @@ The :bf_doc:`Bio-Formats command line
 tools <users/comlinetools/>` include a
 program, tiffcomment, that performs these steps using the
 getComment(String) method of 
-:source:`TiffParser <components/formats-bsd/src/loci/formats/tiff/TiffParser.java>`.
+:bf_source:`TiffParser <components/formats-bsd/src/loci/formats/tiff/TiffParser.java>`.
 You can produce a nicely formatted OME-XML string from an OME-TIFF file
 with:
 
@@ -89,7 +89,7 @@ user to alter the comments on the command line, and writes updated
 comments back to the files. It requires the
 :bf_plone:`Bio-Formats library <>`.
 
-:source:`EditTiffComment.java <components/formats-gpl/utils/EditTiffComment.java>`
+:bf_source:`EditTiffComment.java <components/formats-gpl/utils/EditTiffComment.java>`
 
 The comment string is acquired using ``new TiffParser(f).getComment()``, and
 updated with 
@@ -119,7 +119,7 @@ The following program converts the files given on the command line into
 OME-TIFF format. It requires the :bf_plone:`Bio-Formats <>` and :doc:`OME-XML
 Java </ome-xml/java-library>` libraries.
 
-:source:`ConvertToOmeTiff.java <components/formats-gpl/utils/ConvertToOmeTiff.java>`
+:bf_source:`ConvertToOmeTiff.java <components/formats-gpl/utils/ConvertToOmeTiff.java>`
 
 The code functions by creating an ImageReader for reading the input
 files' image planes sequentially, and an OMETiffWriter for writing the
