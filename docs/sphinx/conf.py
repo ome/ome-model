@@ -128,7 +128,7 @@ downloads_root = 'http://downloads.openmicroscopy.org'
 help_root = 'http://help.openmicroscopy.org'
 
 # Edit on GitHub prefix
-edit_on_github_prefix = 'ome-model'
+edit_on_github_prefix = 'docs/sphinx'
 
 extlinks = {
     # Trac links
