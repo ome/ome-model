@@ -43,7 +43,7 @@ version = 'UNKNOWN'
 extensions = ['sphinx.ext.extlinks', 'edit_on_github']
 
 # Configuration for the edit_on_github extension
-edit_on_github_project = 'openmicroscopy/ome-files'
+edit_on_github_project = 'ome/ome-model'
 edit_on_github_branch = 'master'
 
 # Add any paths that contain templates here, relative to this directory.
@@ -111,8 +111,7 @@ else:
 
 github_root = 'https://github.com/'
 bf_github_root = github_root + openmicroscopy_user + '/bioformats/'
-model_github_root = github_root + ome_user + '/bioformats/'
-files_github_root = github_root + ome_user + '/ome-files/'
+model_github_root = github_root + ome_user + '/ome-model/'
 
 # Variables used to define Jenkins extlinks
 jenkins_root = 'https://ci.openmicroscopy.org'
@@ -129,7 +128,7 @@ downloads_root = 'http://downloads.openmicroscopy.org'
 help_root = 'http://help.openmicroscopy.org'
 
 # Edit on GitHub prefix
-edit_on_github_prefix = 'formats'
+edit_on_github_prefix = 'ome-model'
 
 extlinks = {
     # Trac links
