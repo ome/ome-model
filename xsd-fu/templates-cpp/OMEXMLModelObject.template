@@ -662,7 +662,7 @@ ${customUpdatePropertyContent[prop.name]}
         std::vector<common::xml::dom::Element> ${prop.name}_nodeList(getChildrenByTagName("${prop.name}"));
         for (auto& elem : ${prop.name}_nodeList)
           {
-            std::string text(element.getTextContent()); /// @todo should this be elem?
+            std::string text(elem.getTextContent());
             std::shared_ptr<${prop.methodName}> object(${prop.langTypeNS}::create(text, model));
             add${prop.methodName}(object);
           }
