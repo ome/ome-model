@@ -84,7 +84,7 @@ The following program edits the "image name" metadata value for the file
 given on the command line. It requires the :bf_plone:`Bio-Formats <>` and 
 :doc:`OME-XML Java </ome-xml/java-library>` libraries.
 
-:source:`EditImageName.java <components/formats-gpl/utils/EditImageName.java>`
+:bf_source:`EditImageName.java <components/formats-gpl/utils/EditImageName.java>`
 
 As in the ConvertToOmeTiff.java example in :doc:`/ome-tiff/code`, we attach an 
 OME-XML MetadataStore object to the reader to extract OME-XML metadata from 
@@ -99,7 +99,7 @@ write the updated name back into the metadata structure via a call to
 wish to update the first Image.
 
 Lastly, the
-:source:`loci.formats.services.OMEXMLService <components/formats-api/src/loci/formats/services/OMEXMLService.java>`
+:bf_source:`loci.formats.services.OMEXMLService <components/formats-api/src/loci/formats/services/OMEXMLService.java>`
 class contains a number of useful methods for working with Bio-Formats
 metadata objects (i.e. MetadataStore and MetadataRetrieve
 implementations), including the getOMEXML method for easily extracting
