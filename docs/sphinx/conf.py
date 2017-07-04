@@ -12,6 +12,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+from __future__ import print_function
+
 # Substitutions from external build system.
 srcdir = u'@sphinx_srcdir@'
 builddir = u'@sphinx_builddir@'
@@ -355,12 +357,15 @@ if not (sys.version_info[0] == 2 and sys.version_info[1] <= 5):
 # Regular expressions that match URIs that should not be checked when doing a linkcheck build
 linkcheck_ignore = []
 try:
-    import urllib
+    if sys.version_info[0] >= 3:
+        from urllib.request import urlopen
+    else:
+        from urllib import urlopen
     brokenfiles_url = 'https://raw.github.com/openmicroscopy/sphinx-ignore-links/master/broken_links.txt'
-    brokenlinks = urllib.urlopen(brokenfiles_url)
+    brokenlinks = urlopen(brokenfiles_url)
     linkcheck_ignore.extend(brokenlinks.read().splitlines())
 except IOError:
-    print "Could not open list of broken links."
+    print("Could not open list of broken links.")
 
 # -- Custom roles for the OMERO documentation -----------------------------------------------
 
