@@ -227,12 +227,34 @@ rst_epilog = """
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'sphinxdoc'
+html_theme = 'default'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
-#html_theme_options = {}
+html_theme_options = {
+    'rightsidebar': 'false',
+    'stickysidebar': 'false',
+    'footerbgcolor': '#cfd8dc',
+    'footertextcolor': '#455a64',
+    'sidebarbgcolor': '#cfd8dc',
+    'sidebartextcolor': '#263238',
+    'sidebarlinkcolor': '#455a64',
+    'relbarbgcolor': '#263238',
+    'relbartextcolor': '#ffffff',
+    'relbarlinkcolor': '#ffffff',
+    'bgcolor': '#ffffff',
+    'textcolor': '#37474f',
+    'linkcolor': '#1d8dcd',
+    'visitedlinkcolor': '#1d8dcd',
+    'headbgcolor': '#eceff1',
+    'headtextcolor': '#263238',
+    'headlinkcolor': '#009688',
+    'codebgcolor': '#eceff1',
+    'codetextcolor': '#455a64',
+    'bodyfont': 'Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif',
+    'headfont': 'Open Sans, Helvetica Neue, Helvetica, Arial, sans-serif'
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
 html_theme_path = [os.path.abspath(os.path.join(srcdir, 'themes'))]
@@ -246,7 +268,7 @@ html_theme_path = [os.path.abspath(os.path.join(srcdir, 'themes'))]
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+html_logo = os.path.abspath(os.path.join(srcdir, 'images/ome.svg'))
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
