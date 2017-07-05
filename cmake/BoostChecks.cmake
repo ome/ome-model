@@ -40,7 +40,7 @@ set(Boost_USE_STATIC_LIBS OFF)
 
 find_package(Boost 1.54 REQUIRED
              COMPONENTS date_time filesystem system iostreams
-                        log log_setup program_options regex thread)
+                        log log_setup program_options regex)
 
 include(CheckIncludeFileCXX)
 include(CheckCXXSourceCompiles)
