@@ -56,8 +56,6 @@ endif()
 list(APPEND CMAKE_MODULE_PATH
      "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-include("${CMAKE_CURRENT_LIST_DIR}/cmake/BioFormatsCommon.cmake")
-
 include(MavenVersion)
 maven_version("${CMAKE_CURRENT_LIST_DIR}/pom.xml" maven-project maven-version maven-snapshot)
 
@@ -82,6 +80,7 @@ if(MSVC)
 endif()
 set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_DEFAULT} CACHE BOOL "Use shared libraries")
 
+include(Options)
 include(GNUInstallDirs)
 include(CompilerChecks)
 include(PlatformChecks)
