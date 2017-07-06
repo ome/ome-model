@@ -78,4 +78,8 @@ STD_THREAD_FUNCTIONAL)
   endif()
 endfunction(thread_test)
 
-thread_test()
+# Earlier CMake versions don't set the language standard when running
+# feature tests.
+if(NOT CMAKE_VERSION VERSION_LESS 3.8)
+  thread_test()
+endif()
