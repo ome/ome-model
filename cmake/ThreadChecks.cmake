@@ -1,7 +1,7 @@
 # #%L
 # OME C++ libraries (cmake build infrastructure)
 # %%
-# Copyright © 2006 - 2015 Open Microscopy Environment:
+# Copyright © 2006 - 2017 Open Microscopy Environment:
 #   - Massachusetts Institute of Technology
 #   - National Institutes of Health
 #   - University of Dundee
