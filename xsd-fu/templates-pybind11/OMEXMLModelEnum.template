@@ -1,0 +1,91 @@
+/*
+ * #%L
+ * OME-FILES Python library for image IO.
+ * Copyright (c) 2016-2017 University of Dundee
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ * #L%
+ */
+
+/*─────────────────────────────────────────────────────────────────────────────
+ *
+ * THIS IS AUTOMATICALLY GENERATED CODE.  DO NOT MODIFY.
+ *
+ *─────────────────────────────────────────────────────────────────────────────
+ */
+
+{% if fu.SOURCE_TYPE == "header" %}\
+#pragma once
+
+#include <pybind11/pybind11.h>
+
+
+void init_${klass.langType.lower()}(pybind11::module &m);
+{% end %}\
+{% if fu.SOURCE_TYPE == "source" %}\
+#include <string>
+#include <pybind11/operators.h>
+#include <pybind11/stl.h>
+#include <ome/xml/model/enums/${klass.langType}.h>
+
+#include "${klass.langType.lower()}.h"
+
+
+namespace py = pybind11;
+using ome::xml::model::enums::${klass.langType};
+
+
+void init_${klass.langType.lower()}(py::module &m) {
+  py::class_<${klass.langType}> ${klass.langType}Wrapper(m, "${klass.langType}");
+  ${klass.langType}Wrapper
+    .def(py::init<${klass.langType}::enum_value>())
+    .def(py::init<const std::string&, bool>(), "",
+	 py::arg().noconvert(), py::arg("strict") = false)
+    .def("__str__", [](const ${klass.langType} &t) {
+	return static_cast<std::string>(t);
+      })
+    .def("__repr__", [](const ${klass.langType} &t) {
+	return "${klass.langType}('" + static_cast<std::string>(t) + "')";
+      })
+    .def(py::self == py::self)
+    .def(py::self != py::self)
+    .def_property_readonly("value", [](const ${klass.langType} &t) {
+	return static_cast<${klass.langType}::enum_value>(t);
+      })
+    .def_static("strings", []() { return ${klass.langType}::strings(); },
+		"Get a map of valid string names and enum values.")
+    .def_static("values", []() { return ${klass.langType}::values(); },
+		"Get a map of valid enum values and string names.");
+  py::enum_<${klass.langType}::enum_value> EnumValue(${klass.langType}Wrapper, "enum_value");
+  EnumValue
+{% for value in klass.possibleValues %}\
+{% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('enum', None) is not None %}\
+    .value("${klass.enumProperties[value].enum}", ${klass.langType}::enum_value::${klass.enumProperties[value].enum})
+{% end %}\
+{% if klass.enumProperties is None or not value in klass.enumProperties or klass.enumProperties[value].get('enum', None) is None %}\
+    .value("${enum_value_name(value, False).upper()}", ${klass.langType}::enum_value::${enum_value_name(value, False).upper()})
+{% end %}\
+{% end %}\
+    .export_values();
+  ${klass.langType}Wrapper.attr("__members__") = EnumValue.attr("__members__");
+}
+{% end %}\

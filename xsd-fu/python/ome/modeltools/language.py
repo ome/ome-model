@@ -430,6 +430,16 @@ class CXX(Language):
         return sig
 
 
+class Pybind11(CXX):
+
+    def __init__(self, namespace, templatepath):
+        super(Pybind11, self).__init__(namespace, templatepath)
+        self.template_dir = "templates-pybind11"
+
+    def generatedFilename(self, name, type):
+        return super(Pybind11, self).generatedFilename(name, type).lower()
+
+
 def create(language, namespace, templatepath):
     """
     Create a language by name.
@@ -441,6 +451,8 @@ def create(language, namespace, templatepath):
         lang = Java(namespace, templatepath)
     elif language == "C++":
         lang = CXX(namespace, templatepath)
+    elif language == "pybind11":
+        lang = Pybind11(namespace, templatepath)
     else:
         raise ModelProcessingError(
             "Invalid language: %s" % language)
