@@ -358,12 +358,12 @@ def enumTypesIncludeAll(model, opts):
     used_files.add(os.path.realpath(opts.lang.templatepath('ENUM_INCLUDEALL')))
     headers = model.getEnumHeaders()
 
-    fullname = opts.lang.generatedFilename("enums", language.TYPE_HEADER)
+    fullname = opts.lang.generatedFilename("enums", opts.filetype)
     fullname = os.path.join("ome", "xml", "model", fullname)
 
     fu.GUARD = guard(fullname)
     fu.CLASS_PREFIX = class_prefix(fullname)
-    fu.SOURCE_TYPE = language.TYPE_HEADER;
+    fu.SOURCE_TYPE = opts.filetype;
     fu.HEADERS = sorted(headers);
 
     fullname = os.path.join(opts.outdir, fullname)
