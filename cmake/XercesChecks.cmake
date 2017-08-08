@@ -34,6 +34,10 @@
 # policies, either expressed or implied, of any organization.
 # #L%
 
+if (POLICY CMP0067)
+  cmake_policy(SET CMP0067 NEW)
+endif()
+
 find_package(XercesC 3.0.0 REQUIRED)
 
 include(CheckCXXSourceRuns)
