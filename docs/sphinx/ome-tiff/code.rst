@@ -87,7 +87,7 @@ the file, it overwrites the old data in place.
 The following program extracts comments from TIFF files, prompts the
 user to alter the comments on the command line, and writes updated
 comments back to the files. It requires the
-:bf_plone:`Bio-Formats library <>`.
+:bf:`Bio-Formats library <>`.
 
 :bf_source:`EditTiffComment.java <components/formats-gpl/utils/EditTiffComment.java>`
 
@@ -116,7 +116,7 @@ the conversion from proprietary third-party metadata into OME-XML—a task
 that Bio-Formats greatly simplifies.
 
 The following program converts the files given on the command line into
-OME-TIFF format. It requires the :bf_plone:`Bio-Formats <>` and :doc:`OME-XML
+OME-TIFF format. It requires the :bf:`Bio-Formats <>` and :doc:`OME-XML
 Java </ome-xml/java-library>` libraries.
 
 :bf_source:`ConvertToOmeTiff.java <components/formats-gpl/utils/ConvertToOmeTiff.java>`
@@ -138,5 +138,7 @@ regarding the OME-XML conversion relating to any specific format. If
 there is any metadata missing or converted incorrectly, please let us
 know.
 
-.. seealso:: :bf_doc:`Exporting raw pixel data to OME-TIFF files <developers/export2.html>` 
+.. seealso::
+    
+    :bf_doc:`Exporting raw pixel data to OME-TIFF files <developers/export2.html>` 
     and :bf_doc:`Converting files from FV1000 OIB/OIF to OME-TIFF <developers/conversion.html>`

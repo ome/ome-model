@@ -79,7 +79,7 @@ Some specific features of the OME-XML file format:
    :doc:`/developers/structured-annotations` XML Schema section.
 
 The OME-XML Schema .xsd files and technical documentation are available on the 
-:schema_plone:`Schema pages <>`.
+:schema:`Schema pages <>`.
 
 
 Migrating or sharing data with OME-XML

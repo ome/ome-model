@@ -6,7 +6,7 @@ Sample OME-XML and OME-TIFF files can be found here:
 
 Each schema version's samples are located in a folder named after the schema's
 date e.g. folder :image_downloads:`OME-TIFF/2016-06/` has samples using schema
-version :schema_plone:`OME/2016-06`.
+version :schema:`OME/2016-06`.
 
 See the :doc:`/ome-tiff/data` section for more information about the sample
 TIFF files. The OME-XML files contained in the :image_downloads:`OME-XML`

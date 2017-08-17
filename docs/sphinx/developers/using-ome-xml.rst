@@ -7,7 +7,7 @@ This sections explains how to use OME schema elements in your own XML files.
     The correct attribution for work derived from our schema files under the 
     Creative Commons licence is:
     **"This work is derived in part from the OME specification.
-    Copyright (C) 2002-2016 Open Microscopy Environment"**
+    Copyright (C) 2002-2017 Open Microscopy Environment"**
 
 We encourage people to make use of the OME Data Model as a
 whole by using the OME-XML and OME-TIFF formats directly. If you need to
@@ -117,7 +117,7 @@ model, there are two approaches:
     including in the appropriate place in your software or project
     documentation:
     **"This work is derived in part from the OME specification.
-    Copyright (C) 2002-2015 Open Microscopy Environment"**
+    Copyright (C) 2002-2017 Open Microscopy Environment"**
 
 Worked examples
 ---------------
