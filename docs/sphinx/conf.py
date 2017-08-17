@@ -153,6 +153,8 @@ extlinks = {
     'ome-files' : (oo_root + '/ome-files/%s', ''), 
     'partners' : (oo_root + '/commercial-partners/%s', ''),
     'schema' : (oo_root + '/Schemas/%s', ''),
+    # Old plone links still to be copied to new site
+    'about_plone' : (oo_site_root + '/about/%s', ''),
     # Help links
     'help' : (help_root + '/%s', ''),
     # Miscellaneous links
