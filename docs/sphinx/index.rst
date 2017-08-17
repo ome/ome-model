@@ -26,7 +26,7 @@ with OME-XML and OME-TIFF:
    format metadata into OME-XML structures. It can write image data to the
    OME-TIFF format.
 
--  :omeo-files:`OME Files C++ <>` is a reference implementation of the OME
+-  :ome-files:`OME Files C++ <>` is a reference implementation of the OME
    data model and OME-TIFF for C++ developers wishing to support these in 
    their own software. It can read and write OME-TIFF data.
 
