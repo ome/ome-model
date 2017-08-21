@@ -108,7 +108,7 @@ Technical schema descriptions
 
 Auto-generated documentation is available for each release of the
 schema, including information on each attribute and element. These are
-published as :schema_plone:`XSD files <>` on the OME website. They are usually
+published as :schema:`XSD files <>` on the OME website. They are usually
 read by XML validators and parsers but are viewable as text files.
 Alternatively, you can browse the
 :schema_doc:`current version of the entire Schema <ome.html>` online.
@@ -116,5 +116,5 @@ Alternatively, you can browse the
 Transforms are available which convert between the the different versions
 of the schemas. They can be downloaded from:
 
-:schema_plone:`http://www.openmicroscopy.org/Schemas/Transforms/ <Transforms/>`
+:schema:`http://www.openmicroscopy.org/Schemas/Transforms/ <Transforms/>`
 

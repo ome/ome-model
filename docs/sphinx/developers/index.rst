@@ -81,7 +81,7 @@ MetadataRetrieve interfaces) to greatly simplify OME-XML-related
 development tasks.
 
 The following program edits the "image name" metadata value for the file
-given on the command line. It requires the :bf_plone:`Bio-Formats <>` and 
+given on the command line. It requires the :bf:`Bio-Formats <>` and 
 :doc:`OME-XML Java </ome-xml/java-library>` libraries.
 
 :bf_source:`EditImageName.java <components/formats-gpl/utils/EditImageName.java>`

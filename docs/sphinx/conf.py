@@ -128,6 +128,7 @@ oo_site_root = oo_root + '/site'
 lists_root = 'http://lists.openmicroscopy.org.uk'
 downloads_root = 'http://downloads.openmicroscopy.org'
 help_root = 'http://help.openmicroscopy.org'
+docs_root = 'http://docs.openmicroscopy.org'
 
 # Edit on GitHub prefix
 edit_on_github_prefix = 'docs/sphinx'
@@ -146,22 +147,14 @@ extlinks = {
     'ome-users' : (lists_root + '/pipermail/ome-users/%s' ,''),
     'ome-devel' : (lists_root + '/pipermail/ome-devel/%s' ,''),
     'forum' : (oo_root + '/community/%s', ''),
-    # Plone links. Separating them out so that we can add prefixes and
-    # suffixes during testing.
-    'community_plone' : (oo_site_root + '/community/%s', ''),
-    'legacy_plone' : (oo_site_root + '/support/previous/%s', ''),
+    # Website links
+    'omero' : (oo_root + '/omero/%s', ''),
+    'bf' : (oo_root + '/bio-formats/%s', ''),
+    'ome-files' : (oo_root + '/ome-files/%s', ''), 
+    'partners' : (oo_root + '/commercial-partners/%s', ''),
+    'schema' : (oo_root + '/Schemas/%s', ''),
+    # Old plone links still to be copied to new site
     'about_plone' : (oo_site_root + '/about/%s', ''),
-    'team_plone' : (oo_site_root + '/team/%s', ''),
-    'schema_plone' : (oo_root + '/Schemas/%s', ''),
-    'omero_plone' : (oo_site_root + '/products/omero/%s', ''),
-    'secvuln' : (oo_root + '/info/vulnerabilities/%s', ''),
-    'bf_plone' : (oo_site_root + '/products/bio-formats/%s', ''),
-    'partner_plone' : (oo_site_root + '/products/partner/%s', ''),
-    'cpp_plone' : (oo_site_root + '/products/ome-files-cpp/%s', ''),
-    # One branch only doc links. Branched docs links in conf.py files for
-    # individual doc sets
-    'model_doc' : (oo_site_root + '/support/ome-model/%s', ''),
-    'devs_doc' : (oo_site_root + '/support/contributing/%s', ''),
     # Help links
     'help' : (help_root + '/%s', ''),
     # Miscellaneous links
@@ -180,8 +173,9 @@ extlinks = {
     # API
     'javadoc' : (downloads_root + '/latest/bio-formats/api/%s', ''),
     # Doc links
-    'omero_doc' : (oo_site_root + '/support/omero/%s', ''),
-    'bf_doc' : (oo_site_root + '/support/bio-formats/%s', ''),
+    'devs_doc' : (docs_root + '/contributing/%s', ''),
+    'omero_doc' : (docs_root + '/latest/omero/%s', ''),
+    'bf_doc' : (docs_root + '/latest/bio-formats/%s', ''),
     'schema_doc' : (oo_root + '/Schemas/Documentation/Generated/OME-' + model_version + '/%s', ''),
     # Downloads
     'bf_downloads' : (downloads_root + '/latest/bio-formats/%s', ''),

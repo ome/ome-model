@@ -4,7 +4,7 @@ OME-TIFF specification
 The following provides technical details on the OME-TIFF
 format. It assumes familiarity with both the
 `TIFF <https://en.wikipedia.org/wiki/TIFF>`_ and
-:schema_plone:`OME-XML <>` formats, although there is some review of both.
+:schema:`OME-XML <>` formats, although there is some review of both.
 
 An OME-TIFF dataset consists of:
 

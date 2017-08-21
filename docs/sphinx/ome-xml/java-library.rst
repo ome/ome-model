@@ -5,12 +5,7 @@ OME-XML Java library
 The OME-XML Java library is a collection of Java packages for
 manipulating OME-XML metadata structures. The OME-XML Java library's
 metadata processing facilities form the backbone of the
-:bf_plone:`Bio-Formats <>` library's support for OME-XML conversion.
-
-It is not to be confused with the 
-:legacy_plone:`OME-Java API <ome-server/developer/java-api>`
-for communicating with an :legacy_plone:`OME Server <ome-server>`
-from Java.
+:bf:`Bio-Formats <>` library's support for OME-XML conversion.
 
 Download
 --------
