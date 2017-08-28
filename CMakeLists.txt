@@ -34,10 +34,8 @@
 # policies, either expressed or implied, of any organization.
 # #L%
 
-cmake_minimum_required(VERSION 3.2.0)
-
-# Default policy is from 3.2.0
-cmake_policy(VERSION 3.2.0)
+cmake_minimum_required(VERSION 3.4.0)
+cmake_policy(VERSION 3.4.0)
 
 # For MSVC
 enable_language(CXX)
