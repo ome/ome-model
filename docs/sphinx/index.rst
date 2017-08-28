@@ -41,6 +41,10 @@ acknowledge us.
 We have received support from several companies who use our file formats, for
 details see our list of :partners:`Partners <>`.
 
+.. note:: The versioning for this documentation reflects updates to any of the
+    components it covers and is therefore incremented more frequently than the
+    Schema version, which only covers the Data Model and for which a version
+    history is provided below.
 
 ********
 OME-TIFF
