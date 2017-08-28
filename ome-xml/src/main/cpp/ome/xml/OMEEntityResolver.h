@@ -50,7 +50,7 @@ namespace ome
      * Entity resolver for the OME schemas.
      *
      * This resolver will resolve local copies of all the OME schemas
-     * distributed with Bio-Formats.
+     * distributed as part of the OME Data Model (ome-model).
      */
     class OMEEntityResolver : public ome::common::xml::EntityResolver
     {

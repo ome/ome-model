@@ -39,6 +39,8 @@
 #ifndef OME_XML_MODEL_OMETRANSFORM_H
 #define OME_XML_MODEL_OMETRANSFORM_H
 
+#include <sstream>
+
 #include <ome/compat/regex.h>
 #include <ome/common/xml/dom/Document.h>
 #include <ome/common/xsl/Transformer.h>

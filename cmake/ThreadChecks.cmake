@@ -1,7 +1,7 @@
 # #%L
-# Bio-Formats C++ libraries (cmake build infrastructure)
+# OME C++ libraries (cmake build infrastructure)
 # %%
-# Copyright © 2006 - 2016 Open Microscopy Environment:
+# Copyright © 2006 - 2017 Open Microscopy Environment:
 #   - Massachusetts Institute of Technology
 #   - National Institutes of Health
 #   - University of Dundee
@@ -42,54 +42,48 @@ include(CheckCXXSourceRuns)
 
 find_package(Threads REQUIRED)
 
-function(thread_test namespace header library outvar outlib)
-  set(CMAKE_REQUIRED_DEFINITIONS_SAVE ${CMAKE_REQUIRED_DEFINITIONS})
-  set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -DBOOST_ALL_DYN_LINK -DBOOST_ALL_NO_LIB)
-  set(CMAKE_REQUIRED_INCLUDES_SAVE ${CMAKE_REQUIRED_INCLUDES})
-  set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${Boost_INCLUDE_DIRS})
+function(thread_test)
   set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
   set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${library} ${CMAKE_THREAD_LIBS_INIT})
 
   check_cxx_source_runs(
-"#include <${header}>
+"#include <mutex>
+#include <thread>
 #include <iostream>
 
 namespace
 {
 
-  boost::mutex m1;
-  boost::recursive_mutex m2;
+  std::mutex m1;
+  std::recursive_mutex m2;
 
   void
   threadmain()
   {
-    boost::lock_guard<boost::mutex> lock1(m1);
-    boost::lock_guard<boost::recursive_mutex> lock2(m2);
+    std::lock_guard<std::mutex> lock1(m1);
+    std::lock_guard<std::recursive_mutex> lock2(m2);
     std::cout << \"In thread\" << std::endl;
   }
 
 }
 
 int main() {
-  ${namespace} foo(threadmain);
+  std::thread foo(threadmain);
   foo.join();
 
   return 0;
 }"
-${outvar})
+STD_THREAD_FUNCTIONAL)
 
   set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SAVE})
-  set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES_SAVE})
-  set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS_SAVE})
 
-  set(${outvar} ${${outvar}} PARENT_SCOPE)
-  if (${outvar})
-    set(${outlib} ${library} PARENT_SCOPE)
-  endif(${outvar})
+  if(NOT STD_THREAD_FUNCTIONAL)
+    message(FATAL_ERROR "No working thread or mutex implementation found")
+  endif()
 endfunction(thread_test)
 
-
-thread_test(boost::thread boost/thread.hpp "${Boost_SYSTEM_LIBRARY_RELEASE};${Boost_THREAD_LIBRARY_RELEASE}" OME_HAVE_BOOST_THREAD THREAD_LIBRARY)
-if(NOT OME_HAVE_BOOST_THREAD)
-  message(FATAL_ERROR "No working thread or mutex implementation found")
-endif(NOT OME_HAVE_BOOST_THREAD)
+# Earlier CMake versions don't set the language standard when running
+# feature tests.
+if(NOT CMAKE_VERSION VERSION_LESS 3.8)
+  thread_test()
+endif()
