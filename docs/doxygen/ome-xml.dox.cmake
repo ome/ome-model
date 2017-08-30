@@ -2051,10 +2051,8 @@ INCLUDE_FILE_PATTERNS  =
 # recursively expanded use the := operator instead of the = operator.
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
-PREDEFINED             = OME_HAVE_MEMORY \
-                         OME_HAVE_TUPLE \
-                         OME_HAVE_NOEXCEPT \
-                         OME_HAVE_BOOST_FORMAT
+PREDEFINED             = OME_HAVE_BOOST_LOG \
+                         OME_HAVE_BOOST_GEOMETRY_INDEX_RTREE_HPP
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The

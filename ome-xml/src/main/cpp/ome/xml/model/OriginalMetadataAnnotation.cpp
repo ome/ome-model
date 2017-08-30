@@ -69,7 +69,11 @@ namespace ome
         XMLAnnotation(),
         metadata()
       {
+#ifdef OME_HAVE_BOOST_LOG
         logger.add_attribute("ClassName", logging::attributes::constant<std::string>("OriginalMetadataAnnotation"));
+#else // ! OME_HAVE_BOOST_LOG
+        logger.className("OriginalMetadataAnnotation");
+#endif // OME_HAVE_BOOST_LOG
       }
 
       OriginalMetadataAnnotation::OriginalMetadataAnnotation (const OriginalMetadataAnnotation& copy):
