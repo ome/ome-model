@@ -42,9 +42,26 @@ set(Boost_USE_STATIC_LIBS OFF)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_LIBS OFF)
 
-find_package(Boost 1.54 REQUIRED
+# Log is missing for some Boost versions, so check is optional.
+if (Boost_LOG_LIBRARY_RELEASE STREQUAL "")
+  set(Boost_LOG_LIBRARY_RELEASE "Boost_LOG_LIBRARY_RELEASE-NOTFOUND" CACHE FILEPATH "Logging is missing for this Boost version; reset for FindBoost" FORCE)
+endif()
+if (Boost_LOG_SETUP_LIBRARY_RELEASE STREQUAL "")
+  set(Boost_LOG_SETUP_LIBRARY_RELEASE "Boost_LOG_SETUP_LIBRARY_RELEASE-NOTFOUND" CACHE FILEPATH "Logging setup is missing for this Boost version; reset for FindBoost" FORCE)
+endif()
+find_package(Boost COMPONENTS log log_setup)
+if (NOT Boost_LOG_LIBRARY_RELEASE)
+  message(WARNING "Boost.Log not found.  This might be an error, but is more likely to be harmless (no library available)")
+  set(Boost_LOG_LIBRARY_RELEASE "" CACHE FILEPATH "Logging is probably missing for this Boost version" FORCE)
+endif()
+if (NOT Boost_LOG_SETUP_LIBRARY_RELEASE)
+  message(WARNING "Boost.Log (setup) not found.  This might be an error, but is more likely to be harmless (no library available)")
+  set(Boost_LOG_SETUP_LIBRARY_RELEASE "" CACHE FILEPATH "Logging (setup) is probably missing for this Boost version" FORCE)
+endif()
+
+find_package(Boost 1.53 REQUIRED
              COMPONENTS date_time filesystem system iostreams
-                        log log_setup program_options regex)
+                        program_options regex)
 
 include(CheckIncludeFileCXX)
 include(CheckCXXSourceCompiles)
@@ -53,6 +70,57 @@ set(CMAKE_REQUIRED_DEFINITIONS_SAVE ${CMAKE_REQUIRED_DEFINITIONS})
 set(CMAKE_REQUIRED_DEFINITIONS ${CMAKE_REQUIRED_DEFINITIONS} -DBOOST_ALL_DYN_LINK -DBOOST_ALL_NO_LIB)
 set(CMAKE_REQUIRED_INCLUDES_SAVE ${CMAKE_REQUIRED_INCLUDES})
 set(CMAKE_REQUIRED_INCLUDES ${CMAKE_REQUIRED_INCLUDES} ${Boost_INCLUDE_DIRS})
+
+check_include_file_cxx(boost/log/core.hpp OME_HAVE_BOOST_LOG)
+
+# Geometry headers have missing iostream include
+check_cxx_source_compiles(
+"#include <iostream>
+#include <boost/geometry/index/rtree.hpp>
+
+int main() {}"
+OME_HAVE_BOOST_GEOMETRY_INDEX_RTREE_HPP)
+
+if(NOT OME_HAVE_BOOST_GEOMETRY_INDEX_RTREE_HPP)
+  message(WARNING "Spatial indexes not available with this version of Boost.Geometry; tile coverage lookups will have reduced performance (linear scan replacing quadratic R*Tree)")
+endif()
+
+set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
+set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY_RELEASE} ${Boost_SYSTEM_LIBRARY_RELEASE})
+# boost::filesystem in -lboost_filesystem
+check_cxx_source_compiles(
+"#include <boost/filesystem.hpp>
+
+int main() {
+  boost::filesystem::is_directory(\"/\");
+}"
+BOOST_FILESYSTEM_LINK)
+set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SAVE})
+
+set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
+set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY_RELEASE} ${Boost_SYSTEM_LIBRARY_RELEASE})
+# boost::filesystem in -lboost_filesystem
+check_cxx_source_compiles(
+"#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
+
+int main() {
+  boost::filesystem::path absolutefile = boost::filesystem::absolute(boost::filesystem::path(\"/tmp/../foobar\"));
+}"
+OME_HAVE_BOOST_FILESYSTEM_ABSOLUTE)
+set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SAVE})
+
+set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
+set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} ${Boost_FILESYSTEM_LIBRARY_RELEASE} ${Boost_SYSTEM_LIBRARY_RELEASE})
+# boost::filesystem in -lboost_filesystem
+check_cxx_source_compiles(
+"#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
+
+int main() {
+  boost::filesystem::path canonicalfile = boost::filesystem::canonical(boost::filesystem::path(\"/tmp/../foobar\"));
+}"
+OME_HAVE_BOOST_FILESYSTEM_CANONICAL)
 
 # boost::variant/boost::mpl list size limits
 check_cxx_source_compiles("
