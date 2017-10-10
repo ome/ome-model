@@ -153,8 +153,7 @@ extlinks = {
     'ome-files' : (oo_root + '/ome-files/%s', ''), 
     'partners' : (oo_root + '/commercial-partners/%s', ''),
     'schema' : (oo_root + '/Schemas/%s', ''),
-    # Old plone links still to be copied to new site
-    'about_plone' : (oo_site_root + '/about/%s', ''),
+    'citing' : (oo_root + '/citing-ome/%s', ''),
     # Help links
     'help' : (help_root + '/%s', ''),
     # Miscellaneous links
@@ -178,8 +177,8 @@ extlinks = {
     'bf_doc' : (docs_root + '/latest/bio-formats/%s', ''),
     'schema_doc' : (oo_root + '/Schemas/Documentation/Generated/OME-' + model_version + '/%s', ''),
     # Downloads
-    'bf_downloads' : (downloads_root + '/latest/bio-formats/%s', ''),
-    'cpp_downloads' : (downloads_root + '/latest/ome-files-cpp/%s', ''),
+    'bf_downloads' : (oo_root + '/bio-formats/downloads/%s', ''),
+    'cpp_downloads' : (oo_root + '/ome-files/downloads/%s', ''),
     'image_downloads' : (downloads_root + '/images/%s', ''),
     'ometiff_downloads' : (downloads_root + '/images/OME-TIFF/' + model_version + '/%s', ''),
     'omexml_downloads' : (downloads_root + '/images/OME-XML/' + model_version + '/%s', ''),

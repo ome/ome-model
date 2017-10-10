@@ -35,8 +35,7 @@ with OME-XML and OME-TIFF:
 
 
 If you have used OME-XML, OME-TIFF, Bio-Formats or OMERO in your work please
-use the :about_plone:`correct citations <licensing-attribution/citing-ome>` to
-acknowledge us.
+use the :citing:`correct citations <>` to acknowledge us.
 
 We have received support from several companies who use our file formats, for
 details see our list of :partners:`Partners <>`.

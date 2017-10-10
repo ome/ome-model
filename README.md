@@ -12,8 +12,8 @@ Links
 - [Documentation](https://docs.openmicroscopy.org/latest/ome-model/)
 - [C++ API reference](http://www.openmicroscopy.org/site/support/ome-files-cpp/ome-xml/api/html/namespaces.html)
 - [Java API reference](http://javadoc.io/doc/org.openmicroscopy/ome-xml/)
-- [OME-TIFF sample images](http://downloads.openmicroscopy.org/images/OME-TIFF/)
-- [OME-XML sample images](http://downloads.openmicroscopy.org/images/OME-XML/)
+- [OME-TIFF sample images](https://downloads.openmicroscopy.org/images/OME-TIFF/)
+- [OME-XML sample images](https://downloads.openmicroscopy.org/images/OME-XML/)
 
 More information
 ----------------
@@ -30,7 +30,7 @@ following before submitting a pull request:
  * verify that the branch compiles using Maven
  * verify that the branch does not use syntax or API specific to Java 1.8+
  * internal developers only: [run the data
-   tests](http://www.openmicroscopy.org/site/support/bio-formats/developers/commit-testing.html)
+   tests](https://docs.openmicroscopy.org/latest/bio-formats/developers/commit-testing.html)
    against directories corresponding to the affected format(s)
  * make sure that your commits contain the correct authorship information and,
    if necessary, a signed-off-by line

@@ -34,7 +34,7 @@ OME-TIFF is supported by:
 * `Bitplane AG <http://www.bitplane.com/>`_
 * `Carl Zeiss Microscopy GmbH <https://www.zeiss.com/microscopy/int/home.html>`_
 * `Definiens <http://www.definiens.com>`_
-* `DRVision Technologies LLC <http://www.svisionllc.com/>`_
+* `DRVision Technologies LLC <https://www.drvtechnologies.com>`_
 * `iMagic <http://www.imagic.ch/index.php?id=15&L=2/>`_
 * `Intelligent Imaging Innovations, Inc. <https://www.intelligent-imaging.com>`_
 * `Leica Inc. <http://www.leica-microsystems.com/>`_
