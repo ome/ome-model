@@ -10,7 +10,7 @@ An OME-TIFF dataset consists of:
 
 - one or more files in standard TIFF format with the file extension
   ``.ome.tif`` or ``.ome.tiff`` or
-  `BigTIFF format <http://www.awaresystems.be/imaging/tiff/bigtiff.html>`_
+  `BigTIFF format <https://www.awaresystems.be/imaging/tiff/bigtiff.html>`_
   with one of these same file extensions or a BigTIFF-specific
   extension ``.ome.tf2``, ``.ome.tf8`` or ``.ome.btf``
 - a string of OME-XML metadata embedded in the ImageDescription tag of the
@@ -46,7 +46,7 @@ specification) shows the organization of a TIFF header along with the
 placement of the OME-XML metadata block.  Note this is for the TIFF
 standard specification only; the header structure is slightly
 different for BigTIFF; see the `BigTIFF file format specification
-<http://www.awaresystems.be/imaging/tiff/bigtiff.html>`__. A TIFF file can
+<https://www.awaresystems.be/imaging/tiff/bigtiff.html>`__. A TIFF file can
 contain any number of IFDs, with each one specifying an image plane along with
 certain accompanying metadata such as pixel dimensions, physical
 dimensions, bit depth, color table, etc. One of the fields an IFD can
