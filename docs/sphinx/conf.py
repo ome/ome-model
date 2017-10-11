@@ -124,7 +124,6 @@ jenkins_view_root = jenkins_root + '/view'
 cvs_root = 'http://cvs.openmicroscopy.org.uk'
 trac_root = 'https://trac.openmicroscopy.org/ome'
 oo_root = 'https://www.openmicroscopy.org'
-oo_site_root = oo_root + '/site'
 lists_root = 'http://lists.openmicroscopy.org.uk'
 downloads_root = 'https://downloads.openmicroscopy.org'
 help_root = 'http://help.openmicroscopy.org'
@@ -191,7 +190,7 @@ rst_epilog = """
 .. _Jenkins: http://jenkins-ci.org
 .. _roadmap: https://trac.openmicroscopy.org/ome/roadmap
 .. _OME artifactory: http://artifacts.openmicroscopy.org
-.. _Open Microscopy Environment: http://www.openmicroscopy.org/site
+.. _Open Microscopy Environment: https://www.openmicroscopy.org/
 .. _Glencoe Software, Inc.: http://www.glencoesoftware.com/
 .. _Pillow: http://pillow.readthedocs.org
 .. _Matplotlib: http://matplotlib.org/

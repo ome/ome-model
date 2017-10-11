@@ -20,7 +20,7 @@
 
   <name>OME Model documentation</name>
   <description>Documentation for the OME imaging metadata model specification and implementation.</description>
-  <url>http://www.openmicroscopy.org/site/support/ome-model/ome-xml/java-library.html</url>
+  <url>https://docs.openmicroscopy.org/latest/ome-model/</url>
   <inceptionYear>2006</inceptionYear>
 
   <licenses>
