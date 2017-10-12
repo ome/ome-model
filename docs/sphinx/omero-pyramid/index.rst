@@ -18,5 +18,10 @@ Images with pixel type ``uint32``, ``float`` (32-bit floating point), or ``doubl
 an OMERO pyramid.  Pyramid files larger than 4 gigabytes are supported, as are pyramids containing multiple channels,
 Z sections, and/or timepoints.
 
-Each pyramid contains 5 resolutions for each image plane, with each resolution stored in descending order from largest to smallest XY size.
-Each resolution is half the width and height of the previous resolution.
+Each pyramid contains multiple resolutions for each image plane, with each resolution stored in descending order from largest to smallest XY size.
+Each resolution is half the width and height of the previous resolution.  OMERO by default writes 5 resolutions, but this is an implementation
+detail and not a limitation of the file format.
+
+One IFD is required to be stored for each image plane, but every resolution for a given plane is encapsulated in that plane's single IFD.
+Additional IFDs for each resolution are not expected; any IFDs that do not represent a JPEG-2000 stream with multiple decompression
+levels will be ignored.
