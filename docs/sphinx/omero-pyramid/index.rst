@@ -1,12 +1,15 @@
 The OMERO pyramid format
 ========================
 
+The OMERO pyramid format is a way of storing very large images for easier visualization.
+Currently only v1.0.0 is currently defined.
+
+.. seealso::
+
+  :bf_doc:`Working with whole slide images <developers/wsi.html>`
+
 v1.0.0
 ------
-
-For files that contain very large images and are not in a format that supports pyramids, OMERO will generate its own
-image pyramid to improve visualization performance.  Bio-Formats can read these generated pyramids, but cannot
-currently write them outside of OMERO.  For details of how to read image pyramids with Bio-Formats, see :bf_doc:`Working with whole slide images <developers/wsi.html>`
 
 The OMERO pyramid format is a :bf_doc:`TIFF <formats/tiff.html>` file containing JPEG-2000 compressed image tiles.  All resolutions for a tile
 are encoded in the same JPEG-2000 stream, using the "decompression levels" feature of JPEG-2000.
