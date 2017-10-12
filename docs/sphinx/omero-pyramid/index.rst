@@ -1,5 +1,8 @@
-Internal OMERO pyramid format v1.0.0
-====================================
+The OMERO pyramid format
+========================
+
+v1.0.0
+------
 
 For files that contain very large images and are not in a format that supports pyramids, OMERO will generate its own
 image pyramid to improve visualization performance.  Bio-Formats can read these generated pyramids, but cannot
