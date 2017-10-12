@@ -17,9 +17,3 @@ Z sections, and/or timepoints.
 
 Each pyramid contains 5 resolutions for each image plane, with each resolution stored in descending order from largest to smallest XY size.
 Each resolution is half the width and height of the previous resolution.
-
-OMERO handles pyramid generation automatically for files that do not already have a stored pyramid, use a supported pixel type,
-and have images that exceed a specific XY size.  The default XY size threshold is 3192×3192, but this can be configured in OMERO if necessary.
-Common formats for which a pyramid will be generated include :bf_doc:`Gatan DM3 <formats/gatan-digital-micrograph.html>`,
-:bf_doc:`MRC <formats/mrc.html>`, and :bf_doc:`TIFF <formats/tiff.html>`.  Dedicated whole slide imaging formats such as :bf_doc:`SVS <formats/aperio-svs-tiff.html>`
-typically contain their own image pyramid, in which case an OMERO pyramid will not be generated.
