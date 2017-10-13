@@ -2,7 +2,7 @@ The OMERO pyramid format
 ========================
 
 The OMERO pyramid format is a way of storing very large images for easier visualization.
-Currently only v1.0.0 is currently defined.
+Currently only v1.0.0 is defined.
 
 .. seealso::
 
