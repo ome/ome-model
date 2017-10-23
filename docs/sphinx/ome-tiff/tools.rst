@@ -48,7 +48,7 @@ the ``xmllint`` program:
     $ xmllint --format file.xml
 
 Here is a Perl script that uses
-`XML::LibXML <http://search.cpan.org/dist/XML-LibXML/LibXML.pod>`_ to
+`XML::LibXML <https://metacpan.org/release/XML-LibXML>`_ to
 "pretty print" an XML document with appropriate whitespace:
 
 ::
