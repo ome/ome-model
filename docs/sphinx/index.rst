@@ -73,6 +73,16 @@ OME-XML
     ome-tiff/tools
     ome-xml/java-library
 
+*************
+OMERO Pyramid
+*************
+
+.. toctree::
+    :maxdepth: 1
+    :titlesonly:
+
+    omero-pyramid/index
+
 *******************
 File specifications
 *******************
