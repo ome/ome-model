@@ -85,6 +85,8 @@ def usage(error):
     """
     java = language.create("Java", config.DEFAULT_NAMESPACE, "/path/to/schemas")
     cpp = language.create("C++", config.DEFAULT_NAMESPACE, "/path/to/schemas")
+    pybind11 = language.create("pybind11", config.DEFAULT_NAMESPACE,
+                               "/path/to/schemas")
 
     cmd = sys.argv[0]
     print("""Error: %s
@@ -135,9 +137,16 @@ Default C++ OME-XML quantity package: "%s"
 Default C++ metadata package: "%s"
 Default C++ OME-XML metadata package: "%s"
 
+Default pybind11 OME-XML package: "%s"
+Default pybind11 OME-XML enum package: "%s"
+Default pybind11 OME-XML quantity package: "%s"
+Default pybind11 metadata package: "%s"
+Default pybind11 OME-XML metadata package: "%s"
+
 Examples:
   %s -l Java -n '%s' --ome-xml-model-package=%s -o omexml /path/to/schemas/ome.xsd
   %s -l C++ -n '%s' --ome-xml-model-package=%s -o omexml /path/to/schemas/ome.xsd
+  %s -l pybind11 -n '%s' --ome-xml-model-package=%s -o omexml /path/to/schemas/ome.xsd
 
 Report bugs to OME Devel <ome-devel@lists.openmicroscopy.org.uk>""" % \
     (error,
@@ -145,8 +154,10 @@ Report bugs to OME Devel <ome-devel@lists.openmicroscopy.org.uk>""" % \
      java.modelNamespace,
      java.omexml_model_package, java.omexml_model_enums_package, java.omexml_model_omexml_model_enum_handlers_package, java.metadata_package, java.omexml_metadata_package,
      cpp.omexml_model_package, cpp.omexml_model_enums_package, cpp.omexml_model_quantity_package, cpp.metadata_package, cpp.omexml_metadata_package,
+     pybind11.omexml_model_package, pybind11.omexml_model_enums_package, pybind11.omexml_model_quantity_package, pybind11.metadata_package, pybind11.omexml_metadata_package,
      cmd, java.modelNamespace, java.omexml_model_package,
-     cmd, cpp.modelNamespace, cpp.omexml_model_package))
+     cmd, cpp.modelNamespace, cpp.omexml_model_package,
+     cmd, pybind11.modelNamespace, pybind11.omexml_model_package))
     sys.exit(2)
 
 def main(model, opts):
@@ -347,12 +358,12 @@ def enumTypesIncludeAll(model, opts):
     used_files.add(os.path.realpath(opts.lang.templatepath('ENUM_INCLUDEALL')))
     headers = model.getEnumHeaders()
 
-    fullname = opts.lang.generatedFilename("enums", language.TYPE_HEADER)
+    fullname = opts.lang.generatedFilename("enums", opts.filetype)
     fullname = os.path.join("ome", "xml", "model", fullname)
 
     fu.GUARD = guard(fullname)
     fu.CLASS_PREFIX = class_prefix(fullname)
-    fu.SOURCE_TYPE = language.TYPE_HEADER;
+    fu.SOURCE_TYPE = opts.filetype;
     fu.HEADERS = sorted(headers);
 
     fullname = os.path.join(opts.outdir, fullname)
