@@ -123,12 +123,11 @@ jenkins_view_root = jenkins_root + '/view'
 # Variables used to define other extlinks
 cvs_root = 'http://cvs.openmicroscopy.org.uk'
 trac_root = 'https://trac.openmicroscopy.org/ome'
-oo_root = 'http://www.openmicroscopy.org'
-oo_site_root = oo_root + '/site'
+oo_root = 'https://www.openmicroscopy.org'
 lists_root = 'http://lists.openmicroscopy.org.uk'
-downloads_root = 'http://downloads.openmicroscopy.org'
+downloads_root = 'https://downloads.openmicroscopy.org'
 help_root = 'http://help.openmicroscopy.org'
-docs_root = 'http://docs.openmicroscopy.org'
+docs_root = 'https://docs.openmicroscopy.org'
 
 # Edit on GitHub prefix
 edit_on_github_prefix = 'docs/sphinx'
@@ -153,8 +152,7 @@ extlinks = {
     'ome-files' : (oo_root + '/ome-files/%s', ''), 
     'partners' : (oo_root + '/commercial-partners/%s', ''),
     'schema' : (oo_root + '/Schemas/%s', ''),
-    # Old plone links still to be copied to new site
-    'about_plone' : (oo_site_root + '/about/%s', ''),
+    'citing' : (oo_root + '/citing-ome/%s', ''),
     # Help links
     'help' : (help_root + '/%s', ''),
     # Miscellaneous links
@@ -178,8 +176,8 @@ extlinks = {
     'bf_doc' : (docs_root + '/latest/bio-formats/%s', ''),
     'schema_doc' : (oo_root + '/Schemas/Documentation/Generated/OME-' + model_version + '/%s', ''),
     # Downloads
-    'bf_downloads' : (downloads_root + '/latest/bio-formats/%s', ''),
-    'cpp_downloads' : (downloads_root + '/latest/ome-files-cpp/%s', ''),
+    'bf_downloads' : (oo_root + '/bio-formats/downloads/%s', ''),
+    'cpp_downloads' : (oo_root + '/ome-files/downloads/%s', ''),
     'image_downloads' : (downloads_root + '/images/%s', ''),
     'ometiff_downloads' : (downloads_root + '/images/OME-TIFF/' + model_version + '/%s', ''),
     'omexml_downloads' : (downloads_root + '/images/OME-XML/' + model_version + '/%s', ''),
@@ -192,7 +190,7 @@ rst_epilog = """
 .. _Jenkins: http://jenkins-ci.org
 .. _roadmap: https://trac.openmicroscopy.org/ome/roadmap
 .. _OME artifactory: http://artifacts.openmicroscopy.org
-.. _Open Microscopy Environment: http://www.openmicroscopy.org/site
+.. _Open Microscopy Environment: https://www.openmicroscopy.org/
 .. _Glencoe Software, Inc.: http://www.glencoesoftware.com/
 .. _Pillow: http://pillow.readthedocs.org
 .. _Matplotlib: http://matplotlib.org/

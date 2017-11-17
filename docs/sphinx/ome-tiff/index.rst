@@ -30,15 +30,15 @@ Support
 OME-TIFF is supported by:
 
 * `Accelrys Inc. <http://accelrys.com/>`_
-* `GE Healthcare Life Sciences (formerly Applied Precision) <http://www.gelifesciences.com/webapp/wcs/stores/servlet/catalog/en/GELifeSciences-UK/brands/deltavision/>`_
+* `GE Healthcare Life Sciences (formerly Applied Precision) <http://www.gelifesciences.com/webapp/wcs/stores/servlet/catalog/en/GELifeSciences/brands/deltavision/>`_
 * `Bitplane AG <http://www.bitplane.com/>`_
 * `Carl Zeiss Microscopy GmbH <https://www.zeiss.com/microscopy/int/home.html>`_
 * `Definiens <http://www.definiens.com>`_
-* `DRVision Technologies LLC <http://www.svisionllc.com/>`_
+* `DRVision Technologies LLC <https://www.drvtechnologies.com>`_
 * `iMagic <http://www.imagic.ch/index.php?id=15&L=2/>`_
 * `Intelligent Imaging Innovations, Inc. <https://www.intelligent-imaging.com>`_
 * `Leica Inc. <http://www.leica-microsystems.com/>`_
-* `Mayachitra Inc. <http://www.mayachitra.com/>`_
+* `Mayachitra Inc. <http://mayachitra.com/>`_
 * `Micro-Manager <https://micro-manager.org/wiki/>`_
 * `Molecular Devices Inc. <https://www.moleculardevices.com>`_
 * `PerkinElmer <http://www.perkinelmer.com/>`_

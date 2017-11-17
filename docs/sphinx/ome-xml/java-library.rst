@@ -10,8 +10,9 @@ metadata processing facilities form the backbone of the
 Download
 --------
 
-You can download **ome-xml.jar** from the 
-:bf_downloads:`Bio-Formats downloads <>` page. The
+**ome-xml.jar** is included in **bioformats_package.jar** available to
+download from the :bf_downloads:`Bio-Formats download page <>`. Alternatively,
+the individual artifact **ome-xml.jar** is hosted at `Maven Central <http://search.maven.org/>`_ under the group ``org.openmicroscopy``. The
 license is `LGPL <http://www.gnu.org/licenses/lgpl.html>`_.
 
 Installation
