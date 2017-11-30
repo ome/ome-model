@@ -30,7 +30,7 @@ Support
 OME-TIFF is supported by:
 
 * `Accelrys Inc. <http://accelrys.com/>`_
-* `GE Healthcare Life Sciences (formerly Applied Precision) <http://www.gelifesciences.com/webapp/wcs/stores/servlet/catalog/en/GELifeSciences/brands/deltavision/>`_
+* `GE Healthcare Life Sciences (formerly Applied Precision) <https://www.gelifesciences.com>`_
 * `Bitplane AG <http://www.bitplane.com/>`_
 * `Carl Zeiss Microscopy GmbH <https://www.zeiss.com/microscopy/int/home.html>`_
 * `Definiens <http://www.definiens.com>`_
