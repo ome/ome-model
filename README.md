@@ -10,7 +10,7 @@ Links
 -----
 
 - [Documentation](https://docs.openmicroscopy.org/latest/ome-model/)
-- [C++ API reference](http://www.openmicroscopy.org/site/support/ome-files-cpp/ome-xml/api/html/namespaces.html)
+- [C++ API reference](https://docs.openmicroscopy.org/latest/ome-files-cpp/ome-xml/api/html/namespaces.html)
 - [Java API reference](http://javadoc.io/doc/org.openmicroscopy/ome-xml/)
 - [OME-TIFF sample images](https://downloads.openmicroscopy.org/images/OME-TIFF/)
 - [OME-XML sample images](https://downloads.openmicroscopy.org/images/OME-XML/)
