@@ -37,7 +37,7 @@ OME-TIFF is supported by:
 * `DRVision Technologies LLC <https://www.drvtechnologies.com>`_
 * `iMagic <http://www.imagic.ch/index.php?id=15&L=2/>`_
 * `Intelligent Imaging Innovations, Inc. <https://www.intelligent-imaging.com>`_
-* `Leica Inc. <http://www.leica-microsystems.com/>`_
+* `Leica Inc. <https://www.leica-microsystems.com/>`_
 * `Mayachitra Inc. <http://mayachitra.com/>`_
 * `Micro-Manager <https://micro-manager.org/wiki/>`_
 * `Molecular Devices Inc. <https://www.moleculardevices.com>`_
