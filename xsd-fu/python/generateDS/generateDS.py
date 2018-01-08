@@ -99,7 +99,10 @@ from xml.sax import handler, make_parser
 import xml.sax.xmlreader
 import logging
 import keyword
-import StringIO
+try:
+  from StringIO import StringIO
+except ImportError:
+  from io import StringIO
 from collections import OrderedDict
 import six
 from six.moves import range
@@ -4238,7 +4241,7 @@ def parseAndGenerate(outfileName, subclassFilename, prefix,
     if processIncludes:
         from . import process_includes
         process_includes.DIRPATH = Dirpath
-        outfile = StringIO.StringIO()
+        outfile = StringIO()
         process_includes.process_include_files(infile, outfile)
         outfile.seek(0)
 ##         #
