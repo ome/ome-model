@@ -56,7 +56,7 @@
     return False
 
   def sorted_properties(o):
-    return sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
+    return sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
 %}\
 \
 \
@@ -291,12 +291,12 @@ namespace ome
          * Set the text value of ${o.name}.
          *
          * @param value text value.
-{% for param in indexes[o.name].items()[0][1] %}\
+{% for param in list(indexes[o.name].values())[0] %}\
          * @param ${param['argname']} the ${param['type']} index.
 {% end for %}\
          */
         virtual void
-        set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])}) = 0;
+        set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])}) = 0;
 
 {% end header%}\
 {% end %}\
@@ -311,7 +311,7 @@ namespace ome
 {% end debug %}\
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% if debug %}\
         // ${prop.minOccurs}:${prop.maxOccurs}
         // Is multi path? ${is_multi_path[o.name]}
@@ -346,7 +346,7 @@ ${setter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\

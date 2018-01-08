@@ -347,7 +347,7 @@ ${customContent[obj.name][prop.name]}
     return False
 
   def sorted_properties(o):
-    return sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
+    return sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
 
   def accessor_string(name, max_occurs, level, concreteName=None):
     """Makes a C++ method accessor string from an index name."""
@@ -913,11 +913,11 @@ namespace ome
 {% end debug %}\
         // Documented in base class.
         void
-        set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])});
+        set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])});
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       void
-      OMEXMLMetadata::set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])})
+      OMEXMLMetadata::set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])})
       {
         if (root->sizeOfImageList() == imageIndex)
           {
@@ -950,11 +950,11 @@ namespace ome
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in base class.
         ${o.langBaseType}
-        get${o.name}Value(${indexes_string(indexes[o.name].items()[0][1])}) const;
+        get${o.name}Value(${indexes_string(list(indexes[o.name].values())[0])}) const;
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       ${o.langBaseType}
-      OMEXMLMetadata::get${o.name}Value(${indexes_string(indexes[o.name].items()[0][1])}) const
+      OMEXMLMetadata::get${o.name}Value(${indexes_string(list(indexes[o.name].values())[0])}) const
       {
         const char * const image_method("get${o.name}Value [getImage]");
         const char * const pixels_method("get${o.name}Value [getPixels]");
@@ -1060,7 +1060,7 @@ ${counter(k, o, v)}\
 {% end header %}\
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% if fu.SOURCE_TYPE == "header" %}\
 {% if debug %}\
         // ${prop.minOccurs}:${prop.maxOccurs}
@@ -1100,7 +1100,7 @@ ${getter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\
@@ -1217,7 +1217,7 @@ ${getter(k, o, prop, v)}\
 {% end header %}\
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% if fu.SOURCE_TYPE == "header" %}\
 {% if debug %}\
         // ${prop.minOccurs}:${prop.maxOccurs}
@@ -1256,7 +1256,7 @@ ${setter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\

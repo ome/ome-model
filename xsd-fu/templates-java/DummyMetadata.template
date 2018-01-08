@@ -69,7 +69,7 @@
     return False
 
   def sorted_properties(o):
-    return sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
+    return sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
 
   def accessor_string(name, max_occurs, level, concreteName=None):
     """Makes a Java method accessor string from an index name."""
@@ -258,11 +258,11 @@ public class DummyMetadata implements IMetadata
 {% if o.langBaseType != 'Object' %}\
   // Element's text data
   // ${repr(indexes[o.name])}
-  public void set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])})
+  public void set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])})
   {
   }
 
-  public ${o.langBaseType} get${o.name}Value(${indexes_string(indexes[o.name].items()[0][1])})
+  public ${o.langBaseType} get${o.name}Value(${indexes_string(list(indexes[o.name].values())[0])})
   {
     return null;
   }
@@ -323,7 +323,7 @@ ${counter(k, o, v)}\
 
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% if debug %}\
   // ${prop.minOccurs}:${prop.maxOccurs}
   // Is multi path? ${is_multi_path[o.name]}
@@ -366,7 +366,7 @@ ${getter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\
@@ -435,7 +435,7 @@ ${getter(k, o, prop, v)}\
 
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% if debug %}\
   // ${prop.minOccurs}:${prop.maxOccurs}
   // Is multi path? ${is_multi_path[o.name]}
@@ -467,7 +467,7 @@ ${getter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\

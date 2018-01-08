@@ -124,7 +124,7 @@
     return False
 
   def sorted_properties(o):
-    return sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
+    return sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
 
   def accessor_string(name, max_occurs, level, concreteName=None):
     """Makes a Java method accessor string from an index name."""
@@ -499,11 +499,11 @@ namespace ome
 {% end debug %}\
         // Documented in base class.
         void
-        set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])});
+        set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])});
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       void
-      DummyMetadata::set${o.name}Value(${o.langBaseType}, ${indexes_string_dummy(indexes[o.name].items()[0][1])})
+      DummyMetadata::set${o.name}Value(${o.langBaseType}, ${indexes_string_dummy(list(indexes[o.name].values())[0])})
       {
       }
 {% end source %}\
@@ -511,11 +511,11 @@ namespace ome
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in base class.
         ${o.langBaseType}
-        get${o.name}Value(${indexes_string(indexes[o.name].items()[0][1])}) const;
+        get${o.name}Value(${indexes_string(list(indexes[o.name].values())[0])}) const;
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       ${o.langBaseType}
-      DummyMetadata::get${o.name}Value(${indexes_string_dummy(indexes[o.name].items()[0][1])}) const
+      DummyMetadata::get${o.name}Value(${indexes_string_dummy(list(indexes[o.name].values())[0])}) const
       {
         throw MetadataException("DummyMetadata", "get${o.name}Value",
                                 "intentionally not implemented");
@@ -617,7 +617,7 @@ ${counter(k, o, v)}\
 {% end debug %}\
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% if debug %}\
         // ${prop.minOccurs}:${prop.maxOccurs}
         // Is multi path? ${is_multi_path[o.name]}
@@ -658,7 +658,7 @@ ${getter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\
@@ -766,7 +766,7 @@ ${getter(k, o, prop, v)}\
 {% end debug %}\
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% if debug %}\
         // ${prop.minOccurs}:${prop.maxOccurs}
         // Is multi path? ${is_multi_path[o.name]}
@@ -807,7 +807,7 @@ ${setter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\
