@@ -1,25 +1,13 @@
 The OME-XML format
 ==================
 
-OME-XML is a project to provide support for the exchange of microscope
-imaging data within the field of life sciences. Its key aspects include
-support for collaborative sharing of data between labs who may be using
-different apparatus, and the safeguarding of crucial metadata associated
-with image files, that can be lost when they are moved across systems (or
-in many cases, never recorded at all).
+OME-XML is a `file format <https://en.wikipedia.org/wiki/File_format>`_
+for storing microscopy information (both pixels and metadata) using the
+OME-XML data model.
 
-The term "OME-XML" applies to two interrelated but distinct things:
-
-#. A `data model <https://en.wikipedia.org/wiki/Data_model>`_ for
-   representing microscopy metadata, for use with microscopy file
-   formats, expressed as an `XML <https://en.wikipedia.org/wiki/XML>`_
-   schema.
-#. A `file format <https://en.wikipedia.org/wiki/File_format>`_ for
-   storing microscopy information (both pixels and metadata) using the
-   OME-XML data model.
-
-.. note:: OME-XML as a file format is somewhat superseded by OME-TIFF, which 
-    is the preferred container format for OME-XML encoded metadata.
+.. note:: OME-XML as a file format is superseded by OME-TIFF, which 
+    is the preferred container format for image data making use of the
+    OME Data Model.
 
 The purpose of OME-XML is to provide a rich, extensible way to save
 information concerning microscopy experiments and the images acquired
@@ -33,9 +21,9 @@ therein, including:
 -  the settings used with said hardware (e.g. physical size of the image
    planes in microns, laser gain and offset, channel configuration)
 -  the person performing the experiment
--  some details on the experiment itself, such as a description, what
-   type of experiment (e.g. FRET, time lapse, fluorescence lifetime)
-   and events occurring during the acquisition (e.g. laser ablation, stage
+-  some details regarding the experiment itself, such as a description,
+   the type of experiment (e.g. FRET, time lapse, fluorescence lifetime)
+   and events occurring during acquisition (e.g. laser ablation, stage
    motion)
 -  additional custom information you may wish to provide about your
    experiment in a structured form (known as 
@@ -86,33 +74,5 @@ Migrating or sharing data with OME-XML
 --------------------------------------
 
 Data saved in an OME-XML file is easily read by any software capable of
-reading and interpreting OME-XML. OME software tools can export and
-import OME-XML files, but any OME-XML-aware software can be used.
-
-In the figure :ref:`figure-data-workflow`, microscope image data is imported 
-into My OME Database (more accurately, an instance of OME managing image data 
-at one location). After a set of analyses is performed, this data is exported
-in its entirety (i.e. including binary image data, image metadata, and
-the associated analytic results) and then passed to a collaborator's OME
-database ("Your OME Database"). This strategy packages analytic data
-together with the image data to ensure none of the critical
-interpretative information is lost.
-
-.. _figure-data-workflow:
-
-.. figure:: /images/OMEXML.png
-   :align: center
-   :alt: Data Workflow
-
-   Data Workflow
-
-
-Ongoing development
--------------------
-
-The ongoing development of the OME-XML data model can be tracked on
-https://trac.openmicroscopy.org/ome.
-
-Users can also add work tickets to the system detailing any changes they
-feel should be made.
-
+reading and interpreting XML. OME software tools can export and
+import OME-XML files, but any software capable of reading XML may be used.
