@@ -604,7 +604,8 @@ class Translator(DirectiveFactory):
         QName('style'), QName('http://www.w3.org/1999/xhtml}style')
     ])
     INCLUDE_ATTRS = frozenset([
-        'abbr', 'alt', 'label', 'prompt', 'standby', 'summary', 'title'
+        'abbr', 'alt', 'label', 'prompt', 'standby', 'summary', 'title',
+        'placeholder',
     ])
     NAMESPACE = I18N_NAMESPACE
 
@@ -1048,7 +1049,13 @@ class MessageBuffer(object):
 
         while parts:
             order, string = parts.pop(0)
-            events = self.events[order].pop(0)
+            events = self.events[order]
+            if events:
+                events = events.pop(0)
+            else:
+                # create a dummy empty text event so any remaining
+                # part of the translation can be processed.
+                events = [(TEXT, "", (None, -1, -1))]
             parts_counter[order].pop()
 
             for event in events:
