@@ -25,6 +25,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import absolute_import
 import logging
 
 from ome.modeltools import config
@@ -79,7 +80,7 @@ class OMEModelEntity(object):
         if match is None:
             raise ModelProcessingError(
                 'No prefix match for %s on %s' % (v, self.name))
-        prefix, = filter(None, match.groups())
+        prefix, = [_f for _f in match.groups() if _f]
         return prefix.lower() + v[len(prefix):]
 
     def _get_argumentName(self):

@@ -33,6 +33,8 @@ Toolkit for working with enumerations from one or more OME XML
 # POSSIBILITY OF SUCH DAMAGE.
 
 
+from __future__ import absolute_import
+from __future__ import print_function
 import logging
 import sys
 import os
@@ -51,7 +53,7 @@ def usage(error):
 	Prints usage so that we don't have to. :)
 	"""
 	cmd = sys.argv[0]
-	print """%s
+	print("""%s
 Usage: %s (-t | -x | -d <file>) [path/to/ome.xsd]
 Toolkit for working with enumerations from an OME XML Schema definition.
 
@@ -72,7 +74,7 @@ Examples:
   %s -d cfg/example.cfg
 
 Report bugs to OME-Devel <ome-devel@lists.openmicroscopy.org.uk""" % \
-	(error, cmd, config.DEFAULT_NAMESPACE, cmd, cmd, cmd)
+	(error, cmd, config.DEFAULT_NAMESPACE, cmd, cmd, cmd))
 	sys.exit(2)
 
 def resolve_paths(paths, level, names):
@@ -99,12 +101,12 @@ def dump(model):
 				paths = list()
 				resolve_paths(paths, 0, parents)
 				for path in paths:
-					print path
-				print "  +-- %s" % obj.name
-				print "    +-- %s(%s)" % (prop.name, prop.type)
+					print(path)
+				print("  +-- %s" % obj.name)
+				print("    +-- %s(%s)" % (prop.name, prop.type))
 				for value in prop.possibleValues:
-					print "      +-- %s" % value
-	print "\nTotal enumerations: %d" % count
+					print("      +-- %s" % value)
+	print("\nTotal enumerations: %d" % count)
 
 def resolve_xpaths(xpaths, suffix, names):
 	"""
@@ -146,7 +148,7 @@ def dump_xpath(model):
 	hierarchically.
 	"""
 	for xpath in build_xpaths(model).keys():
-		print xpath
+		print(xpath)
 
 def diff_enumerations(old, old_ns, new, new_ns, xpaths):
 	"""Diffs all enumerations from two XSD files."""
@@ -160,12 +162,13 @@ def diff_enumerations(old, old_ns, new, new_ns, xpaths):
 		new_values = new_xpaths[new_xpath]['property'].possibleValues
 		for old_value in old_values:
 			if old_value not in new_values:
-				print "%s:%s not in %s" % (old_xpath, old_value, new_xpath)
+				print("%s:%s not in %s" % (old_xpath, old_value, new_xpath))
 
 if __name__ == '__main__':
 	try:
 		options, args = getopt(sys.argv[1:], "txd:n:")
-	except GetoptError, (msg, opt):
+	except GetoptError as xxx_todo_changeme:
+		(msg, opt) = xxx_todo_changeme.args
 		usage(msg)
 
 	namespace = config.DEFAULT_NAMESPACE

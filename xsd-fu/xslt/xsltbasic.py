@@ -28,6 +28,8 @@
 #  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #  SUCH DAMAGE.
 
+from __future__ import absolute_import
+from __future__ import print_function
 import unittest
 
 from copy import deepcopy
@@ -35,6 +37,7 @@ from copy import deepcopy
 # We're using lxml's ElementTree implementation for XML manipulation due to
 # its XSLT integration.
 from lxml.etree import Element
+from six.moves import range
 
 # Handle Python 2.5 built-in ElementTree
 # try:
@@ -264,14 +267,14 @@ class XsltBasic(unittest.TestCase):
             newValue = newElement.get(mappedKey)
             oldValue = oldElement.get(key)
             if(oldValue != newValue):
-                print 'FAILURE in xsltbasic.compareAttributes'
-                print 'EXCEPTIONLIST %s' % exceptionList
-                print 'oldElement.tag %s' % oldElement.tag
-                print 'newElement.tag %s' % newElement.tag
-                print 'key %s' % key
-                print 'old %s' % oldValue
-                print 'new %s' % newValue
-                print 'END FAILURE'
+                print('FAILURE in xsltbasic.compareAttributes')
+                print('EXCEPTIONLIST %s' % exceptionList)
+                print('oldElement.tag %s' % oldElement.tag)
+                print('newElement.tag %s' % newElement.tag)
+                print('key %s' % key)
+                print('old %s' % oldValue)
+                print('new %s' % newValue)
+                print('END FAILURE')
             self.assertEquals(newValue, oldValue)
 
     # Get all the child elements from the element, in namespace.

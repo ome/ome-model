@@ -19,9 +19,14 @@
 
 from __future__ import generators
 
+from __future__ import absolute_import
 import sys
 import os
 import re
+import six
+from six.moves import map
+from six.moves import range
+from six.moves import zip
 
 compiler = None
 try:
@@ -183,7 +188,7 @@ class Builder(object):
         return m(o)
 
     def build_List(self, o):
-        return map(self.build, o.getChildren())
+        return list(map(self.build, o.getChildren()))
 
     def build_Const(self, o):
         return o.value
@@ -192,7 +197,7 @@ class Builder(object):
         d = {}
         i = iter(map(self.build, o.getChildren()))
         for el in i:
-            d[el] = i.next()
+            d[el] = next(i)
         return d
 
     def build_Tuple(self, o):
@@ -210,7 +215,7 @@ class Builder(object):
         raise UnknownType('Undefined Name')
 
     def build_Add(self, o):
-        real, imag = map(self.build_Const, o.getChildren())
+        real, imag = list(map(self.build_Const, o.getChildren()))
         try:
             real = float(real)
         except TypeError:
@@ -527,7 +532,7 @@ class Section(dict):
         self._initialise()
         # we do this explicitly so that __setitem__ is used properly
         # (rather than just passing to ``dict.__init__``)
-        for entry, value in indict.iteritems():
+        for entry, value in six.iteritems(indict):
             self[entry] = value
 
     def _initialise(self):
@@ -571,7 +576,7 @@ class Section(dict):
     def __getitem__(self, key):
         """Fetch the item and do string interpolation."""
         val = dict.__getitem__(self, key)
-        if self.main.interpolation and isinstance(val, basestring):
+        if self.main.interpolation and isinstance(val, six.string_types):
             return self._interpolate(key, val)
         return val
 
@@ -589,7 +594,7 @@ class Section(dict):
         ``unrepr`` must be set when setting a value to a dictionary, without
         creating a new sub-section.
         """
-        if not isinstance(key, basestring):
+        if not isinstance(key, six.string_types):
             raise ValueError('The key "%s" is not a string.' % key)
 
         # add the comment
@@ -623,11 +628,11 @@ class Section(dict):
             if key not in self:
                 self.scalars.append(key)
             if not self.main.stringify:
-                if isinstance(value, basestring):
+                if isinstance(value, six.string_types):
                     pass
                 elif isinstance(value, (list, tuple)):
                     for entry in value:
-                        if not isinstance(entry, basestring):
+                        if not isinstance(entry, six.string_types):
                             raise TypeError(
                                 'Value is not a string "%s".' % entry)
                 else:
@@ -674,7 +679,7 @@ class Section(dict):
             del self.comments[key]
             del self.inline_comments[key]
             self.sections.remove(key)
-        if self.main.interpolation and isinstance(val, basestring):
+        if self.main.interpolation and isinstance(val, six.string_types):
             return self._interpolate(key, val)
         return val
 
@@ -713,7 +718,7 @@ class Section(dict):
 
     def items(self):
         """D.items() -> list of D's (key, value) pairs, as 2-tuples"""
-        return zip((self.scalars + self.sections), self.values())
+        return list(zip((self.scalars + self.sections), list(self.values())))
 
     def keys(self):
         """D.keys() -> list of D's keys"""
@@ -949,7 +954,7 @@ class Section(dict):
             return False
         else:
             try:
-                if not isinstance(val, basestring):
+                if not isinstance(val, six.string_types):
                     # TODO: Why do we raise a KeyError here?
                     raise KeyError()
                 else:
@@ -1192,7 +1197,7 @@ class ConfigObj(Section):
         self._load(infile, configspec)
 
     def _load(self, infile, configspec):
-        if isinstance(infile, basestring):
+        if isinstance(infile, six.string_types):
             self.filename = infile
             if os.path.isfile(infile):
                 h = open(infile, 'rb')
@@ -1405,7 +1410,7 @@ class ConfigObj(Section):
                     else:
                         infile = newline
                     # UTF8 - don't decode
-                    if isinstance(infile, basestring):
+                    if isinstance(infile, six.string_types):
                         return infile.splitlines(True)
                     else:
                         return infile
@@ -1413,7 +1418,7 @@ class ConfigObj(Section):
                 return self._decode(infile, encoding)
 
         # No BOM discovered and no encoding specified, just return
-        if isinstance(infile, basestring):
+        if isinstance(infile, six.string_types):
             # infile read from a file will be a single string
             return infile.splitlines(True)
         return infile
@@ -1431,12 +1436,12 @@ class ConfigObj(Section):
 
         if is a string, it also needs converting to a list.
         """
-        if isinstance(infile, basestring):
+        if isinstance(infile, six.string_types):
             # can't be unicode
             # NOTE: Could raise a ``UnicodeDecodeError``
             return infile.decode(encoding).splitlines(True)
         for i, line in enumerate(infile):
-            if not isinstance(line, unicode):
+            if not isinstance(line, six.text_type):
                 # NOTE: The isinstance test here handles mixed lists of
                 # unicode/string
                 # NOTE: But the decode will break on any non-string values
@@ -1457,7 +1462,7 @@ class ConfigObj(Section):
         Used by ``stringify`` within validate, to turn non-string values
         into strings.
         """
-        if not isinstance(value, basestring):
+        if not isinstance(value, six.string_types):
             return str(value)
         else:
             return value
@@ -1576,7 +1581,7 @@ class ConfigObj(Section):
                             comment = ''
                             try:
                                 value = unrepr(value)
-                            except Exception, e:
+                            except Exception as e:
                                 if type(e) == UnknownType:
                                     msg = ('Unknown name or type in value at'
                                            ' line %s.')
@@ -1590,7 +1595,7 @@ class ConfigObj(Section):
                         comment = ''
                         try:
                             value = unrepr(value)
-                        except Exception, e:
+                        except Exception as e:
                             if isinstance(e, UnknownType):
                                 msg = ('Unknown name or type in value at line'
                                        ' %s.')
@@ -1707,7 +1712,7 @@ class ConfigObj(Section):
                 return self._quote(value[0], multiline=False) + ','
             return ', '.join([self._quote(val, multiline=False)
                               for val in value])
-        if not isinstance(value, basestring):
+        if not isinstance(value, six.string_types):
             if self.stringify:
                 value = str(value)
             else:
@@ -1860,11 +1865,11 @@ class ConfigObj(Section):
                                        raise_errors=True,
                                        file_error=True,
                                        _inspec=True)
-            except ConfigObjError, e:
+            except ConfigObjError as e:
                 # FIXME: Should these errors have a reference
                 #        to the already parsed ConfigObj ?
                 raise ConfigspecError('Parsing configspec failed: %s' % e)
-            except IOError, e:
+            except IOError as e:
                 raise IOError('Reading configspec failed: %s' % e)
 
         self.configspec = configspec
@@ -2099,7 +2104,7 @@ class ConfigObj(Section):
                                         val,
                                         missing=missing
                                         )
-            except validator.baseErrorClass, e:
+            except validator.baseErrorClass as e:
                 if not preserve_errors or isinstance(e, self._vdtMissingValue):
                     out[entry] = False
                 else:
@@ -2255,7 +2260,7 @@ class ConfigObj(Section):
         This method raises a ``ReloadError`` if the ConfigObj doesn't have
         a filename attribute pointing to a file.
         """
-        if not isinstance(self.filename, basestring):
+        if not isinstance(self.filename, six.string_types):
             raise ReloadError()
 
         filename = self.filename

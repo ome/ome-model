@@ -34,6 +34,7 @@ Generate code to process OME-XML from an OME-XML schema.
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from __future__ import absolute_import
 import itertools
 import logging
 import sys
@@ -165,7 +166,7 @@ def main(model, opts):
     base, filename = os.path.split(opts.lang.templatepath('CLASS'))
     name, extension = os.path.splitext(filename)
     for obj in model.objects.values():
-        if obj.name in opts.lang.model_type_map.keys():
+        if obj.name in list(opts.lang.model_type_map.keys()):
             continue
 
         parents = model.resolve_parents(obj.name)
@@ -546,7 +547,7 @@ def resolve_hierarchy(results, model, names, func, child=None, key=None, level=0
         # We only want to add the index if the object count at this level
         # is greater than 1.
         max_occurs = max_occurs_under_parent(model, name, child)
-        if len(names.keys()) > 1:
+        if len(list(names.keys())) > 1:
             is_multi_path = True
         if o.isConcreteSubstitution:
             parents = dict()
@@ -755,9 +756,9 @@ def validateMetadataConverter():
     storeFilename = os.path.join(relpath, "MetadataStore")
     retrieveFilename = os.path.join(relpath, "MetadataRetrieve")
     convertFilename = os.path.join(os.path.join(root, opts.lang.getConverterDir()), opts.lang.getConverterName())
-    storeFile = file(os.path.join(opts.outdir, opts.lang.generatedFilename(storeFilename, opts.filetype)))
-    retrieveFile = file(os.path.join(opts.outdir, opts.lang.generatedFilename(retrieveFilename, opts.filetype)))
-    convertFile = file(os.path.join(opts.outdir, convertFilename + opts.lang.source_suffix))
+    storeFile = open(os.path.join(opts.outdir, opts.lang.generatedFilename(storeFilename, opts.filetype)))
+    retrieveFile = open(os.path.join(opts.outdir, opts.lang.generatedFilename(retrieveFilename, opts.filetype)))
+    convertFile = open(os.path.join(opts.outdir, convertFilename + opts.lang.source_suffix))
     storegrepper = None
     retrievegrepper = None
     convertgrepper = None

@@ -11,12 +11,14 @@
 
 """
 
+from __future__ import absolute_import
 import glob
 import sys
 import os
 
 from ez_setup import use_setuptools
 from setuptools import setup, find_packages
+from six.moves import map
 
 ov = os.environ.get("BF_VERSION", "unknown")
 

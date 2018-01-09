@@ -25,6 +25,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import absolute_import
 from collections import OrderedDict
 import logging
 import re
@@ -475,7 +476,7 @@ class OMEModelProperty(OMEModelEntity):
     def _get_concreteClasses(self):
         returnList = []
         if self.model.opts.lang.hasSubstitutionGroup(self.name):
-            for o in sorted(self.model.objects.values(), lambda x, y: cmp(x.name, y.name)):
+            for o in sorted(list(self.model.objects.values()), lambda x, y: cmp(x.name, y.name)):
                 if o.parentName == self.name:
                     returnList.append(o.name)
         return returnList
@@ -987,7 +988,7 @@ class OMEModelProperty(OMEModelEntity):
 
     def _get_header(self):
         header = None
-        if self.name in self.model.opts.lang.model_type_map.keys() and not self.name in self.model.opts.lang.primitive_type_map.keys():
+        if self.name in list(self.model.opts.lang.model_type_map.keys()) and not self.name in list(self.model.opts.lang.primitive_type_map.keys()):
             pass
         elif self.langType is None:
             pass
@@ -1042,7 +1043,7 @@ class OMEModelProperty(OMEModelEntity):
 
     def _get_source_deps(self):
         deps = set()
-        if self.name in self.model.opts.lang.model_type_map.keys():
+        if self.name in list(self.model.opts.lang.model_type_map.keys()):
             pass
         elif self.langType is None:
             pass
@@ -1075,7 +1076,7 @@ class OMEModelProperty(OMEModelEntity):
                 if self.isReference:
                     # Make sure that the reference is a real generated object.
                     o = self.model.getObjectByName("%sRef" % path)
-                    if o is not None and o in self.model.objects.values():
+                    if o is not None and o in list(self.model.objects.values()):
                         deps.add("ome/xml/model/%sRef.h" % path)
             o = self.model.getObjectByName(self.name)
             if o is not None:
@@ -1095,7 +1096,7 @@ class OMEModelProperty(OMEModelEntity):
 
     def _get_fwd(self):
         fwd = set()
-        if self.name in self.model.opts.lang.model_type_map.keys():
+        if self.name in list(self.model.opts.lang.model_type_map.keys()):
             pass
         elif isinstance(self.model.opts.lang, language.CXX):
             if not self.model.opts.lang.hasPrimitiveType(self.langType):

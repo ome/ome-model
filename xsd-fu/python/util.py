@@ -19,13 +19,17 @@
 
 """Various utility classes and functions."""
 
+from __future__ import absolute_import
 import codecs
 from datetime import timedelta, tzinfo
 import os
 import re
 import textwrap
 import time
-from itertools import izip, imap
+
+import six
+from six.moves import zip
+from six.moves import map
 try:
     # assigned so they're importable
     frozenset = frozenset
@@ -191,6 +195,7 @@ def wraptext(text, width=70, initial_indent='', subsequent_indent=''):
                           subsequent_indent=subsequent_indent,
                           break_long_words=False)
     return wrapper.wrap(text)
+
 
 try:
     relpath = os.path.relpath
