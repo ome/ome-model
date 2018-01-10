@@ -109,7 +109,6 @@ Developer tools and guidelines
     developers/sample-files
     developers/id-and-lsid
     developers/ome-units
-    developers/EnumTool
 
 ************************
 The Data Model in detail

@@ -61,7 +61,6 @@ If this is provided by your distribution, install the
 
     sys.exit(1)
 
-from configobj import ConfigObj
 from getopt import gnu_getopt, GetoptError
 from glob import glob
 from xml import sax
@@ -426,8 +425,6 @@ def enumHandlersMain(model, opts):
         used_files.add(os.path.realpath(file))
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_omexml_model_enum_handlers_package)
-    base = os.path.join(os.path.split(os.path.abspath(__file__))[0], "cfg")
-    configobj = ConfigObj(os.path.join(base, "enum_handler.cfg"))
     template = NewTextTemplate(codecs.open(opts.lang.templatepath('ENUM_HANDLER'), encoding='utf-8').read(), encoding='utf-8')
     used_files.add(os.path.realpath(opts.lang.templatepath('ENUM_HANDLER')))
     for obj in model.objects.values():
@@ -454,7 +451,7 @@ def enumHandlersMain(model, opts):
                 os.makedirs(outputDirectory)
 
             classContent = template.generate(fu=fu, klass=prop, model=model, opts=opts, lang=opts.lang, debug=opts.debug,
-                             enum_value_name=enum_value_name, config=configobj).render(encoding='utf-8')
+                                             enum_value_name=enum_value_name, config=config.ENUM_HANDLERS).render(encoding='utf-8')
 
             if not opts.dryrun:
                 f = codecs.open(fullname, "w", encoding='utf-8')
