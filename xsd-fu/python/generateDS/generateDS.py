@@ -98,6 +98,7 @@ import xml.sax.xmlreader
 import logging
 import keyword
 import StringIO
+from collections import OrderedDict
 
 # Default logger configuration
 ## logging.basicConfig(level=logging.DEBUG, 
@@ -136,12 +137,12 @@ AlreadyGenerated = []
 AlreadyGenerated_subclass = []
 PostponedExtensions = []
 ElementsForSubclasses = []
-ElementDict = {}
+ElementDict = OrderedDict()
 Force = 0
 Dirpath = []
 ExternalEncoding = sys.getdefaultencoding()
 
-NamespacesDict = {}
+NamespacesDict = OrderedDict()
 Targetnamespace = ""
 
 ##NameTable = {
@@ -161,14 +162,14 @@ for kw in keyword.kwlist:
 
 SubclassSuffix = 'Sub'
 RootElement = None
-AttributeGroups = {}
-SubstitutionGroups = {}
+AttributeGroups = OrderedDict()
+SubstitutionGroups = OrderedDict()
 #
 # SubstitutionGroups can also include simple types that are
 #   not (defined) elements.  Keep a list of these simple types.
 #   These are simple types defined at top level.
-SimpleElementDict = {}
-SimpleTypeDict = {}
+SimpleElementDict = OrderedDict()
+SimpleTypeDict = OrderedDict()
 ValidatorBodiesBasePath = None
 UserMethodsPath = None
 UserMethodsModule = None
@@ -329,7 +330,7 @@ class SimpleTypeElement(XschemaElementBase):
         # Attribute definitions for the current attributeGroup, if there is one.
         self.attributeGroup = None
         # Attribute definitions for the currect element.
-        self.attributeDefs = {}
+        self.attributeDefs = OrderedDict()
         self.complexType = 0
         # Enumeration values for the current element.
         self.values = list()
@@ -416,7 +417,7 @@ class XschemaElement(XschemaElementBase):
         self.mixedExtensionError = 0
         self.collapseWhiteSpace = 0
         # Attribute definitions for the currect element.
-        self.attributeDefs = {}
+        self.attributeDefs = OrderedDict()
         # Attribute definitions for the current attributeGroup, if there is one.
         self.attributeGroup = None
         # List of names of attributes for this element.
@@ -529,7 +530,7 @@ class XschemaElement(XschemaElementBase):
 
     def annotate(self):
         self.collect_element_dict()
-        #self.element_dict = {}
+        #self.element_dict = OrderedDict()
         #self.build_element_dict(self.element_dict)
         self.annotate_find_type()
         self.annotate_tree()
@@ -889,7 +890,7 @@ class XschemaAttributeGroup:
         if group:
             self.group = group
         else:
-            self.group = {}
+            self.group = OrderedDict()
     def setName(self, name): self.name = name
     def getName(self): return self.name
     def setGroup(self, group): self.group = group
@@ -2761,7 +2762,7 @@ def countElementChildren(element, count):
 
 def buildCtorArgs_multilevel(element):
     content = []
-    addedArgs = {}
+    addedArgs = OrderedDict()
     add = content.append
     buildCtorArgs_multilevel_aux(addedArgs, add, element)
     childCount = countChildren(element, 0)
