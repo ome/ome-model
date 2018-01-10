@@ -76,6 +76,7 @@
 
   <properties>
     <project.rootdir>${basedir}/..</project.rootdir>
+    <python>python</python>
     <xsdfu.script>../xsd-fu/xsd-fu</xsdfu.script>
     <xsdfu.modelpath>${basedir}/target/generated-sources/xsd-fu</xsdfu.modelpath>
     <xsdfu.metadatapath>${basedir}/target/generated-sources/xsd-fu</xsdfu.metadatapath>
@@ -102,7 +103,7 @@
               <goal>exec</goal>
             </goals>
             <configuration>
-              <executable>python</executable>
+              <executable>${python}</executable>
               <arguments>
                 <argument>${xsdfu.script}</argument>
                 <argument>omexml_model_all</argument>
@@ -121,7 +122,7 @@
               <goal>exec</goal>
             </goals>
             <configuration>
-              <executable>python</executable>
+              <executable>${python}</executable>
               <arguments>
                 <argument>${xsdfu.script}</argument>
                 <argument>omexml_metadata_all</argument>
