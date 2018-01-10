@@ -180,7 +180,7 @@ def main(model, opts):
             used_files.add(os.path.realpath(CUSTOM_CLASS_TEMPLATE))
             customContent = customTemplate.generate(
                 fu=fu, klass=obj, parents=parents, model=model, opts=opts, lang=opts.lang, debug=opts.debug)
-            customContent = customContent.render(encoding='utf-8')
+            customContent = customContent.render(encoding='utf-8').decode('utf-8')
         customTemplates = glob(os.path.join(
                 base, "%s_%s_update_*%s" % (name, obj.name, extension)))
         # BEGIN Custom templates for update()
@@ -193,7 +193,7 @@ def main(model, opts):
             customTemplate = NewTextTemplate(codecs.open(customTemplate, encoding='utf-8'), encoding='utf-8')
             content = customTemplate.generate(
                 fu=fu, klass=obj, parents=parents, model=model, opts=opts, lang=opts.lang, debug=opts.debug)
-            content = content.render(encoding='utf-8')
+            content = content.render(encoding='utf-8').decode('utf-8')
             customUpdatePropertyContent[propertyName] = content
         # END Custom templates for update()
         # BEGIN Custom templates for asXMLElement()
@@ -208,7 +208,7 @@ def main(model, opts):
             customTemplate = NewTextTemplate(codecs.open(customTemplate, encoding='utf-8'), encoding='utf-8')
             content = customTemplate.generate(
                 fu=fu, klass=obj, parents=parents, model=model, opts=opts, lang=opts.lang, debug=opts.debug)
-            content = content.render(encoding='utf-8')
+            content = content.render(encoding='utf-8').decode('utf-8')
             customAsXMLElementPropertyContent[propertyName] = content
         # END Custom templates for asXMLElment()
 
@@ -615,7 +615,7 @@ def processMetadataTemplate(template, outputFilename, model, opts):
             indexes=indexes, opts=opts, lang=opts.lang, debug=opts.debug)
         if objectName not in customContent:
             customContent[objectName] = dict()
-        customContent[objectName][propertyName] = customTemplate.render(encoding='utf-8')
+        customContent[objectName][propertyName] = customTemplate.render(encoding='utf-8').decode('utf-8')
 
     fullname = opts.lang.generatedFilename(outputFilename, opts.filetype)
 
