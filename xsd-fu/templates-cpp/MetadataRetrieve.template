@@ -64,7 +64,7 @@
     return False
 
   def sorted_properties(o):
-    return sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
+    return sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name)
 %}\
 \
 \
@@ -373,7 +373,7 @@ namespace ome
         // -- Entity counting (code generated definitions) --
 
 {% end debug %}\
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if o.langBaseType is not None %}\
 {% if fu.SOURCE_TYPE == "header" %}\
@@ -466,7 +466,7 @@ namespace ome
         virtual const ome::xml::model::primitives::OrderedMultimap&
         getImagingEnvironmentMap(index_type imageIndex) const = 0;
 {% end header %}\
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}
 {% if debug %}\
@@ -479,7 +479,7 @@ namespace ome
 {% end debug %}\
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% if debug %}\
         // ${prop.minOccurs}:${prop.maxOccurs}
         // Is multi path? ${is_multi_path[o.name]}
@@ -514,7 +514,7 @@ ${getter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% choose %}\
 {% when prop.isBackReference and not prop.isUnitsEnumeration %}\
 {% if debug %}\

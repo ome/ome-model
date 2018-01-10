@@ -2,7 +2,7 @@
   def getConcreteClasses(abstractClass):
     returnList = []
     if model.opts.lang.hasSubstitutionGroup(abstractClass):
-      for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)):
+      for o in sorted(model.objects.values(), key=lambda x: x.name):
           if o.parentName == abstractClass:
             returnList.append(o.name)
     return returnList

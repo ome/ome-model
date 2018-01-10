@@ -347,7 +347,7 @@ ${customContent[obj.name][prop.name]}
     return False
 
   def sorted_properties(o):
-    return sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
+    return sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name)
 
   def accessor_string(name, max_occurs, level, concreteName=None):
     """Makes a C++ method accessor string from an index name."""
@@ -903,7 +903,7 @@ namespace ome
 {% end debug %}\
 {% end header %}\
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if o.langBaseType is not None %}\
 {% if fu.SOURCE_TYPE == "header" %}\
@@ -1044,7 +1044,7 @@ ${counter(k, o, v)}\
       }
 {% end source %}\
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}\
 {% if fu.SOURCE_TYPE == "header" %}\
@@ -1060,7 +1060,7 @@ ${counter(k, o, v)}\
 {% end header %}\
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% if fu.SOURCE_TYPE == "header" %}\
 {% if debug %}\
         // ${prop.minOccurs}:${prop.maxOccurs}
@@ -1100,7 +1100,7 @@ ${getter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\
@@ -1203,7 +1203,7 @@ ${getter(k, o, prop, v)}\
       }
 {% end source %}\
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}\
 {% if fu.SOURCE_TYPE == "header" %}\
@@ -1217,7 +1217,7 @@ ${getter(k, o, prop, v)}\
 {% end header %}\
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% if fu.SOURCE_TYPE == "header" %}\
 {% if debug %}\
         // ${prop.minOccurs}:${prop.maxOccurs}
@@ -1256,7 +1256,7 @@ ${setter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\
