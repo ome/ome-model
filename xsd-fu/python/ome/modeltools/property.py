@@ -476,7 +476,7 @@ class OMEModelProperty(OMEModelEntity):
     def _get_concreteClasses(self):
         returnList = []
         if self.model.opts.lang.hasSubstitutionGroup(self.name):
-            for o in sorted(list(self.model.objects.values()), lambda x, y: cmp(x.name, y.name)):
+            for o in sorted(list(self.model.objects.values()), key=lambda x: x.name):
                 if o.parentName == self.name:
                     returnList.append(o.name)
         return returnList
