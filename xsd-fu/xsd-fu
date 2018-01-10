@@ -40,11 +40,10 @@ import sys
 import os
 import re
 import codecs
+from collections import OrderedDict
 
 # Needed to import modeltools
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), 'python'))
-
-from util import odict
 
 from ome.modeltools.template import TemplateInfo
 from ome.modeltools import config
@@ -582,7 +581,7 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     is_multi_path = dict()
     for obj in model.objects.values():
         name = obj.name
-        indexes[name] = odict()
+        indexes[name] = OrderedDict()
         parents[name] = model.resolve_parents(name)
         is_multi_path[name] = resolve_hierarchy(indexes[name], model,
                             {name: parents[name]},
