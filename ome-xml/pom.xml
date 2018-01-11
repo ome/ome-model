@@ -103,6 +103,9 @@
               <goal>exec</goal>
             </goals>
             <configuration>
+              <environmentVariables>
+                <PYTHONPATH>${basedir}/../xsd-fu/python</PYTHONPATH>
+              </environmentVariables>
               <executable>${python}</executable>
               <arguments>
                 <argument>${xsdfu.script}</argument>
@@ -122,6 +125,9 @@
               <goal>exec</goal>
             </goals>
             <configuration>
+              <environmentVariables>
+                <PYTHONPATH>${basedir}/../xsd-fu/python</PYTHONPATH>
+              </environmentVariables>
               <executable>${python}</executable>
               <arguments>
                 <argument>${xsdfu.script}</argument>

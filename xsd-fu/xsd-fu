@@ -43,23 +43,12 @@ import re
 import codecs
 from collections import OrderedDict
 
-# Needed to import modeltools
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), 'python'))
-
 from ome.modeltools.template import TemplateInfo
 from ome.modeltools import config
 from ome.modeltools import language
 from ome.modeltools import generateds
 
-try:
-    from genshi.template import NewTextTemplate
-except ImportError:
-    print("""The genshi module was not found, but is required by xsd-fu.
-If this is provided by your distribution, install the
-"python-genshi" package or its equivalent.  Otherwise, run
-"pip install genshi" (you may need to install pip first).""", file=sys.stderr)
-
-    sys.exit(1)
+from genshi.template import NewTextTemplate
 
 from getopt import gnu_getopt, GetoptError
 from glob import glob
