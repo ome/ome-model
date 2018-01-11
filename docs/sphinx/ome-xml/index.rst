@@ -3,7 +3,7 @@ The OME-XML format
 
 OME-XML is a `file format <https://en.wikipedia.org/wiki/File_format>`_
 for storing microscopy information (both pixels and metadata) using the
-OME-XML data model.
+OME Data Model.
 
 .. note:: OME-XML as a file format is superseded by OME-TIFF, which 
     is the preferred container format for image data making use of the
@@ -68,11 +68,3 @@ Some specific features of the OME-XML file format:
 
 The OME-XML Schema .xsd files and technical documentation are available on the 
 :schema:`Schema pages <>`.
-
-
-Migrating or sharing data with OME-XML
---------------------------------------
-
-Data saved in an OME-XML file is easily read by any software capable of
-reading and interpreting XML. OME software tools can export and
-import OME-XML files, but any software capable of reading XML may be used.
