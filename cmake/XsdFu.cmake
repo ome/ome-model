@@ -76,6 +76,13 @@ set(XSD_FU_ARGS ${XSDFU_DEBUG} --language=C++ --output-directory=${GEN_DIR} ${MO
 # command: the xsd-fu command to invoke
 # outvar: variable to store generated file list in
 function(xsd_fu_single filetype command outvar)
+  set(saved_pythonpath "$ENV{PYTHONPATH}")
+  if(WIN32)
+    set(ENV{PYTHONPATH} "${PROJECT_SOURCE_DIR}/xsd-fu/python;$ENV{PYTHONPATH}")
+  else()
+    set(ENV{PYTHONPATH} "${PROJECT_SOURCE_DIR}/xsd-fu/python:$ENV{PYTHONPATH}")
+  endif()
+
   message(STATUS "Determining xsd-fu outputs for target ${command} (${filetype}s)")
   execute_process(COMMAND ${XSD_FU} ${command} --dry-run --file-type=${filetype} --print-generated ${XSD_FU_ARGS}
                   OUTPUT_VARIABLE genfiles
@@ -104,11 +111,23 @@ function(xsd_fu_single filetype command outvar)
   endif(WIN32)
   list(REMOVE_DUPLICATES gendeps)
 
+  string(REPLACE ";" "^^" XSD_FU "${XSD_FU}")
+  string(REPLACE ";" "^^" XSD_FU_ARGS "${XSD_FU_ARGS}")
+  string(REPLACE ";" "^^" XSD_FU_PYTHONPATH "$ENV{PYTHONPATH}")
+
   add_custom_command(OUTPUT ${genfiles}
-                     COMMAND ${XSD_FU} ${command} --quiet --file-type=${filetype} ${XSD_FU_ARGS}
+                     COMMAND ${CMAKE_COMMAND}
+                     "-DXSD_FU=${XSD_FU}"
+                     "-DXSD_FU_COMMAND=${command}"
+                     "-DXSD_FU_FILETYPE=${filetype}"
+                     "-DXSD_FU_ARGS=${XSD_FU_ARGS}"
+                     "-DXSD_FU_PYTHONPATH=${XSD_FU_PYTHONPATH}"
+                     -P "${PROJECT_SOURCE_DIR}/cmake/RunXsdFu.cmake"
+                     VERBATIM
                      DEPENDS ${gendeps} ${XSD_FU_SCRIPT})
 
   set(${outvar} ${genfiles} PARENT_SCOPE)
+  set(ENV{PYTHONPATH} "${saved_pythonpath}")
 endfunction(xsd_fu_single)
 
 # xsd_fu_header: Run xsd-fu for header generation
