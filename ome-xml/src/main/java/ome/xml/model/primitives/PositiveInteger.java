@@ -46,7 +46,7 @@ public class PositiveInteger extends NonNegativeInteger {
     super(value);
     if (value == null || value.intValue() < 1) {
       throw new IllegalArgumentException(
-          value + " must not be null and positive.");
+          value + " must be non-null and strictly positive.");
     }
   }
 
