@@ -1,4 +1,4 @@
-5.6.1 (2019-02-17)
+5.6.1 (2018-02-17)
 ------------------
 
 Documentation updates:
@@ -109,7 +109,7 @@ Documentation updates:
 * Add minimal C++ 11 features [#25](https://github.com/ome/ome-model/pull/25)
 * OME-XML performance improvements
   [#28](https://github.com/ome/ome-model/pull/28)
-* Cmake: obtain release version from Maven
+* CMake: obtain release version from Maven
   [#29](https://github.com/ome/ome-model/pull/29)
 
 5.4.0 (2017-01-05)
