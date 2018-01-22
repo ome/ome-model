@@ -46,7 +46,7 @@ public class NonNegativeInteger extends PrimitiveType<Integer> implements Primit
     super(value);
     if (value == null || value.intValue() < 0) {
       throw new IllegalArgumentException(
-          value + " must not be null or non-negative.");
+          value + " must be neither null nor strictly negative.");
     }
   }
 

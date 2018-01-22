@@ -46,7 +46,7 @@ public class NonNegativeLong extends PrimitiveType<Long> implements PrimitiveNum
     super(value);
     if (value == null || value.longValue() < 0) {
       throw new IllegalArgumentException(
-          value + " must not be null or non-negative.");
+          value + " must be neither null nor strictly negative.");
     }
   }
 
