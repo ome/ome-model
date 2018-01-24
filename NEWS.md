@@ -1,3 +1,9 @@
+5.6.2 (2018-01-25)
+------------------
+
+* Report numerical value domain errors more clearly
+  [#68](https://github.com/ome/ome-model/pull/68)
+
 5.6.1 (2018-01-17)
 ------------------
 
