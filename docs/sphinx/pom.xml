@@ -42,7 +42,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.0.1</version>
+        <version>3.0.2</version>
         <executions>
           <execution>
             <id>copy-configuration</id>
@@ -80,7 +80,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
-        <version>1.12</version>
+        <version>3.0.0</version>
         <executions>
           <execution>
             <id>parse-version</id>
@@ -93,7 +93,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>1.5.0</version>
+        <version>1.6.0</version>
         <executions>
           <!-- Generate the OME model object classes -->
           <execution>
@@ -142,7 +142,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
-            <version>2.6</version>
+            <version>3.1.0</version>
             <configuration>
               <descriptors>
                 <descriptor>assembly.xml</descriptor>
