@@ -197,7 +197,6 @@
     - Board of Regents of the University of Wisconsin-Madison
     - Glencoe Software, Inc.
     - University of Dundee</organizationName>
-            <projectName>Contains the OME imaging metadata model specification, code generator and implementation</projectName>
             <addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
             <canUpdateDescription>true</canUpdateDescription>
             <!-- NB: Avoid stomping on variant copyright holders. -->
