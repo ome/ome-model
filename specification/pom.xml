@@ -60,8 +60,65 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.7.0</version>
       </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>license-maven-plugin</artifactId>
+      </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-dependency-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-plugin-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-release-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>buildnumber-maven-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+        </plugin>
     </plugins>
   </build>
 </project>
