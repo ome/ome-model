@@ -418,21 +418,4 @@
       </build>
     </profile>
   </profiles>
-
-  <reporting>
-    <plugins>
-      <!-- Generate javadocs as part of site generation. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.0</version>
-        <configuration>
-          <failOnError>false</failOnError>
-          <links>
-            <link>http://docs.oracle.com/javase/7/docs/api/</link>
-          </links>
-        </configuration>
-      </plugin>
-    </plugins>
-  </reporting>
 </project>
