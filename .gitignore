@@ -1,29 +1,3 @@
-.classpath
-.project
-.settings
 .DS_Store
-BioFormats Unit Tests
-IO_Tests
-Missing JAI ImageIO Service Tests
-Missing LuraWave Service Tests
-Missing MDB Service Tests
-Missing NetCDF Service Tests
-Missing OME ReaderWriter Service Tests
-Missing OME-XML Service Tests
-Missing POI Service Tests
-OME ReaderWriter Service Tests
-OMEXMLTests
-artifacts
-build
-emailable-report.html
-index.html
 target
-test-output
-testng-results.xml
-testng.css
-tools/*.jar
-*.log
-*.xpr
-
-# For Fiji #
-loci_tools.jar
+.idea
