@@ -42,9 +42,10 @@ enable_language(CXX)
 # For feature tests with CMake 2.8.x
 enable_language(C)
 
-# Enable C++11 support universally, with C++14 where available
+# Require C++14 support
 if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
+  set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 endif()
 # Enable C99 support universally
 if(NOT CMAKE_C_STANDARD)
