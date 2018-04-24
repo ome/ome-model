@@ -349,4 +349,4 @@ if not (sys.version_info[0] == 2 and sys.version_info[1] <= 5):
     linkcheck_retries = int(os.environ.get("SPHINX_LINKCHECK_RETRIES", 5))
 
 # Regular expressions that match URIs that should not be checked when doing a linkcheck build
-linkcheck_ignore = []
+linkcheck_ignore = ['http://www.mitocheck.org/']
