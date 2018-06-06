@@ -55,6 +55,10 @@
 
 #include <ome/common/log.h>
 
+{% if klass.name == "AffineTransform" %}\
+#include <ome/common/units/angle.h>
+
+{% end class is AffineTransform %}\
 #include <ome/common/xml/dom/Document.h>
 #include <ome/common/xml/dom/Element.h>
 #include <ome/common/xml/dom/Node.h>
@@ -66,6 +70,9 @@
 {% end for%}\
 {% end header%}\
 {% if fu.SOURCE_TYPE == "source" %}\
+{% if klass.name == "AffineTransform" %}\
+#include <cmath>
+{% end class is AffineTransform %}\
 #include <sstream>
 
 {% if klass.hasPrimitiveBase %}\
@@ -268,6 +275,30 @@ namespace ome
       }
 
 {% end source %}\
+{% if klass.name == "AffineTransform" %}\
+{% if fu.SOURCE_TYPE == "header" %}\
+        /**
+         * Construct an AffineTransform corresponding to
+         * the given angle.
+         *
+         * @param theta the angle of rotation in radians
+         */
+        AffineTransform(ome::common::units::radian_quantity theta);
+{% end header %}\
+{% if fu.SOURCE_TYPE == "source" %}\
+      AffineTransform::AffineTransform(ome::common::units::radian_quantity theta)
+      {
+        double v = ome::common::units::quantity_cast<double>(theta);
+        setA02(0.0);
+        setA12(0.0);
+        setA00(cos(v));
+        setA11(cos(v));
+        setA01(sin(v));
+        setA10(-1.0 * sin(v));
+      }
+
+{% end source %}\
+{% end class is AffineTransform %}\
 {% if fu.SOURCE_TYPE == "header" %}\
         /**
          * Copy constructor.
