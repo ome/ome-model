@@ -158,6 +158,8 @@ def main(model, opts):
     for file in opts.args:
         used_files.add(os.path.realpath(file))
 
+    aggregate_content = ""
+
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_package)
     template = NewTextTemplate(codecs.open(opts.lang.templatepath('CLASS'), encoding='utf-8').read(), encoding='utf-8')
     used_files.add(os.path.realpath(opts.lang.templatepath('CLASS')))
@@ -220,6 +222,10 @@ def main(model, opts):
         fu.GUARD = guard(fullname)
         fu.CLASS_PREFIX = class_prefix(fullname)
 
+        if (isinstance(opts.lang, language.CXX) and
+            opts.filetype == language.TYPE_SOURCE):
+            fullname = opts.lang.generatedFilename("AllModelObjects", opts.filetype)
+            fullname = os.path.join("ome", "xml", "model", fullname)
         fullname = os.path.join(opts.outdir, fullname)
 
         if opts.print_generated:
@@ -237,8 +243,19 @@ def main(model, opts):
         classContent = classContent.render(encoding='utf-8')
 
         if not opts.dryrun:
+            if (isinstance(opts.lang, language.CXX) and
+                opts.filetype == language.TYPE_SOURCE):
+                aggregate_content += classContent.decode('utf-8')
+            else:
+                f = codecs.open(fullname, "w", encoding='utf-8')
+                f.write(classContent.decode('utf-8'))
+                f.close()
+
+    if not opts.dryrun:
+        if (isinstance(opts.lang, language.CXX) and
+            opts.filetype == language.TYPE_SOURCE):
             f = codecs.open(fullname, "w", encoding='utf-8')
-            f.write(classContent.decode('utf-8'))
+            f.write(aggregate_content)
             f.close()
 
     if opts.print_depends:
@@ -294,6 +311,10 @@ def enumTypesMain(model, opts):
     for file in opts.args:
         used_files.add(os.path.realpath(file))
 
+    aggregate_content = ""
+
+    enums = dict()
+
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_enums_package)
     template = NewTextTemplate(codecs.open(opts.lang.templatepath('ENUM'), encoding='utf-8').read(), encoding='utf-8')
     used_files.add(os.path.realpath(opts.lang.templatepath('ENUM')))
@@ -301,33 +322,52 @@ def enumTypesMain(model, opts):
         for prop in obj.properties.values():
             if not prop.isEnumeration:
                 continue
+            if not prop.langType in enums.keys():
+                enums[prop.langType] = prop
 
-            try:
-                fullname = opts.lang.generatedFilename(prop.langType, opts.filetype)
-                fullname = os.path.join("ome", "xml", "model", "enums", fullname)
-            except ModelProcessingError:
-                continue
+    for propname in sorted(enums.keys()):
+        prop = enums[propname]
+        try:
+            fullname = opts.lang.generatedFilename(prop.langType, opts.filetype)
+            fullname = os.path.join("ome", "xml", "model", "enums", fullname)
+        except ModelProcessingError:
+            continue
 
-            fu.GUARD = guard(fullname)
-            fu.CLASS_PREFIX = class_prefix(fullname)
-            fu.SOURCE_TYPE = opts.filetype;
+        fu.GUARD = guard(fullname)
+        fu.CLASS_PREFIX = class_prefix(fullname)
+        fu.SOURCE_TYPE = opts.filetype;
 
-            fullname = os.path.join(opts.outdir, fullname)
+        if (isinstance(opts.lang, language.CXX) and
+            opts.filetype == language.TYPE_SOURCE):
+            fullname = opts.lang.generatedFilename("AllModelEnums", opts.filetype)
+            fullname = os.path.join("ome", "xml", "model", "enums", fullname)
+        fullname = os.path.join(opts.outdir, fullname)
 
-            if opts.print_generated:
-                print(fullname)
+        if opts.print_generated:
+            print(fullname)
 
-            outputDirectory = os.path.dirname(fullname)
-            if not opts.dryrun and not os.path.exists(outputDirectory):
-                os.makedirs(outputDirectory)
+        outputDirectory = os.path.dirname(fullname)
+        if not opts.dryrun and not os.path.exists(outputDirectory):
+            os.makedirs(outputDirectory)
 
-            classContent = template.generate(fu=fu, klass=prop, opts=opts, lang=opts.lang, debug=opts.debug,
-                                             enum_value_name=enum_value_name).render(encoding='utf-8')
+        classContent = template.generate(fu=fu, klass=prop, opts=opts, lang=opts.lang, debug=opts.debug,
+                                         enum_value_name=enum_value_name).render(encoding='utf-8')
 
-            if not opts.dryrun:
+        if not opts.dryrun:
+            if (isinstance(opts.lang, language.CXX) and
+                opts.filetype == language.TYPE_SOURCE):
+                aggregate_content += classContent.decode('utf-8')
+            else:
                 f = codecs.open(fullname, "w", encoding='utf-8')
                 f.write(classContent.decode('utf-8'))
                 f.close()
+
+    if not opts.dryrun:
+        if (isinstance(opts.lang, language.CXX) and
+            opts.filetype == language.TYPE_SOURCE):
+            f = codecs.open(fullname, "w", encoding='utf-8')
+            f.write(aggregate_content)
+            f.close()
 
     if opts.print_depends:
         for file in sorted(used_files):
