@@ -197,10 +197,9 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% choose %}\
 {% when is_abstract(parent) and prop.isReference %}\
         // ${prop.name} is abstract and is a reference
-        std::shared_ptr<${prop.instanceTypeNS}> ${prop.instanceVariableName}_reference(std::make_shared<${prop.instanceTypeNS}>());
-        ${prop.instanceVariableName}_reference->setID(${prop.argumentName});
+        std::shared_ptr<ome::xml::model::Reference> ref(std::static_pointer_cast<ome::xml::model::reference>(std::make_shared<${prop.instanceTypeNS}>()));
+        ref->setID(${prop.argumentName});
         std::shared_ptr<::${lang.omexml_model_package}::OMEModelObject> o_base(std::static_pointer_cast<::${lang.omexml_model_package}::OMEModelObject>(${safe_accessor([{'accessor':'root'}]+accessor(obj.name, parent, prop, func=accessor_string_complex)[:-1], setPropMethod(is_multi_path[o.name], parent, obj.name, prop))}));
-        std::shared_ptr<::${lang.omexml_model_package}::Reference> ref(std::static_pointer_cast<::${lang.omexml_model_package}::Reference>(${prop.instanceVariableName}_reference));
 
         model->addReference(o_base, ref);
         // ${parent} is abstract
@@ -269,10 +268,9 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% end %}\
 {% when prop.isReference %}\
         // ${prop.name} is reference and occurs more than once
-        std::shared_ptr<${prop.instanceTypeNS}> ${prop.instanceVariableName}_reference(std::make_shared<${prop.instanceTypeNS}>());
-        ${prop.instanceVariableName}_reference->setID(${prop.argumentName});
+        std::shared_ptr<ome::xml::model::Reference> ref(std::static_pointer_cast<ome::xml::model::Reference>(std::make_shared<${prop.instanceTypeNS}>()));
+        ref->setID(${prop.argumentName});
         std::shared_ptr<::${lang.omexml_model_package}::OMEModelObject> modelObject(std::static_pointer_cast<::${lang.omexml_model_package}::OMEModelObject>(${safe_accessor([{'accessor':'root'}]+accessor(obj.name, parent, prop, func=accessor_string_complex), setPropMethod(is_multi_path[o.name], parent, obj.name, prop))}));
-        std::shared_ptr<::${lang.omexml_model_package}::Reference> ref(std::static_pointer_cast<::${lang.omexml_model_package}::Reference>(${prop.instanceVariableName}_reference));
 
         model->addReference(modelObject, ref);
 {% end %}\
