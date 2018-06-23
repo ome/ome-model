@@ -44,11 +44,18 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author callan
  *
  */
 public abstract class AbstractOMEModelObject implements OMEModelObject {
+
+  /** Logger for this class. */
+  protected static final Logger LOGGER =
+    LoggerFactory.getLogger(AbstractOMEModelObject.class);
 
   /* (non-Javadoc)
    * @see ome.xml.r201004.OMEModelObject#update(org.w3c.dom.Element, ome.xml.r201004.OMEModel)
@@ -82,6 +89,8 @@ public abstract class AbstractOMEModelObject implements OMEModelObject {
    */
   @Override
   public boolean link(Reference reference, OMEModelObject o) {
+    LOGGER.debug("{} unable to handle reference of type {} for {}",
+                 getClass(), reference.getClass(), o.getClass());
     return false;
   }
 

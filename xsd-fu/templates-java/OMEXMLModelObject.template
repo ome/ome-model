@@ -465,11 +465,6 @@ ${customUpdatePropertyContent[prop.name]}
 
   public boolean link(Reference reference, OMEModelObject o)
   {
-    boolean wasHandledBySuperClass = super.link(reference, o);
-    if (wasHandledBySuperClass)
-    {
-      return true;
-    }
 {% for prop in klass.properties.values() %}\
 {% if prop.isReference %}\
     if (reference instanceof ${prop.name})
@@ -493,8 +488,7 @@ ${customUpdatePropertyContent[prop.name]}
     }
 {% end %}\
 {% end %}\
-    LOGGER.debug("Unable to handle reference of type: {}", reference.getClass());
-    return false;
+    return super.link(reference, o);
   }
 {% if klass.langBaseType != 'Object' %}\
   // Element's text data getter
