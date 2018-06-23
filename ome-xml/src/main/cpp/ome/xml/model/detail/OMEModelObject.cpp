@@ -38,6 +38,7 @@
 
 #include <ome/common/xml/String.h>
 
+#include <ome/xml/model/Reference.h>
 #include <ome/xml/model/detail/OMEModelObject.h>
 
 namespace ome
@@ -104,9 +105,14 @@ namespace ome
         }
 
         bool
-        OMEModelObject::link (std::shared_ptr<Reference>&                         /* reference */,
-                              std::shared_ptr<::ome::xml::model::OMEModelObject>& /* object */)
+        OMEModelObject::link (std::shared_ptr<Reference>&                         reference,
+                              std::shared_ptr<::ome::xml::model::OMEModelObject>& object)
         {
+          BOOST_LOG_SEV(logger, ome::logging::trivial::warning)
+            << elementName()
+            << " unable to handle reference of type "
+            << reference->elementName()
+            << " for " << object->elementName();
           return false;
         }
 

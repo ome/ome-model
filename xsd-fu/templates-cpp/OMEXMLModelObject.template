@@ -82,6 +82,7 @@
 
 #include <ome/xml/Document.h>
 #include <ome/xml/model/ModelException.h>
+#include <ome/xml/model/Reference.h>
 #include <ome/xml/model/detail/Parse.h>
 
 #include <boost/format.hpp>
@@ -727,10 +728,6 @@ ${customUpdatePropertyContent[prop.name]}
       ${klass.name}::link (std::shared_ptr<Reference>& reference,
                            std::shared_ptr<${lang.omexml_model_package}::OMEModelObject>& object)
       {
-        if (${klass.parentName}::link(reference, object))
-          {
-            return true;
-          }
 {% for prop in klass.properties.values() %}\
 {% if prop.isReference %}\
         if (std::dynamic_pointer_cast<${prop.name}>(reference))
@@ -771,10 +768,7 @@ ${customUpdatePropertyContent[prop.name]}
           }
 {% end %}\
 {% end %}\
-        BOOST_LOG_SEV(logger, ome::logging::trivial::warning)
-          << "Unable to handle reference of type: "
-          << typeid(reference).name();
-        return false;
+        return ${klass.parentName}::link(reference, object);
       }
 {% end source %}\
 {% if klass.langBaseType is not None %}\
