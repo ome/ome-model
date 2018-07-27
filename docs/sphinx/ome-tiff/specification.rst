@@ -434,3 +434,112 @@ The master file containing the full OME-XML metadata should be either an
 OME-XML companion file with the extension :file:`.companion.ome` or a master
 OME-TIFF file containing the full metadata (see :ref:`multifile_samples` for
 representative samples).
+
+Multi-resolution images
+-----------------------
+
+.. versionadded:: 5.7.0
+
+The OME-TIFF specification supports multi-resolution images also called
+pyramidal images i.e. images where individual planes are stored at different
+levels of resolution. The intermediate downsampled image planes are called
+sub-resolution image planes, sub-resolutions or pyramidal levels.
+
+Supported resolutions
+^^^^^^^^^^^^^^^^^^^^^
+
+Image planes can be reduced alongside the X and Y dimensions. Each pyramidal
+level must be a downsampling of the full-resolution plane in the X and Y
+dimensions and the resolution must stay unchanged in the other dimensions. The
+downsampling factor must be an integer value, identical alongside the X and
+the Y dimensions and stay the same between each consecutive pyramidal level.
+
+The following table below shows two examples of pyramidal level dimensions
+supported by the OME-TIFF specification:
+
+.. list-table::
+  :header-rows: 1
+
+  -  *
+     * Example 1
+     * Example 2
+
+  -  * Downsampling factor
+     * 3
+     * 4
+
+  -  * Level 0 (full-resolution)
+     * 9234 × 6075 × 1 × 1 × 10
+     * 38912 × 25600 × 1 × 3 × 1
+
+  -  * Level 1
+     * 3078 × 2025 × 1 × 1 × 10
+     * 9728 × 6400 × 1 × 3 × 1
+
+  -  * Level 2
+     * 1026 × 675 × 1 × 1 × 10
+     * 2432 × 1600 × 1 × 3 × 1
+
+  -  * Level 3
+     * 342 × 225 × 1 × 1 × 10
+     * 608 × 400 × 1 × 3 × 1
+
+  -  * Level 4
+     * 114 × 74 × 1 × 1 × 10
+     * 152 × 100 × 1 × 3 × 1
+
+  -  * Level 5
+     * 38 × 25 × 1 × 1 × 10
+     * 38 × 25 × 1 × 3 × 1
+
+Q: what about rounding?
+
+Storage
+^^^^^^^
+
+Full-resolution image planes must be stored as described above using a valid
+TIFF IFDand referenced from the OME-XML metadata using the
+:ref:`TiffData <tiffdata>` element. In addition when sub-resolutions are
+present:
+
+-  the `SubIFDs` TIFF extension tag must be used to specify the sub-resolution
+   image directories (see below),
+-  the reduced image bit of the `NewSubfileType` Baseline TIFF tag must be set
+   to 1 (TODO: check) to distinguish full-resolution planes from reduced planes
+-  the page bit may optionally be set when appropriate.
+
+Sub-resolution levels must be stored in a valid IFD of the same TIFF file as
+the full-resolution image plane. Additionally:
+
+- the IFD offsets of all pyramidal levels must be listed in the `SubIFDs` TIFF
+  extension tag of the full-resolution plane IFD. The listing must be ordered
+  by size of the sub-resolution image planes from largest to smallest,
+- the IFD offsets of all pyramidal levels must not be referenced in the chain
+  of IFDs derived from the first IFD of the TIFF file,
+- the reduced image bit of the `NewSubfileType` Baseline TIFF tag must be set
+  to 2 (TODO: check) to distinguish full-resolution planes from reduced planes
+- the page bit may optionally be set when appropriate.
+
+Multi-resolution images especially the largest resolutions should used a tiled
+image organization following the TIFF specification (reference) and may be
+compressed using any of the techniques officially supported by the TIFF
+standard including LZW, JPEG, JPEG2000). Sub-resolution image planes may chose
+to use different compression algorithms than the one used by the full
+resolution image. For example the full resolution image may use no
+compression or lossless compression while the sub-resolution images use lossy
+compression.
+
+BigTIFF is recommended for large images, while Baseline TIFF may suffice for
+smaller images.
+
+TODO: ref to valid sample showing multi-resolution OME-TIFF images.
+
+Q: ref to the TIFF spec
+Q: constraints/recommendation on compression/tile size consistency across
+pyramidal levels?
+
+.. seealso::
+
+  https://openmicroscopy.github.io/design/OME005/
+    Official design proposal for the addition of sub-resolution support to the
+    OME-TIFF specification.
