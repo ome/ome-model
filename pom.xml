@@ -190,7 +190,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>license-maven-plugin</artifactId>
-          <version>1.14</version>
+          <version>1.16</version>
           <configuration>
             <licenseName>bsd_2</licenseName>
             <organizationName>Open Microscopy Environment:
@@ -215,7 +215,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.21.0</version>
+          <version>2.22.0</version>
         </plugin>
 
         <plugin>
@@ -226,12 +226,12 @@
 
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.0</version>
         </plugin>
 
         <plugin>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.1.1</version>
         </plugin>
 
         <plugin>
@@ -246,7 +246,7 @@
 
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.1.0</version>
           <!-- Always add classpath to JAR manifests. -->
           <configuration>
             <skipIfEmpty>true</skipIfEmpty>
@@ -277,7 +277,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <!-- NB: The same version declaration and configuration block also
                appears in the <reporting> section, and must be kept in sync. -->
-          <version>3.0.0</version>
+          <version>3.0.1</version>
           <configuration>
             <failOnError>false</failOnError>
             <links>
@@ -296,7 +296,7 @@
 
         <plugin>
           <artifactId>maven-plugin-plugin</artifactId>
-          <version>3.5.1</version>
+          <version>3.5.2</version>
         </plugin>
 
         <plugin>
@@ -313,12 +313,12 @@
 
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>3.0.2</version>
+          <version>3.1.0</version>
         </plugin>
 
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.7</version>
+          <version>3.7.1</version>
         </plugin>
 
         <!-- Create -sources.jar when building. -->
