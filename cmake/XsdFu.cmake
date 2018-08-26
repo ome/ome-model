@@ -41,12 +41,14 @@ if(xsdfu-debug)
   set(XSDFU_DEBUG --debug)
 endif()
 
+find_package(PythonInterp)
+
 # The xsd-fu script
 set(XSD_FU_SCRIPT ${PROJECT_SOURCE_DIR}/xsd-fu/xsd-fu)
 
 # Command to invoke xsd-fu; python used explicitly to allow it to
 # function on windows
-set(XSD_FU python ${XSD_FU_SCRIPT})
+set(XSD_FU "${PYTHON_EXECUTABLE}" ${XSD_FU_SCRIPT})
 
 # Version of the OME-XML model to use
 set(MODEL_VERSION 2016-06)
