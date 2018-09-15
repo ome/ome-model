@@ -1,9 +1,12 @@
 #!/usr/bin/env python
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 import getopt
 from xml.dom import minidom
 from xml.dom import Node
+from six.moves import range
 #import yaml
 
 #
@@ -44,9 +47,9 @@ class top:
         self.addr = addr
     def factory(*args):
         if top.subclass:
-            return apply(top.subclass, args)
+            return top.subclass(*args)
         else:
-            return apply(top, args)
+            return top(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -103,9 +106,9 @@ class attributelist:
         self.addr = addr
     def factory(*args):
         if attributelist.subclass:
-            return apply(attributelist.subclass, args)
+            return attributelist.subclass(*args)
         else:
-            return apply(attributelist, args)
+            return attributelist(*args)
     factory = staticmethod(factory)
     def getAttribute(self): return self.attribute
     def addAttribute(self, attribute): self.attribute.append(attribute)
@@ -164,9 +167,9 @@ class attribute:
         self.addr = addr
     def factory(*args):
         if attribute.subclass:
-            return apply(attribute.subclass, args)
+            return attribute.subclass(*args)
         else:
-            return apply(attribute, args)
+            return attribute(*args)
     factory = staticmethod(factory)
     def getName(self): return self.name
     def setName(self, name): self.name = name
@@ -238,9 +241,9 @@ class include:
         self.addr = addr
     def factory(*args):
         if include.subclass:
-            return apply(include.subclass, args)
+            return include.subclass(*args)
         else:
-            return apply(include, args)
+            return include(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -384,9 +387,9 @@ class emport:
         self.addr = addr
     def factory(*args):
         if emport.subclass:
-            return apply(emport.subclass, args)
+            return emport.subclass(*args)
         else:
-            return apply(emport, args)
+            return emport(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -502,9 +505,9 @@ class enum:
         self.addr = addr
     def factory(*args):
         if enum.subclass:
-            return apply(enum.subclass, args)
+            return enum.subclass(*args)
         else:
-            return apply(enum, args)
+            return enum(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -553,9 +556,9 @@ class enumitem:
         self.addr = addr
     def factory(*args):
         if enumitem.subclass:
-            return apply(enumitem.subclass, args)
+            return enumitem.subclass(*args)
         else:
-            return apply(enumitem, args)
+            return enumitem(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -595,9 +598,9 @@ class kwargs:
         self.addr = addr
     def factory(*args):
         if kwargs.subclass:
-            return apply(kwargs.subclass, args)
+            return kwargs.subclass(*args)
         else:
-            return apply(kwargs, args)
+            return kwargs(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -641,9 +644,9 @@ class typemap:
         self.addr = addr
     def factory(*args):
         if typemap.subclass:
-            return apply(typemap.subclass, args)
+            return typemap.subclass(*args)
         else:
-            return apply(typemap, args)
+            return typemap(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -692,9 +695,9 @@ class typemapitem:
         self.addr = addr
     def factory(*args):
         if typemapitem.subclass:
-            return apply(typemapitem.subclass, args)
+            return typemapitem.subclass(*args)
         else:
-            return apply(typemapitem, args)
+            return typemapitem(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -744,9 +747,9 @@ class klass:
         self.addr = addr
     def factory(*args):
         if klass.subclass:
-            return apply(klass.subclass, args)
+            return klass.subclass(*args)
         else:
-            return apply(klass, args)
+            return klass(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -822,9 +825,9 @@ class cdecl:
         self.addr = addr
     def factory(*args):
         if cdecl.subclass:
-            return apply(cdecl.subclass, args)
+            return cdecl.subclass(*args)
         else:
-            return apply(cdecl, args)
+            return cdecl(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -864,9 +867,9 @@ class access:
         self.addr = addr
     def factory(*args):
         if access.subclass:
-            return apply(access.subclass, args)
+            return access.subclass(*args)
         else:
-            return apply(access, args)
+            return access(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -909,9 +912,9 @@ class parmlist:
         self.addr = addr
     def factory(*args):
         if parmlist.subclass:
-            return apply(parmlist.subclass, args)
+            return parmlist.subclass(*args)
         else:
-            return apply(parmlist, args)
+            return parmlist(*args)
     factory = staticmethod(factory)
     def getParm(self): return self.parm
     def addParm(self, parm): self.parm.append(parm)
@@ -951,9 +954,9 @@ class parm:
         self.addr = addr
     def factory(*args):
         if parm.subclass:
-            return apply(parm.subclass, args)
+            return parm.subclass(*args)
         else:
-            return apply(parm, args)
+            return parm(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -993,9 +996,9 @@ class constructor:
         self.addr = addr
     def factory(*args):
         if constructor.subclass:
-            return apply(constructor.subclass, args)
+            return constructor.subclass(*args)
         else:
-            return apply(constructor, args)
+            return constructor(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -1035,9 +1038,9 @@ class destructor:
         self.addr = addr
     def factory(*args):
         if destructor.subclass:
-            return apply(destructor.subclass, args)
+            return destructor.subclass(*args)
         else:
-            return apply(destructor, args)
+            return destructor(*args)
     factory = staticmethod(factory)
     def getAttributelist(self): return self.attributelist
     def setAttributelist(self, attributelist): self.attributelist = attributelist
@@ -1075,9 +1078,9 @@ class module:
         pass
     def factory(*args):
         if module.subclass:
-            return apply(module.subclass, args)
+            return module.subclass(*args)
         else:
-            return apply(module, args)
+            return module(*args)
     factory = staticmethod(factory)
     def export(self, outfile, level):
         showIndent(outfile, level)
@@ -1099,9 +1102,9 @@ class insert:
         pass
     def factory(*args):
         if insert.subclass:
-            return apply(insert.subclass, args)
+            return insert.subclass(*args)
         else:
-            return apply(insert, args)
+            return insert(*args)
     factory = staticmethod(factory)
     def export(self, outfile, level):
         showIndent(outfile, level)
@@ -1122,7 +1125,7 @@ Usage: python <Parser>.py <in_xml_file>
 """
 
 def usage():
-    print USAGE_TEXT
+    print(USAGE_TEXT)
     sys.exit(-1)
 
 

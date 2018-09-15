@@ -4,10 +4,13 @@
 # Generated Mon Aug 18 17:12:21 2003 by generateDS.py.
 #
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 from xml.dom import minidom
 
 import outline as supermod
+from six.moves import range
 
 #
 # Support/utility functions.
@@ -69,7 +72,7 @@ Usage: python outline_extended.py <infilename>
 """
 
 def usage():
-    print USAGE_TEXT
+    print(USAGE_TEXT)
     sys.exit(-1)
 
 

@@ -4,10 +4,13 @@
 # Generated Tue Jan 30 12:32:05 2007 by generateDS.py.
 #
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 import getopt
 from xml.dom import minidom
 from xml.dom import Node
+from six.moves import range
 
 #
 # If you have installed IPython you can uncomment and use the following.
@@ -222,7 +225,7 @@ class person:
         # Validate type percent, a restriction on xs:integer.
         if (value < 0 or
             value > 100):
-            print 'bad percent value'
+            print('bad percent value')
     def getImagesize(self): return self.imagesize
     def setImagesize(self, imagesize): self.imagesize = imagesize
     def validate_scale(self, value):
@@ -777,7 +780,7 @@ class SaxPeopleHandler(handler.ContentHandler):
         self.locator = locator
     
     def showError(self, msg):
-        print '*** (showError):', msg
+        print('*** (showError):', msg)
         sys.exit(-1)
 
     def startElement(self, name, attrs):
@@ -1004,7 +1007,7 @@ Options:
 """
 
 def usage():
-    print USAGE_TEXT
+    print(USAGE_TEXT)
     sys.exit(-1)
 
 
@@ -1022,7 +1025,7 @@ class SaxSelectorHandler(handler.ContentHandler):
 
 
 def parseSelect(inFileName):
-    infile = file(inFileName, 'r')
+    infile = open(inFileName, 'r')
     topElementName = None
     parser = make_parser()
     documentHandler = SaxSelectorHandler()
@@ -1033,10 +1036,10 @@ def parseSelect(inFileName):
         except StopIteration:
             topElementName = documentHandler.getTopElementName()
         if topElementName is None:
-            raise RuntimeError, 'no top level element'
+            raise RuntimeError('no top level element')
         topElementName = topElementName.replace('-', '_').replace(':', '_')
         if topElementName not in globals():
-            raise RuntimeError, 'no class for top element: %s' % topElementName
+            raise RuntimeError('no class for top element: %s' % topElementName)
         topElement = globals()[topElementName]
         infile.seek(0)
         doc = minidom.parse(infile)

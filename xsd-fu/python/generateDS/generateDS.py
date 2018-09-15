@@ -87,11 +87,13 @@ Options:
 
 #from __future__ import generators   # only needed for Python 2.2
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 import os.path
 import time
 import getopt
-import urllib2
+import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
 import imp
 from xml.sax import handler, make_parser
 import xml.sax.xmlreader
@@ -99,6 +101,9 @@ import logging
 import keyword
 import StringIO
 from collections import OrderedDict
+import six
+from six.moves import range
+from six.moves import input
 
 # Default logger configuration
 ## logging.basicConfig(level=logging.DEBUG, 
@@ -298,11 +303,11 @@ def set_type_constants(nameSpace):
 DEBUG = 0
 def dbgprint(level, msg):
     if DEBUG and level > 0:
-        print msg
+        print(msg)
 
 def pplist(lst):
     for count, item in enumerate(lst):
-        print '%d. %s' % (count, item)
+        print('%d. %s' % (count, item))
 
 
 
@@ -397,12 +402,12 @@ class XschemaElement(XschemaElementBase):
         self.name = name_val
         self.children = []
         self.optional = False
-        if 'minOccurs' in self.attrs.keys():
+        if 'minOccurs' in list(self.attrs.keys()):
             self.minOccurs = self.attrs['minOccurs']
             self.minOccurs = int(self.minOccurs)
         else:
             self.minOccurs = 1
-        if 'maxOccurs' in self.attrs.keys():
+        if 'maxOccurs' in list(self.attrs.keys()):
             self.maxOccurs = self.attrs['maxOccurs']
             if self.maxOccurs == 'unbounded':
                 self.maxOccurs = 99999
@@ -458,7 +463,7 @@ class XschemaElement(XschemaElementBase):
     def isListType(self): return self.listType
     def getType(self):
         returnType = self.type
-        if ElementDict.has_key(self.type):
+        if self.type in ElementDict:
             typeObj = ElementDict[self.type]
             typeObjType = typeObj.getRawType()
             if typeObjType in StringType or \
@@ -745,17 +750,17 @@ class XschemaElement(XschemaElementBase):
         self.replace_attributeGroup_names()
         
         # Resolve "maxOccurs" attribute
-        if 'maxOccurs' in self.attrs.keys():
+        if 'maxOccurs' in list(self.attrs.keys()):
             maxOccurs = self.attrs['maxOccurs']
-        elif self.choice and 'maxOccurs' in self.choice.attrs.keys():
+        elif self.choice and 'maxOccurs' in list(self.choice.attrs.keys()):
             maxOccurs = self.choice.attrs['maxOccurs']
         else:
             maxOccurs = 1
             
         # Resolve "minOccurs" attribute
-        if 'minOccurs' in self.attrs.keys():
+        if 'minOccurs' in list(self.attrs.keys()):
             minOccurs = self.attrs['minOccurs']
-        elif self.choice and 'minOccurs' in self.choice.attrs.keys():
+        elif self.choice and 'minOccurs' in list(self.choice.attrs.keys()):
             minOccurs = self.choice.attrs['minOccurs']
         else:
             minOccurs = 1
@@ -784,7 +789,7 @@ class XschemaElement(XschemaElementBase):
         if self.type == 'NoneType' and self.name:
             self.type = self.name
         # Is it a mixed-content element definition?
-        if 'mixed' in self.attrs.keys():
+        if 'mixed' in list(self.attrs.keys()):
             mixed = self.attrs['mixed'].strip()
             if mixed == '1' or mixed.lower() == 'true':
                 self.mixed = 1
@@ -808,14 +813,14 @@ class XschemaElement(XschemaElementBase):
     def replace_attributeGroup_names(self):
         for groupName in self.attributeGroupNameList:
             key = None
-            if AttributeGroups.has_key(groupName):
+            if groupName in AttributeGroups:
                 key =groupName
             else:
                 # Looking for name space prefix
                 keyList = groupName.split(':')
                 if len(keyList) > 1:
                     key1 = keyList[1]
-                    if AttributeGroups.has_key(key1):
+                    if key1 in AttributeGroups:
                         key = key1
             if key is not None:
                 attrGroup = AttributeGroups[key]
@@ -846,7 +851,7 @@ class XschemaElement(XschemaElementBase):
         self.collectElementNames(elementNames)
         replaced = []
         # Create the needed new attributes.
-        keys = attrDefs.keys()
+        keys = list(attrDefs.keys())
         for key in keys:
             attr = attrDefs[key]
             name = attr.getName()
@@ -896,12 +901,12 @@ class XschemaAttributeGroup:
     def setGroup(self, group): self.group = group
     def getGroup(self): return self.group
     def get(self, name, default=None):
-        if self.group.has_key(name):
+        if name in self.group:
             return self.group[name]
         else:
             return default
     def getKeys(self):
-        return self.group.keys()
+        return list(self.group.keys())
     def add(self, name, attr):
         self.group[name] = attr
     def delete(self, name):
@@ -1008,7 +1013,7 @@ class XschemaHandler(handler.ContentHandler):
 
     def startElement(self, name, attrs):
         global Targetnamespace, NamespacesDict
-        logging.debug("Start element: %s %s" % (name, repr(attrs.items())))
+        logging.debug("Start element: %s %s" % (name, repr(list(attrs.items()))))
 
         if name == SchemaType:
             # If there is an attribute "xmlns" and its value is
@@ -1034,11 +1039,11 @@ class XschemaHandler(handler.ContentHandler):
             self.inElement = 1
             self.inNonanonymousComplexType = 1
             element = XschemaElement(attrs)
-            if not 'type' in attrs.keys() and not 'ref' in attrs.keys():
+            if not 'type' in list(attrs.keys()) and not 'ref' in list(attrs.keys()):
                 element.setExplicitDefine(1)
             if len(self.stack) == 1:
                 element.setTopLevel(1)
-            if 'substitutionGroup' in attrs.keys() and 'name' in attrs.keys():
+            if 'substitutionGroup' in list(attrs.keys()) and 'name' in list(attrs.keys()):
                 substituteName = attrs['name']
                 headName = attrs['substitutionGroup']
                 if headName not in SubstitutionGroups:
@@ -1069,21 +1074,21 @@ class XschemaHandler(handler.ContentHandler):
             self.currentChoices[len(self.stack)] = choice
         elif name == AttributeType:
             self.inAttribute = 1
-            if 'name' in attrs.keys():
+            if 'name' in list(attrs.keys()):
                 name = attrs['name']
-            elif 'ref' in attrs.keys():
+            elif 'ref' in list(attrs.keys()):
                 name = strip_namespace(attrs['ref'])
             else:
                 name = 'no_attribute_name'
-            if 'type' in attrs.keys():
+            if 'type' in list(attrs.keys()):
                 data_type = attrs['type']
             else:
                 data_type = StringType[0]
-            if 'use' in attrs.keys():
+            if 'use' in list(attrs.keys()):
                 use = attrs['use']
             else:
                 use = 'optional'
-            if 'default' in attrs.keys():
+            if 'default' in list(attrs.keys()):
                 default = attrs['default']
             else:
                 default = None
@@ -1100,7 +1105,7 @@ class XschemaHandler(handler.ContentHandler):
             self.inAttributeGroup = 1
             # If it has attribute 'name', then it's a definition.
             #   Prepare to save it as an attributeGroup.
-            if 'name' in attrs.keys():
+            if 'name' in list(attrs.keys()):
                 name = strip_namespace(attrs['name'])
                 attributeGroup = XschemaAttributeGroup(name)
                 element = XschemaElement(attrs)
@@ -1110,12 +1115,12 @@ class XschemaHandler(handler.ContentHandler):
                 self.stack.append(element)
             # If it has attribute 'ref', add it to the list of
             #   attributeGroups for this element/complexType.
-            if 'ref' in attrs.keys():
+            if 'ref' in list(attrs.keys()):
                 self.stack[-1].attributeGroupNameList.append(attrs['ref'])
         elif name == ComplexContentType:
             pass
         elif name == ExtensionType:
-            if 'base' in attrs.keys() and len(self.stack) > 0:
+            if 'base' in list(attrs.keys()) and len(self.stack) > 0:
                 extensionBase = attrs['base']
                 if extensionBase in StringType or \
                     extensionBase in IDTypes or \
@@ -1148,7 +1153,7 @@ class XschemaHandler(handler.ContentHandler):
             else:
                 # Save the name of the simpleType, but ignore everything
                 #   else about it (for now).
-                if 'name' in attrs.keys():
+                if 'name' in list(attrs.keys()):
                     stName = cleanupName(attrs['name'])
                 elif len(self.stack) > 0:
                     stName = cleanupName(self.stack[-1].getName())
@@ -1163,22 +1168,22 @@ class XschemaHandler(handler.ContentHandler):
             self.inSimpleType = 1
         elif name == RestrictionType:
             if self.inAttribute:
-                if attrs.has_key('base'):
+                if 'base' in attrs:
                     self.lastAttribute.setData_type(attrs['base'])
             else:
                 # If we are in a simpleType, capture the name of
                 #   the restriction base.
-                if self.inSimpleType and 'base' in attrs.keys():
+                if self.inSimpleType and 'base' in list(attrs.keys()):
                     self.stack[-1].setBase(attrs['base'])
             self.inRestrictionType = 1
         elif name == EnumerationType:
-            if self.inAttribute and attrs.has_key('value'):
+            if self.inAttribute and 'value' in attrs:
                 # We know that the restriction is on an attribute and the
                 # attributes of the current element are un-ordered so the
                 # instance variable "lastAttribute" will have our attribute.
                 logging.debug("Adding value %s to %s" % (attrs['value'], self.lastAttribute))
                 self.lastAttribute.values.append(attrs['value'])
-            elif self.inElement and attrs.has_key('value'):
+            elif self.inElement and 'value' in attrs:
                 # We're not in an attribute so the restriction must have
                 # been placed on an element and that element will still be
                 # in the stack. We search backwards through the stack to
@@ -1194,21 +1199,21 @@ class XschemaHandler(handler.ContentHandler):
                             attrs['value']), )
                     sys.exit(1)
                 element.values.append(attrs['value'])
-            elif self.inSimpleType and attrs.has_key('value'):
+            elif self.inSimpleType and 'value' in attrs:
                 # We've been defined as a simpleType on our own.
                 logging.debug("Adding value %s to %s" % (attrs['value'], self.stack[-1]))
                 self.stack[-1].values.append(attrs['value'])
         elif name == UnionType:
             # Union types are only used with a parent simpleType and we want
             # the parent to know what it's a union of.
-            if attrs.has_key('memberTypes'):
+            if 'memberTypes' in attrs:
                 for member in attrs['memberTypes'].split(" "):
                     o = self.stack[-1]
                     logging.debug("Adding union member %s to %s" % (member, o))
                     o.unionOf.append(member)
             self.inUnionType = 1
         elif name == WhiteSpaceType and self.inRestrictionType:
-            if attrs.has_key('value'):
+            if 'value' in attrs:
                 if attrs.getValue('value') == 'collapse':
                     self.stack[-1].collapseWhiteSpace = 1
         elif name == ListType:
@@ -3260,7 +3265,7 @@ def generateClasses(outfile, prefix, element, delayed):
         parent = ElementDict[base]
         parentName = parent.getName()
         if (parentName not in AlreadyGenerated and
-            parentName not in SimpleTypeDict.keys()):
+            parentName not in list(SimpleTypeDict.keys())):
             PostponedExtensions.append(element)
             return
     if element.getName() in AlreadyGenerated:
@@ -3648,12 +3653,12 @@ def get_impl_body(classBehavior, baseImplUrl, implUrl):
         if baseImplUrl:
             implUrl = '%s%s' % (baseImplUrl, implUrl)
         try:
-            implFile = urllib2.urlopen(implUrl)
+            implFile = six.moves.urllib.request.urlopen(implUrl)
             impl = implFile.read()
             implFile.close()
-        except urllib2.HTTPError:
+        except six.moves.urllib.error.HTTPError:
             err_msg('*** Implementation at %s not found.\n' % implUrl)
-        except urllib2.URLError:
+        except six.moves.urllib.error.URLError:
             err_msg('*** Connection refused for URL: %s\n' % implUrl)
     return impl
 
@@ -4096,7 +4101,7 @@ def generate(outfileName, subclassFilename, behaviorFilename,
             parent = ElementDict[base]
             parentName = parent.getName()
             if (parentName in AlreadyGenerated or 
-                parentName in SimpleTypeDict.keys()):
+                parentName in list(SimpleTypeDict.keys())):
                 generateClasses(outfile, prefix, element, 1)
             else:
                 PostponedExtensions.insert(0, element)
@@ -4116,11 +4121,11 @@ def makeFile(outFileName):
     global Force
     outFile = None
     if (not Force) and os.path.exists(outFileName):
-        reply = raw_input('File %s exists.  Overwrite? (y/n): ' % outFileName)
+        reply = input('File %s exists.  Overwrite? (y/n): ' % outFileName)
         if reply == 'y':
-            outFile = file(outFileName, 'w')
+            outFile = open(outFileName, 'w')
     else:
-        outFile = file(outFileName, 'w')
+        outFile = open(outFileName, 'w')
     return outFile
 
 
@@ -4231,7 +4236,7 @@ def parseAndGenerate(outfileName, subclassFilename, prefix,
     else:
         infile = open(xschemaFileName, 'r')
     if processIncludes:
-        import process_includes
+        from . import process_includes
         process_includes.DIRPATH = Dirpath
         outfile = StringIO.StringIO()
         process_includes.process_include_files(infile, outfile)
@@ -4253,10 +4258,10 @@ def parseAndGenerate(outfileName, subclassFilename, prefix,
 
 def debug_show_elements(root):
     #print 'ElementDict:', ElementDict
-    print '=' * 50
-    for name, obj in ElementDict.iteritems():
-        print 'element:', name, obj.getName(), obj.type
-    print '=' * 50
+    print('=' * 50)
+    for name, obj in six.iteritems(ElementDict):
+        print('element:', name, obj.getName(), obj.type)
+    print('=' * 50)
     #ipshell('debug')
 ##     root.show(sys.stdout, 0)
 ##     print '=' * 50
@@ -4303,7 +4308,7 @@ def main():
             'member-specs=',
             'version',
             ])
-    except getopt.GetoptError, exp:
+    except getopt.GetoptError as exp:
         usage()
     prefix = ''
     outFilename = None
@@ -4364,7 +4369,7 @@ def main():
             if MemberSpecs not in ('list', 'dict', ):
                 raise RuntimeError('Option --member-specs must be "list" or "dict".')
     if showVersion:
-        print 'generateDS.py version %s' % VERSION
+        print('generateDS.py version %s' % VERSION)
         sys.exit(0)
     XsdNameSpace = nameSpace
     Namespacedef = namespacedef
