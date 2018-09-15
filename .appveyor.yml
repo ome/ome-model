@@ -27,6 +27,7 @@ init:
   - 'if [%java%] == [10] set "JAVA_HOME=C:\Program Files\Java\jdk10"'
   - PATH=%JAVA_HOME%\bin;%PATH%
   - 'set "MAVEN_OPTS=-Dmaven.repo.local=%AV_OME_M2%"'
+  - 'if [%java%] == [1.7] set "MAVEN_OPTS=%MAVEN_OPTS% -Dhttps.protocols=TLSv1.2"'
 
 build_script:
   # Cached venv is available from this point.
