@@ -12,8 +12,14 @@ jdk:
   - oraclejdk8
   - openjdk7
 
+env:
+  - MAVEN_OPTS=-Dpython=python3
+  - MAVEN_OPTS=-Dpython=python2
+
 matrix:
   fast_finish: true
 
 before_install:
-  pip install --user -r requirements.txt
+  - python2 --version
+  - python3 --version
+  - pip install --user -r requirements.txt
