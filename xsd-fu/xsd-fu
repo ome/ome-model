@@ -535,7 +535,7 @@ def resolve_hierarchy(results, model, names, func, child=None, key=None, level=0
     is_multi_path = False
     if names is None:
         return is_multi_path
-    for name in names.keys():
+    for name in sorted(names.keys()):
         o = model.getObjectByName(name)
         # Set our key and instantiate our index list if we're the first level
         if level == 1:
