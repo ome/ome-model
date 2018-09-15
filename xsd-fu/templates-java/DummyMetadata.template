@@ -256,8 +256,10 @@ public class DummyMetadata implements IMetadata
 {% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if o.langBaseType != 'Object' %}\
+{% if debug %}\
   // Element's text data
   // ${repr(indexes[o.name])}
+{% end %}\
   public void set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])})
   {
   }
@@ -313,13 +315,13 @@ ${counter(k, o, v)}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}
 {% if debug %}\
   // MARKER [EEE]
-{% end debug %}\
   //
   // ${o.name} property storage
   //
   // Indexes: ${repr(indexes[o.name])}
   // ${repr(parents[o.name])}
   // Is multi path? ${is_multi_path[o.name]}
+{% end debug %}\
 
 {% choose %}\
 {% when o.isReference %}\
@@ -427,11 +429,13 @@ ${getter(k, o, prop, v)}\
 {% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}
+{% if debug %}\
   //
   // ${o.name} property storage
   //
   // ${repr(parents[o.name])}
   // Is multi path? ${is_multi_path[o.name]}
+{% end debug %}\
 
 {% choose %}\
 {% when o.isReference %}\

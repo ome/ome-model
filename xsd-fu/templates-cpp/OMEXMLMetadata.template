@@ -23,7 +23,9 @@
       OMEXMLMetadata::index_type
       OMEXMLMetadata::${getCounterMethod(is_multi_path[o.name], parent, obj.name)}(${indexes_string(indexes[:-1])}) const
       {
+{% if debug %}\
         // Parents: ${repr(parents[obj.name])}
+{% end debug %}\
 {% if obj.isReference %}\
         // ${obj.name} is a reference
         return ${safe_accessor([{'accessor':'root'}]+accessor(obj.name, parent, obj.name, func=accessor_string_complex)[:-1] + [{'accessor':"sizeOfLinked%sList()" % obj.name.replace('Ref', '')}], getCounterMethod(is_multi_path[o.name], parent, obj.name))};
@@ -74,7 +76,9 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% end %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       {
+{% if debug %}\
         // Parents: ${repr(parents[obj.name])}
+{% end debug%}\
 {% choose %}\
 {% when is_abstract(parent) and prop.isReference and prop.maxOccurs > 1 %}\
         // ${parent} is abstract, is reference and occurs more than once
@@ -193,7 +197,9 @@ OMEXMLMetadata::${getPropMethod(is_multi_path[o.name], parent, obj.name, prop)}(
 {% end %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       {
+{% if debug %}\
         // Parents: ${repr(parents[obj.name])}
+{% end debug %}\
 {% choose %}\
 {% when is_abstract(parent) and prop.isReference %}\
         // ${prop.name} is abstract and is a reference
