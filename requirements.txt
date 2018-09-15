@@ -4,4 +4,4 @@
 #     pip install -r requirements.txt
 #
 six
-Sphinx
+Sphinx==1.7.9
