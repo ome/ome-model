@@ -13,7 +13,8 @@
 
 """Support for "safe" evaluation of Python expressions."""
 
-import __builtin__
+from __future__ import absolute_import
+import six.moves.builtins
 
 from textwrap import dedent
 from types import CodeType
@@ -26,6 +27,8 @@ from genshi.util import flatten
 
 from genshi.compat import get_code_params, build_code_chunk, isstring, \
                           IS_PYTHON2
+import six
+from six.moves import zip
 
 __all__ = ['Code', 'Expression', 'Suite', 'LenientLookup', 'StrictLookup',
            'Undefined', 'UndefinedError']
@@ -37,7 +40,7 @@ has_star_import_bug = False
 try:
     class _FakeMapping(object):
         __getitem__ = __setitem__ = lambda *a: None
-    exec 'from sys import *' in {}, _FakeMapping()
+    exec('from sys import *', {}, _FakeMapping())
 except SystemError:
     has_star_import_bug = True
 del _FakeMapping
@@ -75,7 +78,7 @@ class Code(object):
                       if `None`, the appropriate transformation is chosen
                       depending on the mode
         """
-        if isinstance(source, basestring):
+        if isinstance(source, six.string_types):
             self.source = source
             node = _parse(source, mode=self.mode)
         else:
@@ -94,13 +97,13 @@ class Code(object):
                              filename=filename, lineno=lineno, xform=xform)
         if lookup is None:
             lookup = LenientLookup
-        elif isinstance(lookup, basestring):
+        elif isinstance(lookup, six.string_types):
             lookup = {'lenient': LenientLookup, 'strict': StrictLookup}[lookup]
         self._globals = lookup.globals
 
     def __getstate__(self):
         state = {'source': self.source, 'ast': self.ast,
-                 'lookup': self._globals.im_self}
+                 'lookup': self._globals.__self__}
         state['code'] = get_code_params(self.code)
         return state
 
@@ -196,7 +199,7 @@ class Suite(Code):
         """
         __traceback_hide__ = 'before_and_this'
         _globals = self._globals(data)
-        exec self.code in _globals, data
+        exec(self.code, _globals, data)
 
 
 UNDEFINED = object()
@@ -333,8 +336,8 @@ class LookupBase(object):
             key = key[0]
         try:
             return obj[key]
-        except (AttributeError, KeyError, IndexError, TypeError), e:
-            if isinstance(key, basestring):
+        except (AttributeError, KeyError, IndexError, TypeError) as e:
+            if isinstance(key, six.string_types):
                 val = getattr(obj, key, UNDEFINED)
                 if val is UNDEFINED:
                     val = cls.undefined(key, owner=obj)
@@ -424,7 +427,7 @@ def _parse(source, mode='eval'):
             if first.rstrip().endswith(':') and not rest[0].isspace():
                 rest = '\n'.join(['    %s' % line for line in rest.splitlines()])
             source = '\n'.join([first, rest])
-    if isinstance(source, unicode):
+    if isinstance(source, six.text_type):
         source = (u'\ufeff' + source).encode('utf-8')
     return parse(source, mode)
 
@@ -435,11 +438,11 @@ def _compile(node, source=None, mode='eval', filename=None, lineno=-1,
         filename = '<string>'
     if IS_PYTHON2:
         # Python 2 requires non-unicode filenames
-        if isinstance(filename, unicode):
+        if isinstance(filename, six.text_type):
             filename = filename.encode('utf-8', 'replace')
     else:
         # Python 3 requires unicode filenames
-        if not isinstance(filename, unicode):
+        if not isinstance(filename, six.text_type):
             filename = filename.decode('utf-8', 'replace')
     if lineno <= 0:
         lineno = 1
@@ -483,7 +486,7 @@ def _new(class_, *args, **kwargs):
     return ret
 
 
-BUILTINS = __builtin__.__dict__.copy()
+BUILTINS = six.moves.builtins.__dict__.copy()
 BUILTINS.update({'Markup': Markup, 'Undefined': Undefined})
 CONSTANTS = frozenset(['False', 'True', 'None', 'NotImplemented', 'Ellipsis'])
 
@@ -527,7 +530,7 @@ class TemplateASTTransformer(ASTTransformer):
         return names
 
     def visit_Str(self, node):
-        if not isinstance(node.s, unicode):
+        if not isinstance(node.s, six.text_type):
             try: # If the string is ASCII, return a `str` object
                 node.s.decode('ascii')
             except ValueError: # Otherwise return a `unicode` object

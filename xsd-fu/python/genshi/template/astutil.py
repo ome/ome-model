@@ -13,6 +13,8 @@
 
 """Support classes for generating code from abstract syntax trees."""
 
+from __future__ import absolute_import
+from six.moves import zip
 try:
     import _ast
 except ImportError:

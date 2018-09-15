@@ -11,6 +11,7 @@
 # individuals. For the exact contribution history, see the revision
 # history and logs, available at http://genshi.edgewall.org/log/.
 
+from __future__ import absolute_import
 from datetime import datetime
 import doctest
 from gettext import NullTranslations
@@ -21,6 +22,8 @@ from genshi.template import MarkupTemplate, Context
 from genshi.filters.i18n import Translator, extract
 from genshi.input import HTML
 from genshi.compat import IS_PYTHON2, StringIO
+import six
+from six.moves import range
 
 
 class DummyTranslations(NullTranslations):
@@ -46,7 +49,7 @@ class DummyTranslations(NullTranslations):
             if tmsg is missing:
                 if self._fallback:
                     return self._fallback.ugettext(message)
-                return unicode(message)
+                return six.text_type(message)
             return tmsg
     else:
         def gettext(self, message):
@@ -55,7 +58,7 @@ class DummyTranslations(NullTranslations):
             if tmsg is missing:
                 if self._fallback:
                     return self._fallback.gettext(message)
-                return unicode(message)
+                return six.text_type(message)
             return tmsg
 
     if IS_PYTHON2:

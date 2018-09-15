@@ -13,6 +13,7 @@
 
 """Basic templating functionality."""
 
+from __future__ import absolute_import
 from collections import deque
 import os
 import sys
@@ -20,6 +21,7 @@ import sys
 from genshi.compat import StringIO, BytesIO
 from genshi.core import Attrs, Stream, StreamEventKind, START, TEXT, _ensure
 from genshi.input import ParseError
+import six
 
 __all__ = ['Context', 'DirectiveFactory', 'Template', 'TemplateError',
            'TemplateRuntimeError', 'TemplateSyntaxError', 'BadDirectiveError']
@@ -179,7 +181,7 @@ class Context(object):
         
         :return: the number of variables in the context
         """
-        return len(self.items())
+        return len(list(self.items()))
 
     def __setitem__(self, key, value):
         """Set a variable in the current scope.
@@ -321,12 +323,11 @@ class DirectiveFactoryMeta(type):
         return type.__new__(cls, name, bases, d)
 
 
-class DirectiveFactory(object):
+class DirectiveFactory(six.with_metaclass(DirectiveFactoryMeta, object)):
     """Base for classes that provide a set of template directives.
     
     :since: version 0.6
     """
-    __metaclass__ = DirectiveFactoryMeta
 
     directives = []
     """A list of ``(name, cls)`` tuples that define the set of directives
@@ -379,7 +380,7 @@ class Template(DirectiveFactory):
     """
 
     serializer = None
-    _number_conv = unicode # function used to convert numbers to event data
+    _number_conv = six.text_type # function used to convert numbers to event data
 
     def __init__(self, source, filepath=None, filename=None, loader=None,
                  encoding=None, lookup='strict', allow_exec=True):
@@ -411,13 +412,13 @@ class Template(DirectiveFactory):
         self._prepared = False
 
         if not isinstance(source, Stream) and not hasattr(source, 'read'):
-            if isinstance(source, unicode):
+            if isinstance(source, six.text_type):
                 source = StringIO(source)
             else:
                 source = BytesIO(source)
         try:
             self._stream = self._parse(source, encoding)
-        except ParseError, e:
+        except ParseError as e:
             raise TemplateSyntaxError(e.msg, self.filepath, e.lineno, e.offset)
 
     def __getstate__(self):
@@ -502,7 +503,7 @@ class Template(DirectiveFactory):
                 if kind is INCLUDE:
                     href, cls, fallback = data
                     tmpl_inlined = False
-                    if (isinstance(href, basestring) and
+                    if (isinstance(href, six.string_types) and
                             not getattr(self.loader, 'auto_reload', True)):
                         # If the path to the included template is static, and
                         # auto-reloading is disabled on the template loader,
@@ -601,16 +602,16 @@ class Template(DirectiveFactory):
                         # First check for a string, otherwise the iterable test
                         # below succeeds, and the string will be chopped up into
                         # individual characters
-                        if isinstance(result, basestring):
+                        if isinstance(result, six.string_types):
                             yield TEXT, result, pos
-                        elif isinstance(result, (int, float, long)):
+                        elif isinstance(result, (int, float, int)):
                             yield TEXT, number_conv(result), pos
                         elif hasattr(result, '__iter__'):
                             push(stream)
                             stream = _ensure(result)
                             break
                         else:
-                            yield TEXT, unicode(result), pos
+                            yield TEXT, six.text_type(result), pos
 
                 elif kind is SUB:
                     # This event is a list of directives and a list of nested
@@ -639,7 +640,7 @@ class Template(DirectiveFactory):
         for event in stream:
             if event[0] is INCLUDE:
                 href, cls, fallback = event[1]
-                if not isinstance(href, basestring):
+                if not isinstance(href, six.string_types):
                     parts = []
                     for subkind, subdata, subpos in self._flatten(href, ctxt,
                                                                   **vars):

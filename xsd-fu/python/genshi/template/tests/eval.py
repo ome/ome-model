@@ -11,6 +11,7 @@
 # individuals. For the exact contribution history, see the revision
 # history and logs, available at http://genshi.edgewall.org/log/.
 
+from __future__ import absolute_import
 import doctest
 import os
 import pickle
@@ -23,6 +24,7 @@ from genshi.template.base import Context
 from genshi.template.eval import Expression, Suite, Undefined, UndefinedError, \
                                  UNDEFINED
 from genshi.compat import BytesIO, IS_PYTHON2, wrapped_bytes
+from six.moves import range
 
 
 class ExpressionTestCase(unittest.TestCase):
@@ -82,10 +84,10 @@ class ExpressionTestCase(unittest.TestCase):
     def test_num_literal(self):
         self.assertEqual(42, Expression("42").evaluate({}))
         if IS_PYTHON2:
-            self.assertEqual(42L, Expression("42L").evaluate({}))
+            self.assertEqual(42, Expression("42L").evaluate({}))
         self.assertEqual(.42, Expression(".42").evaluate({}))
         if IS_PYTHON2:
-            self.assertEqual(07, Expression("07").evaluate({}))
+            self.assertEqual(0o7, Expression("07").evaluate({}))
         self.assertEqual(0xF2, Expression("0xF2").evaluate({}))
         self.assertEqual(0XF2, Expression("0XF2").evaluate({}))
 
@@ -236,7 +238,7 @@ class ExpressionTestCase(unittest.TestCase):
         self.assertEqual(42, Expression("foo()").evaluate({'foo': lambda: 42}))
         data = {'foo': 'bar'}
         self.assertEqual('BAR', Expression("foo.upper()").evaluate(data))
-        data = {'foo': {'bar': range(42)}}
+        data = {'foo': {'bar': list(range(42))}}
         self.assertEqual(42, Expression("len(foo.bar)").evaluate(data))
 
     def test_call_keywords(self):
@@ -254,7 +256,7 @@ class ExpressionTestCase(unittest.TestCase):
         self.assertEqual(42, expr.evaluate({'foo': foo, 'bar': {"x": 42}}))
 
     def test_lambda(self):
-        data = {'items': range(5)}
+        data = {'items': list(range(5))}
         expr = Expression("filter(lambda x: x > 2, items)")
         self.assertEqual([3, 4], list(expr.evaluate(data)))
 
@@ -268,19 +270,19 @@ class ExpressionTestCase(unittest.TestCase):
 
     def test_list_comprehension(self):
         expr = Expression("[n for n in numbers if n < 2]")
-        self.assertEqual([0, 1], expr.evaluate({'numbers': range(5)}))
+        self.assertEqual([0, 1], expr.evaluate({'numbers': list(range(5))}))
 
         expr = Expression("[(i, n + 1) for i, n in enumerate(numbers)]")
         self.assertEqual([(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)],
-                         expr.evaluate({'numbers': range(5)}))
+                         expr.evaluate({'numbers': list(range(5))}))
 
         expr = Expression("[offset + n for n in numbers]")
         self.assertEqual([2, 3, 4, 5, 6],
-                         expr.evaluate({'numbers': range(5), 'offset': 2}))
+                         expr.evaluate({'numbers': list(range(5)), 'offset': 2}))
 
         expr = Expression("[n for group in groups for n in group]")
         self.assertEqual([0, 1, 0, 1, 2],
-                         expr.evaluate({'groups': [range(2), range(3)]}))
+                         expr.evaluate({'groups': [list(range(2)), list(range(3))]}))
 
         expr = Expression("[(a, b) for a in x for b in y]")
         self.assertEqual([('x0', 'y0'), ('x0', 'y1'), ('x1', 'y0'), ('x1', 'y1')],
@@ -298,19 +300,19 @@ class ExpressionTestCase(unittest.TestCase):
 
     def test_generator_expression(self):
         expr = Expression("list(n for n in numbers if n < 2)")
-        self.assertEqual([0, 1], expr.evaluate({'numbers': range(5)}))
+        self.assertEqual([0, 1], expr.evaluate({'numbers': list(range(5))}))
 
         expr = Expression("list((i, n + 1) for i, n in enumerate(numbers))")
         self.assertEqual([(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)],
-                         expr.evaluate({'numbers': range(5)}))
+                         expr.evaluate({'numbers': list(range(5))}))
 
         expr = Expression("list(offset + n for n in numbers)")
         self.assertEqual([2, 3, 4, 5, 6],
-                         expr.evaluate({'numbers': range(5), 'offset': 2}))
+                         expr.evaluate({'numbers': list(range(5)), 'offset': 2}))
 
         expr = Expression("list(n for group in groups for n in group)")
         self.assertEqual([0, 1, 0, 1, 2],
-                         expr.evaluate({'groups': [range(2), range(3)]}))
+                         expr.evaluate({'groups': [list(range(2)), list(range(3))]}))
 
         expr = Expression("list((a, b) for a in x for b in y)")
         self.assertEqual([('x0', 'y0'), ('x0', 'y1'), ('x1', 'y0'), ('x1', 'y1')],
@@ -334,29 +336,29 @@ class ExpressionTestCase(unittest.TestCase):
 
     def test_slice(self):
         expr = Expression("numbers[0:2]")
-        self.assertEqual([0, 1], expr.evaluate({'numbers': range(5)}))
+        self.assertEqual([0, 1], expr.evaluate({'numbers': list(range(5))}))
 
     def test_slice_with_vars(self):
         expr = Expression("numbers[start:end]")
-        self.assertEqual([0, 1], expr.evaluate({'numbers': range(5), 'start': 0,
+        self.assertEqual([0, 1], expr.evaluate({'numbers': list(range(5)), 'start': 0,
                                                 'end': 2}))
 
     def test_slice_copy(self):
         expr = Expression("numbers[:]")
-        self.assertEqual([0, 1, 2, 3, 4], expr.evaluate({'numbers': range(5)}))
+        self.assertEqual([0, 1, 2, 3, 4], expr.evaluate({'numbers': list(range(5))}))
 
     def test_slice_stride(self):
         expr = Expression("numbers[::stride]")
-        self.assertEqual([0, 2, 4], expr.evaluate({'numbers': range(5),
+        self.assertEqual([0, 2, 4], expr.evaluate({'numbers': list(range(5)),
                                                    'stride': 2}))
 
     def test_slice_negative_start(self):
         expr = Expression("numbers[-1:]")
-        self.assertEqual([4], expr.evaluate({'numbers': range(5)}))
+        self.assertEqual([4], expr.evaluate({'numbers': list(range(5))}))
 
     def test_slice_negative_end(self):
         expr = Expression("numbers[:-1]")
-        self.assertEqual([0, 1, 2, 3], expr.evaluate({'numbers': range(5)}))
+        self.assertEqual([0, 1, 2, 3], expr.evaluate({'numbers': list(range(5))}))
 
     def test_access_undefined(self):
         expr = Expression("nothing", filename='index.html', lineno=50,
@@ -416,7 +418,7 @@ class ExpressionTestCase(unittest.TestCase):
         try:
             expr.evaluate({})
             self.fail('Expected UndefinedError')
-        except UndefinedError, e:
+        except UndefinedError as e:
             exc_type, exc_value, exc_traceback = sys.exc_info()
             frame = exc_traceback.tb_next
             frames = []
@@ -439,7 +441,7 @@ class ExpressionTestCase(unittest.TestCase):
         try:
             expr.evaluate({'something': Something()})
             self.fail('Expected UndefinedError')
-        except UndefinedError, e:
+        except UndefinedError as e:
             self.assertEqual('<Something> has no member named "nil"', str(e))
             exc_type, exc_value, exc_traceback = sys.exc_info()
             search_string = "<Expression 'something.nil'>"
@@ -463,7 +465,7 @@ class ExpressionTestCase(unittest.TestCase):
         try:
             expr.evaluate({'something': Something()})
             self.fail('Expected UndefinedError')
-        except UndefinedError, e:
+        except UndefinedError as e:
             self.assertEqual('<Something> has no member named "nil"', str(e))
             exc_type, exc_value, exc_traceback = sys.exc_info()
             search_string = '''<Expression 'something["nil"]'>'''

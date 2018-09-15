@@ -13,12 +13,15 @@
 
 """Implementation of the various template directives."""
 
+from __future__ import absolute_import
 from genshi.core import QName, Stream
 from genshi.path import Path
 from genshi.template.base import TemplateRuntimeError, TemplateSyntaxError, \
                                  EXPR, _apply_directives, _eval_expr
 from genshi.template.eval import Expression, ExpressionASTTransformer, \
                                  _ast, _parse
+import six
+from six.moves import range
 
 __all__ = ['AttrsDirective', 'ChooseDirective', 'ContentDirective',
            'DefDirective', 'ForDirective', 'IfDirective', 'MatchDirective',
@@ -35,7 +38,7 @@ class DirectiveMeta(type):
         return type.__new__(cls, name, bases, d)
 
 
-class Directive(object):
+class Directive(six.with_metaclass(DirectiveMeta, object)):
     """Abstract base class for template directives.
     
     A directive is basically a callable that takes three positional arguments:
@@ -53,7 +56,6 @@ class Directive(object):
     described above, and can only be applied programmatically (for example by
     template filters).
     """
-    __metaclass__ = DirectiveMeta
     __slots__ = ['expr']
 
     def __init__(self, value, template=None, namespaces=None, lineno=-1,
@@ -108,7 +110,7 @@ class Directive(object):
         try:
             return expr and Expression(expr, template.filepath, lineno,
                                        lookup=template.lookup) or None
-        except SyntaxError, err:
+        except SyntaxError as err:
             err.msg += ' in expression "%s" of "%s" directive' % (expr,
                                                                   cls.tagname)
             raise TemplateSyntaxError(err, template.filepath, lineno,
@@ -165,18 +167,18 @@ class AttrsDirective(Directive):
 
     def __call__(self, stream, directives, ctxt, **vars):
         def _generate():
-            kind, (tag, attrib), pos  = stream.next()
+            kind, (tag, attrib), pos  = next(stream)
             attrs = _eval_expr(self.expr, ctxt, vars)
             if attrs:
                 if isinstance(attrs, Stream):
                     try:
-                        attrs = iter(attrs).next()
+                        attrs = next(iter(attrs))
                     except StopIteration:
                         attrs = []
                 elif not isinstance(attrs, list): # assume it's a dict
-                    attrs = attrs.items()
+                    attrs = list(attrs.items())
                 attrib |= [
-                    (QName(n), v is not None and unicode(v).strip() or None)
+                    (QName(n), v is not None and six.text_type(v).strip() or None)
                     for n, v in attrs
                 ]
             yield kind, (tag, attrib), pos
@@ -529,8 +531,8 @@ class StripDirective(Directive):
     def __call__(self, stream, directives, ctxt, **vars):
         def _generate():
             if not self.expr or _eval_expr(self.expr, ctxt, vars):
-                stream.next() # skip start tag
-                previous = stream.next()
+                next(stream) # skip start tag
+                previous = next(stream)
                 for event in stream:
                     yield previous
                     previous = event
@@ -622,13 +624,13 @@ class WhenDirective(Directive):
         if not info:
             raise TemplateRuntimeError('"when" directives can only be used '
                                        'inside a "choose" directive',
-                                       self.filename, *(stream.next())[2][1:])
+                                       self.filename, *(next(stream))[2][1:])
         if info[0]:
             return []
         if not self.expr and not info[1]:
             raise TemplateRuntimeError('either "choose" or "when" directive '
                                        'must have a test expression',
-                                       self.filename, *(stream.next())[2][1:])
+                                       self.filename, *(next(stream))[2][1:])
         if info[1]:
             value = info[2]
             if self.expr:
@@ -661,7 +663,7 @@ class OtherwiseDirective(Directive):
         if not info:
             raise TemplateRuntimeError('an "otherwise" directive can only be '
                                        'used inside a "choose" directive',
-                                       self.filename, *(stream.next())[2][1:])
+                                       self.filename, *(next(stream))[2][1:])
         if info[0]:
             return []
         info[0] = True
@@ -698,7 +700,7 @@ class WithDirective(Directive):
                 self.vars.append(([_assignment(n) for n in node.targets],
                                   Expression(node.value, template.filepath,
                                              lineno, lookup=template.lookup)))
-        except SyntaxError, err:
+        except SyntaxError as err:
             err.msg += ' in expression "%s" of "%s" directive' % (value,
                                                                   self.tagname)
             raise TemplateSyntaxError(err, template.filepath, lineno,

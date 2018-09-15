@@ -13,8 +13,10 @@
 
 """Various Python version compatibility classes and functions."""
 
+from __future__ import absolute_import
 import sys
 from types import CodeType
+import six
 
 
 IS_PYTHON2 = (sys.version_info[0] == 2)
@@ -39,7 +41,7 @@ else:
 
 if IS_PYTHON2:
     def isstring(obj):
-        return isinstance(obj, basestring)
+        return isinstance(obj, six.string_types)
 else:
     def isstring(obj):
         return isinstance(obj, str)
@@ -102,7 +104,7 @@ try:
     next = next
 except NameError:
     def next(iterator):
-        return iterator.next()
+        return next(iterator)
 
 # Compatibility fallback implementations for Python < 2.5
 

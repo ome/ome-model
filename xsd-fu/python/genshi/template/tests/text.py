@@ -11,6 +11,7 @@
 # individuals. For the exact contribution history, see the revision
 # history and logs, available at http://genshi.edgewall.org/log/.
 
+from __future__ import absolute_import
 import doctest
 import os
 import shutil
@@ -20,6 +21,7 @@ import unittest
 from genshi.template.base import TemplateSyntaxError
 from genshi.template.loader import TemplateLoader
 from genshi.template.text import OldTextTemplate, NewTextTemplate
+from six.moves import range
 
 
 class OldTextTemplateTestCase(unittest.TestCase):
@@ -74,7 +76,7 @@ class OldTextTemplateTestCase(unittest.TestCase):
           * 0
           * 1
           * 2
-""", tmpl.generate(items=range(3)).render(encoding=None))
+""", tmpl.generate(items=list(range(3))).render(encoding=None))
 
     def test_empty_lines2(self):
         tmpl = OldTextTemplate("""Your items:
@@ -91,7 +93,7 @@ class OldTextTemplateTestCase(unittest.TestCase):
 
           * 2
 
-""", tmpl.generate(items=range(3)).render(encoding=None))
+""", tmpl.generate(items=list(range(3))).render(encoding=None))
 
     def test_include(self):
         file1 = open(os.path.join(self.dirname, 'tmpl1.txt'), 'wb')
@@ -169,7 +171,7 @@ class NewTextTemplateTestCase(unittest.TestCase):
   * 0
   * 1
   * 2
-""", tmpl.generate(items=range(3)).render(encoding=None))
+""", tmpl.generate(items=list(range(3))).render(encoding=None))
 
     def test_empty_lines1_with_crlf(self):
         tmpl = NewTextTemplate('Your items:\r\n'
@@ -182,7 +184,7 @@ class NewTextTemplateTestCase(unittest.TestCase):
 '\r\n'
 '  * 0\r\n'
 '  * 1\r\n'
-'  * 2\r\n', tmpl.generate(items=range(3)).render(encoding=None))
+'  * 2\r\n', tmpl.generate(items=list(range(3))).render(encoding=None))
 
     def test_empty_lines2(self):
         tmpl = NewTextTemplate("""Your items:
@@ -199,7 +201,7 @@ class NewTextTemplateTestCase(unittest.TestCase):
 
   * 2
 
-""", tmpl.generate(items=range(3)).render(encoding=None))
+""", tmpl.generate(items=list(range(3))).render(encoding=None))
 
     def test_empty_lines2_with_crlf(self):
         tmpl = NewTextTemplate('Your items:\r\n'
@@ -215,7 +217,7 @@ class NewTextTemplateTestCase(unittest.TestCase):
 '  * 1\r\n'
 '\r\n'
 '  * 2\r\n'
-'\r\n', tmpl.generate(items=range(3)).render(encoding=None))
+'\r\n', tmpl.generate(items=list(range(3))).render(encoding=None))
 
     def test_exec_with_trailing_space(self):
         """
