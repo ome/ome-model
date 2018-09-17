@@ -7,6 +7,7 @@
 #   - University of Dundee
 #   - Board of Regents of the University of Wisconsin-Madison
 #   - Glencoe Software, Inc.
+# Copyright © 2018 Codelibre Consulting Limited
 # %%
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -34,26 +35,17 @@
 # policies, either expressed or implied, of any organization.
 # #L%
 
-# Extract the maven project name and version information from a POM
-# pom the POM file to read
-# artefact the variable in which to store the project name
+# Extract the gradle project name and version information from a POM
+# file the versionfile file to read
 # version the variable in which to store the project version
 # snapshot the variable in which to store if this version is a
 #          snapshot (Boolean)
-function(maven_version pom artefact version snapshot)
-  set(artefact_regex ".*<artifactId>(.*)</artifactId>.*")
-  set(version_regex ".*<version>([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?</version>.*")
+function(gradle_version file version snapshot)
+  set(version_regex "([0-9]+\.[0-9]+\.[0-9]+)(-SNAPSHOT)?")
 
-  file(STRINGS "${pom}" pomdata ENCODING "UTF-8"
-    REGEX "<artifactId>|<version>")
+  file(STRINGS "${file}" lines ENCODING "UTF-8")
 
-  foreach(line IN LISTS pomdata)
-    if(NOT ${artefact} AND NOT artefact_match)
-      string(REGEX MATCH "${artefact_regex}" artefact_match "${line}")
-      if(artefact_match)
-        set(${artefact} "${CMAKE_MATCH_1}" PARENT_SCOPE)
-      endif()
-    endif()
+  foreach(line IN LISTS lines)
     if(NOT ${version} AND NOT version_match)
       string(REGEX MATCH "${version_regex}" version_match "${line}")
       if(version_match)
@@ -65,7 +57,7 @@ function(maven_version pom artefact version snapshot)
         endif()
       endif()
     endif()
-    if(artefact_match AND version_match)
+    if(version_match)
       break()
     endif()
   endforeach()

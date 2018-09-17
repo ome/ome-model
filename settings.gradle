@@ -1,0 +1,9 @@
+rootProject.name = 'ome-model'
+
+include 'ome-xml'
+include 'specification'
+include 'ome-model-doc'
+
+project(":ome-model-doc").projectDir = file("docs/sphinx")
+
+enableFeaturePreview('STABLE_PUBLISHING')

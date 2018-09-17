@@ -1,0 +1,112 @@
+description = 'OME imaging metadata model specification, code generator and implementation'
+
+subprojects {
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+
+    group = 'org.openmicroscopy'
+    version = rootProject.file('VERSION').text.trim()
+
+    ext {
+        isReleaseVersion = !version.endsWith("SNAPSHOT")
+        if (!project.hasProperty('python')) {
+            python = 'python'
+        }
+        if (!project.hasProperty('ossrhUsername')) {
+            ossrhUsername = ''
+        }
+        if (!project.hasProperty('ossrhPassword')) {
+            ossrhPassword = ''
+        }
+
+        def versionPattern = /(\d+)\.(\d+)\.(\d+)/
+        def versionMatch = (project.version =~ /$versionPattern/)
+        majorVersion = Integer.parseInt(versionMatch[0][1])
+        minorVersion = Integer.parseInt(versionMatch[0][2])
+
+        modelSchemaVersion = '2016-06'
+        modelSchema = "${rootProject.projectDir}/specification/src/main/resources/released-schema/${modelSchemaVersion}/ome.xsd"
+        xsdfuPythonPath = "${rootProject.projectDir}/xsd-fu/python"
+
+        gitCommit = 'git rev-parse HEAD'.execute().text.trim()
+        buildDate = new Date().format("dd MMMM yyyy")
+    }
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
+        options.encoding = 'UTF-8'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                    authentication(userName: "${ossrhUsername}", password: "${ossrhPassword}")
+                }
+
+                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
+                }
+
+                pom.project {
+                    url 'https://github.com/ome/ome-model'
+
+                    scm {
+                        connection 'scm:git:https://github.com/ome/ome-model'
+                        developerConnection 'scm:git:git@github.com:ome/ome-model'
+                        url 'https://github.com/ome/ome-model'
+                    }
+
+                    licenses {
+                        license {
+                            name 'Simplified BSD License'
+                            url 'https://opensource.org/licenses/BSD-2-Clause'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'ome'
+                            name 'The OME Team'
+                            email 'ome-devel@lists.openmicroscopy.org.uk'
+                        }
+                    }
+
+                    contributors {
+                        contributor { name 'Chris Allan' }
+                        contributor { name 'Sébastien Besson' }
+                        contributor { name 'Jean-Marie Burel' }
+                        contributor { name 'Colin Blackburn' }
+                        contributor { name 'Mark Carroll' }
+                        contributor { name 'Helen Flynn' }
+                        contributor { name 'David Gault' }
+                        contributor { name 'Alexander Görtz' }
+                        contributor { name 'Mark Hiner' }
+                        contributor { name 'Simone Leo' }
+                        contributor { name 'Roger Leigh' }
+                        contributor { name 'Melissa Linkert' }
+                        contributor { name 'Josh Moore' }
+                        contributor { name 'Andrew Patterson' }
+                        contributor { name 'Curtis Rueden' }
+                        contributor { name 'Paul van Schayck' }
+                        contributor { name 'Christoph Sommer' }
+                        contributor { name 'Bjoern Thiel' }
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+        sign configurations.archives
+    }
+}

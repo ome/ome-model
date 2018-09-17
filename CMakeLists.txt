@@ -55,11 +55,11 @@ endif()
 list(APPEND CMAKE_MODULE_PATH
      "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-include(MavenVersion)
-maven_version("${CMAKE_CURRENT_LIST_DIR}/pom.xml" maven-project maven-version maven-snapshot)
+include(GradleVersion)
+gradle_version("${CMAKE_CURRENT_LIST_DIR}/VERSION" gradle-version gradle-snapshot)
 
-project("${maven-project}"
-        VERSION "${maven-version}"
+project(ome-model
+        VERSION "${gradle-version}"
         LANGUAGES CXX)
 
 include(cmake/Version.cmake)

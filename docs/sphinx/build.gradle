@@ -1,0 +1,73 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+apply plugin: 'distribution'
+
+description = 'OME imaging metadata model documentation'
+
+ext {
+    sphinxBuildDir = project.file("build/sphinx")
+    sphinxBuilder = 'html'
+    sphinxStaticBuildDir = project.file("build/sphinx/_static")
+    model_version = "${modelSchemaVersion}"
+}
+
+task generateSphinxConfiguration(type: Copy) {
+    into sphinxBuildDir
+
+    into('.') {
+        from project.projectDir
+        include 'conf.py'
+
+        filter(ReplaceTokens, tokens: [
+            'sphinx_srcdir': "${project.projectDir}".toString(),
+            'sphinx_builddir': "${sphinxBuildDir}".toString(),
+            'model_version': "${modelSchemaVersion}".toString()
+        ])
+    }
+
+    into('.') {
+        from project.projectDir
+        include '_static/**'
+        includeEmptyDirs = true
+    }
+}
+
+task generateDocumentation(type: Exec) {
+    dependsOn generateSphinxConfiguration
+    executable 'sphinx-build'
+    args '-D', "release=${project.version}",
+         '-D', "version=${majorVersion}.${minorVersion}",
+         '-c', "${sphinxBuildDir}",
+         '-d', "${sphinxBuildDir}/cache",
+         '-b', "${sphinxBuilder}",
+         '-W', "${project.projectDir}",
+         "${sphinxBuildDir}/${sphinxBuilder}"
+    workingDir project.projectDir
+}
+
+distributions {
+    main {
+        contents {
+            from {
+                "${sphinxBuildDir}/${sphinxBuilder}"
+            }
+        }
+    }
+}
+
+tasks.withType(Tar){
+    compression = Compression.GZIP
+    extension = 'tar.gz'
+}
+
+distZip.dependsOn(generateDocumentation)
+distTar.dependsOn(generateDocumentation)
+
+publishing {
+    publications {
+        docs(MavenPublication) {
+            artifact distZip
+            artifact distTar
+        }
+    }
+}

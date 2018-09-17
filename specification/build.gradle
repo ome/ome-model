@@ -1,0 +1,89 @@
+apply plugin: 'java'
+
+description = 'OME imaging metadata model specification'
+
+dependencies {
+    compile project (':ome-xml')
+    testCompile group: 'org.testng', name: 'testng', version: '6.8'
+}
+
+sourceSets {
+   main {
+       resources {
+           exclude 'transforms/internal/**'
+           exclude 'transforms/util/**'
+       }
+    }
+}
+
+tasks.withType(Jar) {
+    manifest {
+        attributes(
+            'Manifest-Version': "1.0",
+            'Created-By': "Gradle ${gradle.gradleVersion}",
+            'Built-By': System.properties['user.name'],
+            'Build-Jdk': "${System.properties['java.version']}",
+        )
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+            'Manifest-Version': "1.0",
+            'Created-By': "Gradle ${gradle.gradleVersion}",
+            'Built-By': System.properties['user.name'],
+            'Build-Jdk': "${System.properties['java.version']}",
+            'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' '),
+            'Specification-Title': project.description,
+            'Specification-Version': "${majorVersion}.${minorVersion}",
+            'Specification-Vendor': 'Open Microscopy Environment',
+            'Implementation-Title': project.description,
+            'Implementation-Version': project.version,
+            'Implementation-Vendor-Id': project.group,
+            'Implementation-Vendor': 'Open Microscopy Environment',
+            'Implementation-URL': 'http://www.openmicroscopy.org/site/support/ome-model/',
+            'Implementation-Build': gitCommit,
+            'Implementation-Date': buildDate
+        )
+    }
+}
+
+task testsJar(type: Jar, dependsOn: testClasses) {
+  classifier = 'tests'
+  from sourceSets.test.output
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task testsSourcesJar(type: Jar, dependsOn: testClasses) {
+  classifier = 'tests-sources'
+  from sourceSets.test.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives testsJar
+    archives sourcesJar
+    archives testsSourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact testsJar
+            artifact sourcesJar
+            artifact testsSourcesJar
+            artifact javadocJar
+        }
+    }
+}
