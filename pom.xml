@@ -138,15 +138,6 @@
     <!-- It is nice for "mvn" with no arguments to do something reasonable. -->
     <defaultGoal>install</defaultGoal>
 
-    <resources>
-      <resource>
-        <directory>src/main/java</directory>
-        <includes>
-          <include>**/*.properties</include>
-        </includes>
-      </resource>
-    </resources>
-
     <plugins>
       <!-- Create -sources.jar when building. -->
       <plugin>
