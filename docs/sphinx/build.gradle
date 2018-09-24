@@ -1,0 +1,84 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'com.github.ben-manes.versions' version '0.36.0'
+}
+
+apply plugin: 'distribution'
+
+description = 'OME imaging metadata model documentation'
+
+ext {
+    sphinxBuildDir = project.file("build/sphinx")
+    if (!project.hasProperty('sphinxBuilder')) {
+        sphinxBuilder = 'html'
+    }
+    sphinxStaticBuildDir = project.file("build/sphinx/_static")
+}
+
+task generateSphinxConfiguration(type: Copy) {
+    into sphinxBuildDir
+
+    into('.') {
+        from project.projectDir
+        include 'conf.py'
+
+        filter(ReplaceTokens, tokens: [
+            'sphinx_srcdir': "${project.projectDir}".toString().replace('\\', '\\\\'),
+            'sphinx_builddir': "${sphinxBuildDir}".toString().replace('\\', '\\\\'),
+            'model_version': "${modelSchemaVersion}".toString()
+        ])
+    }
+
+    into('.') {
+        from project.projectDir
+        include '_static/**'
+        includeEmptyDirs = true
+    }
+}
+
+task generateDocumentation(type: Exec) {
+    dependsOn generateSphinxConfiguration
+    executable 'sphinx-build'
+    args '-D', "release=${project.version}",
+         '-D', "version=${majorVersion}.${minorVersion}",
+         '-c', "${sphinxBuildDir}",
+         '-d', "${sphinxBuildDir}/cache",
+         '-b', "${sphinxBuilder}",
+         '-W', "${project.projectDir}",
+         "${sphinxBuildDir}/${sphinxBuilder}"
+    workingDir project.projectDir
+}
+
+distributions {
+    main {
+        contents {
+            from {
+                "${sphinxBuildDir}/${sphinxBuilder}"
+            }
+        }
+    }
+}
+
+tasks.withType(Tar){
+    compression = Compression.GZIP
+    archiveExtension = 'tar.gz'
+}
+
+distZip.dependsOn(generateDocumentation)
+distTar.dependsOn(generateDocumentation)
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact distZip
+            artifact distTar
+            pom {
+                name = project.name
+                description = project.description
+                url = 'https://gitlab.com/codelibre/ome/ome-model'
+                packaging = 'pom'
+            }
+        }
+    }
+}

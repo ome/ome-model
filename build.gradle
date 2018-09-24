@@ -1,0 +1,129 @@
+description = 'OME imaging metadata model specification, code generator and implementation'
+
+subprojects {
+    apply plugin: 'maven-publish'
+    apply plugin: 'signing'
+
+    group = 'net.codelibre'
+    version = rootProject.file('VERSION').text.trim()
+
+    ext {
+        isReleaseVersion = !version.endsWith("SNAPSHOT")
+        if (!project.hasProperty('python')) {
+            python = 'python'
+        }
+        if (!project.hasProperty('ossrhUsername')) {
+            ossrhUsername = ''
+        }
+        if (!project.hasProperty('ossrhPassword')) {
+            ossrhPassword = ''
+        }
+
+        def _ = null
+        (_, majorVersion, minorVersion, patchVersion) = (project.version =~ /^(\d+)\.(\d+)\.(\d+).*/)[0]
+        logger.debug("VERSION: {}.{}.{}", majorVersion, minorVersion, patchVersion)
+
+        modelSchemaVersion = '2016-06'
+        modelSchema = "${rootProject.projectDir}/specification/src/main/resources/released-schema/${modelSchemaVersion}/ome.xsd"
+        xsdfuPythonPath = "${rootProject.projectDir}/xsd-fu/python"
+
+        gitCommit = 'git rev-parse HEAD'.execute().text.trim()
+        buildDate = new Date().format("dd MMMM yyyy")
+
+        repositoryURL = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+        snapshotRepositoryURL = 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+        options.encoding = 'UTF-8'
+        options.compilerArgs << '-Xlint:unchecked'
+        options.deprecation = true
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    publishing {
+        repositories {
+            maven {
+                url = isReleaseVersion ? repositoryURL : snapshotRepositoryURL
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+        publications {
+            mavenJava(MavenPublication) {
+                pom {
+                    scm {
+                        connection  = 'scm:git:https://gitlab.com/codelibre/ome/ome-model.git'
+                        developerConnection  = 'scm:git:git@gitlab.com:codelibre/ome/ome-model.git'
+                        url  = 'https://gitlab.com/codelibre/ome/ome-model'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'Simplified BSD License'
+                            url = 'https://opensource.org/licenses/BSD-2-Clause'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'ome'
+                            name = 'The OME Team'
+                            email = 'ome-devel@lists.openmicroscopy.org.uk'
+                        }
+                        developer {
+                            id = 'codelibre'
+                            name = 'Codelibre Consulting Limited'
+                            email = 'consulting@codelibre.net'
+                        }
+                    }
+
+                    contributors {
+                        contributor { name = 'Chris Allan' }
+                        contributor { name = 'Sébastien Besson' }
+                        contributor { name = 'Jean-Marie Burel' }
+                        contributor { name = 'Colin Blackburn' }
+                        contributor { name = 'Mark Carroll' }
+                        contributor { name = 'Helen Flynn' }
+                        contributor { name = 'David Gault' }
+                        contributor { name = 'Alexander Görtz' }
+                        contributor { name = 'Mark Hiner' }
+                        contributor { name = 'Simone Leo' }
+                        contributor { name = 'Roger Leigh' }
+                        contributor { name = 'Melissa Linkert' }
+                        contributor { name = 'Josh Moore' }
+                        contributor { name = 'Andrew Patterson' }
+                        contributor { name = 'Curtis Rueden' }
+                        contributor { name = 'Paul van Schayck' }
+                        contributor { name = 'Christoph Sommer' }
+                        contributor { name = 'Bjoern Thiel' }
+                    }
+                }
+            }
+        }
+    }
+
+    signing {
+        required { isReleaseVersion }
+        useGpgCmd()
+        sign publishing.publications.mavenJava
+    }
+
+    tasks.withType(Sign) {
+        onlyIf { isReleaseVersion && project.hasProperty('signing.keyId') }
+    }
+
+    task publishSnapshot(dependsOn: publish) {
+        if (isReleaseVersion) {
+            enabled = false
+            dependsOn = []
+        }
+    }
+}

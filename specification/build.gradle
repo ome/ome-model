@@ -1,0 +1,100 @@
+plugins {
+    id 'com.github.ben-manes.versions' version '0.36.0'
+}
+
+apply plugin: 'java'
+
+description = 'OME imaging metadata model specification'
+
+dependencies {
+    implementation project (':ome-xml')
+    implementation group: 'joda-time', name: 'joda-time', version:'2.10.8'
+    testImplementation group: 'org.testng', name: 'testng', version: '7.3.0'
+}
+
+sourceSets {
+   main {
+       resources {
+           exclude 'transforms/internal/**'
+           exclude 'transforms/util/**'
+       }
+    }
+}
+
+tasks.withType(Jar) {
+    manifest {
+        attributes(
+            'Manifest-Version': "1.0",
+            'Created-By': "Gradle ${gradle.gradleVersion}",
+            'Built-By': System.properties['user.name'],
+            'Build-Jdk': "${System.properties['java.version']}",
+        )
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+            'Manifest-Version': "1.0",
+            'Created-By': "Gradle ${gradle.gradleVersion}",
+            'Built-By': System.properties['user.name'],
+            'Build-Jdk': "${System.properties['java.version']}",
+            'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' '),
+            'Specification-Title': project.description,
+            'Specification-Version': "${majorVersion}.${minorVersion}",
+            'Specification-Vendor': 'Open Microscopy Environment',
+            'Implementation-Title': project.description,
+            'Implementation-Version': project.version,
+            'Implementation-Vendor-Id': project.group,
+            'Implementation-Vendor': 'Open Microscopy Environment',
+            'Implementation-URL': 'http://www.openmicroscopy.org/site/support/ome-model/',
+            'Implementation-Build': gitCommit,
+            'Implementation-Date': buildDate
+        )
+    }
+}
+
+task testsJar(type: Jar, dependsOn: testClasses) {
+    archiveClassifier = 'tests'
+    from sourceSets.test.output
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task testsSourcesJar(type: Jar, dependsOn: testClasses) {
+    archiveClassifier = 'tests-sources'
+    from sourceSets.test.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives testsJar
+    archives sourcesJar
+    archives testsSourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = project.name
+                description = project.description
+                url = 'https://gitlab.com/codelibre/ome/ome-model'
+                packaging = 'jar'
+            }
+            artifact testsJar
+            artifact sourcesJar
+            artifact testsSourcesJar
+            artifact javadocJar
+        }
+    }
+}

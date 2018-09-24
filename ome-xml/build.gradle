@@ -1,0 +1,165 @@
+plugins {
+    id 'com.github.ben-manes.versions' version '0.36.0'
+}
+
+apply plugin: 'java'
+
+description = 'OME XML model and metadata classes'
+
+dependencies {
+    implementation group: 'org.openmicroscopy', name: 'ome-common', version:'6.0.6'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version:'1.7.30'
+    implementation group: 'joda-time', name: 'joda-time', version:'2.10.8'
+    testImplementation group: 'org.testng', name: 'testng', version:'7.3.0'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version:'1.2.3'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version:'1.2.3'
+}
+
+ext {
+    xsdfuScript = '../xsd-fu/xsd-fu'
+    xsdfuOutputPath = "${project.buildDir}/generated-sources/xsd-fu"
+}
+
+task generateModelSources(type: Exec) {
+    executable "${python}"
+    args xsdfuScript, 'omexml_model_all',
+        "--output-directory=${xsdfuOutputPath}/",
+        '--print-generated',
+        modelSchema
+    environment PYTHONPATH: "${xsdfuPythonPath}"
+}
+
+task generateMetadataSources(type: Exec) {
+    executable "${python}"
+    args xsdfuScript, 'omexml_metadata_all',
+        "--output-directory=${xsdfuOutputPath}/",
+        '--print-generated',
+        modelSchema
+    environment PYTHONPATH: "${xsdfuPythonPath}"
+}
+
+sourceSets {
+   main {
+       java {
+           srcDir xsdfuOutputPath
+           srcDir 'src/main/java'
+       }
+    }
+}
+
+compileJava.dependsOn generateModelSources
+compileJava.dependsOn generateMetadataSources
+
+processResources {
+    filesMatching('**/omemodel.properties') {
+        filter {
+            it.replace('\${ome.model.schemaver}', modelSchemaVersion)
+        }
+    }
+}
+
+test {
+  useTestNG() {
+    suites 'src/test/resources/testng.xml'
+  }
+}
+
+tasks.withType(Jar) {
+    manifest {
+        attributes(
+            'Manifest-Version': "1.0",
+            'Created-By': "Gradle ${gradle.gradleVersion}",
+            'Built-By': System.properties['user.name'],
+            'Build-Jdk': "${System.properties['java.version']}",
+        )
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+            'Manifest-Version': "1.0",
+            'Created-By': "Gradle ${gradle.gradleVersion}",
+            'Built-By': System.properties['user.name'],
+            'Build-Jdk': "${System.properties['java.version']}",
+            'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' '),
+            'Specification-Title': project.description,
+            'Specification-Version': "${majorVersion}.${minorVersion}",
+            'Specification-Vendor': 'Open Microscopy Environment',
+            'Implementation-Title': project.description,
+            'Implementation-Version': project.version,
+            'Implementation-Vendor-Id': project.group,
+            'Implementation-Vendor': 'Open Microscopy Environment',
+            'Implementation-URL': 'http://www.openmicroscopy.org/site/support/ome-model/ome-xml/java-library.html',
+            'Implementation-Build': gitCommit,
+            'Implementation-Date': buildDate
+        )
+    }
+}
+
+task testsJar(type: Jar, dependsOn: testClasses) {
+    archiveClassifier = 'tests'
+    from sourceSets.test.output
+}
+
+testsJar {
+    manifest {
+        attributes(
+            'Manifest-Version': "1.0",
+            'Created-By': "Gradle ${gradle.gradleVersion}",
+            'Built-By': System.properties['user.name'],
+            'Build-Jdk': "${System.properties['java.version']}",
+            'Class-Path': configurations.testRuntimeClasspath.collect { it.getName() }.join(' '),
+            'Specification-Title': project.description,
+            'Specification-Version': "${majorVersion}.${minorVersion}",
+            'Specification-Vendor': 'Open Microscopy Environment',
+            'Implementation-Title': project.description,
+            'Implementation-Version': project.version,
+            'Implementation-Vendor-Id': project.group,
+            'Implementation-Vendor': 'Open Microscopy Environment',
+            'Implementation-URL': 'http://www.openmicroscopy.org/site/support/ome-model/ome-xml/java-library.html',
+            'Implementation-Build': gitCommit,
+            'Implementation-Date': buildDate
+        )
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task testsSourcesJar(type: Jar, dependsOn: testClasses) {
+    archiveClassifier = 'tests-sources'
+    from sourceSets.test.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives testsJar
+    archives sourcesJar
+    archives testsSourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom {
+                name = project.name
+                description = project.description
+                url = 'https://gitlab.com/codelibre/ome/ome-model'
+                packaging = 'jar'
+            }
+            artifact testsJar
+            artifact sourcesJar
+            artifact testsSourcesJar
+            artifact javadocJar
+        }
+    }
+}

@@ -1,10 +1,10 @@
 all: html
 
 html:
-	mvn -Dsphinx.builder=html
+	../../gradlew -PsphinxBuilder=html assemble
 
 linkcheck:
-	mvn -Dsphinx.builder=linkcheck
+	../../gradlew -PsphinxBuilder=linkcheck assemble
 
 clean:
-	mvn clean
+	../../gradlew clean
