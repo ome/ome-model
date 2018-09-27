@@ -10,10 +10,12 @@ cache:
 jdk:
   - oraclejdk10
   - oraclejdk8
-  - openjdk7
 
 matrix:
   fast_finish: true
 
 before_install:
   pip install --user -r requirements.txt
+
+script:
+  ./gradlew assemble test
