@@ -1,5 +1,5 @@
 ---
-name: Maven
+name: Java
 
 on:
   push:
@@ -16,7 +16,7 @@ jobs:
         python-version: ['3.6', '3.7', '3.8']
     runs-on: ${{ matrix.os }}
     env:
-      maven_commands: install
+      gradle_commands: build
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python
@@ -31,11 +31,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java }}
-      - name: Cache Maven packages
+      - name: Cache packages
         uses: actions/cache@v2
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Build
-        run: mvn ${{ env.maven_commands }}
+        run: ./gradlew ${{ env.gradle_commands }}
