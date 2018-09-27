@@ -57,7 +57,7 @@ import ome.units.UNITS;
  * <p>This technique allows conversion between two different storage media.
  * For example, it can be used to convert an <code>OMEROMetadataStore</code>
  * (OMERO's metadata store implementation) into an
- * {@link ome.xml.OMEXMLMetadata}, thus generating OME-XML from
+ * {@link ome.xml.meta.OMEXMLMetadataImpl}, thus generating OME-XML from
  * information in an OMERO database.
  *
  * @author Curtis Rueden ctrueden at wisc.edu

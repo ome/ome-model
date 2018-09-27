@@ -69,7 +69,7 @@ public abstract class AbstractOMEModelObject implements OMEModelObject {
    * Takes the entire object hierarchy and produced an XML DOM tree taking
    * into account class hierarchy.
    * @param document Destination document for element creation, etc.
-   * @param element Element from the subclass. If </code>null</code> a new
+   * @param element Element from the subclass. If <code>null</code> a new
    * element will be created of this class.
    * @return <code>element</code> populated with properties from this class.
    */
