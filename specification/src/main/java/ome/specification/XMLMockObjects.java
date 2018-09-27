@@ -139,7 +139,7 @@ import ome.units.quantity.Time;
  * @author Jean-Marie Burel &nbsp;&nbsp;&nbsp;&nbsp;
  * <a href="mailto:j.burel@dundee.ac.uk">j.burel@dundee.ac.uk</a>
  * @author Chris Allan &nbsp;&nbsp;&nbsp;&nbsp;
- * Chris Allan <callan at blackcat dot ca>
+ * Chris Allan callan at blackcat dot ca
  * @version 3.0
  * <small>
  * (<b>Internal version:</b> $Revision: $Date: $)

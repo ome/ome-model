@@ -159,7 +159,7 @@ import ${lang.units_package}.unit.Unit;
  * <code>imageIndex</code>, an inner loop should iterate across
  * <code>pixelsIndex</code>, and an innermost loop should handle
  * <code>planeIndex</code>. For an illustration of the ideal traversal order,
- * see {@link loci.formats.meta.MetadataConverter#convertMetadata}.</p>
+ * see {@link ome.xml.meta.MetadataConverter#convertMetadata}.</p>
  *
  * @author Chris Allan callan at blackcat.ca
  * @author Curtis Rueden ctrueden at wisc.edu
