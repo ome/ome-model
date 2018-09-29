@@ -1,7 +1,6 @@
 description = 'OME imaging metadata model specification, code generator and implementation'
 
 subprojects {
-    apply plugin: 'maven'
     apply plugin: 'maven-publish'
     apply plugin: 'signing'
 
