@@ -31,6 +31,9 @@ subprojects {
 
         gitCommit = 'git rev-parse HEAD'.execute().text.trim()
         buildDate = new Date().format("dd MMMM yyyy")
+
+        repositoryURL = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+        snapshotRepositoryURL = 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
 
     tasks.withType(JavaCompile) {
@@ -48,11 +51,11 @@ subprojects {
             mavenDeployer {
                 beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-                repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                    authentication(userName: "${ossrhUsername}", password: "${ossrhPassword}")
+                repository(url: repositoryURL) {
+                    authentication(userName: ossrhUsername, password: ossrhPassword)
                 }
 
-                snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                snapshotRepository(url: snapshotRepositoryURL) {
                     authentication(userName: ossrhUsername, password: ossrhPassword)
                 }
 
@@ -105,6 +108,20 @@ subprojects {
 
     signing {
         required { isReleaseVersion && gradle.taskGraph.hasTask("uploadArchives") }
+        if (isReleaseVersion && project.hasProperty('signing.keyId')) {
+            useGpgCmd()
+        }
         sign configurations.archives
+    }
+
+    tasks.withType(Sign) {
+        onlyIf { isReleaseVersion && project.hasProperty('signing.keyId') }
+    }
+
+    task uploadSnapshotArchives(dependsOn: uploadArchives) {
+        if (isReleaseVersion) {
+            enabled = false;
+            dependsOn = [];
+        }
     }
 }
