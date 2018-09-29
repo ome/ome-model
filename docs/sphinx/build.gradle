@@ -8,7 +8,19 @@ ext {
     sphinxBuildDir = project.file("build/sphinx")
     sphinxBuilder = 'html'
     sphinxStaticBuildDir = project.file("build/sphinx/_static")
-    model_version = "${modelSchemaVersion}"
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.project {
+                name project.name
+                description project.description
+                url 'http://www.openmicroscopy.org/site/products/bio-formats'
+                packaging 'pom'
+            }
+        }
+    }
 }
 
 task generateSphinxConfiguration(type: Copy) {

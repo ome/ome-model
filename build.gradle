@@ -57,8 +57,6 @@ subprojects {
                 }
 
                 pom.project {
-                    url 'https://github.com/ome/ome-model'
-
                     scm {
                         connection 'scm:git:https://github.com/ome/ome-model'
                         developerConnection 'scm:git:git@github.com:ome/ome-model'

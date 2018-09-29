@@ -17,6 +17,19 @@ ext {
     xsdfuOutputPath = "${project.buildDir}/generated-sources/xsd-fu"
 }
 
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.project {
+                name project.name
+                description project.description
+                url 'http://www.openmicroscopy.org/site/products/bio-formats'
+                packaging 'jar'
+            }
+        }
+    }
+}
+
 task generateModelSources(type: Exec) {
     executable "${python}"
     args xsdfuScript, 'omexml_model_all',
