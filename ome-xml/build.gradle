@@ -17,14 +17,14 @@ ext {
     xsdfuOutputPath = "${project.buildDir}/generated-sources/xsd-fu"
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            pom.project {
-                name project.name
-                description project.description
-                url 'http://www.openmicroscopy.org/site/products/bio-formats'
-                packaging 'jar'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                name = project.name
+                description = project.description
+                url = 'http://www.openmicroscopy.org/site/products/bio-formats'
+                packaging = 'jar'
             }
         }
     }

@@ -10,14 +10,14 @@ ext {
     sphinxStaticBuildDir = project.file("build/sphinx/_static")
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            pom.project {
-                name project.name
-                description project.description
-                url 'http://www.openmicroscopy.org/site/products/bio-formats'
-                packaging 'pom'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                name = project.name
+                description = project.description
+                url = 'http://www.openmicroscopy.org/site/products/bio-formats'
+                packaging = 'pom'
             }
         }
     }
@@ -77,7 +77,7 @@ distTar.dependsOn(generateDocumentation)
 
 publishing {
     publications {
-        docs(MavenPublication) {
+        mavenJava(MavenPublication) {
             artifact distZip
             artifact distTar
         }
