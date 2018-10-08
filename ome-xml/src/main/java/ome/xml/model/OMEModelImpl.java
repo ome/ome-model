@@ -99,6 +99,9 @@ public class OMEModelImpl implements OMEModel {
    */
   @Override
   public boolean addReference(OMEModelObject a, Reference b) {
+    if (b != null && b.getID() == null) {
+      return false;
+    }
     List<Reference> bList = references.get(a);
     if (bList == null) {
       bList = new ArrayList<Reference>();
