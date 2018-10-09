@@ -106,6 +106,267 @@ public final class MetadataConverter {
     convertRootAttributes(src, dest);
   }
 
+  /**
+   * Copy all metadata from the specified channel in the source MetadataRetrieve
+   * to the specified channel in the destination MetadataStore.  The specified
+   * destination Image must exist (e.g. via calling
+   * <code>setImageID(..., destImage)</code>), but the destination Channel only
+   * needs to exist if the copyID flag is <code>false<code>
+   * LightSource references are assumed to be correct and are not checked for validity.
+   *
+   * @param src the source {@link MetadataRetrieve}
+   * @param srcImage the index of the Channel's parent Image in src
+   * @param srcChannel the index of the Channel in src
+   * @param dest the destination {@link MetadataStore}
+   * @param destImage the index of the Channel's parent Image in dest
+   * @param destChannel the index of the Channel in dest
+   * @param copyID false if the Channel ID should be omitted from the copy operation
+   */
+  public static void convertChannelMetadata(MetadataRetrieve src, int srcImage, int srcChannel,
+    MetadataStore dest, int destImage, int destChannel, boolean copyID)
+  {
+    convertChannelMetadata(src, srcImage, srcChannel, dest, destImage, destChannel, copyID, null);
+  }
+
+
+  /**
+   * Copy all metadata from the specified channel in the source MetadataRetrieve
+   * to the specified channel in the destination MetadataStore.  The specified
+   * destination Image must exist (e.g. via calling
+   * <code>setImageID(..., destImage)</code>), but the destination Channel only
+   * needs to exist if the copyID flag is <code>false<code>
+   *
+   * @param src the source {@link MetadataRetrieve}
+   * @param srcImage the index of the Channel's parent Image in src
+   * @param srcChannel the index of the Channel in src
+   * @param dest the destination {@link MetadataStore}
+   * @param destImage the index of the Channel's parent Image in dest
+   * @param destChannel the index of the Channel in dest
+   * @param copyID false if the Channel ID should be omitted from the copy operation
+   * @param lightSourceIds list of valid LightSource IDs for reference checking
+   */
+  public static void convertChannelMetadata(MetadataRetrieve src, int srcImage, int srcChannel,
+    MetadataStore dest, int destImage, int destChannel, boolean copyID, List<String> lightSourceIds)
+  {
+    if (copyID) {
+      try {
+        String channelID = src.getChannelID(srcImage, srcChannel);
+        dest.setChannelID(channelID, destImage, destChannel);
+      }
+      catch (NullPointerException e) {
+        return;
+      }
+    }
+
+    try {
+      AcquisitionMode mode = src.getChannelAcquisitionMode(srcImage, srcChannel);
+      dest.setChannelAcquisitionMode(mode, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      Color color = src.getChannelColor(srcImage, srcChannel);
+      dest.setChannelColor(color, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      ContrastMethod method = src.getChannelContrastMethod(srcImage, srcChannel);
+      dest.setChannelContrastMethod(method, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      Length emWave = src.getChannelEmissionWavelength(srcImage, srcChannel);
+      dest.setChannelEmissionWavelength(emWave, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      Length exWave = src.getChannelExcitationWavelength(srcImage, srcChannel);
+      dest.setChannelExcitationWavelength(exWave, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      String filterSetRef = src.getChannelFilterSetRef(srcImage, srcChannel);
+      dest.setChannelFilterSetRef(filterSetRef, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      String fluor = src.getChannelFluor(srcImage, srcChannel);
+      dest.setChannelFluor(fluor, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      IlluminationType illumType = src.getChannelIlluminationType(srcImage, srcChannel);
+      dest.setChannelIlluminationType(illumType, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      Double ndFilter = src.getChannelNDFilter(srcImage, srcChannel);
+      dest.setChannelNDFilter(ndFilter, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      String channelName = src.getChannelName(srcImage, srcChannel);
+      dest.setChannelName(channelName, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      Length pinholeSize = src.getChannelPinholeSize(srcImage, srcChannel);
+      dest.setChannelPinholeSize(pinholeSize, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      Integer pockelCell = src.getChannelPockelCellSetting(srcImage, srcChannel);
+      dest.setChannelPockelCellSetting(pockelCell, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      PositiveInteger samplesPerPixel = src.getChannelSamplesPerPixel(srcImage, srcChannel);
+      dest.setChannelSamplesPerPixel(samplesPerPixel, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      String detectorSettingsID = src.getDetectorSettingsID(srcImage, srcChannel);
+      if (detectorSettingsID != null) {
+        dest.setDetectorSettingsID(detectorSettingsID, destImage, destChannel);
+
+        try {
+          Binning binning = src.getDetectorSettingsBinning(srcImage, srcChannel);
+          dest.setDetectorSettingsBinning(binning, destImage, destChannel);
+        }
+        catch (NullPointerException e) { }
+
+        try {
+          Double gain = src.getDetectorSettingsGain(srcImage, srcChannel);
+          dest.setDetectorSettingsGain(gain, destImage, destChannel);
+        }
+        catch (NullPointerException e) { }
+
+        try {
+          PositiveInteger integration =
+            src.getDetectorSettingsIntegration(srcImage, srcChannel);
+          dest.setDetectorSettingsIntegration(integration, destImage, destChannel);
+        }
+        catch (NullPointerException e) { }
+
+        try {
+          Double offset = src.getDetectorSettingsOffset(srcImage, srcChannel);
+          dest.setDetectorSettingsOffset(offset, destImage, destChannel);
+        }
+        catch (NullPointerException e) { }
+
+        try {
+          Frequency readOutRate = src.getDetectorSettingsReadOutRate(srcImage, srcChannel);
+          dest.setDetectorSettingsReadOutRate(readOutRate, destImage, destChannel);
+        }
+        catch (NullPointerException e) { }
+
+        try {
+          ElectricPotential voltage = src.getDetectorSettingsVoltage(srcImage, srcChannel);
+          dest.setDetectorSettingsVoltage(voltage, destImage, destChannel);
+        }
+        catch (NullPointerException e) { }
+
+        try {
+          Double zoom = src.getDetectorSettingsZoom(srcImage, srcChannel);
+          dest.setDetectorSettingsZoom(zoom, destImage, destChannel);
+        }
+        catch (NullPointerException e) { }
+      }
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      String dichroicRef = src.getLightPathDichroicRef(srcImage, srcChannel);
+      dest.setLightPathDichroicRef(dichroicRef, destImage, destChannel);
+    }
+    catch (NullPointerException e) { }
+
+    try {
+      String lightSourceID = src.getChannelLightSourceSettingsID(srcImage, srcChannel);
+      if (lightSourceID != null && (lightSourceIds == null || lightSourceIds.contains(lightSourceID))) {
+        dest.setChannelLightSourceSettingsID(lightSourceID, destImage, destChannel);
+
+        try {
+          PercentFraction attenuation =
+            src.getChannelLightSourceSettingsAttenuation(srcImage, srcChannel);
+          dest.setChannelLightSourceSettingsAttenuation(attenuation, destImage, destChannel);
+        }
+        catch (NullPointerException e) { }
+
+        try {
+          Length wavelength = src.getChannelLightSourceSettingsWavelength(srcImage, srcChannel);
+          dest.setChannelLightSourceSettingsWavelength(wavelength, destImage, destChannel);
+        }
+        catch (NullPointerException e) { }
+      }
+    }
+    catch (NullPointerException e) { }
+
+    int channelAnnotationRefCount = 0;
+    try {
+      channelAnnotationRefCount = src.getChannelAnnotationRefCount(srcImage, srcChannel);
+    }
+    catch (NullPointerException e) { }
+    for (int q=0; q<channelAnnotationRefCount; q++) {
+      try {
+        String channelAnnotationRef = src.getChannelAnnotationRef(srcImage, srcChannel, q);
+        dest.setChannelAnnotationRef(channelAnnotationRef, destImage, destChannel, q);
+      }
+      catch (NullPointerException e) { }
+    }
+
+    int emFilterRefCount = 0;
+    try {
+      emFilterRefCount = src.getLightPathEmissionFilterRefCount(srcImage, srcChannel);
+    }
+    catch (NullPointerException e) { }
+    for (int q=0; q<emFilterRefCount; q++) {
+      try {
+        String emFilterRef = src.getLightPathEmissionFilterRef(srcImage, srcChannel, q);
+        dest.setLightPathEmissionFilterRef(emFilterRef, destImage, destChannel, q);
+      }
+      catch (NullPointerException e) { }
+    }
+
+    int exFilterRefCount = 0;
+    try {
+      exFilterRefCount = src.getLightPathExcitationFilterRefCount(srcImage, srcChannel);
+    }
+    catch (NullPointerException e) { }
+    for (int q=0; q<exFilterRefCount; q++) {
+      try {
+        String exFilterRef = src.getLightPathExcitationFilterRef(srcImage, srcChannel, q);
+        dest.setLightPathExcitationFilterRef(exFilterRef, destImage, destChannel, q);
+      }
+      catch (NullPointerException e) { }
+    }
+
+    int lightPathAnnotationRefCount = 0;
+    try {
+      lightPathAnnotationRefCount = src.getLightPathAnnotationRefCount(srcImage, srcChannel);
+    }
+    catch (NullPointerException e) { }
+    for (int q=0; q<lightPathAnnotationRefCount; q++) {
+      try {
+        String lightPathAnnotationRef = src.getLightPathAnnotationRef(srcImage, srcChannel, q);
+        dest.setLightPathAnnotationRef(lightPathAnnotationRef, destImage, destChannel, q);
+      }
+      catch (NullPointerException e) { }
+    }
+  }
+
   // -- Helper methods --
 
   /**
@@ -1081,227 +1342,14 @@ public final class MetadataConverter {
         catch (NullPointerException e) { }
       }
 
+
       int channelCount = 0;
       try {
         channelCount = src.getChannelCount(i);
       }
       catch (NullPointerException e) { }
       for (int c=0; c<channelCount; c++) {
-        try {
-          String channelID = src.getChannelID(i, c);
-          dest.setChannelID(channelID, i, c);
-        }
-        catch (NullPointerException e) {
-          continue;
-        }
-
-        try {
-          AcquisitionMode mode = src.getChannelAcquisitionMode(i, c);
-          dest.setChannelAcquisitionMode(mode, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          Color color = src.getChannelColor(i, c);
-          dest.setChannelColor(color, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          ContrastMethod method = src.getChannelContrastMethod(i, c);
-          dest.setChannelContrastMethod(method, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          Length emWave = src.getChannelEmissionWavelength(i, c);
-          dest.setChannelEmissionWavelength(emWave, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          Length exWave = src.getChannelExcitationWavelength(i, c);
-          dest.setChannelExcitationWavelength(exWave, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          String filterSetRef = src.getChannelFilterSetRef(i, c);
-          dest.setChannelFilterSetRef(filterSetRef, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          String fluor = src.getChannelFluor(i, c);
-          dest.setChannelFluor(fluor, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          IlluminationType illumType = src.getChannelIlluminationType(i, c);
-          dest.setChannelIlluminationType(illumType, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          Double ndFilter = src.getChannelNDFilter(i, c);
-          dest.setChannelNDFilter(ndFilter, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          String channelName = src.getChannelName(i, c);
-          dest.setChannelName(channelName, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          Length pinholeSize = src.getChannelPinholeSize(i, c);
-          dest.setChannelPinholeSize(pinholeSize, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          Integer pockelCell = src.getChannelPockelCellSetting(i, c);
-          dest.setChannelPockelCellSetting(pockelCell, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          PositiveInteger samplesPerPixel = src.getChannelSamplesPerPixel(i, c);
-          dest.setChannelSamplesPerPixel(samplesPerPixel, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          String detectorSettingsID = src.getDetectorSettingsID(i, c);
-          if (detectorSettingsID != null) {
-            dest.setDetectorSettingsID(detectorSettingsID, i, c);
-
-            try {
-              Binning binning = src.getDetectorSettingsBinning(i, c);
-              dest.setDetectorSettingsBinning(binning, i, c);
-            }
-            catch (NullPointerException e) { }
-
-            try {
-              Double gain = src.getDetectorSettingsGain(i, c);
-              dest.setDetectorSettingsGain(gain, i, c);
-            }
-            catch (NullPointerException e) { }
-
-            try {
-              PositiveInteger integration =
-                src.getDetectorSettingsIntegration(i, c);
-              dest.setDetectorSettingsIntegration(integration, i, c);
-            }
-            catch (NullPointerException e) { }
-
-            try {
-              Double offset = src.getDetectorSettingsOffset(i, c);
-              dest.setDetectorSettingsOffset(offset, i, c);
-            }
-            catch (NullPointerException e) { }
-
-            try {
-              Frequency readOutRate = src.getDetectorSettingsReadOutRate(i, c);
-              dest.setDetectorSettingsReadOutRate(readOutRate, i, c);
-            }
-            catch (NullPointerException e) { }
-
-            try {
-              ElectricPotential voltage = src.getDetectorSettingsVoltage(i, c);
-              dest.setDetectorSettingsVoltage(voltage, i, c);
-            }
-            catch (NullPointerException e) { }
-
-            try {
-              Double zoom = src.getDetectorSettingsZoom(i, c);
-              dest.setDetectorSettingsZoom(zoom, i, c);
-            }
-            catch (NullPointerException e) { }
-          }
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          String dichroicRef = src.getLightPathDichroicRef(i, c);
-          dest.setLightPathDichroicRef(dichroicRef, i, c);
-        }
-        catch (NullPointerException e) { }
-
-        try {
-          String lightSourceID = src.getChannelLightSourceSettingsID(i, c);
-          if (lightSourceID != null && lightSourceIds.contains(lightSourceID)) {
-            dest.setChannelLightSourceSettingsID(lightSourceID, i, c);
-
-            try {
-              PercentFraction attenuation =
-                src.getChannelLightSourceSettingsAttenuation(i, c);
-              dest.setChannelLightSourceSettingsAttenuation(attenuation, i, c);
-            }
-            catch (NullPointerException e) { }
-
-            try {
-              Length wavelength = src.getChannelLightSourceSettingsWavelength(i, c);
-              dest.setChannelLightSourceSettingsWavelength(wavelength, i, c);
-            }
-            catch (NullPointerException e) { }
-          }
-        }
-        catch (NullPointerException e) { }
-
-        int channelAnnotationRefCount = 0;
-        try {
-          channelAnnotationRefCount = src.getChannelAnnotationRefCount(i, c);
-        }
-        catch (NullPointerException e) { }
-        for (int q=0; q<channelAnnotationRefCount; q++) {
-          try {
-            String channelAnnotationRef = src.getChannelAnnotationRef(i, c, q);
-            dest.setChannelAnnotationRef(channelAnnotationRef, i, c, q);
-          }
-          catch (NullPointerException e) { }
-        }
-
-        int emFilterRefCount = 0;
-        try {
-          emFilterRefCount = src.getLightPathEmissionFilterRefCount(i, c);
-        }
-        catch (NullPointerException e) { }
-        for (int q=0; q<emFilterRefCount; q++) {
-          try {
-            String emFilterRef = src.getLightPathEmissionFilterRef(i, c, q);
-            dest.setLightPathEmissionFilterRef(emFilterRef, i, c, q);
-          }
-          catch (NullPointerException e) { }
-        }
-
-        int exFilterRefCount = 0;
-        try {
-          exFilterRefCount = src.getLightPathExcitationFilterRefCount(i, c);
-        }
-        catch (NullPointerException e) { }
-        for (int q=0; q<exFilterRefCount; q++) {
-          try {
-            String exFilterRef = src.getLightPathExcitationFilterRef(i, c, q);
-            dest.setLightPathExcitationFilterRef(exFilterRef, i, c, q);
-          }
-          catch (NullPointerException e) { }
-        }
-
-        int lightPathAnnotationRefCount = 0;
-        try {
-          lightPathAnnotationRefCount = src.getLightPathAnnotationRefCount(i, c);
-        }
-        catch (NullPointerException e) { }
-        for (int q=0; q<lightPathAnnotationRefCount; q++) {
-          try {
-            String lightPathAnnotationRef = src.getLightPathAnnotationRef(i, c, q);
-            dest.setLightPathAnnotationRef(lightPathAnnotationRef, i, c, q);
-          }
-          catch (NullPointerException e) { }
-        }
+        convertChannelMetadata(src, i, c, dest, i, c, true, lightSourceIds);
       }
 
       int planeCount = 0;
