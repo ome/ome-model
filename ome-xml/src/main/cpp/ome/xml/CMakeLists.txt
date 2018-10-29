@@ -263,10 +263,10 @@ foreach(transform ${OME_TRANSFORMS})
 endforeach(transform)
 
 # Find and install all samples
-file(GLOB_RECURSE OME_SAMPLES RELATIVE "${PROJECT_SOURCE_DIR}/specification/samples/" "${PROJECT_SOURCE_DIR}/specification/samples/*")
+file(GLOB_RECURSE OME_SAMPLES RELATIVE "${PROJECT_SOURCE_DIR}/specification/src/main/resources/samples/" "${PROJECT_SOURCE_DIR}/specification/src/main/resources/samples/*")
 foreach(sample ${OME_SAMPLES})
   get_filename_component(SAMPLE_FILE ${sample} PATH)
-  install(FILES "${PROJECT_SOURCE_DIR}/specification/samples/${sample}"
+  install(FILES "${PROJECT_SOURCE_DIR}/specification/src/main/resources/samples/${sample}"
           DESTINATION "${OME_XML_INSTALL_SAMPLEDIR}/${SAMPLE_FILE}"
           COMPONENT "runtime")
 endforeach(sample)
