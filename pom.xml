@@ -120,7 +120,7 @@
     <ome-common.version>${ome_common.version}</ome-common.version>
 
     <ome.model.schemaver>2016-06</ome.model.schemaver>
-    <ome.model.schemapath>specification/src/main/resources/released-schema/${ome.model.schemaver}</ome.model.schemapath>
+    <ome.model.schemapath>specification/src/main/resources/schemas/${ome.model.schemaver}</ome.model.schemapath>
     <ome.model.omeschema>${ome.model.schemapath}/ome.xsd</ome.model.omeschema>
 
     <!-- NB: Avoid platform encoding warning when copying resources. -->

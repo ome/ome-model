@@ -39,7 +39,7 @@
 function(ome_xml_add_test)
   add_test(${ARGV})
   set_tests_properties(${ARGV0}
-    PROPERTIES ENVIRONMENT "OME_XML_SCHEMADIR=${PROJECT_SOURCE_DIR}/specification/src/main/resources/released-schema;OME_XML_TRANSFORMDIR=${PROJECT_SOURCE_DIR}/specification/src/main/resources/transforms;OME_XML_SAMPLEDIR=${PROJECT_SOURCE_DIR}/specification/src/main/resources/samples")
+    PROPERTIES ENVIRONMENT "OME_XML_SCHEMADIR=${PROJECT_SOURCE_DIR}/specification/src/main/resources/schemas;OME_XML_TRANSFORMDIR=${PROJECT_SOURCE_DIR}/specification/src/main/resources/transforms;OME_XML_SAMPLEDIR=${PROJECT_SOURCE_DIR}/specification/src/main/resources/samples")
 endfunction()
 
 add_subdirectory(src/main/cpp)
