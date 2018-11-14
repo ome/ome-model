@@ -66,7 +66,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 {% if klass.hasPrimitiveBase %}\
 
-import javax.xml.bind.DatatypeConverter;
+import java.util.Base64;
 
 {% end %}\
 import ${lang.units_package}.quantity.Angle;
@@ -247,7 +247,7 @@ ${customUpdatePropertyContent[prop.name]}
     String value_textContent = element.getTextContent();
     if (value_textContent.trim().length() > 0) {
 {% if prop.type == 'base64Binary' %}\
-      byte[] rawBytes = DatatypeConverter.parseBase64Binary(value_textContent);
+      byte[] rawBytes = Base64.getDecoder().decode(value_textContent);
       set${prop.methodName}(rawBytes);
 {% end if prop.type %}\
 {% if not prop.type == 'base64Binary' %}\
@@ -707,7 +707,7 @@ ${customAsXMLElementPropertyContent[prop.name]}
       ${klass.name}_element.setTextContent(${prop.instanceVariableName}.toString());
 {% end if not prop.type %}\
 {% if prop.type == 'base64Binary' %}\
-      String encodedString = DatatypeConverter.printBase64Binary(${prop.instanceVariableName});
+      String encodedString = Base64.getEncoder().encodeToString(${prop.instanceVariableName});
       ${klass.name}_element.setTextContent(encodedString);
 {% end if prop.type %}\
 {% end when %}\
