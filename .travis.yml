@@ -10,7 +10,6 @@ cache:
 jdk:
   - oraclejdk11
   - oraclejdk8
-  - openjdk7
 
 matrix:
   fast_finish: true
