@@ -27,7 +27,9 @@ An OME-TIFF dataset has the following characteristics:
 Support
 -------
 
-OME-TIFF is supported by:
+OME-TIFF is supported by a number of companies, either by using the format
+as their main storage format or by providing users the ability to export
+in OME-TIFF. Below is a list of vendors who are known to support OME-TIFF:
 
 * `Accelrys Inc. <http://accelrys.com/>`_
 * `GE Healthcare Life Sciences (formerly Applied Precision) <https://www.gelifesciences.com>`_
@@ -41,11 +43,17 @@ OME-TIFF is supported by:
 * `Mayachitra Inc. <http://mayachitra.com/>`_
 * `Micro-Manager <https://micro-manager.org/wiki/>`_
 * `Molecular Devices Inc. <https://www.moleculardevices.com>`_
+* `Nikon <https://www.nikoninstruments.com/>`_
+* `Olympus <https://www.olympus-global.com/>`_
 * `PerkinElmer <http://www.perkinelmer.com/>`_
 * `Scientifica <http://www.scientifica.uk.com>`_
 * `Scientific Volume Imaging B.V. <https://svi.nl/HomePage>`_
 * `Strand Life Sciences <http://strandls.com>`_
 * `TILL Photonics GmbH, now FEI Munich <https://www.fei.com/home/>`_
+
+If you would like to have your name placed on this list, please contact
+us via one of our `support channels <https://www.openmicroscopy.org/support>`_.
+
 
 Public image repositories allowing image downloads as OME-TIFF
 --------------------------------------------------------------
