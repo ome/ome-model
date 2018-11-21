@@ -1,3 +1,10 @@
+.*un~
 .DS_Store
 target
 .idea
+
+# Python files
+*.pyc
+build
+dist
+ome_model.egg-info
