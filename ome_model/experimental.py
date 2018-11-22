@@ -145,24 +145,24 @@ def parse_tiff(tiff):
     return (m.group("channel"), m.group("time"), m.group("slice"))
 
 
-def create_companion(plate):
+def create_companion(plates=[], images=[]):
     """
     Create a companion OME-XML for a given experiment.
     Assumes 2D TIFFs
     """
     root = ET.Element("OME", attrib=OME_ATTRIBUTES)
 
-    images = []
-    p = ET.SubElement(root, "Plate", attrib=plate.data['Plate'])
-    for well in plate.data["Wells"]:
-        w = ET.SubElement(p, "Well", attrib=well.data["Well"])
-        for wellsample in well.data["WellSamples"]:
-            ws = ET.SubElement(w, "WellSample",
-                               attrib=wellsample.data['WellSample'])
-            image = wellsample.data['Image']
-            images.append(image)
-            ET.SubElement(ws, "ImageRef", attrib={
-                "ID": image.data['Image']["ID"]})
+    for plate in plates:
+        p = ET.SubElement(root, "Plate", attrib=plate.data['Plate'])
+        for well in plate.data["Wells"]:
+            w = ET.SubElement(p, "Well", attrib=well.data["Well"])
+            for wellsample in well.data["WellSamples"]:
+                ws = ET.SubElement(w, "WellSample",
+                                   attrib=wellsample.data['WellSample'])
+                image = wellsample.data['Image']
+                images.append(image)
+                ET.SubElement(ws, "ImageRef", attrib={
+                    "ID": image.data['Image']["ID"]})
 
     for img in images:
         i = img.validate()
@@ -190,7 +190,6 @@ def create_companion(plate):
 
 
 def fake_image(basename="test", sizeX=64, sizeY=64, sizeZ=1, sizeC=3, sizeT=1):
-    colors = [""]
     tiffs = ["%s_z%s_c%s_t%s.tiff" % (basename, z, c, t)
              for z in range(sizeZ) for c in range(sizeC)
              for t in range(sizeT)] 
@@ -215,5 +214,5 @@ def fake_plate(rows=2, columns=2, fields=1):
 
 
 if __name__ == "__main__":
-    plate = fake_plate()
-    create_companion(plate)
+    plates = [fake_plate()]
+    create_companion(plates=plates)
