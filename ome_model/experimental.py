@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # Generate companion files
 
-import os
 import re
 import sys
 import uuid
@@ -16,13 +15,13 @@ OME_ATTRIBUTES = {
 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd',
 }
 
-TIFF_PARSER = "^.*?" # Ignore prefix
+TIFF_PARSER = "^.*?"  # Ignore prefix
 TIFF_PARSER += "(?:[-_]+|"  # Skip separators
 TIFF_PARSER += "[Cc]_?(?P<channel>[^-_]+)|"  # Channel section
 TIFF_PARSER += "[TtHhRr]_?(?P<time>[^-_]+)|"  # "Time" section
 TIFF_PARSER += "[Zz]_?(?P<slice>[^-_]+)"  # Z-slices
 TIFF_PARSER += ")+"  # As many of those three as needed
-TIFF_PARSER += ".*?[.].*?" # Ignore the rest, but don't slurp the file ending
+TIFF_PARSER += ".*?[.].*?"  # Ignore the rest, but don't slurp the file ending
 TIFF_PARSER = re.compile(TIFF_PARSER)
 
 
@@ -31,18 +30,18 @@ class Channel(object):
     ID = 0
 
     def __init__(self,
-        image,
-        name,
-        color,
-        samplesPerPixel=1,
-    ):
+                 image,
+                 name,
+                 color,
+                 samplesPerPixel=1,
+                 ):
         self.data = {
-            'ID': 'Channel:%s:%s' % (image, self.ID),
+            'ID': 'Channel:%s' % self.ID,
             'Name': name,
             'Color': str(color),
             'SamplesPerPixel': str(samplesPerPixel),
         }
-        self.ID += 1
+        Channel.ID += 1
 
 
 class Image(object):
@@ -50,12 +49,12 @@ class Image(object):
     ID = 0
 
     def __init__(self,
-        name,
-        sizeX, sizeY, sizeZ, sizeC, sizeT,
-        tiffs,
-        order="XYZTC",
-        type="uint16",
-    ):
+                 name,
+                 sizeX, sizeY, sizeZ, sizeC, sizeT,
+                 tiffs,
+                 order="XYZTC",
+                 type="uint16",
+                 ):
         self.data = {
             'Image': {'ID': 'Image:%s' % self.ID, 'Name': name},
             'Pixels': {
@@ -80,9 +79,62 @@ class Image(object):
             ))
 
     def validate(self):
-        assert len(self.data["Channels"]) == int(self.data["Pixels"]["SizeC"]), \
-               str(self.data)
+        assert (len(self.data["Channels"]) ==
+                int(self.data["Pixels"]["SizeC"])), str(self.data)
         return self.data
+
+
+class Plate(object):
+
+    ID = 0
+
+    def __init__(self, name, rows, columns):
+        self.data = {
+            'Plate': {'ID': 'Plate:%s' % self.ID, 'Name': name},
+            'Wells': [],
+        }
+        Plate.ID += 1
+
+    def add_well(self, row, column):
+        well = Well(self, row, column)
+        self.data["Wells"].append(well)
+        return well
+
+
+class Well(object):
+
+    ID = 0
+
+    def __init__(self, plate, row, column):
+        self.data = {
+            'Well': {
+                'ID': 'Well:%s' % self.ID,
+                'Row': '%s' % row,
+                'Column': '%s' % column
+            },
+            'WellSamples': [],
+        }
+        Well.ID += 1
+
+    def add_wellsample(self, index, image):
+        wellsample = WellSample(self, index, image)
+        self.data["WellSamples"].append(wellsample)
+        return wellsample
+
+
+class WellSample(object):
+
+    ID = 0
+
+    def __init__(self, well, index, image):
+        self.data = {
+            'WellSample': {
+                'ID': 'WellSample:%s' % self.ID,
+                'Index': '%s' % index,
+            },
+            'Image': image,
+        }
+        WellSample.ID += 1
 
 
 def parse_tiff(tiff):
@@ -93,12 +145,25 @@ def parse_tiff(tiff):
     return (m.group("channel"), m.group("time"), m.group("slice"))
 
 
-def create_companion(images):
+def create_companion(plate):
     """
     Create a companion OME-XML for a given experiment.
     Assumes 2D TIFFs
     """
     root = ET.Element("OME", attrib=OME_ATTRIBUTES)
+
+    images = []
+    p = ET.SubElement(root, "Plate", attrib=plate.data['Plate'])
+    for well in plate.data["Wells"]:
+        w = ET.SubElement(p, "Well", attrib=well.data["Well"])
+        for wellsample in well.data["WellSamples"]:
+            ws = ET.SubElement(w, "WellSample",
+                               attrib=wellsample.data['WellSample'])
+            image = wellsample.data['Image']
+            images.append(image)
+            ET.SubElement(ws, "ImageRef", attrib={
+                "ID": image.data['Image']["ID"]})
+
     for img in images:
         i = img.validate()
         image = ET.SubElement(root, "Image", attrib=i["Image"])
@@ -117,26 +182,38 @@ def create_companion(images):
                 "PlaneCount": "1",
                 "IFD": '0'})
             ET.SubElement(tiffdata, "UUID", attrib={
-                "FileName": tiff}).text = str(uuid.uuid4())
+                "FileName": tiff}).text = "urn:uuid:%s" % str(uuid.uuid4())
 
     # https://stackoverflow.com/a/48671499/56887
     xmlstr = ET.tostring(root).decode()
     sys.stdout.write(xmlstr)
 
 
-def fake_image():
-    tiffs = [
-        "foo_c0_t0_z0.tiff",
-        "bar_t0_c1_z0.tiff",
-        "baz_z0_t0_c2.tiff",
-    ]
-    image = Image("test", 64, 64, 1, 3, 1, tiffs)
+def fake_image(basename="test", sizeX=64, sizeY=64, sizeZ=1, sizeC=3, sizeT=1):
+    colors = [""]
+    tiffs = ["%s_z%s_c%s_t%s.tiff" % (basename, z, c, t)
+             for z in range(sizeZ) for c in range(sizeC)
+             for t in range(sizeT)] 
+    image = Image("test", sizeX, sizeY, sizeZ, sizeC, sizeT, tiffs)
     image.add_channel("red", 0)
     image.add_channel("green", 0)
     image.add_channel("blue", 0)
     return image
 
 
+def fake_plate(rows=2, columns=2, fields=1):
+
+    plate = Plate("test", rows, columns)
+    for row in range(rows):
+        for column in range(columns):
+            well = plate.add_well(row, column)
+            for field in range(fields):
+                basename = "Well%s%s" % (chr(row + 65), column)
+                image = fake_image(basename=basename)
+                well.add_wellsample(field, image)
+    return plate
+
+
 if __name__ == "__main__":
-    image = fake_image()
-    create_companion([image])
+    plate = fake_plate()
+    create_companion(plate)
