@@ -145,7 +145,7 @@ def parse_tiff(tiff):
     return (m.group("channel"), m.group("time"), m.group("slice"))
 
 
-def create_companion(plates=[], images=[]):
+def create_companion(plates=[], images=[], out=sys.stdout):
     """
     Create a companion OME-XML for a given experiment.
     Assumes 2D TIFFs
@@ -185,8 +185,8 @@ def create_companion(plates=[], images=[]):
                 "FileName": tiff}).text = "urn:uuid:%s" % str(uuid.uuid4())
 
     # https://stackoverflow.com/a/48671499/56887
-    xmlstr = ET.tostring(root).decode()
-    sys.stdout.write(xmlstr)
+    xmlstr = ET.tostring(root, encoding="UTF-8").decode()
+    out.write(xmlstr)
 
 
 def fake_image(basename="test", sizeX=64, sizeY=64, sizeZ=1, sizeC=3, sizeT=1):
