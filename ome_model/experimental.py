@@ -1,10 +1,16 @@
 #!/usr/bin/env python
 # Generate companion files
 
+from __future__ import print_function
 import re
 import sys
 import uuid
 import xml.etree.ElementTree as ET
+
+if sys.version_info[0] > 2:
+    PYTHON = 3
+else:
+    PYTHON = 2
 
 OME_ATTRIBUTES = {
     'Creator': "ome_model/experimental.py",
@@ -145,7 +151,7 @@ def parse_tiff(tiff):
     return (m.group("channel"), m.group("time"), m.group("slice"))
 
 
-def create_companion(plates=[], images=[], out=sys.stdout):
+def create_companion(plates=[], images=[], out=None):
     """
     Create a companion OME-XML for a given experiment.
     Assumes 2D TIFFs
@@ -185,8 +191,12 @@ def create_companion(plates=[], images=[], out=sys.stdout):
                 "FileName": tiff}).text = "urn:uuid:%s" % str(uuid.uuid4())
 
     # https://stackoverflow.com/a/48671499/56887
-    xmlstr = ET.tostring(root, encoding="UTF-8").decode()
-    out.write(xmlstr)
+    kwargs = dict(encoding="UTF-8")
+    out = sys.stdout
+    if PYTHON >= 3:
+        kwargs["xml_declaration"]=True
+        out = sys.stdout.buffer
+    ET.ElementTree(root).write(out, **kwargs)
 
 
 def fake_image(basename="test", sizeX=64, sizeY=64, sizeZ=1, sizeC=3, sizeT=1):
