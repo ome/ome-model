@@ -1,16 +1,22 @@
 #!/usr/bin/env python
 # Generate companion files
 
+from __future__ import print_function
 import re
 import sys
 import uuid
 import xml.etree.ElementTree as ET
 
+if sys.version_info[0] > 2:
+    PYTHON = 3
+else:
+    PYTHON = 2
 
 OME_ATTRIBUTES = {
+    'Creator': "ome_model/experimental.py",
+    'UUID': "urn:uuid:%s" % uuid.uuid4(),
     'xmlns': 'http://www.openmicroscopy.org/Schemas/OME/2016-06',
     'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-    'xmlns:OME': 'http://www.openmicroscopy.org/Schemas/OME/2016-06',
     'xsi:schemaLocation': 'http://www.openmicroscopy.org/Schemas/OME/2016-06 \
 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd',
 }
@@ -145,7 +151,7 @@ def parse_tiff(tiff):
     return (m.group("channel"), m.group("time"), m.group("slice"))
 
 
-def create_companion(plates=[], images=[]):
+def create_companion(plates=[], images=[], out=None):
     """
     Create a companion OME-XML for a given experiment.
     Assumes 2D TIFFs
@@ -185,14 +191,18 @@ def create_companion(plates=[], images=[]):
                 "FileName": tiff}).text = "urn:uuid:%s" % str(uuid.uuid4())
 
     # https://stackoverflow.com/a/48671499/56887
-    xmlstr = ET.tostring(root).decode()
-    sys.stdout.write(xmlstr)
+    kwargs = dict(encoding="UTF-8")
+    out = sys.stdout
+    if PYTHON >= 3:
+        kwargs["xml_declaration"]=True
+        out = sys.stdout.buffer
+    ET.ElementTree(root).write(out, **kwargs)
 
 
 def fake_image(basename="test", sizeX=64, sizeY=64, sizeZ=1, sizeC=3, sizeT=1):
     tiffs = ["%s_z%s_c%s_t%s.tiff" % (basename, z, c, t)
              for z in range(sizeZ) for c in range(sizeC)
-             for t in range(sizeT)] 
+             for t in range(sizeT)]
     image = Image("test", sizeX, sizeY, sizeZ, sizeC, sizeT, tiffs)
     image.add_channel("red", 0)
     image.add_channel("green", 0)
