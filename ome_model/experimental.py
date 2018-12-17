@@ -6,11 +6,11 @@ import sys
 import uuid
 import xml.etree.ElementTree as ET
 
-
 OME_ATTRIBUTES = {
+    'Creator': "ome_model/experimental.py",
+    'UUID': "urn:uuid:%s" % uuid.uuid4(),
     'xmlns': 'http://www.openmicroscopy.org/Schemas/OME/2016-06',
     'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
-    'xmlns:OME': 'http://www.openmicroscopy.org/Schemas/OME/2016-06',
     'xsi:schemaLocation': 'http://www.openmicroscopy.org/Schemas/OME/2016-06 \
 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd',
 }
