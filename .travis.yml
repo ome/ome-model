@@ -1,3 +1,4 @@
+---
 language: java
 
 sudo: false
@@ -5,10 +6,12 @@ sudo: false
 # http://docs.travis-ci.com/user/caching/#Arbitrary-directories
 cache:
   directories:
-  - $HOME/.m2
+    - $HOME/.m2
 
 jdk:
+  - openjdk11
   - oraclejdk11
+  - openjdk8
   - oraclejdk8
 
 matrix:
