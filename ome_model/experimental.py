@@ -192,7 +192,7 @@ def create_companion(plates=[], images=[], out=sys.stdout):
 def fake_image(basename="test", sizeX=64, sizeY=64, sizeZ=1, sizeC=3, sizeT=1):
     tiffs = ["%s_z%s_c%s_t%s.tiff" % (basename, z, c, t)
              for z in range(sizeZ) for c in range(sizeC)
-             for t in range(sizeT)] 
+             for t in range(sizeT)]
     image = Image("test", sizeX, sizeY, sizeZ, sizeC, sizeT, tiffs)
     image.add_channel("red", 0)
     image.add_channel("green", 0)
