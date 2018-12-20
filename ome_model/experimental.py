@@ -63,7 +63,7 @@ class TiffData(object):
                  firstC=0,
                  firstT=0,
                  firstZ=0,
-                 ifd=0,
+                 ifd=None,
                  planeCount=None,
                  uuid=None
                  ):
@@ -113,20 +113,20 @@ class Image(object):
                 self, name, color, samplesPerPixel
             ))
 
-    def add_tiffs(self, tiffs):
+    def add_tiff(self, filename, c=None, t=None, z=None, ifd=None,
+                 planeCount=None):
 
-        for tiff in tiffs:
-            uuid = UUID(tiff)
-            c, t, z = parse_tiff(tiff)
-            self.data["TIFFs"].append(
-                TiffData(
-                    firstC=c,
-                    firstT=t,
-                    firstZ=z,
-                    ifd=0,
-                    planeCount=1,
-                    uuid=uuid)
-            )
+        if c is None and t is None and z is None:
+            # If no mapping specified, assume single plane TIFF which name
+            # contain the z,c,t indices
+            c, t, z = parse_tiff(filename)
+        self.data["TIFFs"].append(TiffData(
+            firstC=c,
+            firstT=t,
+            firstZ=z,
+            ifd=ifd,
+            planeCount=planeCount,
+            uuid=UUID(filename)))
 
     def validate(self):
         assert (len(self.data["Channels"]) ==
@@ -245,7 +245,8 @@ def fake_image(basename="test", sizeX=64, sizeY=64, sizeZ=1, sizeC=3, sizeT=1):
     image.add_channel("red", 0)
     image.add_channel("green", 0)
     image.add_channel("blue", 0)
-    image.add_tiffs(tiffs)
+    for tiff in tiffs:
+        image.add_tiff(tiff)
     return image
 
 
