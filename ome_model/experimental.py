@@ -230,10 +230,12 @@ def create_companion(plates=[], images=[], out=None):
 
     # https://stackoverflow.com/a/48671499/56887
     kwargs = dict(encoding="UTF-8")
-    out = sys.stdout
     if PYTHON >= 3:
         kwargs["xml_declaration"]=True
-        out = sys.stdout.buffer
+        if not out:
+            out = sys.stdout.buffer
+    elif not out:
+        out = sys.stdout
     ET.ElementTree(root).write(out, **kwargs)
 
 
