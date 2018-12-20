@@ -50,6 +50,36 @@ class Channel(object):
         Channel.ID += 1
 
 
+class UUID(object):
+    def __init__(self,
+                 filename=None
+                 ):
+        self.data = {"FileName": filename}
+        self.value = "urn:uuid:%s" % str(uuid.uuid4())
+
+
+class TiffData(object):
+    def __init__(self,
+                 firstC=0,
+                 firstT=0,
+                 firstZ=0,
+                 ifd=0,
+                 planeCount=None,
+                 uuid=None
+                 ):
+        self.data = {
+            "FirstC": str(firstC),
+            "FirstT": str(firstT),
+            "FirstZ": str(firstZ)
+        }
+        self.uuid = uuid
+        if ifd:
+            self.data["IFD"] = str(ifd)
+        if planeCount:
+            self.data["PlaneCount"] = str(planeCount)
+
+
+
 class Image(object):
 
     ID = 0
@@ -57,7 +87,6 @@ class Image(object):
     def __init__(self,
                  name,
                  sizeX, sizeY, sizeZ, sizeC, sizeT,
-                 tiffs,
                  order="XYZTC",
                  type="uint16",
                  ):
@@ -74,7 +103,7 @@ class Image(object):
                 'SizeC': str(sizeC),
             },
             'Channels': [],
-            'TIFFData': tiffs,
+            'TIFFs': [],
         }
         Image.ID += 1
 
@@ -83,6 +112,21 @@ class Image(object):
             Channel(
                 self, name, color, samplesPerPixel
             ))
+
+    def add_tiffs(self, tiffs):
+
+        for tiff in tiffs:
+            uuid = UUID(tiff)
+            c, t, z = parse_tiff(tiff)
+            self.data["TIFFs"].append(
+                TiffData(
+                    firstC=c,
+                    firstT=t,
+                    firstZ=z,
+                    ifd=0,
+                    planeCount=1,
+                    uuid=uuid)
+            )
 
     def validate(self):
         assert (len(self.data["Channels"]) ==
@@ -178,17 +222,11 @@ def create_companion(plates=[], images=[], out=None):
             c = channel.data  # TODO: validation?
             ET.SubElement(pixels, "Channel", attrib=c)
 
-        tiffs = i["TIFFData"]
-        for tiff in tiffs:
-            c, t, z = parse_tiff(tiff)
-            tiffdata = ET.SubElement(pixels, "TiffData", attrib={
-                "FirstC": c,
-                "FirstT": t,
-                "FirstZ": z,
-                "PlaneCount": "1",
-                "IFD": '0'})
-            ET.SubElement(tiffdata, "UUID", attrib={
-                "FileName": tiff}).text = "urn:uuid:%s" % str(uuid.uuid4())
+        for tiff in i["TIFFs"]:
+            tiffdata = ET.SubElement(pixels, "TiffData", attrib=tiff.data)
+            if tiff.uuid:
+                ET.SubElement(
+                    tiffdata, "UUID", tiff.uuid.data).text = tiff.uuid.value
 
     # https://stackoverflow.com/a/48671499/56887
     kwargs = dict(encoding="UTF-8")
@@ -203,10 +241,11 @@ def fake_image(basename="test", sizeX=64, sizeY=64, sizeZ=1, sizeC=3, sizeT=1):
     tiffs = ["%s_z%s_c%s_t%s.tiff" % (basename, z, c, t)
              for z in range(sizeZ) for c in range(sizeC)
              for t in range(sizeT)]
-    image = Image("test", sizeX, sizeY, sizeZ, sizeC, sizeT, tiffs)
+    image = Image("test", sizeX, sizeY, sizeZ, sizeC, sizeT)
     image.add_channel("red", 0)
     image.add_channel("green", 0)
     image.add_channel("blue", 0)
+    image.add_tiffs(tiffs)
     return image
 
 
