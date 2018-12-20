@@ -79,7 +79,6 @@ class TiffData(object):
             self.data["PlaneCount"] = str(planeCount)
 
 
-
 class Image(object):
 
     ID = 0
@@ -231,7 +230,7 @@ def create_companion(plates=[], images=[], out=None):
     # https://stackoverflow.com/a/48671499/56887
     kwargs = dict(encoding="UTF-8")
     if PYTHON >= 3:
-        kwargs["xml_declaration"]=True
+        kwargs["xml_declaration"] = True
         if not out:
             out = sys.stdout.buffer
     elif not out:
