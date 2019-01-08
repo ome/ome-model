@@ -86,6 +86,7 @@ class Image(object):
     def __init__(self,
                  name,
                  sizeX, sizeY, sizeZ, sizeC, sizeT,
+                 tiffs=[],
                  order="XYZTC",
                  type="uint16",
                  ):
@@ -105,6 +106,8 @@ class Image(object):
             'TIFFs': [],
         }
         Image.ID += 1
+        for tiff in tiffs:
+            self.add_tiff(tiff)
 
     def add_channel(self, name, color, samplesPerPixel=1):
         self.data["Channels"].append(
@@ -242,12 +245,10 @@ def fake_image(basename="test", sizeX=64, sizeY=64, sizeZ=1, sizeC=3, sizeT=1):
     tiffs = ["%s_z%s_c%s_t%s.tiff" % (basename, z, c, t)
              for z in range(sizeZ) for c in range(sizeC)
              for t in range(sizeT)]
-    image = Image("test", sizeX, sizeY, sizeZ, sizeC, sizeT)
+    image = Image("test", sizeX, sizeY, sizeZ, sizeC, sizeT, tiffs)
     image.add_channel("red", 0)
     image.add_channel("green", 0)
     image.add_channel("blue", 0)
-    for tiff in tiffs:
-        image.add_tiff(tiff)
     return image
 
 
