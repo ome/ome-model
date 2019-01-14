@@ -122,10 +122,10 @@ public final class MetadataConverter {
    * @param destChannel the index of the Channel in dest
    * @param copyID false if the Channel ID should be omitted from the copy operation
    */
-  public static void convertChannelMetadata(MetadataRetrieve src, int srcImage, int srcChannel,
+  public static void convertChannels(MetadataRetrieve src, int srcImage, int srcChannel,
     MetadataStore dest, int destImage, int destChannel, boolean copyID)
   {
-    convertChannelMetadata(src, srcImage, srcChannel, dest, destImage, destChannel, copyID, null);
+    convertChannels(src, srcImage, srcChannel, dest, destImage, destChannel, copyID, null);
   }
 
 
@@ -145,7 +145,7 @@ public final class MetadataConverter {
    * @param copyID false if the Channel ID should be omitted from the copy operation
    * @param lightSourceIds list of valid LightSource IDs for reference checking
    */
-  public static void convertChannelMetadata(MetadataRetrieve src, int srcImage, int srcChannel,
+  public static void convertChannels(MetadataRetrieve src, int srcImage, int srcChannel,
     MetadataStore dest, int destImage, int destChannel, boolean copyID, List<String> lightSourceIds)
   {
     if (copyID) {
@@ -1349,7 +1349,7 @@ public final class MetadataConverter {
       }
       catch (NullPointerException e) { }
       for (int c=0; c<channelCount; c++) {
-        convertChannelMetadata(src, i, c, dest, i, c, true, lightSourceIds);
+        convertChannels(src, i, c, dest, i, c, true, lightSourceIds);
       }
 
       int planeCount = 0;
