@@ -50,6 +50,35 @@ class Channel(object):
         Channel.ID += 1
 
 
+class UUID(object):
+    def __init__(self,
+                 filename=None
+                 ):
+        self.data = {"FileName": filename}
+        self.value = "urn:uuid:%s" % str(uuid.uuid4())
+
+
+class TiffData(object):
+    def __init__(self,
+                 firstC=0,
+                 firstT=0,
+                 firstZ=0,
+                 ifd=None,
+                 planeCount=None,
+                 uuid=None
+                 ):
+        self.data = {
+            "FirstC": str(firstC),
+            "FirstT": str(firstT),
+            "FirstZ": str(firstZ)
+        }
+        self.uuid = uuid
+        if ifd:
+            self.data["IFD"] = str(ifd)
+        if planeCount:
+            self.data["PlaneCount"] = str(planeCount)
+
+
 class Image(object):
 
     ID = 0
@@ -57,7 +86,7 @@ class Image(object):
     def __init__(self,
                  name,
                  sizeX, sizeY, sizeZ, sizeC, sizeT,
-                 tiffs,
+                 tiffs=[],
                  order="XYZTC",
                  type="uint16",
                  ):
@@ -74,15 +103,32 @@ class Image(object):
                 'SizeC': str(sizeC),
             },
             'Channels': [],
-            'TIFFData': tiffs,
+            'TIFFs': [],
         }
         Image.ID += 1
+        for tiff in tiffs:
+            self.add_tiff(tiff)
 
     def add_channel(self, name, color, samplesPerPixel=1):
         self.data["Channels"].append(
             Channel(
                 self, name, color, samplesPerPixel
             ))
+
+    def add_tiff(self, filename, c=None, t=None, z=None, ifd=None,
+                 planeCount=None):
+
+        if c is None and t is None and z is None:
+            # If no mapping specified, assume single plane TIFF which name
+            # contain the z,c,t indices
+            c, t, z = parse_tiff(filename)
+        self.data["TIFFs"].append(TiffData(
+            firstC=c,
+            firstT=t,
+            firstZ=z,
+            ifd=ifd,
+            planeCount=planeCount,
+            uuid=UUID(filename)))
 
     def validate(self):
         assert (len(self.data["Channels"]) ==
@@ -178,24 +224,20 @@ def create_companion(plates=[], images=[], out=None):
             c = channel.data  # TODO: validation?
             ET.SubElement(pixels, "Channel", attrib=c)
 
-        tiffs = i["TIFFData"]
-        for tiff in tiffs:
-            c, t, z = parse_tiff(tiff)
-            tiffdata = ET.SubElement(pixels, "TiffData", attrib={
-                "FirstC": c,
-                "FirstT": t,
-                "FirstZ": z,
-                "PlaneCount": "1",
-                "IFD": '0'})
-            ET.SubElement(tiffdata, "UUID", attrib={
-                "FileName": tiff}).text = "urn:uuid:%s" % str(uuid.uuid4())
+        for tiff in i["TIFFs"]:
+            tiffdata = ET.SubElement(pixels, "TiffData", attrib=tiff.data)
+            if tiff.uuid:
+                ET.SubElement(
+                    tiffdata, "UUID", tiff.uuid.data).text = tiff.uuid.value
 
     # https://stackoverflow.com/a/48671499/56887
     kwargs = dict(encoding="UTF-8")
-    out = sys.stdout
     if PYTHON >= 3:
-        kwargs["xml_declaration"]=True
-        out = sys.stdout.buffer
+        kwargs["xml_declaration"] = True
+        if not out:
+            out = sys.stdout.buffer
+    elif not out:
+        out = sys.stdout
     ET.ElementTree(root).write(out, **kwargs)
 
 
