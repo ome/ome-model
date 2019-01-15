@@ -23,7 +23,7 @@ import sys
 from setuptools import setup
 
 
-version = '5.6.4.dev1'
+version = '6.0.0a3'
 url = "https://github.com/ome/ome-model/"
 
 setup(
