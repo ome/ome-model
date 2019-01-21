@@ -1,4 +1,5 @@
 .. _TIFF: https://www.adobe.io/open/standards/TIFF.html
+.. _RFC 2119: https://www.ietf.org/rfc/rfc2119.txt
 
 OME-TIFF specification
 ======================
@@ -6,6 +7,8 @@ OME-TIFF specification
 The following provides technical details on the OME-TIFF
 format. It assumes familiarity with both the TIFF_ specification and
 the :schema:`OME Data Model <>`, although there is some review of both.
+
+The key words MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RECOMMENDED, MAY, and OPTIONAL in this specification are to be interpreted as described in `RFC 2119`_.
 
 An OME-TIFF dataset consists of:
 
