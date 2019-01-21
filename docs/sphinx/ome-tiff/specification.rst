@@ -501,38 +501,30 @@ using typical downsampling factors:
 Storage
 ^^^^^^^
 
-Full-resolution image planes must be stored as described above using a valid
-TIFF IFD and referenced from the OME-XML metadata using the
-:ref:`TiffData <tiffdata>` element. When sub-resolutions are present:
+Full-resolution image planes must reamin stored as described above using a valid TIFF IFD and referenced from the OME-XML metadata using the
+:ref:`TiffData <tiffdata>` element.
 
--  the `SubIFDs` TIFF extension tag must be used to specify the sub-resolution
-   image directories (see below),
--  the reduced image bit of the `NewSubfileType` Baseline TIFF tag should be
-   set to 1 to distinguish full-resolution planes from reduced planes
--  the page bit may optionally be set when appropriate.
+Each sub-resolution must be stored in a valid IFD of the same TIFF file as the full-resolution image plane. Additionally:
 
-Each sub-resolution level must be stored in a valid IFD of the same TIFF file as the full-resolution image plane. Additionally:
+- the offsets of all sub-resolutions IFDs must be referenced from the IFD of
+  the full-resolution plane using the `SubIFDs` TIFF extension tag. The list 
+  of sub-resolution offsets must be ordered by plane size from largest to
+  smallest,
+- the IFD offsets of pyramidal levels must not be referenced in the primary
+  chain of IFDs derived from the first IFD of the TIFF file,
+- the NewSubFileType TIFF tag for each pyramidal level should be set to 1
+  to distinguish full-resolution planes from downsampled planes.
 
-- the IFD offsets of all subresolutions must be referenced using the `SubIFDs` 
-  TIFF extension tag of the full-resolution plane IFD. The list of SubIFDs
-  must be ordered by plane size from largest to smallest,
-- the IFD offsets of all pyramidal levels must not be referenced in the chain
-  of IFDs derived from the first IFD of the TIFF file,
-- the reduced image bit of the `NewSubfileType` Baseline TIFF tag should be set
-  to 2 (TODO: check) to distinguish full-resolution planes from reduced planes
-- the page bit may optionally be set when appropriate.
+The planes of largest resolutions should be organized into tiles rather than
+strips as described in the TIFF_ specification and may be compressed using any
+of the officially supported schemes including LZW, JPEG, JPEG2000.
+Sub-resolution image planes may chose to use different compression algorithms
+than the one used by the full resolution plane. For example the full
+resolution image may use no compression or lossless compression while the
+sub-resolution images use lossy compression.
 
-Multi-resolution images especially the largest resolutions should used a tiled
-image organization following the TIFF specification (reference) and may be
-compressed using any of the algorithms officially supported by the TIFF_
-standard including LZW, JPEG, JPEG2000. Sub-resolution image planes may chose
-to use different compression algorithms than the one used by the full
-resolution image. For example the full resolution image may use no
-compression or lossless compression while the sub-resolution images use lossy
-compression.
-
-BigTIFF is recommended for large images, while Baseline TIFF may suffice for
-smaller images.
+While baseline TIFF may suffice for smaller pyramidal images, BigTIFF is
+recommended for large images.
 
 .. seealso::
 
