@@ -501,7 +501,7 @@ using typical downsampling factors:
 Storage
 ^^^^^^^
 
-Full-resolution image planes must reamin stored as described above using a valid TIFF IFD and referenced from the OME-XML metadata using the
+Full-resolution image planes must remain stored as described above using a valid TIFF IFD and referenced from the OME-XML metadata using the
 :ref:`TiffData <tiffdata>` element.
 
 Each sub-resolution must be stored in a valid IFD of the same TIFF file as the full-resolution image plane. Additionally:
@@ -518,7 +518,7 @@ Each sub-resolution must be stored in a valid IFD of the same TIFF file as the f
 The planes of largest resolutions should be organized into tiles rather than
 strips as described in the TIFF_ specification and may be compressed using any
 of the officially supported schemes including LZW, JPEG, JPEG2000.
-Sub-resolution image planes may chose to use different compression algorithms
+Sub-resolution image planes may choose to use different compression algorithms
 than the one used by the full resolution plane. For example the full
 resolution image may use no compression or lossless compression while the
 sub-resolution images use lossy compression.
