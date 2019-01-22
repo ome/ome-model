@@ -506,7 +506,8 @@ Storage
 Full-resolution image planes must remain stored as described above using a valid TIFF IFD and referenced from the OME-XML metadata using the
 :ref:`TiffData <tiffdata>` element.
 
-Each sub-resolution must be stored in a valid IFD of the same TIFF file as the full-resolution image plane. Additionally:
+Each sub-resolution must be stored in the same IFD as the full-resolution
+image plane. Additionally:
 
 - the offsets of all sub-resolutions IFDs must be referenced from the IFD of
   the full-resolution plane using the SubIFDs TIFF extension tag 330 as
