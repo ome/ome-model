@@ -509,12 +509,14 @@ Full-resolution image planes must remain stored as described above using a valid
 Each sub-resolution must be stored in a valid IFD of the same TIFF file as the full-resolution image plane. Additionally:
 
 - the offsets of all sub-resolutions IFDs must be referenced from the IFD of
-  the full-resolution plane using the `SubIFDs` TIFF extension tag. The list 
-  of sub-resolution offsets must be ordered by plane size from largest to
-  smallest,
+  the full-resolution plane using the SubIFDs TIFF extension tag 330 as
+  defined in the TIFF Tech Note 1 of the
+  `Adobe PageMaker® 6.0 TIFF Technical Notes <https://www.adobe.io/content/dam/udp/en/open/standards/tiff/TIFFPM6.pdf>`_.
+  The list of sub-resolution offsets must be ordered by plane size from
+  largest to smallest,
 - the IFD offsets of pyramidal levels must not be referenced in the primary
   chain of IFDs derived from the first IFD of the TIFF file,
-- the NewSubFileType TIFF tag for each pyramidal level should be set to 1
+- the NewSubFileType TIFF tag 254 for each pyramidal level should be set to 1
   to distinguish full-resolution planes from downsampled planes.
 
 The planes of largest resolutions should be organized into tiles rather than
