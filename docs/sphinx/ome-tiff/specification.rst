@@ -439,35 +439,37 @@ OME-XML companion file with the extension :file:`.companion.ome` or a master
 OME-TIFF file containing the full metadata (see :ref:`multifile_samples` for
 representative samples).
 
-Pyramidal OME-TIFF
-------------------
+Sub-resolutions
+---------------
 
 .. versionadded:: 6.0.0
 
-The OME-TIFF specification supports multi-resolution images or pyramidal
-images where individual planes are stored at different levels of resolution.
-The intermediate downsampled image planes are called pyramidal levels,
-sub-resolution image planes or sub-resolutions.
+OME-TIFF supports multi-resolution images or pyramidal images where individual
+planes are stored at different levels of resolution.
+The downsampled image planes are called pyramidal levels, sub-resolution image
+planes or sub-resolutions.
 
 Supported resolutions
 ^^^^^^^^^^^^^^^^^^^^^
 
-OME-TIFF planes can be reduced alongside the X and Y dimensions. Each pyramidal
+OME-TIFF planes can be reduced along the X and Y dimensions. Each pyramidal
 level must be a downsampling of the full-resolution plane in the X and Y
 dimensions and the resolution should stay unchanged in the other dimensions.
-The downsampling factor should be an integer value, identical alongside the X
-and the Y dimensions and stay the same between each consecutive pyramidal
-level.
+The downsampling factor:
 
-The following table below shows two examples of pyramidal level dimensions
+- should be an integer value,
+- should be identical along the X and the Y dimensions,
+- should stay the same between each consecutive pyramid level.
+
+The following table below shows two examples of pyramid level dimensions
 using typical downsampling factors:
 
 .. list-table::
   :header-rows: 1
 
   -  *
-     * Example 1
-     * Example 2
+     * Example 1 (X × Y × Z × C × T)
+     * Example 2 (X × Y × Z × C × T)
 
   -  * Downsampling factor
      * 3
@@ -475,27 +477,27 @@ using typical downsampling factors:
 
   -  * Level 0 (full-resolution)
      * 9234 × 6075 × 1 × 1 × 10
-     * 38912 × 25600 × 1 × 3 × 1
+     * 38912 × 25600 × 200 × 3 × 1
 
   -  * Level 1
      * 3078 × 2025 × 1 × 1 × 10
-     * 9728 × 6400 × 1 × 3 × 1
+     * 9728 × 6400 × 200 × 3 × 1
 
   -  * Level 2
      * 1026 × 675 × 1 × 1 × 10
-     * 2432 × 1600 × 1 × 3 × 1
+     * 2432 × 1600 × 200 × 3 × 1
 
   -  * Level 3
      * 342 × 225 × 1 × 1 × 10
-     * 608 × 400 × 1 × 3 × 1
+     * 608 × 400 × 200 × 3 × 1
 
   -  * Level 4
      * 114 × 74 × 1 × 1 × 10
-     * 152 × 100 × 1 × 3 × 1
+     * 152 × 100 × 200 × 3 × 1
 
   -  * Level 5
      * 38 × 25 × 1 × 1 × 10
-     * 38 × 25 × 1 × 3 × 1
+     * 
 
 
 Storage
@@ -517,7 +519,7 @@ Each sub-resolution must be stored in a valid IFD of the same TIFF file as the f
 
 The planes of largest resolutions should be organized into tiles rather than
 strips as described in the TIFF_ specification and may be compressed using any
-of the officially supported schemes including LZW, JPEG, JPEG2000.
+of the officially supported schemes including LZW, JPEG or JPEG2000.
 Sub-resolution image planes may choose to use different compression algorithms
 than the one used by the full resolution plane. For example the full
 resolution image may use no compression or lossless compression while the
