@@ -515,8 +515,9 @@ image plane. Additionally:
   `Adobe PageMaker® 6.0 TIFF Technical Notes <https://www.adobe.io/content/dam/udp/en/open/standards/tiff/TIFFPM6.pdf>`_.
   The list of sub-resolution offsets must be ordered by plane size from
   largest to smallest,
-- the IFD offsets of pyramidal levels must not be referenced in the primary
-  chain of IFDs derived from the first IFD of the TIFF file,
+- the IFD offsets of pyramidal levels must neither be referenced in the primary
+  chain of IFDs derived from the first IFD of the TIFF file nor be referenced
+  in a :ref:`TiffData <tiffdata>` element of the OME-XML metadata,
 - the NewSubFileType TIFF tag 254 for each pyramidal level should be set to 1
   to distinguish full-resolution planes from downsampled planes.
 
