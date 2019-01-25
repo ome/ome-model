@@ -1,6 +1,7 @@
-6.0.0-m1 (2019-01-15)
+6.0.0-m2 (2019-01-25)
 ---------------------
 
+* Add sub-resolution support to the OME-TIFF specification [#98](https://github.com/ome/ome-model/pull/98)
 * MetadaConverter: add API for copying Channel metadata [#88](https://github.com/ome/ome-model/pull/88)
 * Add experimental OME-XML generation Python API [#91](https://github.com/ome/ome-model/pull/91) [#92](https://github.com/ome/ome-model/pull/92) [#96](https://github.com/ome/ome-model/pull/96) [#97](https://github.com/ome/ome-model/pull/97)
 * Require JDK 8 as the minimum version [90](https://github.com/ome/ome-model/pull/90) [95](https://github.com/ome/ome-model/pull/95)
