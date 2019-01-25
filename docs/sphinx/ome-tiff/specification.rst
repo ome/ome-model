@@ -1,14 +1,18 @@
+.. _TIFF: https://www.adobe.io/open/standards/TIFF.html
+.. _RFC 2119: https://www.ietf.org/rfc/rfc2119.txt
+
 OME-TIFF specification
 ======================
 
 The following provides technical details on the OME-TIFF
-format. It assumes familiarity with both the
-`TIFF <https://en.wikipedia.org/wiki/TIFF>`_ and
-:schema:`OME-XML <>` formats, although there is some review of both.
+format. It assumes familiarity with both the TIFF_ specification and
+the :schema:`OME Data Model <>`, although there is some review of both.
+
+The key words MUST, MUST NOT, REQUIRED, SHALL, SHALL NOT, SHOULD, SHOULD NOT, RECOMMENDED, MAY, and OPTIONAL in this specification are to be interpreted as described in `RFC 2119`_.
 
 An OME-TIFF dataset consists of:
 
-- one or more files in standard TIFF format with the file extension
+- one or more files in standard TIFF_ format with the file extension
   ``.ome.tif`` or ``.ome.tiff`` or
   `BigTIFF format <https://www.awaresystems.be/imaging/tiff/bigtiff.html>`_
   with one of these same file extensions or a BigTIFF-specific
@@ -434,3 +438,102 @@ The master file containing the full OME-XML metadata should be either an
 OME-XML companion file with the extension :file:`.companion.ome` or a master
 OME-TIFF file containing the full metadata (see :ref:`multifile_samples` for
 representative samples).
+
+Sub-resolutions
+---------------
+
+.. versionadded:: 6.0.0
+
+OME-TIFF supports multi-resolution images or pyramidal images where individual
+planes are stored at different levels of resolution.
+The downsampled image planes are called pyramidal levels, sub-resolution image
+planes or sub-resolutions.
+
+Supported resolutions
+^^^^^^^^^^^^^^^^^^^^^
+
+OME-TIFF planes can be reduced along the X and Y dimensions. Each pyramidal
+level must be a downsampling of the full-resolution plane in the X and Y
+dimensions and the resolution should stay unchanged in the other dimensions.
+The downsampling factor:
+
+- should be an integer value,
+- should be identical along the X and the Y dimensions,
+- should stay the same between each consecutive pyramid level.
+
+The following table below shows two examples of pyramid level dimensions
+using typical downsampling factors:
+
+.. list-table::
+  :header-rows: 1
+
+  -  *
+     * Example 1 (X × Y × Z × C × T)
+     * Example 2 (X × Y × Z × C × T)
+
+  -  * Downsampling factor
+     * 3
+     * 4
+
+  -  * Level 0 (full-resolution)
+     * 9234 × 6075 × 1 × 1 × 10
+     * 38912 × 25600 × 200 × 3 × 1
+
+  -  * Level 1
+     * 3078 × 2025 × 1 × 1 × 10
+     * 9728 × 6400 × 200 × 3 × 1
+
+  -  * Level 2
+     * 1026 × 675 × 1 × 1 × 10
+     * 2432 × 1600 × 200 × 3 × 1
+
+  -  * Level 3
+     * 342 × 225 × 1 × 1 × 10
+     * 608 × 400 × 200 × 3 × 1
+
+  -  * Level 4
+     * 114 × 74 × 1 × 1 × 10
+     * 152 × 100 × 200 × 3 × 1
+
+  -  * Level 5
+     * 38 × 25 × 1 × 1 × 10
+     * 
+
+
+Storage
+^^^^^^^
+
+Full-resolution image planes must remain stored as described above using a valid TIFF IFD and referenced from the OME-XML metadata using the
+:ref:`TiffData <tiffdata>` element.
+
+Each sub-resolution must be stored in the same IFD as the full-resolution
+image plane. Additionally:
+
+- the offsets of all sub-resolutions IFDs must be referenced from the IFD of
+  the full-resolution plane using the SubIFDs TIFF extension tag 330 as
+  defined in the TIFF Tech Note 1 of the
+  `Adobe PageMaker® 6.0 TIFF Technical Notes <https://www.adobe.io/content/dam/udp/en/open/standards/tiff/TIFFPM6.pdf>`_.
+  The list of sub-resolution offsets must be ordered by plane size from
+  largest to smallest,
+- the IFD offsets of pyramidal levels must neither be referenced in the primary
+  chain of IFDs derived from the first IFD of the TIFF file nor be referenced
+  in a :ref:`TiffData <tiffdata>` element of the OME-XML metadata,
+- the NewSubFileType TIFF tag 254 for each pyramidal level should be set to 1
+  to distinguish full-resolution planes from downsampled planes.
+
+The planes of largest resolutions should be organized into tiles rather than
+strips as described in the TIFF_ specification and may be compressed using any
+of the officially supported schemes including LZW, JPEG or JPEG2000.
+Sub-resolution image planes may choose to use different compression algorithms
+than the one used by the full resolution plane. For example the full
+resolution image may use no compression or lossless compression while the
+sub-resolution images use lossy compression.
+
+While baseline TIFF may suffice for smaller pyramidal images, BigTIFF is
+recommended for large images.
+
+.. seealso::
+
+  https://openmicroscopy.github.io/design/OME005/
+    Official design proposal for the addition of sub-resolution support to the
+    OME-TIFF specification.
