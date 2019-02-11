@@ -201,6 +201,7 @@ rst_epilog = """
 .. _Django: https://www.djangoproject.com/
 
 .. |model_version| replace:: %s
+.. |WSI| replace:: :abbr:`WSI (Whole Slide Image)`
 .. |SSH| replace:: :abbr:`SSH (Secure Shell)`
 .. |VM| replace:: :abbr:`VM (Virtual Machine)`
 .. |OS| replace:: :abbr:`OS (Operating System)`

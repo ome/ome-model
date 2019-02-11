@@ -17,8 +17,8 @@ Biological datasets
 
 .. _tubhiswt_samples:
 
-Tubhiswt
-^^^^^^^^
+5D datasets
+^^^^^^^^^^^
 
 The following OME-TIFF datasets consist of tubulin histone GFP coexpressing
 *C. elegans* embryos. Many thanks to
@@ -53,8 +53,8 @@ version since their initial creation.
      * 512 × 512 × 10 × 2 × 43
      * 86
 
-BBBC
-^^^^
+Plate
+^^^^^
 
 An OME-TIFF dataset representative of the
 :doc:`High Content Screening </developers/screen-plate-well>` section of the
@@ -76,8 +76,8 @@ OME Data Model, derived from the public
 
 See `Ljosa V, Sokolnicki KL, Carpenter AE (2012). Annotated high-throughput microscopy image sets for validation. Nature Methods 9(7):637 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627348/>`__.
 
-MitoCheck
-^^^^^^^^^
+ROI
+^^^
 
 An OME-TIFF dataset representative of the :doc:`ROI </developers/roi>`
 section of the OME Data Model, derived from the public
@@ -97,6 +97,47 @@ section of the OME Data Model, derived from the public
      * `Public Domain <https://creativecommons.org/publicdomain/mark/1.0/>`_
 
 See `Neumann B et al. (2010). Phenotypic profiling of the human genome by time-lapse microscopy reveals cell division genes. Nature 464(7289):721 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3108885/>`__.
+
+Sub-resolutions
+^^^^^^^^^^^^^^^
+
+A set of OME-TIFF datasets representative of the :ref:`ometiff_subresolutions`
+section of the OME-TIFF specification were derived from a few large X Y images.
+
+.. list-table::
+  :header-rows: 1
+
+  -  * Dataset
+     * Image dimensions (XYZCT)
+     * Notes
+     * Provenance
+     * Copyright
+
+  -  * :ometiff_downloads:`Leica-1.ome.tiff <sub-resolutions/Brightfield/Leica-1/Leica-1.ome.tiff>`
+     * 36832 × 38432 × 1 × 3 × 1
+     * |WSI|, 2 RGB images
+     * `OpenSlide <http://openslide.cs.cmu.edu/download/openslide-testdata/Leica/>`_
+     * `Public Domain <https://creativecommons.org/publicdomain/mark/1.0/>`_
+  -  * :ometiff_downloads:`Leica-2.ome.tiff <sub-resolutions/Brightfield/Leica-2/Leica-2.ome.tiff>`
+     * 39168 × 26048 × 1 × 3 × 1
+     * |WSI|, 5 RGB images
+     * `OpenSlide <http://openslide.cs.cmu.edu/download/openslide-testdata/Leica/>`_
+     * `Public Domain <https://creativecommons.org/publicdomain/mark/1.0/>`_
+  -  * :ometiff_downloads:`LuCa-7color_Scan1.ome.tiff <sub-resolutions/Fluorescence/LuCa-7color_Scan1.ome.tiff>`
+     * 24960 × 34560 × 1 × 5 × 1
+     * |WSI|, multi-channel, fluorescence
+     * `PerkinElmer <http://www.perkinelmer.com/>`_
+     * `CC-BY 4.0 <https://creativecommons.org/licenses/by/4.0>`_
+  -  * :ometiff_downloads:`BGal_000438_frames.ome.tiff <sub-resolutions/EM/BGal_000438_frames.ome.tiff>`
+     * 7676 × 7420 × 1 × 1 × 38
+     * EM, Floating-point
+     * `EMPIAR <https://www.ebi.ac.uk/pdbe/emdb/empiar/>`_
+     * `Public Domain <https://creativecommons.org/publicdomain/mark/1.0/>`_
+  -  * :ometiff_downloads:`retina_large.ome.tiff <sub-resolutions/Z-stack/retina_large.ome.tiff>`
+     * 2048 × 1567 × 64 × 2 × 1
+     * Multi-Z stack
+     * `Bitplane <http://www.bitplane.com>`_
+     * `CC-BY 4.0 <https://creativecommons.org/licenses/by/4.0>`_
 
 .. _artificial-datasets:
 

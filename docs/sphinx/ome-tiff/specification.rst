@@ -439,6 +439,8 @@ OME-XML companion file with the extension :file:`.companion.ome` or a master
 OME-TIFF file containing the full metadata (see :ref:`multifile_samples` for
 representative samples).
 
+.. _ometiff_subresolutions:
+
 Sub-resolutions
 ---------------
 
