@@ -129,7 +129,7 @@ section of the OME-TIFF specification were derived from a few large X Y images.
      * `PerkinElmer <http://www.perkinelmer.com/>`_
      * `CC-BY 4.0 <https://creativecommons.org/licenses/by/4.0>`_
   -  * :ometiff_downloads:`BGal_000438_frames.ome.tiff <sub-resolutions/EM/BGal_000438_frames.ome.tiff>`
-     * 7676 × 7420 × 1 × 1 × 38
+     * 7676 × 7420 × 38 × 1 × 1
      * EM, Floating-point
      * `EMPIAR <https://www.ebi.ac.uk/pdbe/emdb/empiar/>`_
      * `Public Domain <https://creativecommons.org/publicdomain/mark/1.0/>`_
