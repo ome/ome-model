@@ -1,15 +1,29 @@
-6.0.0-m2 (2019-01-25)
----------------------
+## 6.0.0 (2019-01-25)
+
+
+### OME-TIFF
 
 * Add sub-resolution support to the OME-TIFF specification [#98](https://github.com/ome/ome-model/pull/98)
-* MetadaConverter: add API for copying Channel metadata [#88](https://github.com/ome/ome-model/pull/88)
-* Add experimental OME-XML generation Python API [#91](https://github.com/ome/ome-model/pull/91) [#92](https://github.com/ome/ome-model/pull/92) [#96](https://github.com/ome/ome-model/pull/96) [#97](https://github.com/ome/ome-model/pull/97)
+* Add references to public OME-TIFF sub-resolution sample datasets [#99](https://github.com/ome/ome-model/pull/99)
+* Documentation and linkchecker improvements [#70](https://github.com/ome/ome-model/pull/70) [#76](https://github.com/ome/ome-model/pull/76) [#83](https://github.com/ome/ome-model/pull/83) [#94](https://github.com/ome/ome-model/pull/94)
+
+### Java
+
 * Require JDK 8 as the minimum version [90](https://github.com/ome/ome-model/pull/90) [95](https://github.com/ome/ome-model/pull/95)
+* MetadaConverter: add API for copying Channel metadata [#88](https://github.com/ome/ome-model/pull/88)
 * Add createRotationTransform static method to AffineTransform [#77](https://github.com/ome/ome-model/pull/77)
+* Build system: update Maven plugin versions [#74](https://github.com/ome/ome-model/pull/74)
+
+### C++
+
 * Aggregate generated C++ source files for model and enums [#79](https://github.com/ome/ome-model/pull/79)
 * Require C++ 14 support [#76](https://github.com/ome/ome-model/pull/75)
-* Build system: update Maven plugin versions [#74](https://github.com/ome/ome-model/pull/74)
-* Documentation and linkchecker improvements [#70](https://github.com/ome/ome-model/pull/70) [#76](https://github.com/ome/ome-model/pull/76) [#83](https://github.com/ome/ome-model/pull/83) [#94](https://github.com/ome/ome-model/pull/94)
+* Add createRotationTransform static method to AffineTransform [#77](https://github.com/ome/ome-model/pull/77)
+
+### Python
+
+* Add experimental OME-XML generation Python API [#91](https://github.com/ome/ome-model/pull/91) [#92](https://github.com/ome/ome-model/pull/92) [#96](https://github.com/ome/ome-model/pull/96) [#97](https://github.com/ome/ome-model/pull/97)
+
 
 5.6.3 (2018-03-13)
 ------------------
