@@ -31,13 +31,16 @@
   </licenses>
 
   <dependencies>
-    <!-- There should be a specification dependency here, but
-         there's a cyclic reference which needs to be resolved -->
-
     <dependency>
       <groupId>org.openmicroscopy</groupId>
       <artifactId>ome-common</artifactId>
       <version>${ome-common.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>specification</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
