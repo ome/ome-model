@@ -1,3 +1,9 @@
+## 6.0.1 (2019-05-09)
+
+### Java
+
+* Fix cyclic dependency between specification and ome-xml modules [#101](https://github.com/ome/ome-model/pull/101)
+
 ## 6.0.0 (2019-02-13)
 
 
