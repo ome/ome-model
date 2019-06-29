@@ -16,10 +16,7 @@
 
 import os
 import six
-try:
-    import threading
-except ImportError:
-    import dummy_threading as threading
+import threading
 
 from genshi.template.base import TemplateError
 from genshi.util import LRUCache

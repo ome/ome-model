@@ -99,10 +99,7 @@ from xml.sax import handler, make_parser
 import xml.sax.xmlreader
 import logging
 import keyword
-try:
-  from io import StringIO
-except ImportError:
-  from io import StringIO
+from io import StringIO
 from collections import OrderedDict
 import six
 from six.moves import range
