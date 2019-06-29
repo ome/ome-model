@@ -13,8 +13,8 @@
 
 """Implementation of a number of stream filters."""
 
-from __future__ import absolute_import
-from six import unichr
+
+from six import chr
 import six
 try:
     any
@@ -314,7 +314,7 @@ class HTMLSanitizer(object):
         # The set of URI schemes that are considered safe.
 
     # IE6 <http://heideri.ch/jso/#80>
-    _EXPRESSION_SEARCH = re.compile(u"""
+    _EXPRESSION_SEARCH = re.compile("""
         [eE
          \uFF25 # FULLWIDTH LATIN CAPITAL LETTER E
          \uFF45 # FULLWIDTH LATIN SMALL LETTER E
@@ -359,7 +359,7 @@ class HTMLSanitizer(object):
     # IE6 <http://openmya.hacker.jp/hasegawa/security/expression.txt>
     #     7) Particular bit of Unicode characters
     _URL_FINDITER = re.compile(
-        u'[Uu][Rr\u0280][Ll\u029F]\s*\(([^)]+)').finditer
+        '[Uu][Rr\u0280][Ll\u029F]\s*\(([^)]+)').finditer
 
     def __call__(self, stream):
         """Apply the filter to the given stream.
@@ -531,7 +531,7 @@ class HTMLSanitizer(object):
         def _repl(match):
             t = match.group(1)
             if t:
-                return unichr(int(t, 16))
+                return chr(int(t, 16))
             t = match.group(2)
             if t == '\\':
                 return r'\\'

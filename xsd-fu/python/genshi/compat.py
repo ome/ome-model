@@ -13,7 +13,7 @@
 
 """Various Python version compatibility classes and functions."""
 
-from __future__ import absolute_import
+
 import sys
 from types import CodeType
 import six
@@ -49,9 +49,9 @@ else:
 # We need to differentiate between StringIO and BytesIO in places
 
 if IS_PYTHON2:
-    from StringIO import StringIO
+    from io import StringIO
     try:
-        from cStringIO import StringIO as BytesIO
+        from io import StringIO as BytesIO
     except ImportError:
         BytesIO = StringIO
 else:

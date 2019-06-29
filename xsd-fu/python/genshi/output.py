@@ -15,7 +15,7 @@
 streams.
 """
 
-from __future__ import absolute_import
+
 from itertools import chain
 import re
 
@@ -638,7 +638,7 @@ class NamespaceFlattener(object):
         self.cache = cache
 
     def __call__(self, stream):
-        prefixes = dict([(v, [k]) for k, v in self.prefixes.items()])
+        prefixes = dict([(v, [k]) for k, v in list(self.prefixes.items())])
         namespaces = {XML_NAMESPACE.uri: ['xml']}
         _emit, _get, cache = _prepare_cache(self.cache)
         def _push_ns(prefix, uri):
@@ -668,7 +668,7 @@ class NamespaceFlattener(object):
             while 1:
                 val += 1
                 yield 'ns%d' % val
-        _gen_prefix = _gen_prefix().next
+        _gen_prefix = _gen_prefix().__next__
 
         for kind, data, pos in stream:
             if kind is TEXT and isinstance(data, Markup):

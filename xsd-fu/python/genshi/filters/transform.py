@@ -48,7 +48,7 @@ box, but custom transformations can be added easily.
 :since: version 0.5
 """
 
-from __future__ import absolute_import
+
 import re
 import sys
 
@@ -732,7 +732,7 @@ class SelectTransformation(object):
         variables = {}
         test = self.path.test()
         stream = iter(stream)
-        next = stream.next
+        next = stream.__next__
         for mark, event in stream:
             if mark is None:
                 yield mark, event

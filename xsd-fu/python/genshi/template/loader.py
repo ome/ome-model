@@ -13,7 +13,7 @@
 
 """Template loading and caching."""
 
-from __future__ import absolute_import
+
 import os
 import six
 try:
@@ -329,7 +329,7 @@ class TemplateLoader(object):
         :rtype: ``function``
         """
         def _dispatch_by_prefix(filename):
-            for prefix, delegate in delegates.items():
+            for prefix, delegate in list(delegates.items()):
                 if filename.startswith(prefix):
                     if isinstance(delegate, six.string_types):
                         delegate = directory(delegate)

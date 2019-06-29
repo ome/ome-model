@@ -13,7 +13,7 @@
 
 """Basic templating functionality."""
 
-from __future__ import absolute_import
+
 from collections import deque
 import os
 import sys
@@ -234,7 +234,7 @@ class Context(object):
         
         :return: a list of variables
         """
-        return [(key, self.get(key)) for key in self.keys()]
+        return [(key, self.get(key)) for key in list(self.keys())]
 
     def update(self, mapping):
         """Update the context from the mapping provided."""
@@ -604,7 +604,7 @@ class Template(DirectiveFactory):
                         # individual characters
                         if isinstance(result, six.string_types):
                             yield TEXT, result, pos
-                        elif isinstance(result, (int, float, int)):
+                        elif isinstance(result, (int, float)):
                             yield TEXT, number_conv(result), pos
                         elif hasattr(result, '__iter__'):
                             push(stream)

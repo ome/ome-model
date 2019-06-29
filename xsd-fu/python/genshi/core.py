@@ -13,7 +13,7 @@
 
 """Core classes for markup processing."""
 
-from __future__ import absolute_import
+
 import six
 from six.moves import map
 from six.moves import zip

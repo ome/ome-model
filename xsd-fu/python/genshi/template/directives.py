@@ -13,7 +13,7 @@
 
 """Implementation of the various template directives."""
 
-from __future__ import absolute_import
+
 from genshi.core import QName, Stream
 from genshi.path import Path
 from genshi.template.base import TemplateRuntimeError, TemplateSyntaxError, \

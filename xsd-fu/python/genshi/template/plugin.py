@@ -16,7 +16,7 @@
 CherryPy/Buffet.
 """
 
-from __future__ import absolute_import
+
 from genshi.input import ET, HTML, XML
 from genshi.output import DocType
 from genshi.template.base import Template

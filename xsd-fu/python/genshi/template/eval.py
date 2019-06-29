@@ -13,7 +13,7 @@
 
 """Support for "safe" evaluation of Python expressions."""
 
-from __future__ import absolute_import
+
 import six.moves.builtins
 
 from textwrap import dedent
@@ -267,7 +267,7 @@ class Undefined(object):
     def __iter__(self):
         return iter([])
 
-    def __nonzero__(self):
+    def __bool__(self):
         return False
 
     def __repr__(self):
@@ -428,7 +428,7 @@ def _parse(source, mode='eval'):
                 rest = '\n'.join(['    %s' % line for line in rest.splitlines()])
             source = '\n'.join([first, rest])
     if isinstance(source, six.text_type):
-        source = (u'\ufeff' + source).encode('utf-8')
+        source = ('\ufeff' + source).encode('utf-8')
     return parse(source, mode)
 
 

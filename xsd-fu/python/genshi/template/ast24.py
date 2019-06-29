@@ -13,7 +13,7 @@
 
 """Emulation of the proper abstract syntax tree API for Python 2.4."""
 
-from __future__ import absolute_import
+
 import compiler
 import compiler.ast
 

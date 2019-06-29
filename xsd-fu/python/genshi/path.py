@@ -38,7 +38,7 @@ Because the XPath engine operates on markup streams (as opposed to tree
 structures), it only implements a subset of the full XPath 1.0 language.
 """
 
-from __future__ import absolute_import
+
 from collections import deque
 import six
 from six.moves import range
@@ -580,7 +580,7 @@ class Path(object):
             variables = {}
         stream = iter(stream)
         def _generate(stream=stream, ns=namespaces, vs=variables):
-            next = stream.next
+            next = stream.__next__
             test = self.test()
             for event in stream:
                 result = test(event, ns, vs)

@@ -26,7 +26,7 @@ recommended for new projects, and existing projects may want to migrate to the
 new syntax to remain compatible with future Genshi releases.
 """
 
-from __future__ import absolute_import
+
 import re
 
 from genshi.core import TEXT

@@ -18,7 +18,7 @@ templates.
 :note: Directives support added since version 0.6
 """
 
-from __future__ import absolute_import
+
 import six
 try:
     any
@@ -482,8 +482,8 @@ class ChooseDirective(ExtractableI18NDirective):
         # XXX: should we test which form was chosen like this!?!?!?
         # There should be no match in any catalogue for these singular and
         # plural test strings
-        singular = u'O\x85\xbe\xa9\xa8az\xc3?\xe6\xa1\x02n\x84\x93'
-        plural = u'\xcc\xfb+\xd3Pn\x9d\tT\xec\x1d\xda\x1a\x88\x00'
+        singular = 'O\x85\xbe\xa9\xa8az\xc3?\xe6\xa1\x02n\x84\x93'
+        plural = '\xcc\xfb+\xd3Pn\x9d\tT\xec\x1d\xda\x1a\x88\x00'
         return ngettext(singular, plural, numeral) == plural
 
 

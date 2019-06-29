@@ -68,7 +68,7 @@ returns an object of type `Fragment`:
 Hello, <em>world</em>!
 """
 
-from __future__ import absolute_import
+
 from genshi.core import Attrs, Markup, Namespace, QName, Stream, \
                         START, END, TEXT
 import six
@@ -120,7 +120,7 @@ class Fragment(object):
         :param node: the node to append; can be an `Element`, `Fragment`, or a
                      `Stream`, or a Python string or number
         """
-        if isinstance(node, (Stream, Element, six.string_types, int, float, int)):
+        if isinstance(node, (Stream, Element, six.string_types, int, float)):
             # For objects of a known/primitive type, we avoid the check for
             # whether it is iterable for better performance
             self.children.append(node)
@@ -157,7 +157,7 @@ class Fragment(object):
 def _kwargs_to_attrs(kwargs):
     attrs = []
     names = set()
-    for name, value in kwargs.items():
+    for name, value in list(kwargs.items()):
         name = name.rstrip('_').replace('_', '-')
         if value is not None and name not in names:
             attrs.append((QName(name), six.text_type(value)))
