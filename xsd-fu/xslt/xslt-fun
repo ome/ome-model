@@ -31,7 +31,7 @@
 import unittest
 import sys
 
-from StringIO import StringIO
+from io import StringIO
 from getopt import getopt, GetoptError
 from copy import deepcopy
 
@@ -49,7 +49,7 @@ from lxml.etree import XML, XSLT, Element, SubElement, ElementTree, dump, parse
 def usage(error):
     """Prints usage so that we don't have to. :)"""
     cmd = sys.argv[0]
-    print """%s
+    print("""%s
 Usage: %s <stylesheet.xsl> <input.xml> [output.xml]
 Runs the stylesheet transform upon an XML instance document.
 
@@ -58,7 +58,7 @@ Options:
 Examples:
   %s foo.xslt bar.xml bar_new.xml
 
-Report bugs to ome-devel@lists.openmicroscopy.org.uk""" % (error, cmd, cmd)
+Report bugs to ome-devel@lists.openmicroscopy.org.uk""" % (error, cmd, cmd))
     sys.exit(2)
 
 def run_stylesheet(xslt, document):
@@ -165,7 +165,7 @@ class Test200809(unittest.TestCase):
                     mappedName = renameMap[mappedName];
             newValue = newElement.get(mappedName);
             self.assertFalse(newValue==None);
-            self.assertEquals(newValue, self.stripStr(oldChildElement.text));
+            self.assertEqual(newValue, self.stripStr(oldChildElement.text));
 
     # Compare Elements in left with the attributes in right if they are in comparison map.
     def compareElementsWithAttributesFromMap(self, left, right, comparisonMap):
@@ -176,7 +176,7 @@ class Test200809(unittest.TestCase):
             mappedName = comparisonMap[leftChildName];
             newValue = newElement.get(mappedName);
             self.assertFalse(newValue==None);
-            self.assertEquals(newValue, self.stripStr(leftChild.text));
+            self.assertEqual(newValue, self.stripStr(leftChild.text));
 
     # Check that the element contains the elements in containsList
     def containsElements(self, element, NS, containsList):
@@ -188,7 +188,7 @@ class Test200809(unittest.TestCase):
             if(elementName in containsMap):
                 containsMap[elementName] = True;
         for key in containsMap:
-            self.assertEquals(containsMap[key], True);
+            self.assertEqual(containsMap[key], True);
 
     # Check that the element contains the elements in containsMap with the values in the map
     def containsElementsWithValues(self, element, NS, containsMap):
@@ -201,7 +201,7 @@ class Test200809(unittest.TestCase):
                 if(containsMap[elementName] == self.stripStr(child.text)):
                     equalsMap[elementName] = True;
         for key in equalsMap:
-            self.assertEquals(equalsMap[key], True);
+            self.assertEqual(equalsMap[key], True);
 
 
     # Check that the element contains the attributes in containsList
@@ -209,23 +209,23 @@ class Test200809(unittest.TestCase):
         containsMap = {};
         for name in containsList:
             containsMap[name] = False;
-        for attribute in element.attrib.keys():
+        for attribute in list(element.attrib.keys()):
             if(attribute in containsMap):
                 containsMap[attribute] = True;
         for key in containsMap:
-            self.assertEquals(containsMap[key], True);
+            self.assertEqual(containsMap[key], True);
 
     # Check that the element contains the attributes in containsMap and the values in the map match the values in the element.
     def containsAttributesWithValues(self, element, containsMap):
         equalsMap = {};
         for key in containsMap:
             equalsMap[key] = False;
-        for attribute in element.attrib.keys():
+        for attribute in list(element.attrib.keys()):
             if(attribute in containsMap):
                 if(containsMap[attribute] == element.get(attribute)):
                     equalsMap[attribute] = True;
         for key in equalsMap:
-            self.assertEquals(equalsMap[key], True);
+            self.assertEqual(equalsMap[key], True);
 
     # Get elements in list as a map from element [name:value], removing namespace.
     def getElementsAsMap(self, element):
@@ -237,7 +237,7 @@ class Test200809(unittest.TestCase):
    # Get attributes in list as a map from element [name:value].
     def getElementsAsMap(self, element):
         attributeMap = {};
-        for attribute in element.attrib.keys():
+        for attribute in list(element.attrib.keys()):
             attributeMap[attribute] = element.get(attribute);
         return attributeMap;
 
@@ -263,17 +263,17 @@ class Test200809(unittest.TestCase):
             newChildXPath = self.createXPath('local', newElementNS, mappedName);
             newChildElement = newElement.find(newChildXPath);
             self.assertFalse(newChildElement, None);
-            self.assertEquals(self.stripStr(newChildElement.text), self.stripStr(oldChildElement.text))
+            self.assertEqual(self.stripStr(newChildElement.text), self.stripStr(oldChildElement.text))
         for key in inclusionMap:
-            self.assertEquals(inclusionMap[key], True);
+            self.assertEqual(inclusionMap[key], True);
 
     # Compare attributes from oldElement to new element
     # Don't compare those elements in the exceptionList.
     # Rename those elements in the renameMap.
     def compareAttributes(self, oldElement, newElement, exceptionList=None, renameMap=None):
-        for key in oldElement.attrib.keys():
+        for key in list(oldElement.attrib.keys()):
             if(exceptionList != None):
-                print key
+                print(key)
                 if(key in exceptionList):
                     continue;
             mappedKey = key;
@@ -283,15 +283,15 @@ class Test200809(unittest.TestCase):
             newValue = newElement.get(mappedKey);
             oldValue = oldElement.get(key);
             if(oldValue != newValue):
-                print 'FAILURE'
-                print 'EXCEPTIONLIST %s' % exceptionList
-                print 'oldElement.tag %s' % oldElement.tag
-                print 'newElement.tag %s' % newElement.tag
-                print key
-                print oldValue
-                print newValue
-                print 'END FAILURE'
-            self.assertEquals(newValue, oldValue);
+                print('FAILURE')
+                print('EXCEPTIONLIST %s' % exceptionList)
+                print('oldElement.tag %s' % oldElement.tag)
+                print('newElement.tag %s' % newElement.tag)
+                print(key)
+                print(oldValue)
+                print(newValue)
+                print('END FAILURE')
+            self.assertEqual(newValue, oldValue);
 
     # Get all the child elements from the element, in namespace.
     # Exclude thoses child elements in the exclusions list.
@@ -328,7 +328,7 @@ class Test200809(unittest.TestCase):
     # Compare graph's are same, the attributes and elements maybe renamed using the renameAttributes
     # and renameElements map, this method assumes that the graphs are in the same element order.
     def compareGraphs(self, left, right, ignoreAttributes = None, renameAttributes = None, renameElements=None):
-        print 'IGNOREATTRIBUTES %s' % ignoreAttributes
+        print('IGNOREATTRIBUTES %s' % ignoreAttributes)
         leftChildren = left.getchildren();
         rightChildren = right.getchildren();
         self.assertEqual(len(leftChildren), len(rightChildren));
@@ -386,7 +386,7 @@ class Test200809(unittest.TestCase):
     def shallowcopy(self, element):
         newElement = Element(element.tag);
         newElement.text = element.text
-        for key in element.keys():
+        for key in list(element.keys()):
             newElement.set(key, element.get(key));
         return newElement;
 
@@ -403,7 +403,7 @@ class Test200809(unittest.TestCase):
             return;
         for i, child in enumerate(children):
             elementName = self.elementRefName(self.localName(child.tag))
-            print elementName
+            print(elementName)
             if(self.isRef(child) and elementName in RefList):
                 elementFromRef = self.findElementByID(root, NS, elementName, child.get('ID'));
                 newElement.append(deepcopy(elementFromRef));
@@ -494,9 +494,9 @@ class Test200809(unittest.TestCase):
         reference_count_posx = 0
         reference_count_posy = 0
         for element in old_elements:
-            if ('PosX' in element.keys()):
+            if ('PosX' in list(element.keys())):
                 reference_count_posx+=1
-            if ('PosY' in element.keys()):
+            if ('PosY' in list(element.keys())):
                 reference_count_posy+=1
 
         # count old PosX and PosY attributes in new WellSample
@@ -505,22 +505,22 @@ class Test200809(unittest.TestCase):
         new_count_posx = 0
         new_count_posy = 0
         for element in new_wellsample_elements:
-            if ('PositionX' in element.keys()):
+            if ('PositionX' in list(element.keys())):
                 new_count_posx+=1
-            if ('PositionY' in element.keys()):
+            if ('PositionY' in list(element.keys())):
                 new_count_posy+=1
 
         # compare old PosX attributes to new PositionX attributes
-        self.assertEquals(reference_count_posx, new_count_posx)
+        self.assertEqual(reference_count_posx, new_count_posx)
         # compare old PosY attributes to new PositionY attributes
-        self.assertEquals(reference_count_posy, new_count_posy)
+        self.assertEqual(reference_count_posy, new_count_posy)
 
     def test_description_no_lang(self):
         """
         Change OME:Description to be a local simple type in each
         element it is used called Description based on xsd:string
         """
-        print self.result
+        print(self.result)
         # find old OME:Description
         xpath = './/{%s}Description' % self.OLD_OME_NS
         reference_count_all = len(self.old_root.findall(xpath))
@@ -538,16 +538,16 @@ class Test200809(unittest.TestCase):
         xpath = './/{%s}Description' % self.NEW_OME_NS
         new_elements = self.new_root.findall(xpath)
         for element in new_elements:
-            self.assertFalse('lang' in element.keys())
+            self.assertFalse('lang' in list(element.keys()))
         # old attributes must not be present in new SPW:Description nodes
         xpath = './/{%s}Description' % self.NEW_SPW_NS
         new_elements = self.new_root.findall(xpath)
         for element in new_elements:
-            self.assertFalse('lang' in element.keys())
+            self.assertFalse('lang' in list(element.keys()))
         # all old OME must equal new OME + new SPW
-        self.assertEquals(reference_count_all, len(new_ome_descripton_elements)+len(new_screen_descripton_elements))
+        self.assertEqual(reference_count_all, len(new_ome_descripton_elements)+len(new_screen_descripton_elements))
         # old OME in screen must equal new OME in screen
-        self.assertEquals(len(reference_screen_descripton_elements),len(new_screen_descripton_elements))
+        self.assertEqual(len(reference_screen_descripton_elements),len(new_screen_descripton_elements))
 
     def test_plate_description(self):
         """
@@ -562,25 +562,25 @@ class Test200809(unittest.TestCase):
         old_elements = self.old_root.findall(xpath)
         reference_count_attribute = 0
         for element in old_elements:
-            if ('Description' in element.keys()):
+            if ('Description' in list(element.keys())):
                 reference_count_attribute+=1
 
         # find new SPW:Plate
         xpath = './/{%s}Plate' % self.NEW_SPW_NS
         new_plate_count = len(self.new_root.findall(xpath))
         # old plate equals new plate
-        self.assertEquals(reference_count_all, new_plate_count)
+        self.assertEqual(reference_count_all, new_plate_count)
         # find new SPW:Description only in SPW:Plate
         xpath = './/{%s}Plate/{%s}Description' % (self.NEW_SPW_NS, self.NEW_SPW_NS)
         new_plate_descripton_count = len(self.new_root.findall(xpath))
         # compare old Description attributes to new Description elements in Plate
-        self.assertEquals(reference_count_attribute, new_plate_descripton_count)
+        self.assertEqual(reference_count_attribute, new_plate_descripton_count)
 
         # old attributes must not be present in new SPW:Plate nodes
         xpath = './/{%s}Plate' % self.NEW_SPW_NS
         new_elements = self.new_root.findall(xpath)
         for element in new_elements:
-            self.assertFalse('Description' in element.keys())
+            self.assertFalse('Description' in list(element.keys()))
 
     def test_dataset_no_locked(self):
         """
@@ -654,9 +654,9 @@ class Test200809(unittest.TestCase):
             oldElementWithoutMBRef = self.replaceRefsWithElements(self.old_root, self.OLD_OME_NS, elementWithRefs, ["MicrobeamManipulation"]);
             oldElementsWithoutROIRef = self.replaceRefsWithElementsRecurse(self.old_root, self.OLD_OME_NS, oldElementWithoutMBRef, ["ROI"]);
             oldElementWithoutChannel = self.moveElementsFromChildToParent(oldElementsWithoutROIRef, self.OLD_OME_NS, "Channels");
-            print 'DUMP(oldElementWithoutChannel)';
+            print('DUMP(oldElementWithoutChannel)');
             dump(oldElementWithoutChannel);
-            print 'DUMP(newElement)';
+            print('DUMP(newElement)');
             dump(newElement);
             self.compareGraphs(oldElementWithoutChannel, newElement, ['{http://www.w3.org/XML/1998/namespace}lang', 'ID'], {'theZ':'TheZ', 'theT':'TheT','theC':'TheC'}, {"LogicalChannelRef":"ChannelRef"});
 
@@ -670,9 +670,9 @@ class Test200809(unittest.TestCase):
         toElements = self.getAllElements(self.new_root, self.NEW_OME_NS,
                                          ['Detector'])
         self.assertEqual(len(fromElements), len(toElements))
-        print "Element count: %d" % len(toElements)
+        print("Element count: %d" % len(toElements))
         for element in toElements:
-            print dump(element)
+            print(dump(element))
 
     """
     Follow a collection of tests for transformation related to ROI elements.

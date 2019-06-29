@@ -28,8 +28,8 @@
 #  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 #  SUCH DAMAGE.
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 import unittest
 
 from copy import deepcopy
@@ -140,7 +140,7 @@ class XsltBasic(unittest.TestCase):
                     mappedName = renameMap[mappedName]
             newValue = newElement.get(mappedName)
             self.assertFalse(newValue is None)
-            self.assertEquals(newValue, self.stripStr(oldChildElement.text))
+            self.assertEqual(newValue, self.stripStr(oldChildElement.text))
 
     # Compare Elements in left with the attributes in right if they are in
     # comparison map.
@@ -153,7 +153,7 @@ class XsltBasic(unittest.TestCase):
             mappedName = comparisonMap[leftChildName]
             newValue = right.get(mappedName)
             self.assertFalse(newValue is None)
-            self.assertEquals(newValue, self.stripStr(leftChild.text))
+            self.assertEqual(newValue, self.stripStr(leftChild.text))
 
     # Check that the element contains the elements in containsList
     def containsElements(self, element, NS, containsList):
@@ -165,7 +165,7 @@ class XsltBasic(unittest.TestCase):
             if(elementName in containsMap):
                 containsMap[elementName] = True
         for key in containsMap:
-            self.assertEquals(containsMap[key], True)
+            self.assertEqual(containsMap[key], True)
 
     # Check that the element contains the elements in containsMap with the
     # values in the map
@@ -179,18 +179,18 @@ class XsltBasic(unittest.TestCase):
                 if(containsMap[elementName] == self.stripStr(child.text)):
                     equalsMap[elementName] = True
         for key in equalsMap:
-            self.assertEquals(equalsMap[key], True)
+            self.assertEqual(equalsMap[key], True)
 
     # Check that the element contains the attributes in containsList
     def containsAttributes(self, element, containsList):
         containsMap = {}
         for name in containsList:
             containsMap[name] = False
-        for attribute in element.attrib.keys():
+        for attribute in list(element.attrib.keys()):
             if(attribute in containsMap):
                 containsMap[attribute] = True
         for key in containsMap:
-            self.assertEquals(containsMap[key], True)
+            self.assertEqual(containsMap[key], True)
 
     # Check that the element contains the attributes in containsMap and the
     # values in the map match the values in the element.
@@ -198,12 +198,12 @@ class XsltBasic(unittest.TestCase):
         equalsMap = {}
         for key in containsMap:
             equalsMap[key] = False
-        for attribute in element.attrib.keys():
+        for attribute in list(element.attrib.keys()):
             if(attribute in containsMap):
                 if(containsMap[attribute] == element.get(attribute)):
                     equalsMap[attribute] = True
         for key in equalsMap:
-            self.assertEquals(equalsMap[key], True)
+            self.assertEqual(equalsMap[key], True)
 
     # Get elements in list as a map from element [name:value], removing
     # namespace.
@@ -216,7 +216,7 @@ class XsltBasic(unittest.TestCase):
     # Get attributes in list as a map from element [name:value].
     def getElementsAsMap2(self, element):
         attributeMap = {}
-        for attribute in element.attrib.keys():
+        for attribute in list(element.attrib.keys()):
             attributeMap[attribute] = element.get(attribute)
         return attributeMap
 
@@ -246,17 +246,17 @@ class XsltBasic(unittest.TestCase):
                 'local', newElementNS, mappedName)
             newChildElement = newElement.find(newChildXPath)
             self.assertFalse(newChildElement, None)
-            self.assertEquals(self.stripStr(newChildElement.text),
+            self.assertEqual(self.stripStr(newChildElement.text),
                               self.stripStr(oldChildElement.text))
         for key in inclusionMap:
-            self.assertEquals(inclusionMap[key], True)
+            self.assertEqual(inclusionMap[key], True)
 
     # Compare attributes from oldElement to new element
     # Don't compare those elements in the exceptionList.
     # Rename those elements in the renameMap.
     def compareAttributes(self, oldElement, newElement, exceptionList=None,
                           renameMap=None):
-        for key in oldElement.attrib.keys():
+        for key in list(oldElement.attrib.keys()):
             if exceptionList is not None:
                 if(key in exceptionList):
                     continue
@@ -275,7 +275,7 @@ class XsltBasic(unittest.TestCase):
                 print('old %s' % oldValue)
                 print('new %s' % newValue)
                 print('END FAILURE')
-            self.assertEquals(newValue, oldValue)
+            self.assertEqual(newValue, oldValue)
 
     # Get all the child elements from the element, in namespace.
     # Exclude thoses child elements in the exclusions list.
@@ -388,7 +388,7 @@ class XsltBasic(unittest.TestCase):
     def shallowcopy(self, element):
         newElement = Element(element.tag)
         newElement.text = element.text
-        for key in element.keys():
+        for key in list(element.keys()):
             newElement.set(key, element.get(key))
         return newElement
 

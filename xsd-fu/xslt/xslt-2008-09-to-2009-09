@@ -31,7 +31,7 @@
 import unittest
 import sys
 
-from StringIO import StringIO
+from io import StringIO
 from getopt import getopt, GetoptError
 from copy import deepcopy
 from xsltbasic import XsltBasic
@@ -49,7 +49,7 @@ from lxml.etree import XML, XSLT, Element, SubElement, ElementTree, dump, parse
 def usage(error):
     """Prints usage so that we don't have to. :)"""
     cmd = sys.argv[0]
-    print """%s
+    print("""%s
 Usage: %s <stylesheet.xsl> <input.xml> [output.xml]
 Runs the stylesheet transform upon an XML instance document.
 
@@ -58,7 +58,7 @@ Options:
 Examples:
   %s foo.xslt bar.xml bar_new.xml
 
-Report bugs to ome-devel@lists.openmicroscopy.org.uk""" % (error, cmd, cmd)
+Report bugs to ome-devel@lists.openmicroscopy.org.uk""" % (error, cmd, cmd))
     sys.exit(2)
 
 def run_stylesheet(xslt, document):
@@ -129,9 +129,9 @@ class Test200809t0200909(XsltBasic):
         reference_count_posx = 0
         reference_count_posy = 0
         for element in old_elements:
-            if ('PosX' in element.keys()):
+            if ('PosX' in list(element.keys())):
                 reference_count_posx+=1
-            if ('PosY' in element.keys()):
+            if ('PosY' in list(element.keys())):
                 reference_count_posy+=1
 
         # count old PosX and PosY attributes in new WellSample
@@ -140,22 +140,22 @@ class Test200809t0200909(XsltBasic):
         new_count_posx = 0
         new_count_posy = 0
         for element in new_wellsample_elements:
-            if ('PositionX' in element.keys()):
+            if ('PositionX' in list(element.keys())):
                 new_count_posx+=1
-            if ('PositionY' in element.keys()):
+            if ('PositionY' in list(element.keys())):
                 new_count_posy+=1
 
         # compare old PosX attributes to new PositionX attributes
-        self.assertEquals(reference_count_posx, new_count_posx)
+        self.assertEqual(reference_count_posx, new_count_posx)
         # compare old PosY attributes to new PositionY attributes
-        self.assertEquals(reference_count_posy, new_count_posy)
+        self.assertEqual(reference_count_posy, new_count_posy)
 
     def test_description_no_lang(self):
         """
         Change OME:Description to be a local simple type in each
         element it is used called Description based on xsd:string
         """
-        print self.result
+        print(self.result)
         # find old OME:Description
         xpath = './/{%s}Description' % self.OLD_OME_NS
         reference_count_all = len(self.old_root.findall(xpath))
@@ -173,16 +173,16 @@ class Test200809t0200909(XsltBasic):
         xpath = './/{%s}Description' % self.NEW_OME_NS
         new_elements = self.new_root.findall(xpath)
         for element in new_elements:
-            self.assertFalse('lang' in element.keys())
+            self.assertFalse('lang' in list(element.keys()))
         # old attributes must not be present in new SPW:Description nodes
         xpath = './/{%s}Description' % self.NEW_SPW_NS
         new_elements = self.new_root.findall(xpath)
         for element in new_elements:
-            self.assertFalse('lang' in element.keys())
+            self.assertFalse('lang' in list(element.keys()))
         # all old OME must equal new OME + new SPW
-        self.assertEquals(reference_count_all, len(new_ome_descripton_elements)+len(new_screen_descripton_elements))
+        self.assertEqual(reference_count_all, len(new_ome_descripton_elements)+len(new_screen_descripton_elements))
         # old OME in screen must equal new OME in screen
-        self.assertEquals(len(reference_screen_descripton_elements),len(new_screen_descripton_elements))
+        self.assertEqual(len(reference_screen_descripton_elements),len(new_screen_descripton_elements))
 
     def test_plate_description(self):
         """
@@ -197,25 +197,25 @@ class Test200809t0200909(XsltBasic):
         old_elements = self.old_root.findall(xpath)
         reference_count_attribute = 0
         for element in old_elements:
-            if ('Description' in element.keys()):
+            if ('Description' in list(element.keys())):
                 reference_count_attribute+=1
 
         # find new SPW:Plate
         xpath = './/{%s}Plate' % self.NEW_SPW_NS
         new_plate_count = len(self.new_root.findall(xpath))
         # old plate equals new plate
-        self.assertEquals(reference_count_all, new_plate_count)
+        self.assertEqual(reference_count_all, new_plate_count)
         # find new SPW:Description only in SPW:Plate
         xpath = './/{%s}Plate/{%s}Description' % (self.NEW_SPW_NS, self.NEW_SPW_NS)
         new_plate_descripton_count = len(self.new_root.findall(xpath))
         # compare old Description attributes to new Description elements in Plate
-        self.assertEquals(reference_count_attribute, new_plate_descripton_count)
+        self.assertEqual(reference_count_attribute, new_plate_descripton_count)
 
         # old attributes must not be present in new SPW:Plate nodes
         xpath = './/{%s}Plate' % self.NEW_SPW_NS
         new_elements = self.new_root.findall(xpath)
         for element in new_elements:
-            self.assertFalse('Description' in element.keys())
+            self.assertFalse('Description' in list(element.keys()))
 
     def test_dataset_no_locked(self):
         """
@@ -290,9 +290,9 @@ class Test200809t0200909(XsltBasic):
             oldElementWithoutMBRef = self.replaceRefsWithElements(self.old_root, self.OLD_OME_NS, elementWithRefs, ["MicrobeamManipulation"]);
             oldElementsWithoutROIRef = self.replaceRefsWithElementsRecurse(self.old_root, self.OLD_OME_NS, oldElementWithoutMBRef, ["ROI"]);
             oldElementWithoutChannel = self.moveElementsFromChildToParent(oldElementsWithoutROIRef, self.OLD_OME_NS, "Channels");
-            print 'DUMP(oldElementWithoutChannel)';
+            print('DUMP(oldElementWithoutChannel)');
             dump(oldElementWithoutChannel);
-            print 'DUMP(newElement)';
+            print('DUMP(newElement)');
             dump(newElement);
             self.compareGraphs(oldElementWithoutChannel, newElement, ['{http://www.w3.org/XML/1998/namespace}lang', 'ID'], {'theZ':'TheZ', 'theT':'TheT','theC':'TheC'}, {"LogicalChannelRef":"ChannelRef"});
 
@@ -306,9 +306,9 @@ class Test200809t0200909(XsltBasic):
         toElements = self.getAllElements(self.new_root, self.NEW_OME_NS,
                                          ['Detector'])
         self.assertEqual(len(fromElements), len(toElements))
-        print "Element count: %d" % len(toElements)
+        print("Element count: %d" % len(toElements))
         for element in toElements:
-            print dump(element)
+            print(dump(element))
 
     """
     Follow a collection of tests for transformation related to ROI elements.

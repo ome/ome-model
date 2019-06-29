@@ -31,7 +31,7 @@
 import unittest
 import sys
 
-from StringIO import StringIO
+from io import StringIO
 from getopt import getopt, GetoptError
 from copy import deepcopy
 from xsltbasic import XsltBasic
@@ -49,7 +49,7 @@ from lxml.etree import XML, XSLT, XMLSchema, XMLSchemaValidateError, Element, Su
 def usage(error):
     """Prints usage so that we don't have to. :)"""
     cmd = sys.argv[0]
-    print """%s
+    print("""%s
 Usage: %s <stylesheet.xsl> <input.xml> [output.xml]
 Runs the stylesheet transform upon an XML instance document.
 
@@ -58,7 +58,7 @@ Options:
 Examples:
   %s foo.xslt bar.xml bar_new.xml
 
-Report bugs to ome-devel@lists.openmicroscopy.org.uk""" % (error, cmd, cmd)
+Report bugs to ome-devel@lists.openmicroscopy.org.uk""" % (error, cmd, cmd))
     sys.exit(2)
 
 def run_stylesheet(xslt, document):
@@ -108,7 +108,7 @@ class Test200802(XsltBasic):
             schema = XMLSchema(parse(self.OLD_VALIDATION))
         except:
             # chosen schema failed to laod
-            print "Validator Internal error: XSD schema file could not be found [OLD]"
+            print("Validator Internal error: XSD schema file could not be found [OLD]")
 
         # validating the document tree against the loaded schema
         # according to the docs this should not throw an exception - but it does!
@@ -117,11 +117,11 @@ class Test200802(XsltBasic):
             isXsdValid = True
             for err in schema.error_log:
                 isXsdValid = False
-                print "File: %s Line: (%s, %s) Type: %s (%s) - %s\n" % ("Input", err.line, None, "XSD", None, err.message)
+                print("File: %s Line: (%s, %s) Type: %s (%s) - %s\n" % ("Input", err.line, None, "XSD", None, err.message))
 
         except XMLSchemaValidateError:
             isXsdValid = False
-            print "File: %s Line: (%s, %s) Type: %s (%s) - %s\n" % ("Input", None, None, "XML", None, "Processing the XML data has generated an unspecified error in the XML sub-system. This is usually a result of an incorrect top level block. Please check the OME block is well-formed and that the schemaLocation is specified correctly. This may also be caused by a missing namespace prefix or incorrect xmlns attribute.")
+            print("File: %s Line: (%s, %s) Type: %s (%s) - %s\n" % ("Input", None, None, "XML", None, "Processing the XML data has generated an unspecified error in the XML sub-system. This is usually a result of an incorrect top level block. Please check the OME block is well-formed and that the schemaLocation is specified correctly. This may also be caused by a missing namespace prefix or incorrect xmlns attribute."))
 
         self.assertTrue(isXsdValid);
 
@@ -135,7 +135,7 @@ class Test200802(XsltBasic):
             schema = XMLSchema(parse(self.NEW_VALIDATION))
         except:
             # chosen schema failed to laod
-            print "Validator Internal error: XSD schema file could not be found [NEW]"
+            print("Validator Internal error: XSD schema file could not be found [NEW]")
 
         # validating the document tree against the loaded schema
         # according to the docs this should not throw an exception - but it does!
@@ -144,12 +144,12 @@ class Test200802(XsltBasic):
             isXsdValid = True
             for err in schema.error_log:
                 isXsdValid = False
-                print "File: %s Line: (%s, %s) Type: %s (%s) - %s\n" % ("Output", err.line, None, "XSD", None, err.message)
+                print("File: %s Line: (%s, %s) Type: %s (%s) - %s\n" % ("Output", err.line, None, "XSD", None, err.message))
 
         except XMLSchemaValidateError:
             isXsdValid = False
-            print "File: %s Line: (%s, %s) Type: %s (%s) - %s\n" % ("Output", None, None, "XML", None, "Processing the XML data has generated an unspecified error in the XML sub-system. This is usually a result of an incorrect top level block. Please check the OME block is well-formed and that the schemaLocation is specified correctly. This may also be caused by a missing namespace prefix or incorrect xmlns attribute.")
-            print "File is invalid"
+            print("File: %s Line: (%s, %s) Type: %s (%s) - %s\n" % ("Output", None, None, "XML", None, "Processing the XML data has generated an unspecified error in the XML sub-system. This is usually a result of an incorrect top level block. Please check the OME block is well-formed and that the schemaLocation is specified correctly. This may also be caused by a missing namespace prefix or incorrect xmlns attribute."))
+            print("File is invalid")
 
         self.assertTrue(isXsdValid);
 
