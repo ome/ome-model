@@ -19,7 +19,7 @@
 
 """Various utility classes and functions."""
 
-from __future__ import absolute_import
+
 import codecs
 from datetime import timedelta, tzinfo
 import os
