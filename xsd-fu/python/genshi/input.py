@@ -26,7 +26,6 @@ from genshi.core import Attrs, QName, Stream, stripentities
 from genshi.core import START, END, XML_DECL, DOCTYPE, TEXT, START_NS, \
                         END_NS, START_CDATA, END_CDATA, PI, COMMENT
 from genshi.compat import StringIO, BytesIO
-from six import chr
 import six
 from six.moves import zip
 

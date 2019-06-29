@@ -35,7 +35,6 @@ from genshi.template.eval import _ast
 from genshi.template.base import DirectiveFactory, EXPR, SUB, _apply_directives
 from genshi.template.directives import Directive, StripDirective
 from genshi.template.markup import MarkupTemplate, EXEC
-from genshi.compat import IS_PYTHON2
 
 __all__ = ['Translator', 'extract']
 __docformat__ = 'restructuredtext en'
@@ -663,19 +662,11 @@ class Translator(DirectiveFactory):
             if ctxt:
                 ctxt['_i18n.gettext'] = gettext
         else:
-            if IS_PYTHON2:
-                gettext = self.translate.ugettext
-                ngettext = self.translate.ungettext
-            else:
-                gettext = self.translate.gettext
-                ngettext = self.translate.ngettext
+            gettext = self.translate.gettext
+            ngettext = self.translate.ngettext
             try:
-                if IS_PYTHON2:
-                    dgettext = self.translate.dugettext
-                    dngettext = self.translate.dungettext
-                else:
-                    dgettext = self.translate.dgettext
-                    dngettext = self.translate.dngettext
+                dgettext = self.translate.dgettext
+                dngettext = self.translate.dngettext
             except AttributeError:
                 dgettext = lambda _, y: gettext(y)
                 dngettext = lambda _, s, p, n: ngettext(s, p, n)

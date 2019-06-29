@@ -23,7 +23,7 @@ else:
     def parse(source, mode):
         return compile(source, '', mode, _ast.PyCF_ONLY_AST)
 
-from genshi.compat import IS_PYTHON2, isstring
+from genshi.compat import isstring
 
 __docformat__ = 'restructuredtext en'
 
@@ -148,10 +148,8 @@ class ASTCodeGenerator(object):
             else:
                 self.visit(node.kwarg)
 
-    if not IS_PYTHON2:
-        # In Python 3 arguments get a special node
-        def visit_arg(self, node):
-            self._write(node.arg)
+    def visit_arg(self, node):
+        self._write(node.arg)
 
     # FunctionDef(identifier name, arguments args,
     #                           stmt* body, expr* decorator_list)
@@ -321,36 +319,18 @@ class ASTCodeGenerator(object):
             self.visit(statement)
         self._change_indent(-1)
 
-    if IS_PYTHON2:
-        # Raise(expr? type, expr? inst, expr? tback)
-        def visit_Raise(self, node):
-            self._new_line()
-            self._write('raise')
-            if not node.type:
-                return
-            self._write(' ')
-            self.visit(node.type)
-            if not node.inst:
-                return
-            self._write(', ')
-            self.visit(node.inst)
-            if not node.tback:
-                return
-            self._write(', ')
-            self.visit(node.tback)
-    else:
-        # Raise(expr? exc from expr? cause)
-        def visit_Raise(self, node):
-            self._new_line()
-            self._write('raise')
-            if not node.exc:
-                return
-            self._write(' ')
-            self.visit(node.exc)
-            if not node.cause:
-                return
-            self._write(' from ')
-            self.visit(node.cause)
+    # Raise(expr? exc from expr? cause)
+    def visit_Raise(self, node):
+        self._new_line()
+        self._write('raise')
+        if not node.exc:
+            return
+        self._write(' ')
+        self.visit(node.exc)
+        if not node.cause:
+            return
+        self._write(' from ')
+        self.visit(node.cause)
 
     # TryExcept(stmt* body, excepthandler* handlers, stmt* orelse)
     def visit_TryExcept(self, node):
@@ -699,10 +679,9 @@ class ASTCodeGenerator(object):
     def visit_Str(self, node):
         self._write(repr(node.s))
 
-    if not IS_PYTHON2:
-        # Bytes(bytes s)
-        def visit_Bytes(self, node):
-            self._write(repr(node.s))
+    # Bytes(bytes s)
+    def visit_Bytes(self, node):
+        self._write(repr(node.s))
 
     # Attribute(expr value, identifier attr, expr_context ctx)
     def visit_Attribute(self, node):

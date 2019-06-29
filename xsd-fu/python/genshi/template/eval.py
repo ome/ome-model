@@ -25,8 +25,8 @@ from genshi.template.astutil import ASTTransformer, ASTCodeGenerator, \
 from genshi.template.base import TemplateRuntimeError
 from genshi.util import flatten
 
-from genshi.compat import get_code_params, build_code_chunk, isstring, \
-                          IS_PYTHON2
+from genshi.compat import get_code_params, build_code_chunk, isstring
+
 import six
 from six.moves import zip
 
@@ -436,14 +436,9 @@ def _compile(node, source=None, mode='eval', filename=None, lineno=-1,
              xform=None):
     if not filename:
         filename = '<string>'
-    if IS_PYTHON2:
-        # Python 2 requires non-unicode filenames
-        if isinstance(filename, six.text_type):
-            filename = filename.encode('utf-8', 'replace')
-    else:
-        # Python 3 requires unicode filenames
-        if not isinstance(filename, six.text_type):
-            filename = filename.decode('utf-8', 'replace')
+    # Python 3 requires unicode filenames
+    if not isinstance(filename, six.text_type):
+        filename = filename.decode('utf-8', 'replace')
     if lineno <= 0:
         lineno = 1
 
@@ -500,7 +495,7 @@ class TemplateASTTransformer(ASTTransformer):
         self.locals = [CONSTANTS]
 
     def _process(self, names, node):
-        if not IS_PYTHON2 and isinstance(node, _ast.arg):
+        if isinstance(node, _ast.arg):
             names.add(node.arg)
         elif isstring(node):
             names.add(node)

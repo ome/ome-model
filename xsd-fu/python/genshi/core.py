@@ -25,7 +25,7 @@ import sys
 from itertools import chain
 import operator
 
-from genshi.util import plaintext, stripentities, striptags, stringrepr
+from genshi.util import plaintext, stripentities, striptags
 
 __all__ = ['Stream', 'Markup', 'escape', 'unescape', 'Attrs', 'Namespace',
            'QName']
@@ -676,13 +676,8 @@ class Namespace(object):
     def __hash__(self):
         return hash(self.uri)
 
-    if sys.version_info[0] == 2:
-        # Only use stringrepr in python 2
-        def __repr__(self):
-            return '%s(%s)' % (type(self).__name__, stringrepr(self.uri))
-    else:
-        def __repr__(self):
-            return '%s(%r)' % (type(self).__name__, self.uri)
+    def __repr__(self):
+        return '%s(%r)' % (type(self).__name__, self.uri)
 
     def __str__(self):
         return self.uri.encode('utf-8')
@@ -743,10 +738,5 @@ class QName(six.text_type):
     def __getnewargs__(self):
         return (self.lstrip('{'),)
 
-    if sys.version_info[0] == 2:
-        # Only use stringrepr in python 2
-        def __repr__(self):
-            return '%s(%s)' % (type(self).__name__, stringrepr(self.lstrip('{')))
-    else:
-        def __repr__(self):
-            return '%s(%r)' % (type(self).__name__, self.lstrip('{'))
+    def __repr__(self):
+        return '%s(%r)' % (type(self).__name__, self.lstrip('{'))

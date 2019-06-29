@@ -23,7 +23,8 @@ from genshi.core import Markup
 from genshi.template.base import Context
 from genshi.template.eval import Expression, Suite, Undefined, UndefinedError, \
                                  UNDEFINED
-from genshi.compat import BytesIO, IS_PYTHON2, wrapped_bytes
+import BytesIO
+from genshi.compat import wrapped_bytes
 from six.moves import range
 
 
@@ -76,18 +77,11 @@ class ExpressionTestCase(unittest.TestCase):
         # On Py3k, we have no need to do this as non-prefixed strings aren't
         # raw.
         expr = Expression(wrapped_bytes(r"b'\xc3\xbe'"))
-        if IS_PYTHON2:
-            self.assertEqual('þ', expr.evaluate({}))
-        else:
-            self.assertEqual('þ'.encode('utf-8'), expr.evaluate({}))
+        self.assertEqual('þ'.encode('utf-8'), expr.evaluate({}))
 
     def test_num_literal(self):
         self.assertEqual(42, Expression("42").evaluate({}))
-        if IS_PYTHON2:
-            self.assertEqual(42, Expression("42L").evaluate({}))
         self.assertEqual(.42, Expression(".42").evaluate({}))
-        if IS_PYTHON2:
-            self.assertEqual(0o7, Expression("07").evaluate({}))
         self.assertEqual(0xF2, Expression("0xF2").evaluate({}))
         self.assertEqual(0XF2, Expression("0XF2").evaluate({}))
 
@@ -259,14 +253,6 @@ class ExpressionTestCase(unittest.TestCase):
         data = {'items': list(range(5))}
         expr = Expression("filter(lambda x: x > 2, items)")
         self.assertEqual([3, 4], list(expr.evaluate(data)))
-
-    def test_lambda_tuple_arg(self):
-        # This syntax goes away in Python 3
-        if not IS_PYTHON2:
-            return
-        data = {'items': [(1, 2), (2, 1)]}
-        expr = Expression("filter(lambda (x, y): x > y, items)")
-        self.assertEqual([(2, 1)], list(expr.evaluate(data)))
 
     def test_list_comprehension(self):
         expr = Expression("[n for n in numbers if n < 2]")
@@ -592,9 +578,8 @@ x = smash(foo='abc', bar='def')
         suite.execute(data)
         self.assertEqual(['bardef', 'fooabc'], sorted(data['x']))
 
-    if not IS_PYTHON2:
-        def test_def_kwonlyarg(self):
-            suite = Suite("""
+    def test_def_kwonlyarg(self):
+        suite = Suite("""
 def kwonly(*args, k):
     return k
 x = kwonly(k="foo")
