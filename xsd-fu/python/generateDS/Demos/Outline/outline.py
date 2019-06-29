@@ -4,8 +4,8 @@
 # Generated Mon Aug 18 17:09:37 2003 by generateDS.py.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 import sys
 import getopt
 from xml.dom import minidom

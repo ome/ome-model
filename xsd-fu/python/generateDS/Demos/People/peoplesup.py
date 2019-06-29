@@ -4,8 +4,8 @@
 # Generated Tue Jan 30 12:32:05 2007 by generateDS.py.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 import sys
 import getopt
 from xml.dom import minidom
@@ -268,7 +268,7 @@ class person:
             outfile.write(' value="%s"' % (self.getValue(), ))
         if self.getRatio_attr() is not None:
             outfile.write(' ratio_attr="%s"' % (self.getRatio_attr(), ))
-        for name, value in self.anyAttributes_.items():
+        for name, value in list(self.anyAttributes_.items()):
             outfile.write(' %s="%s"' % (name, value, ))
     def exportChildren(self, outfile, level, name_='person'):
         showIndent(outfile, level)
@@ -299,7 +299,7 @@ class person:
         outfile.write('value = "%s",\n' % (self.getValue(),))
         showIndent(outfile, level)
         outfile.write('ratio_attr = "%s",\n' % (self.getRatio_attr(),))
-        for name, value in self.anyAttributes_.items():
+        for name, value in list(self.anyAttributes_.items()):
             showIndent(outfile, level)
             outfile.write('%s = "%s",\n' % (name, value,))
     def exportLiteralChildren(self, outfile, level, name_):
@@ -365,7 +365,7 @@ class person:
         if attrs.get('ratio_attr'):
             self.ratio_attr = attrs.get('ratio_attr').value
         self.anyAttributes_ = {}
-        for name, value in attrs.items():
+        for name, value in list(attrs.items()):
             if name != "id" and name != "value" and name != "ratio_attr":
                 self.anyAttributes_[name] = value
     def buildChildren(self, child_, nodeName_):
@@ -541,7 +541,7 @@ class hot_agent:
         showIndent(outfile, level)
         outfile.write('</%s>\n' % name_)
     def exportAttributes(self, outfile, level, name_='hot.agent'):
-        for name, value in self.anyAttributes_.items():
+        for name, value in list(self.anyAttributes_.items()):
             outfile.write(' %s="%s"' % (name, value, ))
         pass
     def exportChildren(self, outfile, level, name_='hot.agent'):
@@ -556,7 +556,7 @@ class hot_agent:
         self.exportLiteralAttributes(outfile, level, name_)
         self.exportLiteralChildren(outfile, level, name_)
     def exportLiteralAttributes(self, outfile, level, name_):
-        for name, value in self.anyAttributes_.items():
+        for name, value in list(self.anyAttributes_.items()):
             showIndent(outfile, level)
             outfile.write('%s = "%s",\n' % (name, value,))
     def exportLiteralChildren(self, outfile, level, name_):
@@ -574,7 +574,7 @@ class hot_agent:
             self.buildChildren(child_, nodeName_)
     def buildAttributes(self, attrs):
         self.anyAttributes_ = {}
-        for name, value in attrs.items():
+        for name, value in list(attrs.items()):
             self.anyAttributes_[name] = value
     def buildChildren(self, child_, nodeName_):
         if child_.nodeType == Node.ELEMENT_NODE and \

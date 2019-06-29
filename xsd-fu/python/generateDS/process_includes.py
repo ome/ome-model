@@ -23,8 +23,8 @@ Examples:
 #
 # Imports
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 import sys
 import os
 import getopt
@@ -164,7 +164,7 @@ def make_file(outFileName):
     global FORCE
     outFile = None
     if (not FORCE) and os.path.exists(outFileName):
-        reply = input('File %s exists.  Overwrite? (y/n): ' % outFileName)
+        reply = eval(input('File %s exists.  Overwrite? (y/n): ' % outFileName))
         if reply == 'y':
             outFile = open(outFileName, 'w')
     else:

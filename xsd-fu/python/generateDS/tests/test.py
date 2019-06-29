@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 import sys, popen2
 import getopt
 import unittest
@@ -15,7 +15,7 @@ class GenTest(unittest.TestCase):
         result = outfile.read()
         outfile.close()
         infile.close()
-        self.failUnless(len(result) == 0)
+        self.assertTrue(len(result) == 0)
 
     def test_2_compare_superclasses(self):
         cmd = 'diff out1sup.py out2sup.py'
@@ -26,7 +26,7 @@ class GenTest(unittest.TestCase):
         #print 'len(result):', len(result)
         # Ignore the differing lines containing the date/time.
         #self.failUnless(len(result) < 130 and result.find('Generated') > -1)
-        self.failUnless(check_result(result))
+        self.assertTrue(check_result(result))
 
     def test_3_compare_subclasses(self):
         cmd = 'diff out1sub.py out2sub.py'
@@ -36,7 +36,7 @@ class GenTest(unittest.TestCase):
         infile.close()
         # Ignore the differing lines containing the date/time.
         #self.failUnless(len(result) < 130 and result.find('Generated') > -1)
-        self.failUnless(check_result(result))
+        self.assertTrue(check_result(result))
 
 
 def check_result(result):

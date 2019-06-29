@@ -4,8 +4,8 @@
 # Generated Tue Jan 30 12:32:05 2007 by generateDS.py.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 import sys
 from xml.dom import minidom
 from xml.sax import handler, make_parser

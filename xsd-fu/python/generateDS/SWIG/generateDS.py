@@ -26,10 +26,10 @@
 
 
 
-from __future__ import generators   # only needed for Python 2.2
+   # only needed for Python 2.2
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 import sys, os.path
 import getopt
 from xml.sax import saxexts, saxlib, saxutils
@@ -102,7 +102,7 @@ class XschemaElement:
         outfile.write('  - Attrs: %s\n' % self.attrs)
         showLevel(outfile, level)
         outfile.write('  - AttributeDefs: %s\n' % self.attributeDefs)
-        for key in self.attributeDefs.keys():
+        for key in list(self.attributeDefs.keys()):
             showLevel(outfile, level + 1)
             outfile.write('key: %s  value: %s\n' % \
                 (key, self.attributeDefs[key]))
@@ -894,7 +894,7 @@ def makeFile(outFileName):
     global Force
     outFile = None
     if (not Force) and os.path.exists(outFileName):
-        reply = input('File %s exists.  Overwrite? (y/n): ' % outFileName)
+        reply = eval(input('File %s exists.  Overwrite? (y/n): ' % outFileName))
         if reply == 'y':
             outFile = open(outFileName, 'w')
     else:

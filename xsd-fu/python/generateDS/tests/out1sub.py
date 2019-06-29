@@ -4,8 +4,8 @@
 # Generated Tue Aug 11 11:57:44 2009 by generateDS.py version 1.18c.
 #
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 import sys
 from string import lower as str_lower
 from xml.dom import minidom
