@@ -308,7 +308,7 @@ class Java(Language):
         self.type_map['MIMEtype'] = 'String'
 
         self.name = "Java"
-        self.template_dir = "templates-java"
+        self.template_dir = "templates/java"
         self.source_suffix = ".java"
         self.header_suffix = None
         self.converter_name = "MetadataConverter"
@@ -399,7 +399,7 @@ class CXX(Language):
         self.type_map['MIMEtype'] = 'std::string'
 
         self.name = "C++"
-        self.template_dir = "templates-cpp"
+        self.template_dir = "templates/cpp"
         self.source_suffix = ".cpp"
         self.header_suffix = ".h"
         self.converter_name = "Convert"
