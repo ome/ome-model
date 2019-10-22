@@ -33,24 +33,24 @@ def _simplify(stream, with_attrs=False):
         for mark, (kind, data, pos) in stream:
             if kind is START:
                 if with_attrs:
-                    data = (unicode(data[0]), dict((unicode(k), v)
+                    data = (str(data[0]), dict((str(k), v)
                                                    for k, v in data[1]))
                 else:
-                    data = unicode(data[0])
+                    data = str(data[0])
             elif kind is END:
-                data = unicode(data)
+                data = str(data)
             elif kind is ATTR:
                 kind = ATTR
-                data = dict((unicode(k), v) for k, v in data[1])
+                data = dict((str(k), v) for k, v in data[1])
             yield mark, kind, data
     return list(_generate())
 
 
 def _transform(html, transformer, with_attrs=False):
     """Apply transformation returning simplified marked stream."""
-    if isinstance(html, basestring) and not isinstance(html, unicode):
+    if isinstance(html, str) and not isinstance(html, str):
         html = HTML(html, encoding='utf-8')
-    elif isinstance(html, unicode):
+    elif isinstance(html, str):
         html = HTML(html, encoding='utf-8')
     stream = transformer(html, keep_marks=True)
     return _simplify(stream, with_attrs)
@@ -60,7 +60,7 @@ class SelectTest(unittest.TestCase):
     """Test .select()"""
     def _select(self, select):
         html = HTML(FOOBAR, encoding='utf-8')
-        if isinstance(select, basestring):
+        if isinstance(select, str):
             select = [select]
         transformer = Transformer(select[0])
         for sel in select[1:]:
@@ -70,78 +70,78 @@ class SelectTest(unittest.TestCase):
     def test_select_single_element(self):
         self.assertEqual(
             self._select('foo'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')],
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')],
             )
 
     def test_select_context(self):
         self.assertEqual(
             self._select('.'),
-            [(ENTER, START, u'root'),
-             (INSIDE, TEXT, u'ROOT'),
-             (INSIDE, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (INSIDE, END, u'foo'),
-             (INSIDE, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (INSIDE, END, u'bar'),
-             (EXIT, END, u'root')]
+            [(ENTER, START, 'root'),
+             (INSIDE, TEXT, 'ROOT'),
+             (INSIDE, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (INSIDE, END, 'foo'),
+             (INSIDE, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (INSIDE, END, 'bar'),
+             (EXIT, END, 'root')]
             )
 
     def test_select_inside_select(self):
         self.assertEqual(
             self._select(['.', 'foo']),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')],
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')],
             )
 
     def test_select_text(self):
         self.assertEqual(
             self._select('*/text()'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (OUTSIDE, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, START, u'bar'),
-             (OUTSIDE, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')],
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (OUTSIDE, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, START, 'bar'),
+             (OUTSIDE, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')],
             )
 
     def test_select_attr(self):
         self.assertEqual(
             self._select('foo/@name'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ATTR, ATTR, {'name': u'foo'}),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ATTR, ATTR, {'name': 'foo'}),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_select_text_context(self):
         self.assertEqual(
-            list(Transformer('.')(HTML(u'foo'), keep_marks=True)),
-            [('OUTSIDE', ('TEXT', u'foo', (None, 1, 0)))],
+            list(Transformer('.')(HTML('foo'), keep_marks=True)),
+            [('OUTSIDE', ('TEXT', 'foo', (None, 1, 0)))],
             )
 
 
@@ -152,63 +152,63 @@ class InvertTest(unittest.TestCase):
     def test_invert_element(self):
         self.assertEqual(
             self._invert('foo'),
-            [(OUTSIDE, START, u'root'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (OUTSIDE, END, u'root')]
+            [(OUTSIDE, START, 'root'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (OUTSIDE, END, 'root')]
             )
 
     def test_invert_inverted_element(self):
         self.assertEqual(
             _transform(FOO, Transformer('foo').invert().invert()),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (OUTSIDE, START, u'foo'),
-             (OUTSIDE, TEXT, u'FOO'),
-             (OUTSIDE, END, u'foo'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (OUTSIDE, START, 'foo'),
+             (OUTSIDE, TEXT, 'FOO'),
+             (OUTSIDE, END, 'foo'),
+             (None, END, 'root')]
             )
 
     def test_invert_text(self):
         self.assertEqual(
             self._invert('foo/text()'),
-            [(OUTSIDE, START, u'root'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (OUTSIDE, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (OUTSIDE, END, u'foo'),
-             (OUTSIDE, END, u'root')]
+            [(OUTSIDE, START, 'root'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (OUTSIDE, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (OUTSIDE, END, 'foo'),
+             (OUTSIDE, END, 'root')]
             )
 
     def test_invert_attribute(self):
         self.assertEqual(
             self._invert('foo/@name'),
-            [(OUTSIDE, START, u'root'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (None, ATTR, {'name': u'foo'}),
-             (OUTSIDE, START, u'foo'),
-             (OUTSIDE, TEXT, u'FOO'),
-             (OUTSIDE, END, u'foo'),
-             (OUTSIDE, END, u'root')]
+            [(OUTSIDE, START, 'root'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (None, ATTR, {'name': 'foo'}),
+             (OUTSIDE, START, 'foo'),
+             (OUTSIDE, TEXT, 'FOO'),
+             (OUTSIDE, END, 'foo'),
+             (OUTSIDE, END, 'root')]
             )
 
     def test_invert_context(self):
         self.assertEqual(
             self._invert('.'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, END, 'root')]
             )
 
     def test_invert_text_context(self):
         self.assertEqual(
-            _simplify(Transformer('.').invert()(HTML(u'foo'), keep_marks=True)),
-            [(None, 'TEXT', u'foo')],
+            _simplify(Transformer('.').invert()(HTML('foo'), keep_marks=True)),
+            [(None, 'TEXT', 'foo')],
             )
 
 
@@ -218,12 +218,12 @@ class EndTest(unittest.TestCase):
         stream = _transform(FOO, Transformer('foo').end())
         self.assertEqual(
             stream,
-            [(OUTSIDE, START, u'root'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (OUTSIDE, START, u'foo'),
-             (OUTSIDE, TEXT, u'FOO'),
-             (OUTSIDE, END, u'foo'),
-             (OUTSIDE, END, u'root')]
+            [(OUTSIDE, START, 'root'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (OUTSIDE, START, 'foo'),
+             (OUTSIDE, TEXT, 'FOO'),
+             (OUTSIDE, END, 'foo'),
+             (OUTSIDE, END, 'root')]
             )
 
 
@@ -234,47 +234,47 @@ class EmptyTest(unittest.TestCase):
     def test_empty_element(self):
         self.assertEqual(
             self._empty('foo'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (EXIT, END, u'foo'),
-             (None, END, u'root')],
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (EXIT, END, 'foo'),
+             (None, END, 'root')],
             )
 
     def test_empty_text(self):
         self.assertEqual(
             self._empty('foo/text()'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (OUTSIDE, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (OUTSIDE, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, END, 'root')]
             )
 
     def test_empty_attr(self):
         self.assertEqual(
             self._empty('foo/@name'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ATTR, ATTR, {'name': u'foo'}),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ATTR, ATTR, {'name': 'foo'}),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, END, 'root')]
             )
 
     def test_empty_context(self):
         self.assertEqual(
             self._empty('.'),
-            [(ENTER, START, u'root'),
-             (EXIT, END, u'root')]
+            [(ENTER, START, 'root'),
+             (EXIT, END, 'root')]
             )
 
     def test_empty_text_context(self):
         self.assertEqual(
-            _simplify(Transformer('.')(HTML(u'foo'), keep_marks=True)),
-            [(OUTSIDE, TEXT, u'foo')],
+            _simplify(Transformer('.')(HTML('foo'), keep_marks=True)),
+            [(OUTSIDE, TEXT, 'foo')],
             )
 
 
@@ -285,29 +285,29 @@ class RemoveTest(unittest.TestCase):
     def test_remove_element(self):
         self.assertEqual(
             self._remove('foo|bar'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, END, 'root')]
             )
 
     def test_remove_text(self):
         self.assertEqual(
             self._remove('//text()'),
-            [(None, START, u'root'),
-             (None, START, u'foo'),
-             (None, END, u'foo'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, START, 'foo'),
+             (None, END, 'foo'),
+             (None, END, 'root')]
             )
 
     def test_remove_attr(self):
         self.assertEqual(
             self._remove('foo/@name'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, END, 'root')]
             )
 
     def test_remove_context(self):
@@ -330,52 +330,52 @@ class UnwrapText(unittest.TestCase):
     def test_unwrap_element(self):
         self.assertEqual(
             self._unwrap('foo'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (INSIDE, TEXT, u'FOO'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (INSIDE, TEXT, 'FOO'),
+             (None, END, 'root')]
             )
 
     def test_unwrap_text(self):
         self.assertEqual(
             self._unwrap('foo/text()'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (OUTSIDE, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (OUTSIDE, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, END, 'root')]
             )
 
     def test_unwrap_attr(self):
         self.assertEqual(
             self._unwrap('foo/@name'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ATTR, ATTR, {'name': u'foo'}),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ATTR, ATTR, {'name': 'foo'}),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, END, 'root')]
             )
 
     def test_unwrap_adjacent(self):
         self.assertEqual(
             _transform(FOOBAR, Transformer('foo|bar').unwrap()),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (INSIDE, TEXT, u'FOO'),
-             (INSIDE, TEXT, u'BAR'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (INSIDE, TEXT, 'FOO'),
+             (INSIDE, TEXT, 'BAR'),
+             (None, END, 'root')]
             )
 
     def test_unwrap_root(self):
         self.assertEqual(
             self._unwrap('.'),
-            [(INSIDE, TEXT, u'ROOT'),
-             (INSIDE, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (INSIDE, END, u'foo')]
+            [(INSIDE, TEXT, 'ROOT'),
+             (INSIDE, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (INSIDE, END, 'foo')]
             )
 
     def test_unwrap_text_root(self):
@@ -392,75 +392,75 @@ class WrapTest(unittest.TestCase):
     def test_wrap_element(self):
         self.assertEqual(
             self._wrap('foo'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, START, u'wrap'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, END, u'wrap'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, START, 'wrap'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, END, 'wrap'),
+             (None, END, 'root')]
             )
 
     def test_wrap_adjacent_elements(self):
         self.assertEqual(
             _transform(FOOBAR, Transformer('foo|bar').wrap('wrap')),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, START, u'wrap'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, END, u'wrap'),
-             (None, START, u'wrap'),
-             (ENTER, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (EXIT, END, u'bar'),
-             (None, END, u'wrap'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, START, 'wrap'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, END, 'wrap'),
+             (None, START, 'wrap'),
+             (ENTER, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (EXIT, END, 'bar'),
+             (None, END, 'wrap'),
+             (None, END, 'root')]
             )
 
     def test_wrap_text(self):
         self.assertEqual(
             self._wrap('foo/text()'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (None, START, u'wrap'),
-             (OUTSIDE, TEXT, u'FOO'),
-             (None, END, u'wrap'),
-             (None, END, u'foo'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (None, START, 'wrap'),
+             (OUTSIDE, TEXT, 'FOO'),
+             (None, END, 'wrap'),
+             (None, END, 'foo'),
+             (None, END, 'root')]
             )
 
     def test_wrap_root(self):
         self.assertEqual(
             self._wrap('.'),
-            [(None, START, u'wrap'),
-             (ENTER, START, u'root'),
-             (INSIDE, TEXT, u'ROOT'),
-             (INSIDE, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (INSIDE, END, u'foo'),
-             (EXIT, END, u'root'),
-             (None, END, u'wrap')]
+            [(None, START, 'wrap'),
+             (ENTER, START, 'root'),
+             (INSIDE, TEXT, 'ROOT'),
+             (INSIDE, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (INSIDE, END, 'foo'),
+             (EXIT, END, 'root'),
+             (None, END, 'wrap')]
             )
 
     def test_wrap_text_root(self):
         self.assertEqual(
             _transform('foo', Transformer('.').wrap('wrap')),
-            [(None, START, u'wrap'),
-             (OUTSIDE, TEXT, u'foo'),
-             (None, END, u'wrap')],
+            [(None, START, 'wrap'),
+             (OUTSIDE, TEXT, 'foo'),
+             (None, END, 'wrap')],
             )
 
     def test_wrap_with_element(self):
         element = Element('a', href='http://localhost')
         self.assertEqual(
             _transform('foo', Transformer('.').wrap(element), with_attrs=True),
-            [(None, START, (u'a', {u'href': u'http://localhost'})),
-             (OUTSIDE, TEXT, u'foo'),
-             (None, END, u'a')]
+            [(None, START, ('a', {'href': 'http://localhost'})),
+             (OUTSIDE, TEXT, 'foo'),
+             (None, END, 'a')]
             )
 
 
@@ -483,55 +483,55 @@ class FilterTest(unittest.TestCase):
     def test_filter_element(self):
         self.assertEqual(
             self._filter('foo'),
-            [[(None, START, u'foo'),
-              (None, TEXT, u'FOO'),
-              (None, END, u'foo')]]
+            [[(None, START, 'foo'),
+              (None, TEXT, 'FOO'),
+              (None, END, 'foo')]]
             )
 
     def test_filter_adjacent_elements(self):
         self.assertEqual(
             self._filter('foo|bar'),
-            [[(None, START, u'foo'),
-              (None, TEXT, u'FOO'),
-              (None, END, u'foo')],
-             [(None, START, u'bar'),
-              (None, TEXT, u'BAR'),
-              (None, END, u'bar')]]
+            [[(None, START, 'foo'),
+              (None, TEXT, 'FOO'),
+              (None, END, 'foo')],
+             [(None, START, 'bar'),
+              (None, TEXT, 'BAR'),
+              (None, END, 'bar')]]
             )
 
     def test_filter_text(self):
         self.assertEqual(
             self._filter('*/text()'),
-            [[(None, TEXT, u'FOO')],
-             [(None, TEXT, u'BAR')]]
+            [[(None, TEXT, 'FOO')],
+             [(None, TEXT, 'BAR')]]
             )
     def test_filter_root(self):
         self.assertEqual(
             self._filter('.'),
-            [[(None, START, u'root'),
-              (None, TEXT, u'ROOT'),
-              (None, START, u'foo'),
-              (None, TEXT, u'FOO'),
-              (None, END, u'foo'),
-              (None, START, u'bar'),
-              (None, TEXT, u'BAR'),
-              (None, END, u'bar'),
-              (None, END, u'root')]]
+            [[(None, START, 'root'),
+              (None, TEXT, 'ROOT'),
+              (None, START, 'foo'),
+              (None, TEXT, 'FOO'),
+              (None, END, 'foo'),
+              (None, START, 'bar'),
+              (None, TEXT, 'BAR'),
+              (None, END, 'bar'),
+              (None, END, 'root')]]
             )
 
     def test_filter_text_root(self):
         self.assertEqual(
             self._filter('.', 'foo'),
-            [[(None, TEXT, u'foo')]])
+            [[(None, TEXT, 'foo')]])
 
     def test_filter_after_outside(self):
         stream = _transform(
             '<root>x</root>', Transformer('//root/text()').filter(lambda x: x))
         self.assertEqual(
             list(stream),
-            [(None, START, u'root'),
-             (OUTSIDE, TEXT, u'x'),
-             (None, END, u'root')])
+            [(None, START, 'root'),
+             (OUTSIDE, TEXT, 'x'),
+             (None, END, 'root')])
 
 
 class MapTest(unittest.TestCase):
@@ -546,16 +546,16 @@ class MapTest(unittest.TestCase):
     def test_map_element(self):
         self.assertEqual(
             self._map('foo'),
-            [(QName('foo'), Attrs([(QName('name'), u'foo'),
-                                   (QName('size'), u'100')])),
-             u'FOO',
+            [(QName('foo'), Attrs([(QName('name'), 'foo'),
+                                   (QName('size'), '100')])),
+             'FOO',
              QName('foo')]
         )
 
     def test_map_with_text_kind(self):
         self.assertEqual(
             self._map('.', TEXT),
-            [u'ROOT', u'FOO', u'BAR']
+            ['ROOT', 'FOO', 'BAR']
         )
 
     def test_map_with_root_and_end_kind(self):
@@ -567,7 +567,7 @@ class MapTest(unittest.TestCase):
     def test_map_with_attribute(self):
         self.assertEqual(
             self._map('foo/@name'),
-            [(QName('foo@*'), Attrs([('name', u'foo')]))]
+            [(QName('foo@*'), Attrs([('name', 'foo')]))]
         )
 
 
@@ -578,29 +578,29 @@ class SubstituteTest(unittest.TestCase):
     def test_substitute_foo(self):
         self.assertEqual(
             self._substitute('foo', 'FOO|BAR', 'FOOOOO'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOOOOO'),
-             (EXIT, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOOOOO'),
+             (EXIT, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_substitute_foobar_with_group(self):
         self.assertEqual(
             self._substitute('foo|bar', '(FOO|BAR)', r'(\1)'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'(FOO)'),
-             (EXIT, END, u'foo'),
-             (ENTER, START, u'bar'),
-             (INSIDE, TEXT, u'(BAR)'),
-             (EXIT, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, '(FOO)'),
+             (EXIT, END, 'foo'),
+             (ENTER, START, 'bar'),
+             (INSIDE, TEXT, '(BAR)'),
+             (EXIT, END, 'bar'),
+             (None, END, 'root')]
             )
 
 
@@ -611,43 +611,43 @@ class RenameTest(unittest.TestCase):
     def test_rename_root(self):
         self.assertEqual(
             self._rename('.'),
-            [(ENTER, START, u'foobar'),
-             (INSIDE, TEXT, u'ROOT'),
-             (INSIDE, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (INSIDE, END, u'foo'),
-             (INSIDE, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (INSIDE, END, u'bar'),
-             (EXIT, END, u'foobar')]
+            [(ENTER, START, 'foobar'),
+             (INSIDE, TEXT, 'ROOT'),
+             (INSIDE, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (INSIDE, END, 'foo'),
+             (INSIDE, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (INSIDE, END, 'bar'),
+             (EXIT, END, 'foobar')]
             )
 
     def test_rename_element(self):
         self.assertEqual(
             self._rename('foo|bar'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foobar'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foobar'),
-             (ENTER, START, u'foobar'),
-             (INSIDE, TEXT, u'BAR'),
-             (EXIT, END, u'foobar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foobar'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foobar'),
+             (ENTER, START, 'foobar'),
+             (INSIDE, TEXT, 'BAR'),
+             (EXIT, END, 'foobar'),
+             (None, END, 'root')]
             )
 
     def test_rename_text(self):
         self.assertEqual(
             self._rename('foo/text()'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (OUTSIDE, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (OUTSIDE, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
 
@@ -658,15 +658,15 @@ class ContentTestMixin(object):
 
             def __iter__(self):
                 self.count += 1
-                return iter(HTML(u'CONTENT %i' % self.count))
+                return iter(HTML('CONTENT %i' % self.count))
 
-        if isinstance(html, basestring) and not isinstance(html, unicode):
+        if isinstance(html, str) and not isinstance(html, str):
             html = HTML(html, encoding='utf-8')
         else:
             html = HTML(html)
         if content is None:
             content = Injector()
-        elif isinstance(content, basestring):
+        elif isinstance(content, str):
             content = HTML(content)
         return _transform(html, getattr(Transformer(select), self.operation)
                                 (content))
@@ -678,59 +678,59 @@ class ReplaceTest(unittest.TestCase, ContentTestMixin):
     def test_replace_element(self):
         self.assertEqual(
             self._apply('foo'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, TEXT, u'CONTENT 1'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, TEXT, 'CONTENT 1'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_replace_text(self):
         self.assertEqual(
             self._apply('text()'),
-            [(None, START, u'root'),
-             (None, TEXT, u'CONTENT 1'),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'CONTENT 1'),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_replace_context(self):
         self.assertEqual(
             self._apply('.'),
-            [(None, TEXT, u'CONTENT 1')],
+            [(None, TEXT, 'CONTENT 1')],
             )
 
     def test_replace_text_context(self):
         self.assertEqual(
             self._apply('.', html='foo'),
-            [(None, TEXT, u'CONTENT 1')],
+            [(None, TEXT, 'CONTENT 1')],
             )
 
     def test_replace_adjacent_elements(self):
         self.assertEqual(
             self._apply('*'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, TEXT, u'CONTENT 1'),
-             (None, TEXT, u'CONTENT 2'),
-             (None, END, u'root')],
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, TEXT, 'CONTENT 1'),
+             (None, TEXT, 'CONTENT 2'),
+             (None, END, 'root')],
             )
 
     def test_replace_all(self):
         self.assertEqual(
             self._apply('*|text()'),
-            [(None, START, u'root'),
-             (None, TEXT, u'CONTENT 1'),
-             (None, TEXT, u'CONTENT 2'),
-             (None, TEXT, u'CONTENT 3'),
-             (None, END, u'root')],
+            [(None, START, 'root'),
+             (None, TEXT, 'CONTENT 1'),
+             (None, TEXT, 'CONTENT 2'),
+             (None, TEXT, 'CONTENT 3'),
+             (None, END, 'root')],
             )
 
     def test_replace_with_callback(self):
@@ -740,11 +740,11 @@ class ReplaceTest(unittest.TestCase, ContentTestMixin):
             yield '%2i.' % count[0]
         self.assertEqual(
             self._apply('*', content),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, TEXT, u' 1.'),
-             (None, TEXT, u' 2.'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, TEXT, ' 1.'),
+             (None, TEXT, ' 2.'),
+             (None, END, 'root')]
             )
 
 
@@ -754,87 +754,87 @@ class BeforeTest(unittest.TestCase, ContentTestMixin):
     def test_before_element(self):
         self.assertEqual(
             self._apply('foo'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, TEXT, u'CONTENT 1'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, TEXT, 'CONTENT 1'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_before_text(self):
         self.assertEqual(
             self._apply('text()'),
-            [(None, START, u'root'),
-             (None, TEXT, u'CONTENT 1'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'CONTENT 1'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_before_context(self):
         self.assertEqual(
             self._apply('.'),
-            [(None, TEXT, u'CONTENT 1'),
-             (ENTER, START, u'root'),
-             (INSIDE, TEXT, u'ROOT'),
-             (INSIDE, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (INSIDE, END, u'foo'),
-             (INSIDE, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (INSIDE, END, u'bar'),
-             (EXIT, END, u'root')]
+            [(None, TEXT, 'CONTENT 1'),
+             (ENTER, START, 'root'),
+             (INSIDE, TEXT, 'ROOT'),
+             (INSIDE, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (INSIDE, END, 'foo'),
+             (INSIDE, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (INSIDE, END, 'bar'),
+             (EXIT, END, 'root')]
             )
 
     def test_before_text_context(self):
         self.assertEqual(
             self._apply('.', html='foo'),
-            [(None, TEXT, u'CONTENT 1'),
-             (OUTSIDE, TEXT, u'foo')]
+            [(None, TEXT, 'CONTENT 1'),
+             (OUTSIDE, TEXT, 'foo')]
             )
 
     def test_before_adjacent_elements(self):
         self.assertEqual(
             self._apply('*'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (None, TEXT, u'CONTENT 1'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, TEXT, u'CONTENT 2'),
-             (ENTER, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (EXIT, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (None, TEXT, 'CONTENT 1'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, TEXT, 'CONTENT 2'),
+             (ENTER, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (EXIT, END, 'bar'),
+             (None, END, 'root')]
 
             )
 
     def test_before_all(self):
         self.assertEqual(
             self._apply('*|text()'),
-            [(None, START, u'root'),
-             (None, TEXT, u'CONTENT 1'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (None, TEXT, u'CONTENT 2'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, TEXT, u'CONTENT 3'),
-             (ENTER, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (EXIT, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'CONTENT 1'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (None, TEXT, 'CONTENT 2'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, TEXT, 'CONTENT 3'),
+             (ENTER, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (EXIT, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_before_with_callback(self):
@@ -844,16 +844,16 @@ class BeforeTest(unittest.TestCase, ContentTestMixin):
             yield '%2i.' % count[0]
         self.assertEqual(
             self._apply('foo/text()', content),
-            [(None, 'START', u'root'),
-             (None, 'TEXT', u'ROOT'),
-             (None, 'START', u'foo'),
-             (None, 'TEXT', u' 1.'),
-             ('OUTSIDE', 'TEXT', u'FOO'),
-             (None, 'END', u'foo'),
-             (None, 'START', u'bar'),
-             (None, 'TEXT', u'BAR'),
-             (None, 'END', u'bar'),
-             (None, 'END', u'root')]
+            [(None, 'START', 'root'),
+             (None, 'TEXT', 'ROOT'),
+             (None, 'START', 'foo'),
+             (None, 'TEXT', ' 1.'),
+             ('OUTSIDE', 'TEXT', 'FOO'),
+             (None, 'END', 'foo'),
+             (None, 'START', 'bar'),
+             (None, 'TEXT', 'BAR'),
+             (None, 'END', 'bar'),
+             (None, 'END', 'root')]
             )
 
 
@@ -863,87 +863,87 @@ class AfterTest(unittest.TestCase, ContentTestMixin):
     def test_after_element(self):
         self.assertEqual(
             self._apply('foo'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, TEXT, u'CONTENT 1'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, TEXT, 'CONTENT 1'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_after_text(self):
         self.assertEqual(
             self._apply('text()'),
-            [(None, START, u'root'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (None, TEXT, u'CONTENT 1'),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (None, TEXT, 'CONTENT 1'),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_after_context(self):
         self.assertEqual(
             self._apply('.'),
-            [(ENTER, START, u'root'),
-             (INSIDE, TEXT, u'ROOT'),
-             (INSIDE, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (INSIDE, END, u'foo'),
-             (INSIDE, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (INSIDE, END, u'bar'),
-             (EXIT, END, u'root'),
-             (None, TEXT, u'CONTENT 1')]
+            [(ENTER, START, 'root'),
+             (INSIDE, TEXT, 'ROOT'),
+             (INSIDE, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (INSIDE, END, 'foo'),
+             (INSIDE, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (INSIDE, END, 'bar'),
+             (EXIT, END, 'root'),
+             (None, TEXT, 'CONTENT 1')]
             )
 
     def test_after_text_context(self):
         self.assertEqual(
             self._apply('.', html='foo'),
-            [(OUTSIDE, TEXT, u'foo'),
-             (None, TEXT, u'CONTENT 1')]
+            [(OUTSIDE, TEXT, 'foo'),
+             (None, TEXT, 'CONTENT 1')]
             )
 
     def test_after_adjacent_elements(self):
         self.assertEqual(
             self._apply('*'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, TEXT, u'CONTENT 1'),
-             (ENTER, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (EXIT, END, u'bar'),
-             (None, TEXT, u'CONTENT 2'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, TEXT, 'CONTENT 1'),
+             (ENTER, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (EXIT, END, 'bar'),
+             (None, TEXT, 'CONTENT 2'),
+             (None, END, 'root')]
 
             )
 
     def test_after_all(self):
         self.assertEqual(
             self._apply('*|text()'),
-            [(None, START, u'root'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (None, TEXT, u'CONTENT 1'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, TEXT, u'CONTENT 2'),
-             (ENTER, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (EXIT, END, u'bar'),
-             (None, TEXT, u'CONTENT 3'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (None, TEXT, 'CONTENT 1'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, TEXT, 'CONTENT 2'),
+             (ENTER, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (EXIT, END, 'bar'),
+             (None, TEXT, 'CONTENT 3'),
+             (None, END, 'root')]
             )
 
     def test_after_with_callback(self):
@@ -953,16 +953,16 @@ class AfterTest(unittest.TestCase, ContentTestMixin):
             yield '%2i.' % count[0]
         self.assertEqual(
             self._apply('foo/text()', content),
-            [(None, 'START', u'root'),
-             (None, 'TEXT', u'ROOT'),
-             (None, 'START', u'foo'),
-             ('OUTSIDE', 'TEXT', u'FOO'),
-             (None, 'TEXT', u' 1.'),
-             (None, 'END', u'foo'),
-             (None, 'START', u'bar'),
-             (None, 'TEXT', u'BAR'),
-             (None, 'END', u'bar'),
-             (None, 'END', u'root')]
+            [(None, 'START', 'root'),
+             (None, 'TEXT', 'ROOT'),
+             (None, 'START', 'foo'),
+             ('OUTSIDE', 'TEXT', 'FOO'),
+             (None, 'TEXT', ' 1.'),
+             (None, 'END', 'foo'),
+             (None, 'START', 'bar'),
+             (None, 'TEXT', 'BAR'),
+             (None, 'END', 'bar'),
+             (None, 'END', 'root')]
             )
 
 
@@ -972,84 +972,84 @@ class PrependTest(unittest.TestCase, ContentTestMixin):
     def test_prepend_element(self):
         self.assertEqual(
             self._apply('foo'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (None, TEXT, u'CONTENT 1'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (None, TEXT, 'CONTENT 1'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_prepend_text(self):
         self.assertEqual(
             self._apply('text()'),
-            [(None, START, u'root'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_prepend_context(self):
         self.assertEqual(
             self._apply('.'),
-            [(ENTER, START, u'root'),
-             (None, TEXT, u'CONTENT 1'),
-             (INSIDE, TEXT, u'ROOT'),
-             (INSIDE, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (INSIDE, END, u'foo'),
-             (INSIDE, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (INSIDE, END, u'bar'),
-             (EXIT, END, u'root')],
+            [(ENTER, START, 'root'),
+             (None, TEXT, 'CONTENT 1'),
+             (INSIDE, TEXT, 'ROOT'),
+             (INSIDE, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (INSIDE, END, 'foo'),
+             (INSIDE, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (INSIDE, END, 'bar'),
+             (EXIT, END, 'root')],
             )
 
     def test_prepend_text_context(self):
         self.assertEqual(
             self._apply('.', html='foo'),
-            [(OUTSIDE, TEXT, u'foo')]
+            [(OUTSIDE, TEXT, 'foo')]
             )
 
     def test_prepend_adjacent_elements(self):
         self.assertEqual(
             self._apply('*'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (None, TEXT, u'CONTENT 1'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (ENTER, START, u'bar'),
-             (None, TEXT, u'CONTENT 2'),
-             (INSIDE, TEXT, u'BAR'),
-             (EXIT, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (None, TEXT, 'CONTENT 1'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (ENTER, START, 'bar'),
+             (None, TEXT, 'CONTENT 2'),
+             (INSIDE, TEXT, 'BAR'),
+             (EXIT, END, 'bar'),
+             (None, END, 'root')]
 
             )
 
     def test_prepend_all(self):
         self.assertEqual(
             self._apply('*|text()'),
-            [(None, START, u'root'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (None, TEXT, u'CONTENT 1'),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (ENTER, START, u'bar'),
-             (None, TEXT, u'CONTENT 2'),
-             (INSIDE, TEXT, u'BAR'),
-             (EXIT, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (None, TEXT, 'CONTENT 1'),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (ENTER, START, 'bar'),
+             (None, TEXT, 'CONTENT 2'),
+             (INSIDE, TEXT, 'BAR'),
+             (EXIT, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_prepend_with_callback(self):
@@ -1059,16 +1059,16 @@ class PrependTest(unittest.TestCase, ContentTestMixin):
             yield '%2i.' % count[0]
         self.assertEqual(
             self._apply('foo', content),
-            [(None, 'START', u'root'),
-             (None, 'TEXT', u'ROOT'),
-             (ENTER, 'START', u'foo'),
-             (None, 'TEXT', u' 1.'),
-             (INSIDE, 'TEXT', u'FOO'),
-             (EXIT, 'END', u'foo'),
-             (None, 'START', u'bar'),
-             (None, 'TEXT', u'BAR'),
-             (None, 'END', u'bar'),
-             (None, 'END', u'root')]
+            [(None, 'START', 'root'),
+             (None, 'TEXT', 'ROOT'),
+             (ENTER, 'START', 'foo'),
+             (None, 'TEXT', ' 1.'),
+             (INSIDE, 'TEXT', 'FOO'),
+             (EXIT, 'END', 'foo'),
+             (None, 'START', 'bar'),
+             (None, 'TEXT', 'BAR'),
+             (None, 'END', 'bar'),
+             (None, 'END', 'root')]
             )
 
 
@@ -1078,84 +1078,84 @@ class AppendTest(unittest.TestCase, ContentTestMixin):
     def test_append_element(self):
         self.assertEqual(
             self._apply('foo'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (None, TEXT, u'CONTENT 1'),
-             (EXIT, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (None, TEXT, 'CONTENT 1'),
+             (EXIT, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_append_text(self):
         self.assertEqual(
             self._apply('text()'),
-            [(None, START, u'root'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (None, START, u'foo'),
-             (None, TEXT, u'FOO'),
-             (None, END, u'foo'),
-             (None, START, u'bar'),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (None, START, 'foo'),
+             (None, TEXT, 'FOO'),
+             (None, END, 'foo'),
+             (None, START, 'bar'),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_append_context(self):
         self.assertEqual(
             self._apply('.'),
-            [(ENTER, START, u'root'),
-             (INSIDE, TEXT, u'ROOT'),
-             (INSIDE, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (INSIDE, END, u'foo'),
-             (INSIDE, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (INSIDE, END, u'bar'),
-             (None, TEXT, u'CONTENT 1'),
-             (EXIT, END, u'root')],
+            [(ENTER, START, 'root'),
+             (INSIDE, TEXT, 'ROOT'),
+             (INSIDE, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (INSIDE, END, 'foo'),
+             (INSIDE, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (INSIDE, END, 'bar'),
+             (None, TEXT, 'CONTENT 1'),
+             (EXIT, END, 'root')],
             )
 
     def test_append_text_context(self):
         self.assertEqual(
             self._apply('.', html='foo'),
-            [(OUTSIDE, TEXT, u'foo')]
+            [(OUTSIDE, TEXT, 'foo')]
             )
 
     def test_append_adjacent_elements(self):
         self.assertEqual(
             self._apply('*'),
-            [(None, START, u'root'),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (None, TEXT, u'CONTENT 1'),
-             (EXIT, END, u'foo'),
-             (ENTER, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (None, TEXT, u'CONTENT 2'),
-             (EXIT, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (None, TEXT, 'CONTENT 1'),
+             (EXIT, END, 'foo'),
+             (ENTER, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (None, TEXT, 'CONTENT 2'),
+             (EXIT, END, 'bar'),
+             (None, END, 'root')]
 
             )
 
     def test_append_all(self):
         self.assertEqual(
             self._apply('*|text()'),
-            [(None, START, u'root'),
-             (OUTSIDE, TEXT, u'ROOT'),
-             (ENTER, START, u'foo'),
-             (INSIDE, TEXT, u'FOO'),
-             (None, TEXT, u'CONTENT 1'),
-             (EXIT, END, u'foo'),
-             (ENTER, START, u'bar'),
-             (INSIDE, TEXT, u'BAR'),
-             (None, TEXT, u'CONTENT 2'),
-             (EXIT, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, 'root'),
+             (OUTSIDE, TEXT, 'ROOT'),
+             (ENTER, START, 'foo'),
+             (INSIDE, TEXT, 'FOO'),
+             (None, TEXT, 'CONTENT 1'),
+             (EXIT, END, 'foo'),
+             (ENTER, START, 'bar'),
+             (INSIDE, TEXT, 'BAR'),
+             (None, TEXT, 'CONTENT 2'),
+             (EXIT, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_append_with_callback(self):
@@ -1165,16 +1165,16 @@ class AppendTest(unittest.TestCase, ContentTestMixin):
             yield '%2i.' % count[0]
         self.assertEqual(
             self._apply('foo', content),
-            [(None, 'START', u'root'),
-             (None, 'TEXT', u'ROOT'),
-             (ENTER, 'START', u'foo'),
-             (INSIDE, 'TEXT', u'FOO'),
-             (None, 'TEXT', u' 1.'),
-             (EXIT, 'END', u'foo'),
-             (None, 'START', u'bar'),
-             (None, 'TEXT', u'BAR'),
-             (None, 'END', u'bar'),
-             (None, 'END', u'root')]
+            [(None, 'START', 'root'),
+             (None, 'TEXT', 'ROOT'),
+             (ENTER, 'START', 'foo'),
+             (INSIDE, 'TEXT', 'FOO'),
+             (None, 'TEXT', ' 1.'),
+             (EXIT, 'END', 'foo'),
+             (None, 'START', 'bar'),
+             (None, 'TEXT', 'BAR'),
+             (None, 'END', 'bar'),
+             (None, 'END', 'root')]
             )
 
 
@@ -1187,29 +1187,29 @@ class AttrTest(unittest.TestCase):
     def test_set_existing_attr(self):
         self.assertEqual(
             self._attr('foo', 'name', 'FOO'),
-            [(None, START, (u'root', {})),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, (u'foo', {u'name': 'FOO', u'size': '100'})),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, START, (u'bar', {u'name': u'bar'})),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, ('root', {})),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, ('foo', {'name': 'FOO', 'size': '100'})),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, START, ('bar', {'name': 'bar'})),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_set_new_attr(self):
         self.assertEqual(
             self._attr('foo', 'title', 'FOO'),
-            [(None, START, (u'root', {})),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, (u'foo', {u'name': u'foo', u'title': 'FOO', u'size': '100'})),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, START, (u'bar', {u'name': u'bar'})),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, ('root', {})),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, ('foo', {'name': 'foo', 'title': 'FOO', 'size': '100'})),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, START, ('bar', {'name': 'bar'})),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_attr_from_function(self):
@@ -1219,29 +1219,29 @@ class AttrTest(unittest.TestCase):
 
         self.assertEqual(
             self._attr('foo|bar', 'name', set),
-            [(None, START, (u'root', {})),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, (u'foo', {u'name': 'FOO', u'size': '100'})),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (ENTER, START, (u'bar', {u'name': 'BAR'})),
-             (INSIDE, TEXT, u'BAR'),
-             (EXIT, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, ('root', {})),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, ('foo', {'name': 'FOO', 'size': '100'})),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (ENTER, START, ('bar', {'name': 'BAR'})),
+             (INSIDE, TEXT, 'BAR'),
+             (EXIT, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_remove_attr(self):
         self.assertEqual(
             self._attr('foo', 'name', None),
-            [(None, START, (u'root', {})),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, (u'foo', {u'size': '100'})),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, START, (u'bar', {u'name': u'bar'})),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, ('root', {})),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, ('foo', {'size': '100'})),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, START, ('bar', {'name': 'bar'})),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
     def test_remove_attr_with_function(self):
@@ -1250,15 +1250,15 @@ class AttrTest(unittest.TestCase):
 
         self.assertEqual(
             self._attr('foo', 'name', set),
-            [(None, START, (u'root', {})),
-             (None, TEXT, u'ROOT'),
-             (ENTER, START, (u'foo', {u'size': '100'})),
-             (INSIDE, TEXT, u'FOO'),
-             (EXIT, END, u'foo'),
-             (None, START, (u'bar', {u'name': u'bar'})),
-             (None, TEXT, u'BAR'),
-             (None, END, u'bar'),
-             (None, END, u'root')]
+            [(None, START, ('root', {})),
+             (None, TEXT, 'ROOT'),
+             (ENTER, START, ('foo', {'size': '100'})),
+             (INSIDE, TEXT, 'FOO'),
+             (EXIT, END, 'foo'),
+             (None, START, ('bar', {'name': 'bar'})),
+             (None, TEXT, 'BAR'),
+             (None, END, 'bar'),
+             (None, END, 'root')]
             )
 
 
@@ -1294,65 +1294,65 @@ class CopyTest(unittest.TestCase, BufferTestMixin):
     def test_copy_element(self):
         self.assertEqual(
             self._apply('foo')[1],
-            [[(None, START, u'foo'),
-              (None, TEXT, u'FOO'),
-              (None, END, u'foo')]]
+            [[(None, START, 'foo'),
+              (None, TEXT, 'FOO'),
+              (None, END, 'foo')]]
             )
 
     def test_copy_adjacent_elements(self):
         self.assertEqual(
             self._apply('foo|bar')[1],
-            [[(None, START, u'foo'),
-              (None, TEXT, u'FOO'),
-              (None, END, u'foo')],
-             [(None, START, u'bar'),
-              (None, TEXT, u'BAR'),
-              (None, END, u'bar')]]
+            [[(None, START, 'foo'),
+              (None, TEXT, 'FOO'),
+              (None, END, 'foo')],
+             [(None, START, 'bar'),
+              (None, TEXT, 'BAR'),
+              (None, END, 'bar')]]
             )
 
     def test_copy_all(self):
         self.assertEqual(
             self._apply('*|text()')[1],
-            [[(None, TEXT, u'ROOT')],
-             [(None, START, u'foo'),
-              (None, TEXT, u'FOO'),
-              (None, END, u'foo')],
-             [(None, START, u'bar'),
-              (None, TEXT, u'BAR'),
-              (None, END, u'bar')]]
+            [[(None, TEXT, 'ROOT')],
+             [(None, START, 'foo'),
+              (None, TEXT, 'FOO'),
+              (None, END, 'foo')],
+             [(None, START, 'bar'),
+              (None, TEXT, 'BAR'),
+              (None, END, 'bar')]]
             )
 
     def test_copy_text(self):
         self.assertEqual(
             self._apply('*/text()')[1],
-            [[(None, TEXT, u'FOO')],
-             [(None, TEXT, u'BAR')]]
+            [[(None, TEXT, 'FOO')],
+             [(None, TEXT, 'BAR')]]
             )
 
     def test_copy_context(self):
         self.assertEqual(
             self._apply('.')[1],
-            [[(None, START, u'root'),
-              (None, TEXT, u'ROOT'),
-              (None, START, u'foo'),
-              (None, TEXT, u'FOO'),
-              (None, END, u'foo'),
-              (None, START, u'bar'),
-              (None, TEXT, u'BAR'),
-              (None, END, u'bar'),
-              (None, END, u'root')]]
+            [[(None, START, 'root'),
+              (None, TEXT, 'ROOT'),
+              (None, START, 'foo'),
+              (None, TEXT, 'FOO'),
+              (None, END, 'foo'),
+              (None, START, 'bar'),
+              (None, TEXT, 'BAR'),
+              (None, END, 'bar'),
+              (None, END, 'root')]]
             )
 
     def test_copy_attribute(self):
         self.assertEqual(
             self._apply('foo/@name', with_attrs=True)[1],
-            [[(None, ATTR, {'name': u'foo'})]]
+            [[(None, ATTR, {'name': 'foo'})]]
             )
 
     def test_copy_attributes(self):
         self.assertEqual(
             self._apply('foo/@*', with_attrs=True)[1],
-            [[(None, ATTR, {u'name': u'foo', u'size': u'100'})]]
+            [[(None, ATTR, {'name': 'foo', 'size': '100'})]]
             )
 
 
@@ -1362,104 +1362,104 @@ class CutTest(unittest.TestCase, BufferTestMixin):
     def test_cut_element(self):
         self.assertEqual(
             self._apply('foo'),
-            ([(None, START, u'root'),
-              (None, TEXT, u'ROOT'),
-              (None, START, u'bar'),
-              (None, TEXT, u'BAR'),
-              (None, END, u'bar'),
-              (None, END, u'root')],
-             [[(None, START, u'foo'),
-               (None, TEXT, u'FOO'),
-               (None, END, u'foo')]])
+            ([(None, START, 'root'),
+              (None, TEXT, 'ROOT'),
+              (None, START, 'bar'),
+              (None, TEXT, 'BAR'),
+              (None, END, 'bar'),
+              (None, END, 'root')],
+             [[(None, START, 'foo'),
+               (None, TEXT, 'FOO'),
+               (None, END, 'foo')]])
             )
 
     def test_cut_adjacent_elements(self):
         self.assertEqual(
             self._apply('foo|bar'),
-            ([(None, START, u'root'), 
-              (None, TEXT, u'ROOT'),
+            ([(None, START, 'root'), 
+              (None, TEXT, 'ROOT'),
               (BREAK, BREAK, None),
-              (None, END, u'root')],
-             [[(None, START, u'foo'),
-               (None, TEXT, u'FOO'),
-               (None, END, u'foo')],
-              [(None, START, u'bar'),
-               (None, TEXT, u'BAR'),
-               (None, END, u'bar')]])
+              (None, END, 'root')],
+             [[(None, START, 'foo'),
+               (None, TEXT, 'FOO'),
+               (None, END, 'foo')],
+              [(None, START, 'bar'),
+               (None, TEXT, 'BAR'),
+               (None, END, 'bar')]])
             )
 
     def test_cut_all(self):
         self.assertEqual(
             self._apply('*|text()'),
-            ([(None, 'START', u'root'),
+            ([(None, 'START', 'root'),
               ('BREAK', 'BREAK', None),
               ('BREAK', 'BREAK', None),
-              (None, 'END', u'root')],
-             [[(None, 'TEXT', u'ROOT')],
-              [(None, 'START', u'foo'),
-               (None, 'TEXT', u'FOO'),
-               (None, 'END', u'foo')],
-              [(None, 'START', u'bar'),
-               (None, 'TEXT', u'BAR'),
-               (None, 'END', u'bar')]])
+              (None, 'END', 'root')],
+             [[(None, 'TEXT', 'ROOT')],
+              [(None, 'START', 'foo'),
+               (None, 'TEXT', 'FOO'),
+               (None, 'END', 'foo')],
+              [(None, 'START', 'bar'),
+               (None, 'TEXT', 'BAR'),
+               (None, 'END', 'bar')]])
             )
 
     def test_cut_text(self):
         self.assertEqual(
             self._apply('*/text()'),
-            ([(None, 'START', u'root'),
-              (None, 'TEXT', u'ROOT'),
-              (None, 'START', u'foo'),
-              (None, 'END', u'foo'),
-              (None, 'START', u'bar'),
-              (None, 'END', u'bar'),
-              (None, 'END', u'root')],
-             [[(None, 'TEXT', u'FOO')],
-              [(None, 'TEXT', u'BAR')]])
+            ([(None, 'START', 'root'),
+              (None, 'TEXT', 'ROOT'),
+              (None, 'START', 'foo'),
+              (None, 'END', 'foo'),
+              (None, 'START', 'bar'),
+              (None, 'END', 'bar'),
+              (None, 'END', 'root')],
+             [[(None, 'TEXT', 'FOO')],
+              [(None, 'TEXT', 'BAR')]])
             )
 
     def test_cut_context(self):
         self.assertEqual(
             self._apply('.')[1],
-            [[(None, 'START', u'root'),
-              (None, 'TEXT', u'ROOT'),
-              (None, 'START', u'foo'),
-              (None, 'TEXT', u'FOO'),
-              (None, 'END', u'foo'),
-              (None, 'START', u'bar'),
-              (None, 'TEXT', u'BAR'),
-              (None, 'END', u'bar'),
-              (None, 'END', u'root')]]
+            [[(None, 'START', 'root'),
+              (None, 'TEXT', 'ROOT'),
+              (None, 'START', 'foo'),
+              (None, 'TEXT', 'FOO'),
+              (None, 'END', 'foo'),
+              (None, 'START', 'bar'),
+              (None, 'TEXT', 'BAR'),
+              (None, 'END', 'bar'),
+              (None, 'END', 'root')]]
             )
 
     def test_cut_attribute(self):
         self.assertEqual(
             self._apply('foo/@name', with_attrs=True),
-            ([(None, START, (u'root', {})),
-              (None, TEXT, u'ROOT'),
-              (None, START, (u'foo', {u'size': u'100'})),
-              (None, TEXT, u'FOO'),
-              (None, END, u'foo'),
-              (None, START, (u'bar', {u'name': u'bar'})),
-              (None, TEXT, u'BAR'),
-              (None, END, u'bar'),
-              (None, END, u'root')],
-             [[(None, ATTR, {u'name': u'foo'})]])
+            ([(None, START, ('root', {})),
+              (None, TEXT, 'ROOT'),
+              (None, START, ('foo', {'size': '100'})),
+              (None, TEXT, 'FOO'),
+              (None, END, 'foo'),
+              (None, START, ('bar', {'name': 'bar'})),
+              (None, TEXT, 'BAR'),
+              (None, END, 'bar'),
+              (None, END, 'root')],
+             [[(None, ATTR, {'name': 'foo'})]])
             )
 
     def test_cut_attributes(self):
         self.assertEqual(
             self._apply('foo/@*', with_attrs=True),
-            ([(None, START, (u'root', {})),
-              (None, TEXT, u'ROOT'),
-              (None, START, (u'foo', {})),
-              (None, TEXT, u'FOO'),
-              (None, END, u'foo'),
-              (None, START, (u'bar', {u'name': u'bar'})),
-              (None, TEXT, u'BAR'),
-              (None, END, u'bar'),
-              (None, END, u'root')],
-             [[(None, ATTR, {u'name': u'foo', u'size': u'100'})]])
+            ([(None, START, ('root', {})),
+              (None, TEXT, 'ROOT'),
+              (None, START, ('foo', {})),
+              (None, TEXT, 'FOO'),
+              (None, END, 'foo'),
+              (None, START, ('bar', {'name': 'bar'})),
+              (None, TEXT, 'BAR'),
+              (None, END, 'bar'),
+              (None, END, 'root')],
+             [[(None, ATTR, {'name': 'foo', 'size': '100'})]])
             )
 
 # XXX Test this when the XPath implementation is fixed (#233).

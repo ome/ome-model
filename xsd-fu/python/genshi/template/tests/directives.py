@@ -426,7 +426,7 @@ class ForDirectiveTestCase(unittest.TestCase):
             <b>3</b>
             <b>4</b>
             <b>5</b>
-        </doc>""", tmpl.generate(items=range(1, 6)).render(encoding=None))
+        </doc>""", tmpl.generate(items=list(range(1, 6))).render(encoding=None))
 
     def test_as_element(self):
         """
@@ -443,7 +443,7 @@ class ForDirectiveTestCase(unittest.TestCase):
             <b>3</b>
             <b>4</b>
             <b>5</b>
-        </doc>""", tmpl.generate(items=range(1, 6)).render(encoding=None))
+        </doc>""", tmpl.generate(items=list(range(1, 6))).render(encoding=None))
 
     def test_multi_assignment(self):
         """
@@ -487,7 +487,7 @@ class ForDirectiveTestCase(unittest.TestCase):
         try:
             list(tmpl.generate(foo=12))
             self.fail('Expected TemplateRuntimeError')
-        except TypeError, e:
+        except TypeError as e:
             assert (str(e) == "iteration over non-sequence" or
                     str(e) == "'int' object is not iterable")
             exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -513,7 +513,7 @@ class ForDirectiveTestCase(unittest.TestCase):
               </py:for>
             </doc>""", filename='test.html').generate()
             self.fail('ExpectedTemplateSyntaxError')
-        except TemplateSyntaxError, e:
+        except TemplateSyntaxError as e:
             self.assertEqual('test.html', e.filename)
             if sys.version_info[:2] > (2,4):
                 self.assertEqual(2, e.lineno)
@@ -1050,7 +1050,7 @@ class ContentDirectiveTestCase(unittest.TestCase):
               <py:content foo="">Foo</py:content>
             </doc>""", filename='test.html').generate()
             self.fail('Expected TemplateSyntaxError')
-        except TemplateSyntaxError, e:
+        except TemplateSyntaxError as e:
             self.assertEqual('test.html', e.filename)
             self.assertEqual(2, e.lineno)
 
@@ -1068,7 +1068,7 @@ class ReplaceDirectiveTestCase(unittest.TestCase):
               <elem py:replace="">Foo</elem>
             </doc>""", filename='test.html').generate()
             self.fail('Expected TemplateSyntaxError')
-        except TemplateSyntaxError, e:
+        except TemplateSyntaxError as e:
             self.assertEqual('test.html', e.filename)
             self.assertEqual(2, e.lineno)
 
@@ -1190,12 +1190,12 @@ class WithDirectiveTestCase(unittest.TestCase):
         </div>""", tmpl.generate(foo={'bar': 42}).render(encoding=None))
 
     def test_unicode_expr(self):
-        tmpl = MarkupTemplate(u"""<div xmlns:py="http://genshi.edgewall.org/">
+        tmpl = MarkupTemplate("""<div xmlns:py="http://genshi.edgewall.org/">
           <span py:with="weeks=(u'一', u'二', u'三', u'四', u'五', u'六', u'日')">
             $weeks
           </span>
         </div>""")
-        self.assertEqual(u"""<div>
+        self.assertEqual("""<div>
           <span>
             一二三四五六日
           </span>

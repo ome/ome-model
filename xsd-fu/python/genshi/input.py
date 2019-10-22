@@ -17,8 +17,8 @@ sources.
 
 from itertools import chain
 import codecs
-import htmlentitydefs as entities
-import HTMLParser as html
+import html.entities as entities
+import html.parser as html
 from xml.parsers import expat
 
 from genshi.core import Attrs, QName, Stream, stripentities
@@ -39,7 +39,7 @@ def ET(element):
     """
     tag_name = QName(element.tag.lstrip('{'))
     attrs = Attrs([(QName(attr.lstrip('{')), value)
-                   for attr, value in element.items()])
+                   for attr, value in list(element.items())])
 
     yield START, (tag_name, attrs), (None, -1, -1)
     if element.text:
@@ -91,8 +91,8 @@ class XMLParser(object):
     """
 
     _entitydefs = ['<!ENTITY %s "&#%d;">' % (name, value) for name, value in
-                   entities.name2codepoint.items()]
-    _external_dtd = u'\n'.join(_entitydefs).encode('utf-8')
+                   list(entities.name2codepoint.items())]
+    _external_dtd = '\n'.join(_entitydefs).encode('utf-8')
 
     def __init__(self, source, filename=None, encoding=None):
         """Initialize the parser for the given XML input.
@@ -156,7 +156,7 @@ class XMLParser(object):
                                 del self.expat # get rid of circular references
                             done = True
                         else:
-                            if isinstance(data, unicode):
+                            if isinstance(data, str):
                                 data = data.encode('utf-8')
                             self.expat.Parse(data, False)
                     for event in self._queue:
@@ -164,7 +164,7 @@ class XMLParser(object):
                     self._queue = []
                     if done:
                         break
-            except expat.ExpatError, e:
+            except expat.ExpatError as e:
                 msg = str(e)
                 raise ParseError(msg, self.filename, e.lineno, e.offset)
         return Stream(_generate()).filter(_coalesce)
@@ -242,7 +242,7 @@ class XMLParser(object):
         if text.startswith('&'):
             # deal with undefined entities
             try:
-                text = unichr(entities.name2codepoint[text[1:-1]])
+                text = chr(entities.name2codepoint[text[1:-1]])
                 self._enqueue(TEXT, text)
             except KeyError:
                 filename, lineno, offset = self._getpos()
@@ -333,7 +333,7 @@ class HTMLParser(html.HTMLParser, object):
                             self.close()
                             done = True
                         else:
-                            if not isinstance(data, unicode):
+                            if not isinstance(data, str):
                                 raise UnicodeError("source returned bytes, but no encoding specified")
                             self.feed(data)
                     for kind, data, pos in self._queue:
@@ -345,7 +345,7 @@ class HTMLParser(html.HTMLParser, object):
                         for tag in open_tags:
                             yield END, QName(tag), pos
                         break
-            except html.HTMLParseError, e:
+            except html.HTMLParseError as e:
                 msg = '%s: line %d, column %d' % (e.msg, e.lineno, e.offset)
                 raise ParseError(msg, self.filename, e.lineno, e.offset)
         return Stream(_generate()).filter(_coalesce)
@@ -388,14 +388,14 @@ class HTMLParser(html.HTMLParser, object):
 
     def handle_charref(self, name):
         if name.lower().startswith('x'):
-            text = unichr(int(name[1:], 16))
+            text = chr(int(name[1:], 16))
         else:
-            text = unichr(int(name))
+            text = chr(int(name))
         self._enqueue(TEXT, text)
 
     def handle_entityref(self, name):
         try:
-            text = unichr(entities.name2codepoint[name])
+            text = chr(entities.name2codepoint[name])
         except KeyError:
             text = '&%s;' % name
         self._enqueue(TEXT, text)
@@ -434,7 +434,7 @@ def HTML(text, encoding=None):
     :raises ParseError: if the HTML text is not well-formed, and error recovery
                         fails
     """
-    if isinstance(text, unicode):
+    if isinstance(text, str):
         # If it's unicode text the encoding should be set to None.
         # The option to pass in an incorrect encoding is for ease
         # of writing doctests that work in both Python 2.x and 3.x.

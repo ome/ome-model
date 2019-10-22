@@ -46,7 +46,7 @@ class DummyTranslations(NullTranslations):
             if tmsg is missing:
                 if self._fallback:
                     return self._fallback.ugettext(message)
-                return unicode(message)
+                return str(message)
             return tmsg
     else:
         def gettext(self, message):
@@ -55,7 +55,7 @@ class DummyTranslations(NullTranslations):
             if tmsg is missing:
                 if self._fallback:
                     return self._fallback.gettext(message)
-                return unicode(message)
+                return str(message)
             return tmsg
 
     if IS_PYTHON2:
@@ -94,10 +94,10 @@ class TranslatorTestCase(unittest.TestCase):
         """
         Verify that translated attributes end up in a proper `Attrs` instance.
         """
-        html = HTML(u"""<html>
+        html = HTML("""<html>
           <span title="Foo"></span>
         </html>""")
-        translator = Translator(lambda s: u"Voh")
+        translator = Translator(lambda s: "Voh")
         stream = list(html.filter(translator))
         kind, data, pos = stream[2]
         assert isinstance(data[1], Attrs)
@@ -139,7 +139,7 @@ class TranslatorTestCase(unittest.TestCase):
         translator = Translator()
         messages = list(translator.extract(tmpl.stream))
         self.assertEqual(1, len(messages))
-        self.assertEqual((2, 'gettext', u'Gr\xfc\xdfe', []), messages[0])
+        self.assertEqual((2, 'gettext', 'Gr\xfc\xdfe', []), messages[0])
 
     def test_extract_included_attribute_text(self):
         tmpl = MarkupTemplate("""<html xmlns:py="http://genshi.edgewall.org/">
@@ -237,10 +237,10 @@ class MsgDirectiveTestCase(unittest.TestCase):
             Please see <a href="help.html">Help</a> for details.
           </p>
         </html>""")
-        gettext = lambda s: u"Für Details siehe bitte [1:Hilfe]."
+        gettext = lambda s: "Für Details siehe bitte [1:Hilfe]."
         translator = Translator(gettext)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p>Für Details siehe bitte <a href="help.html">Hilfe</a>.</p>
         </html>""".encode('utf-8'), tmpl.generate().render(encoding='utf-8'))
 
@@ -260,10 +260,10 @@ class MsgDirectiveTestCase(unittest.TestCase):
             xmlns:i18n="http://genshi.edgewall.org/i18n">
           <p i18n:msg="">Please see <a href="help.html">Help</a></p>
         </html>""")
-        gettext = lambda s: u"Für Details siehe bitte [1:Hilfe]"
+        gettext = lambda s: "Für Details siehe bitte [1:Hilfe]"
         translator = Translator(gettext)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p>Für Details siehe bitte <a href="help.html">Hilfe</a></p>
         </html>""", tmpl.generate().render())
 
@@ -283,10 +283,10 @@ class MsgDirectiveTestCase(unittest.TestCase):
             xmlns:i18n="http://genshi.edgewall.org/i18n">
           <i18n:msg>Please see <a href="help.html">Help</a></i18n:msg>
         </html>""")
-        gettext = lambda s: u"Für Details siehe bitte [1:Hilfe]"
+        gettext = lambda s: "Für Details siehe bitte [1:Hilfe]"
         translator = Translator(gettext)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           Für Details siehe bitte <a href="help.html">Hilfe</a>
         </html>""".encode('utf-8'), tmpl.generate().render(encoding='utf-8'))
 
@@ -317,11 +317,11 @@ class MsgDirectiveTestCase(unittest.TestCase):
         </html>""")
         translator = Translator(lambda msgid: {
             'A helpful paragraph': 'Ein hilfreicher Absatz',
-            'Click for help': u'Klicken für Hilfe',
-            'Please see [1:Help]': u'Siehe bitte [1:Hilfe]'
+            'Click for help': 'Klicken für Hilfe',
+            'Please see [1:Help]': 'Siehe bitte [1:Hilfe]'
         }[msgid])
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p title="Ein hilfreicher Absatz">Siehe bitte <a href="help.html" title="Klicken für Hilfe">Hilfe</a></p>
         </html>""", tmpl.generate().render(encoding=None))
 
@@ -352,11 +352,11 @@ class MsgDirectiveTestCase(unittest.TestCase):
         </html>""")
         translator = Translator(lambda msgid: {
             'A helpful paragraph': 'Ein hilfreicher Absatz',
-            'Click for help': u'Klicken für Hilfe',
-            'Please see [1:Help]': u'Siehe bitte [1:Hilfe]'
+            'Click for help': 'Klicken für Hilfe',
+            'Please see [1:Help]': 'Siehe bitte [1:Hilfe]'
         }[msgid])
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p title="Ein hilfreicher Absatz">Siehe bitte <a href="help.html" title="Klicken für Hilfe">Hilfe</a></p>
         </html>""", tmpl.generate(_=translator.translate).render(encoding=None))
 
@@ -384,11 +384,11 @@ class MsgDirectiveTestCase(unittest.TestCase):
           </i18n:msg>
         </html>""")
         translator = Translator(lambda msgid: {
-            'Click for help': u'Klicken für Hilfe',
-            'Please see [1:Help]': u'Siehe bitte [1:Hilfe]'
+            'Click for help': 'Klicken für Hilfe',
+            'Please see [1:Help]': 'Siehe bitte [1:Hilfe]'
         }[msgid])
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           Siehe bitte <a href="help.html" title="Klicken für Hilfe">Hilfe</a>
         </html>""", tmpl.generate().render(encoding=None))
 
@@ -413,10 +413,10 @@ class MsgDirectiveTestCase(unittest.TestCase):
             Please see <a href="help.html"><em>Help</em> page</a> for details.
           </p>
         </html>""")
-        gettext = lambda s: u"Für Details siehe bitte [1:[2:Hilfeseite]]."
+        gettext = lambda s: "Für Details siehe bitte [1:[2:Hilfeseite]]."
         translator = Translator(gettext)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p>Für Details siehe bitte <a href="help.html"><em>Hilfeseite</em></a>.</p>
         </html>""", tmpl.generate().render())
 
@@ -468,10 +468,10 @@ class MsgDirectiveTestCase(unittest.TestCase):
             Show me <input type="text" name="num" /> entries per page.
           </p>
         </html>""")
-        gettext = lambda s: u"[1:] Einträge pro Seite anzeigen."
+        gettext = lambda s: "[1:] Einträge pro Seite anzeigen."
         translator = Translator(gettext)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p><input type="text" name="num"/> Einträge pro Seite anzeigen.</p>
         </html>""", tmpl.generate().render())
 
@@ -495,10 +495,10 @@ class MsgDirectiveTestCase(unittest.TestCase):
             Please see <a href="help.html">Help</a> for <em>details</em>.
           </p>
         </html>""")
-        gettext = lambda s: u"Für [2:Details] siehe bitte [1:Hilfe]."
+        gettext = lambda s: "Für [2:Details] siehe bitte [1:Hilfe]."
         translator = Translator(gettext)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p>Für <em>Details</em> siehe bitte <a href="help.html">Hilfe</a>.</p>
         </html>""", tmpl.generate().render())
 
@@ -523,10 +523,10 @@ class MsgDirectiveTestCase(unittest.TestCase):
             Show me <input type="text" name="num" /> entries per page, starting at page <input type="text" name="num" />.
           </p>
         </html>""", encoding='utf-8')
-        gettext = lambda s: u"[1:] Einträge pro Seite, beginnend auf Seite [2:]."
+        gettext = lambda s: "[1:] Einträge pro Seite, beginnend auf Seite [2:]."
         translator = Translator(gettext)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p><input type="text" name="num"/> Eintr\u00E4ge pro Seite, beginnend auf Seite <input type="text" name="num"/>.</p>
         </html>""".encode('utf-8'), tmpl.generate().render(encoding='utf-8'))
 
@@ -550,7 +550,7 @@ class MsgDirectiveTestCase(unittest.TestCase):
             Hello, ${user.name}!
           </p>
         </html>""")
-        gettext = lambda s: u"Hallo, %(name)s!"
+        gettext = lambda s: "Hallo, %(name)s!"
         translator = Translator(gettext)
         translator.setup(tmpl)
         self.assertEqual("""<html>
@@ -564,10 +564,10 @@ class MsgDirectiveTestCase(unittest.TestCase):
             Hello, ${user.name}!
           </p>
         </html>""")
-        gettext = lambda s: u"%(name)s, sei gegrüßt!"
+        gettext = lambda s: "%(name)s, sei gegrüßt!"
         translator = Translator(gettext)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p>Jim, sei gegrüßt!</p>
         </html>""", tmpl.generate(user=dict(name='Jim')).render())
 
@@ -578,10 +578,10 @@ class MsgDirectiveTestCase(unittest.TestCase):
             Hello, <a href="#${anchor}">dude</a>!
           </p>
         </html>""")
-        gettext = lambda s: u"Sei gegrüßt, [1:Alter]!"
+        gettext = lambda s: "Sei gegrüßt, [1:Alter]!"
         translator = Translator(gettext)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p>Sei gegrüßt, <a href="#42">Alter</a>!</p>
         </html>""", tmpl.generate(anchor='42').render())
 
@@ -605,7 +605,7 @@ class MsgDirectiveTestCase(unittest.TestCase):
             Written by ${entry.author} at ${entry.time.strftime('%H:%M')}
           </p>
         </html>""")
-        gettext = lambda s: u"%(name)s schrieb dies um %(time)s"
+        gettext = lambda s: "%(name)s schrieb dies um %(time)s"
         translator = Translator(gettext)
         translator.setup(tmpl)
         entry = {
@@ -636,10 +636,10 @@ class MsgDirectiveTestCase(unittest.TestCase):
             Show me <input type="text" name="num" py:attrs="{'value': 'x'}" /> entries per page.
           </p>
         </html>""")
-        gettext = lambda s: u"[1:] Einträge pro Seite anzeigen."
+        gettext = lambda s: "[1:] Einträge pro Seite anzeigen."
         translator = Translator(gettext)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p><input type="text" name="num" value="x"/> Einträge pro Seite anzeigen.</p>
         </html>""", tmpl.generate().render())
 
@@ -668,7 +668,7 @@ class MsgDirectiveTestCase(unittest.TestCase):
             xmlns:i18n="http://genshi.edgewall.org/i18n">
           <p i18n:msg="" i18n:comment="As in foo bar">Foo</p>
         </html>""")
-        gettext = lambda s: u"Voh"
+        gettext = lambda s: "Voh"
         translator = Translator(gettext)
         translator.setup(tmpl)
         self.assertEqual("""<html>
@@ -691,14 +691,14 @@ class MsgDirectiveTestCase(unittest.TestCase):
             xmlns:i18n="http://genshi.edgewall.org/i18n">
           <p i18n:msg="" title="Foo bar">Foo</p>
         </html>""")
-        gettext = lambda s: u"Voh"
+        gettext = lambda s: "Voh"
         translator = Translator(DummyTranslations({
             'Foo': 'Voh',
-            'Foo bar': u'Voh bär'
+            'Foo bar': 'Voh bär'
         }))
         tmpl.filters.insert(0, translator)
         tmpl.add_directives(Translator.NAMESPACE, translator)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p title="Voh bär">Voh</p>
         </html>""", tmpl.generate().render())
 
@@ -738,11 +738,11 @@ class MsgDirectiveTestCase(unittest.TestCase):
           </i18n:msg>
         </html>""")
         translations = DummyTranslations({
-            'Changed %(date)s ago by %(author)s': u'Modificado à %(date)s por %(author)s'
+            'Changed %(date)s ago by %(author)s': 'Modificado à %(date)s por %(author)s'
         })
         translator = Translator(translations)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           Modificado à um dia por Pedro
         </html>""".encode('utf-8'), tmpl.generate(date='um dia', author="Pedro").render(encoding='utf-8'))
 
@@ -757,7 +757,7 @@ class MsgDirectiveTestCase(unittest.TestCase):
         messages = list(translator.extract(tmpl.stream))
         self.assertEqual(1, len(messages))
         self.assertEqual(
-            (3, None, u'[1:[2:Translation\\[\xa00\xa0\\]]: [3:One coin]]', []), messages[0]
+            (3, None, '[1:[2:Translation\\[\xa00\xa0\\]]: [3:One coin]]', []), messages[0]
         )
 
     def test_i18n_msg_ticket_251_translate(self):
@@ -766,12 +766,12 @@ class MsgDirectiveTestCase(unittest.TestCase):
           <p i18n:msg=""><tt><b>Translation[&nbsp;0&nbsp;]</b>: <em>One coin</em></tt></p>
         </html>""")
         translations = DummyTranslations({
-            u'[1:[2:Translation\\[\xa00\xa0\\]]: [3:One coin]]':
-                u'[1:[2:Trandução\\[\xa00\xa0\\]]: [3:Uma moeda]]'
+            '[1:[2:Translation\\[\xa00\xa0\\]]: [3:One coin]]':
+                '[1:[2:Trandução\\[\xa00\xa0\\]]: [3:Uma moeda]]'
         })
         translator = Translator(translations)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p><tt><b>Trandução[ 0 ]</b>: <em>Uma moeda</em></tt></p>
         </html>""".encode('utf-8'), tmpl.generate().render(encoding='utf-8'))
 
@@ -820,12 +820,12 @@ class MsgDirectiveTestCase(unittest.TestCase):
             'before. For questions about installation\n            and '
             'configuration of Trac, please try the\n            '
             '[3:mailing list]\n            instead of filing a ticket.':
-                u'Antes de o fazer, porém,\n            '
-                u'[1:por favor tente [2:procurar]\n            por problemas semelhantes], uma vez que '
-                u'é muito provável que este problema\n            já tenha sido reportado '
-                u'anteriormente. Para questões relativas à instalação\n            e '
-                u'configuração do Trac, por favor tente a\n            '
-                u'[3:mailing list]\n            em vez de criar um assunto.'
+                'Antes de o fazer, porém,\n            '
+                '[1:por favor tente [2:procurar]\n            por problemas semelhantes], uma vez que '
+                'é muito provável que este problema\n            já tenha sido reportado '
+                'anteriormente. Para questões relativas à instalação\n            e '
+                'configuração do Trac, por favor tente a\n            '
+                '[3:mailing list]\n            em vez de criar um assunto.'
         })
         translator = Translator(translations)
         translator.setup(tmpl)
@@ -833,7 +833,7 @@ class MsgDirectiveTestCase(unittest.TestCase):
         self.assertEqual(1, len(messages))
         ctx = Context()
         ctx.push({'trac': {'homepage': 'http://trac.edgewall.org/'}})
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p>Antes de o fazer, porém,
             <strong>por favor tente <a href="http://trac.edgewall.org/search?ticket=yes&amp;noquickjump=1&amp;q=q">procurar</a>
             por problemas semelhantes</strong>, uma vez que é muito provável que este problema
@@ -856,8 +856,8 @@ class MsgDirectiveTestCase(unittest.TestCase):
         translations = DummyTranslations({
             '[1:Note:] This repository is defined in\n            '
             '[2:[3:trac.ini]]\n            and cannot be edited on this page.':
-                u'[1:Nota:] Este repositório está definido em \n           '
-                u'[2:[3:trac.ini]]\n            e não pode ser editado nesta página.',
+                '[1:Nota:] Este repositório está definido em \n           '
+                '[2:[3:trac.ini]]\n            e não pode ser editado nesta página.',
         })
         translator = Translator(translations)
         translator.setup(tmpl)
@@ -868,7 +868,7 @@ class MsgDirectiveTestCase(unittest.TestCase):
             '[2:[3:trac.ini]]\n            and cannot be edited on this page.',
             messages[0][2]
         )
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p class="hint"><strong>Nota:</strong> Este repositório está definido em
            <code><a href="href.wiki(TracIni)">trac.ini</a></code>
             e não pode ser editado nesta página.</p>
@@ -933,7 +933,7 @@ class MsgDirectiveTestCase(unittest.TestCase):
             xmlns:i18n="http://genshi.edgewall.org/i18n">
           <h1 i18n:msg="name">text <a>$name</a></h1>
         </html>""")
-        gettext = lambda s: u'head [1:%(name)s] tail'
+        gettext = lambda s: 'head [1:%(name)s] tail'
         translator = Translator(gettext)
         translator.setup(tmpl)
         self.assertEqual("""<html>
@@ -1342,12 +1342,12 @@ class ChooseDirectiveTestCase(unittest.TestCase):
         })
         translator = Translator(translations)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p title="Sachen">
             Da ist <a href="/things" title="Sache betrachten">1 Sache</a>.
           </p>
         </html>""", tmpl.generate(link="/things", num=1).render(encoding=None))
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
           <p title="Sachen">
             Da sind <a href="/things" title="Sachen betrachten">3 Sachen</a>.
           </p>
@@ -1399,10 +1399,10 @@ class ChooseDirectiveTestCase(unittest.TestCase):
         })
         translator = Translator(translations)
         translator.setup(tmpl)
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
             <p title="Sachen">Da ist <a href="/things" title="Sache betrachten">1 Sache</a>.</p>
         </html>""", tmpl.generate(link="/things", num=1).render(encoding=None))
-        self.assertEqual(u"""<html>
+        self.assertEqual("""<html>
             <p title="Sachen">Da sind <a href="/things" title="Sachen betrachten">3 Sachen</a>.</p>
         </html>""", tmpl.generate(link="/things", num=3).render(encoding=None))
 

@@ -46,7 +46,7 @@ class AbstractTemplateEnginePlugin(object):
 
         self.default_encoding = options.get('genshi.default_encoding', None)
         auto_reload = options.get('genshi.auto_reload', '1')
-        if isinstance(auto_reload, basestring):
+        if isinstance(auto_reload, str):
             auto_reload = auto_reload.lower() in ('1', 'on', 'yes', 'true')
         search_path = [p for p in
                        options.get('genshi.search_path', '').split(':') if p]
@@ -168,7 +168,7 @@ class TextTemplateEnginePlugin(AbstractTemplateEnginePlugin):
             options = {}
 
         new_syntax = options.get('genshi.new_text_syntax')
-        if isinstance(new_syntax, basestring):
+        if isinstance(new_syntax, str):
             new_syntax = new_syntax.lower() in ('1', 'on', 'yes', 'true')
         if new_syntax:
             self.template_class = NewTextTemplate

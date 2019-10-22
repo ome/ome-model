@@ -217,7 +217,7 @@ class TemplateLoader(object):
                 raise TemplateError('Search path for templates not configured')
 
             for loadfunc in search_path:
-                if isinstance(loadfunc, basestring):
+                if isinstance(loadfunc, str):
                     loadfunc = directory(loadfunc)
                 try:
                     filepath, filename, fileobj, uptodate = loadfunc(filename)
@@ -327,9 +327,9 @@ class TemplateLoader(object):
         :rtype: ``function``
         """
         def _dispatch_by_prefix(filename):
-            for prefix, delegate in delegates.items():
+            for prefix, delegate in list(delegates.items()):
                 if filename.startswith(prefix):
-                    if isinstance(delegate, basestring):
+                    if isinstance(delegate, str):
                         delegate = directory(delegate)
                     filepath, _, fileobj, uptodate = delegate(
                         filename[len(prefix):].lstrip('/\\')

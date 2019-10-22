@@ -378,7 +378,7 @@ class ASTUpgrader(object):
     def visit_Const(self, node):
         if node.value is None: # appears in slices
             return None
-        elif isinstance(node.value, basestring):
+        elif isinstance(node.value, str):
             return self._new(_ast.Str, node.value)
         else:
             return self._new(_ast.Num, node.value)

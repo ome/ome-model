@@ -71,7 +71,7 @@ def get_serializer(method='xml', **kwargs):
     :see: `XMLSerializer`, `XHTMLSerializer`, `HTMLSerializer`, `TextSerializer`
     :since: version 0.4.1
     """
-    if isinstance(method, basestring):
+    if isinstance(method, str):
         method = {'xml':   XMLSerializer,
                   'xhtml': XHTMLSerializer,
                   'html':  HTMLSerializer,
@@ -581,7 +581,7 @@ class TextSerializer(object):
                 data = event[1]
                 if strip_markup and type(data) is Markup:
                     data = data.striptags().stripentities()
-                yield unicode(data)
+                yield str(data)
 
 
 class EmptyTagFilter(object):
@@ -636,7 +636,7 @@ class NamespaceFlattener(object):
         self.cache = cache
 
     def __call__(self, stream):
-        prefixes = dict([(v, [k]) for k, v in self.prefixes.items()])
+        prefixes = dict([(v, [k]) for k, v in list(self.prefixes.items())])
         namespaces = {XML_NAMESPACE.uri: ['xml']}
         _emit, _get, cache = _prepare_cache(self.cache)
         def _push_ns(prefix, uri):
@@ -666,7 +666,7 @@ class NamespaceFlattener(object):
             while 1:
                 val += 1
                 yield 'ns%d' % val
-        _gen_prefix = _gen_prefix().next
+        _gen_prefix = _gen_prefix().__next__
 
         for kind, data, pos in stream:
             if kind is TEXT and isinstance(data, Markup):
@@ -822,7 +822,7 @@ class DocTypeInserter(object):
 
         :param doctype: DOCTYPE as a string or DocType object.
         """
-        if isinstance(doctype, basestring):
+        if isinstance(doctype, str):
             doctype = DocType.get(doctype)
         self.doctype_event = (DOCTYPE, doctype, (None, -1, -1))
 

@@ -115,7 +115,7 @@ class PushBackStream(object):
                 yield peek
             else:
                 try:
-                    event = self.stream.next()
+                    event = next(self.stream)
                     yield event
                 except StopIteration:
                     if self.peek is None:
@@ -730,7 +730,7 @@ class SelectTransformation(object):
         variables = {}
         test = self.path.test()
         stream = iter(stream)
-        next = stream.next
+        next = stream.__next__
         for mark, event in stream:
             if mark is None:
                 yield mark, event
@@ -764,7 +764,7 @@ class SelectTransformation(object):
                 yield OUTSIDE, result
             elif result:
                 # XXX Assume everything else is "text"?
-                yield None, (TEXT, unicode(result), (None, -1, -1))
+                yield None, (TEXT, str(result), (None, -1, -1))
             else:
                 yield None, event
 
@@ -990,7 +990,7 @@ class SubstituteTransformation(object):
         :param replace: Replacement pattern.
         :param count: Number of replacements to make in each text fragment.
         """
-        if isinstance(pattern, basestring):
+        if isinstance(pattern, str):
             self.pattern = re.compile(pattern)
         else:
             self.pattern = pattern

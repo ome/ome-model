@@ -271,7 +271,7 @@ def _ensure(stream):
     """Ensure that every item on the stream is actually a markup event."""
     stream = iter(stream)
     try:
-        event = stream.next()
+        event = next(stream)
     except StopIteration:
         return
 
@@ -282,7 +282,7 @@ def _ensure(stream):
             if hasattr(event, 'totuple'):
                 event = event.totuple()
             else:
-                event = TEXT, unicode(event), (None, -1, -1)
+                event = TEXT, str(event), (None, -1, -1)
             yield event
         return
 
@@ -411,7 +411,7 @@ class Attrs(tuple):
         :return: a new instance with the attribute removed
         :rtype: `Attrs`
         """
-        if isinstance(names, basestring):
+        if isinstance(names, str):
             names = (names,)
         return Attrs([(name, val) for name, val in self if name not in names])
 
@@ -445,33 +445,33 @@ class Attrs(tuple):
         return TEXT, ''.join([x[1] for x in self]), (None, -1, -1)
 
 
-class Markup(unicode):
+class Markup(str):
     """Marks a string as being safe for inclusion in HTML/XML output without
     needing to be escaped.
     """
     __slots__ = []
 
     def __add__(self, other):
-        return Markup(unicode.__add__(self, escape(other)))
+        return Markup(str.__add__(self, escape(other)))
 
     def __radd__(self, other):
-        return Markup(unicode.__add__(escape(other), self))
+        return Markup(str.__add__(escape(other), self))
 
     def __mod__(self, args):
         if isinstance(args, dict):
-            args = dict(zip(args.keys(), map(escape, args.values())))
+            args = dict(list(zip(list(args.keys()), list(map(escape, list(args.values()))))))
         elif isinstance(args, (list, tuple)):
             args = tuple(map(escape, args))
         else:
             args = escape(args)
-        return Markup(unicode.__mod__(self, args))
+        return Markup(str.__mod__(self, args))
 
     def __mul__(self, num):
-        return Markup(unicode.__mul__(self, num))
+        return Markup(str.__mul__(self, num))
     __rmul__ = __mul__
 
     def __repr__(self):
-        return "<%s %s>" % (type(self).__name__, unicode.__repr__(self))
+        return "<%s %s>" % (type(self).__name__, str.__repr__(self))
 
     def join(self, seq, escape_quotes=True):
         """Return a `Markup` object which is the concatenation of the strings
@@ -488,7 +488,7 @@ class Markup(unicode):
         :rtype: `Markup`
         :see: `escape`
         """
-        return Markup(unicode.join(self, [escape(item, quotes=escape_quotes)
+        return Markup(str.join(self, [escape(item, quotes=escape_quotes)
                                           for item in seq]))
 
     @classmethod
@@ -538,7 +538,7 @@ class Markup(unicode):
         """
         if not self:
             return ''
-        return unicode(self).replace('&#34;', '"') \
+        return str(self).replace('&#34;', '"') \
                             .replace('&gt;', '>') \
                             .replace('&lt;', '<') \
                             .replace('&amp;', '&')
@@ -652,7 +652,7 @@ class Namespace(object):
         self.uri = uri
 
     def __init__(self, uri):
-        self.uri = unicode(uri)
+        self.uri = str(uri)
 
     def __contains__(self, qname):
         return qname.namespace == self.uri
@@ -691,7 +691,7 @@ class Namespace(object):
 XML_NAMESPACE = Namespace('http://www.w3.org/XML/1998/namespace')
 
 
-class QName(unicode):
+class QName(str):
     """A qualified element or attribute name.
     
     The unicode value of instances of this class contains the qualified name of
@@ -729,11 +729,11 @@ class QName(unicode):
         qname = qname.lstrip('{')
         parts = qname.split('}', 1)
         if len(parts) > 1:
-            self = unicode.__new__(cls, '{%s' % qname)
-            self.namespace, self.localname = map(unicode, parts)
+            self = str.__new__(cls, '{%s' % qname)
+            self.namespace, self.localname = list(map(str, parts))
         else:
-            self = unicode.__new__(cls, qname)
-            self.namespace, self.localname = None, unicode(qname)
+            self = str.__new__(cls, qname)
+            self.namespace, self.localname = None, str(qname)
         return self
 
     def __getnewargs__(self):

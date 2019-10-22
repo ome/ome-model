@@ -40,7 +40,7 @@ else:
 
 if IS_PYTHON2:
     def isstring(obj):
-        return isinstance(obj, basestring)
+        return isinstance(obj, str)
 else:
     def isstring(obj):
         return isinstance(obj, str)
@@ -48,9 +48,9 @@ else:
 # We need to differentiate between StringIO and BytesIO in places
 
 if IS_PYTHON2:
-    from StringIO import StringIO
+    from io import StringIO
     try:
-        from cStringIO import StringIO as BytesIO
+        from io import StringIO as BytesIO
     except ImportError:
         BytesIO = StringIO
 else:
@@ -124,7 +124,7 @@ try:
     next = next
 except NameError:
     def next(iterator):
-        return iterator.next()
+        return iterator.__next__()
 
 # Compatibility fallback implementations for Python < 2.5
 

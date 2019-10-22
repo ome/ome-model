@@ -162,7 +162,7 @@ class NewTextTemplate(Template):
         depth = 0
 
         source = source.read()
-        if not isinstance(source, unicode):
+        if not isinstance(source, str):
             source = source.decode(encoding or 'utf-8', 'replace')
         offset = 0
         lineno = 1
@@ -201,7 +201,7 @@ class NewTextTemplate(Template):
                 try:
                     suite = Suite(value, self.filepath, lineno,
                                   lookup=self.lookup)
-                except SyntaxError, err:
+                except SyntaxError as err:
                     raise TemplateSyntaxError(err, self.filepath,
                                               lineno + (err.lineno or 1) - 1)
                 pos = (self.filename, lineno, 0)
@@ -279,7 +279,7 @@ class OldTextTemplate(Template):
         depth = 0
 
         source = source.read()
-        if not isinstance(source, unicode):
+        if not isinstance(source, str):
             source = source.decode(encoding or 'utf-8', 'replace')
         offset = 0
         lineno = 1
