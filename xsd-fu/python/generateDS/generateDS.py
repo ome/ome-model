@@ -307,7 +307,7 @@ def dbgprint(level, msg):
 
 def pplist(lst):
     for count, item in enumerate(lst):
-        print('%d. %s' % (count, item))
+        print(('%d. %s' % (count, item)))
 
 
 
@@ -4258,10 +4258,10 @@ def parseAndGenerate(outfileName, subclassFilename, prefix,
 
 def debug_show_elements(root):
     #print 'ElementDict:', ElementDict
-    print('=' * 50)
+    print(('=' * 50))
     for name, obj in six.iteritems(ElementDict):
-        print('element:', name, obj.getName(), obj.type)
-    print('=' * 50)
+        print(('element:', name, obj.getName(), obj.type))
+    print(('=' * 50))
     #ipshell('debug')
 ##     root.show(sys.stdout, 0)
 ##     print '=' * 50
@@ -4369,7 +4369,7 @@ def main():
             if MemberSpecs not in ('list', 'dict', ):
                 raise RuntimeError('Option --member-specs must be "list" or "dict".')
     if showVersion:
-        print('generateDS.py version %s' % VERSION)
+        print(('generateDS.py version %s' % VERSION))
         sys.exit(0)
     XsdNameSpace = nameSpace
     Namespacedef = namespacedef
