@@ -38,11 +38,7 @@ Because the XPath engine operates on markup streams (as opposed to tree
 structures), it only implements a subset of the full XPath 1.0 language.
 """
 
-
 from collections import deque
-import six
-from six.moves import range
-from six.moves import zip
 try:
     reduce # builtin in Python < 3
 except NameError:
@@ -580,7 +576,7 @@ class Path(object):
             variables = {}
         stream = iter(stream)
         def _generate(stream=stream, ns=namespaces, vs=variables):
-            next = stream.__next__
+            next = stream.next
             test = self.test()
             for event in stream:
                 result = test(event, ns, vs)
@@ -936,13 +932,13 @@ def as_float(value):
     return float(as_scalar(value))
 
 def as_long(value):
-    return int(as_scalar(value))
+    return long(as_scalar(value))
 
 def as_string(value):
     value = as_scalar(value)
     if value is False:
         return ''
-    return six.text_type(value)
+    return unicode(value)
 
 def as_bool(value):
     return bool(as_scalar(value))
@@ -1350,8 +1346,8 @@ class TranslateFunction(Function):
         string = as_string(self.string(kind, data, pos, namespaces, variables))
         fromchars = as_string(self.fromchars(kind, data, pos, namespaces, variables))
         tochars = as_string(self.tochars(kind, data, pos, namespaces, variables))
-        table = dict(list(zip([ord(c) for c in fromchars],
-                         [ord(c) for c in tochars])))
+        table = dict(zip([ord(c) for c in fromchars],
+                         [ord(c) for c in tochars]))
         return string.translate(table)
     def __repr__(self):
         return 'translate(%r, %r, %r)' % (self.string, self.fromchars,

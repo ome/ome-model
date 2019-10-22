@@ -13,7 +13,6 @@
 
 """Implementation of the template engine."""
 
-
 from genshi.template.base import Context, Template, TemplateError, \
                                  TemplateRuntimeError, TemplateSyntaxError, \
                                  BadDirectiveError

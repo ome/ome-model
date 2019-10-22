@@ -15,14 +15,12 @@
 streams.
 """
 
-
 from itertools import chain
 import re
 
 from genshi.core import escape, Attrs, Markup, Namespace, QName, StreamEventKind
 from genshi.core import START, END, TEXT, XML_DECL, DOCTYPE, START_NS, END_NS, \
                         START_CDATA, END_CDATA, PI, COMMENT, XML_NAMESPACE
-import six
 
 __all__ = ['encode', 'get_serializer', 'DocType', 'XMLSerializer',
            'XHTMLSerializer', 'HTMLSerializer', 'TextSerializer']
@@ -73,7 +71,7 @@ def get_serializer(method='xml', **kwargs):
     :see: `XMLSerializer`, `XHTMLSerializer`, `HTMLSerializer`, `TextSerializer`
     :since: version 0.4.1
     """
-    if isinstance(method, six.string_types):
+    if isinstance(method, basestring):
         method = {'xml':   XMLSerializer,
                   'xhtml': XHTMLSerializer,
                   'html':  HTMLSerializer,
@@ -583,7 +581,7 @@ class TextSerializer(object):
                 data = event[1]
                 if strip_markup and type(data) is Markup:
                     data = data.striptags().stripentities()
-                yield six.text_type(data)
+                yield unicode(data)
 
 
 class EmptyTagFilter(object):
@@ -638,7 +636,7 @@ class NamespaceFlattener(object):
         self.cache = cache
 
     def __call__(self, stream):
-        prefixes = dict([(v, [k]) for k, v in list(self.prefixes.items())])
+        prefixes = dict([(v, [k]) for k, v in self.prefixes.items()])
         namespaces = {XML_NAMESPACE.uri: ['xml']}
         _emit, _get, cache = _prepare_cache(self.cache)
         def _push_ns(prefix, uri):
@@ -668,7 +666,7 @@ class NamespaceFlattener(object):
             while 1:
                 val += 1
                 yield 'ns%d' % val
-        _gen_prefix = _gen_prefix().__next__
+        _gen_prefix = _gen_prefix().next
 
         for kind, data, pos in stream:
             if kind is TEXT and isinstance(data, Markup):
@@ -824,7 +822,7 @@ class DocTypeInserter(object):
 
         :param doctype: DOCTYPE as a string or DocType object.
         """
-        if isinstance(doctype, six.string_types):
+        if isinstance(doctype, basestring):
             doctype = DocType.get(doctype)
         self.doctype_event = (DOCTYPE, doctype, (None, -1, -1))
 

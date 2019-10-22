@@ -48,14 +48,12 @@ box, but custom transformations can be added easily.
 :since: version 0.5
 """
 
-
 import re
 import sys
 
 from genshi.builder import Element
 from genshi.core import Stream, Attrs, QName, TEXT, START, END, _ensure, Markup
 from genshi.path import Path
-import six
 
 __all__ = ['Transformer', 'StreamBuffer', 'InjectorTransformation', 'ENTER',
            'EXIT', 'INSIDE', 'OUTSIDE', 'BREAK']
@@ -117,11 +115,11 @@ class PushBackStream(object):
                 yield peek
             else:
                 try:
-                    event = next(self.stream)
+                    event = self.stream.next()
                     yield event
                 except StopIteration:
                     if self.peek is None:
-                        raise
+                        return
 
 
 class Transformer(object):
@@ -732,7 +730,7 @@ class SelectTransformation(object):
         variables = {}
         test = self.path.test()
         stream = iter(stream)
-        next = stream.__next__
+        next = stream.next
         for mark, event in stream:
             if mark is None:
                 yield mark, event
@@ -766,7 +764,7 @@ class SelectTransformation(object):
                 yield OUTSIDE, result
             elif result:
                 # XXX Assume everything else is "text"?
-                yield None, (TEXT, six.text_type(result), (None, -1, -1))
+                yield None, (TEXT, unicode(result), (None, -1, -1))
             else:
                 yield None, event
 
@@ -992,7 +990,7 @@ class SubstituteTransformation(object):
         :param replace: Replacement pattern.
         :param count: Number of replacements to make in each text fragment.
         """
-        if isinstance(pattern, six.string_types):
+        if isinstance(pattern, basestring):
             self.pattern = re.compile(pattern)
         else:
             self.pattern = pattern

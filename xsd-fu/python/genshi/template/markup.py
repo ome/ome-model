@@ -13,7 +13,6 @@
 
 """Markup templating engine."""
 
-
 from itertools import chain
 
 from genshi.core import Attrs, Markup, Namespace, Stream, StreamEventKind
@@ -94,7 +93,7 @@ class MarkupTemplate(Template):
                 try:
                     suite = Suite(data[1], self.filepath, pos[1],
                                   lookup=self.lookup)
-                except SyntaxError as err:
+                except SyntaxError, err:
                     raise TemplateSyntaxError(err, self.filepath,
                                               pos[1] + (err.lineno or 1) - 1,
                                               pos[2] + (err.offset or 0))
@@ -312,7 +311,7 @@ class MarkupTemplate(Template):
 
         def _strip(stream, append):
             depth = 1
-            next = stream.__next__
+            next = stream.next
             while 1:
                 event = next()
                 if event[0] is START:

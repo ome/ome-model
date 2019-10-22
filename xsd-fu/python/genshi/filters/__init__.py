@@ -13,7 +13,6 @@
 
 """Implementation of a number of stream filters."""
 
-
 from genshi.filters.html import HTMLFormFiller, HTMLSanitizer
 from genshi.filters.i18n import Translator
 from genshi.filters.transform import Transformer

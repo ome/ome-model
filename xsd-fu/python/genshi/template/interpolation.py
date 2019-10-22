@@ -15,7 +15,6 @@
 parts that are literal strings, and others that are Python expressions.
 """
 
-
 from itertools import chain
 import os
 import re
@@ -78,7 +77,7 @@ def interpolate(text, filepath=None, lineno=-1, offset=0, lookup='strict'):
                     expr = Expression(chunk.strip(), pos[0], pos[1],
                                       lookup=lookup)
                     yield EXPR, expr, tuple(pos)
-                except SyntaxError as err:
+                except SyntaxError, err:
                     raise TemplateSyntaxError(err, filepath, pos[1],
                                               pos[2] + (err.offset or 0))
         else:

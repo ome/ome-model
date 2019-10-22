@@ -11,7 +11,6 @@
 # individuals. For the exact contribution history, see the revision
 # history and logs, available at http://genshi.edgewall.org/log/.
 
-
 import doctest
 import sys
 import unittest
@@ -132,7 +131,7 @@ class InterpolateTestCase(unittest.TestCase):
     def test_interpolate_full_mismatched_brackets(self):
         try:
             list(interpolate('${{1:2}'))
-        except TemplateSyntaxError as e:
+        except TemplateSyntaxError, e:
             pass
         else:
             self.fail('Expected TemplateSyntaxError')

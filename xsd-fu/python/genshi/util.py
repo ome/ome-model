@@ -13,9 +13,10 @@
 
 """Various utility classes and functions."""
 
-
-import six.moves.html_entities as entities
+import htmlentitydefs as entities
 import re
+
+from compat import any, all, stringrepr
 
 __docformat__ = 'restructuredtext en'
 
@@ -192,17 +193,17 @@ def stripentities(text, keepxmlentities=False):
     >>> stripentities('1 &lt; 2')
     u'1 < 2'
     >>> stripentities('more &hellip;')
-    u'more \\u2026'
+    u'more \u2026'
     >>> stripentities('&#8230;')
-    u'\\u2026'
+    u'\u2026'
     >>> stripentities('&#x2026;')
-    u'\\u2026'
+    u'\u2026'
     
     If the `keepxmlentities` parameter is provided and is a truth value, the
     core XML entities (&amp;, &apos;, &gt;, &lt; and &quot;) are left intact.
     
     >>> stripentities('1 &lt; 2 &hellip;', keepxmlentities=True)
-    u'1 &lt; 2 \\u2026'
+    u'1 &lt; 2 \u2026'
     """
     def _replace_entity(match):
         if match.group(1): # numeric entity
@@ -211,13 +212,13 @@ def stripentities(text, keepxmlentities=False):
                 ref = int(ref[1:], 16)
             else:
                 ref = int(ref, 10)
-            return chr(ref)
+            return unichr(ref)
         else: # character entity
             ref = match.group(2)
             if keepxmlentities and ref in ('amp', 'apos', 'gt', 'lt', 'quot'):
                 return '&%s;' % ref
             try:
-                return chr(entities.name2codepoint[ref])
+                return unichr(entities.name2codepoint[ref])
             except KeyError:
                 if keepxmlentities:
                     return '&amp;%s;' % ref
