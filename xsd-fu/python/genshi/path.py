@@ -38,7 +38,11 @@ Because the XPath engine operates on markup streams (as opposed to tree
 structures), it only implements a subset of the full XPath 1.0 language.
 """
 
+from __future__ import absolute_import
 from collections import deque
+import six
+from six.moves import range
+from six.moves import zip
 try:
     reduce # builtin in Python < 3
 except NameError:
@@ -932,13 +936,13 @@ def as_float(value):
     return float(as_scalar(value))
 
 def as_long(value):
-    return long(as_scalar(value))
+    return int(as_scalar(value))
 
 def as_string(value):
     value = as_scalar(value)
     if value is False:
         return ''
-    return unicode(value)
+    return six.text_type(value)
 
 def as_bool(value):
     return bool(as_scalar(value))
@@ -1008,7 +1012,7 @@ class QualifiedNameTest(object):
         qname = QName('%s}%s' % (namespaces.get(self.prefix), self.name))
         if kind is START:
             if self.principal_type is ATTRIBUTE and qname in data[1]:
-                return Attrs([(self.name, data[1].get(self.name))])
+                return Attrs([(qname, data[1].get(qname))])
             else:
                 return data[0] == qname
     def __repr__(self):
@@ -1346,8 +1350,8 @@ class TranslateFunction(Function):
         string = as_string(self.string(kind, data, pos, namespaces, variables))
         fromchars = as_string(self.fromchars(kind, data, pos, namespaces, variables))
         tochars = as_string(self.tochars(kind, data, pos, namespaces, variables))
-        table = dict(zip([ord(c) for c in fromchars],
-                         [ord(c) for c in tochars]))
+        table = dict(list(zip([ord(c) for c in fromchars],
+                         [ord(c) for c in tochars])))
         return string.translate(table)
     def __repr__(self):
         return 'translate(%r, %r, %r)' % (self.string, self.fromchars,

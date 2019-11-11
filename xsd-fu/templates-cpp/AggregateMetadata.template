@@ -179,7 +179,7 @@
     return False
 
   def sorted_properties(o):
-    return sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
+    return sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name)
 
   def accessor_string(name, max_occurs, level, concreteName=None):
     """Makes a C++ method accessor string from an index name."""
@@ -656,7 +656,7 @@ namespace ome
         // -- Entity counting (code generated definitions) --
 
 {% end debug %}\
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if o.langBaseType is not None %}\
 {% if fu.SOURCE_TYPE == "header" %}\
@@ -666,17 +666,17 @@ namespace ome
 {% end debug %}\
         // Documented in base class.
         void
-        set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])});
+        set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])});
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       void
-      AggregateMetadata::set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])})
+      AggregateMetadata::set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])})
       {
         for (auto& i : delegates)
           {
             std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(i);
             if (store)
-              store->set${o.name}Value(value, ${indexes_name_string(indexes[o.name].items()[0][1])});
+              store->set${o.name}Value(value, ${indexes_name_string(list(indexes[o.name].values())[0])});
           }
         throw MetadataException("AggregateMetadata", "set${o.name}Value",
                                 "no delegate MetadataStore implementation");
@@ -685,17 +685,17 @@ namespace ome
 
 {% if fu.SOURCE_TYPE == "header" %}\
         ${o.langBaseType}
-        get${o.name}Value(${indexes_string(indexes[o.name].items()[0][1])}) const;
+        get${o.name}Value(${indexes_string(list(indexes[o.name].values())[0])}) const;
 {% end header %}\
 {% if fu.SOURCE_TYPE == "source" %}\
       ${o.langBaseType}
-      AggregateMetadata::get${o.name}Value(${indexes_string(indexes[o.name].items()[0][1])}) const
+      AggregateMetadata::get${o.name}Value(${indexes_string(list(indexes[o.name].values())[0])}) const
       {
         for (const auto& i : delegates)
           {
             std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(i);
             if (retrieve)
-              return retrieve->get${o.name}Value(${indexes_name_string(indexes[o.name].items()[0][1])});
+              return retrieve->get${o.name}Value(${indexes_name_string(list(indexes[o.name].values())[0])});
           }
         throw MetadataException("AggregateMetadata", "get${o.name}Value",
                                 "no delegate MetadataRetrieve implementation");
@@ -811,7 +811,7 @@ ${counter(k, o, v)}\
       }
 {% end source %}\
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}
 {% if debug %}\
@@ -825,7 +825,7 @@ ${counter(k, o, v)}\
 {% end debug %}\
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% if debug %}\
         // ${prop.minOccurs}:${prop.maxOccurs}
         // Is multi path? ${is_multi_path[o.name]}
@@ -866,7 +866,7 @@ ${getter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\
@@ -997,7 +997,7 @@ ${getter(k, o, prop, v)}\
       }
 {% end source %}\
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}
 {% if debug %}\
@@ -1010,7 +1010,7 @@ ${getter(k, o, prop, v)}\
 {% end debug %}\
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% if debug %}\
         // ${prop.minOccurs}:${prop.maxOccurs}
         // Is multi path? ${is_multi_path[o.name]}
@@ -1051,7 +1051,7 @@ ${setter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\

@@ -25,6 +25,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import absolute_import
+from collections import OrderedDict
 import logging
 import re
 
@@ -474,7 +476,7 @@ class OMEModelProperty(OMEModelEntity):
     def _get_concreteClasses(self):
         returnList = []
         if self.model.opts.lang.hasSubstitutionGroup(self.name):
-            for o in sorted(self.model.objects.values(), lambda x, y: cmp(x.name, y.name)):
+            for o in sorted(list(self.model.objects.values()), key=lambda x: x.name):
                 if o.parentName == self.name:
                     returnList.append(o.name)
         return returnList
@@ -615,34 +617,34 @@ class OMEModelProperty(OMEModelEntity):
                 ns_sep = ' ' + ns_sep
             if (self.model.opts.lang.hasFundamentalType(self.langType) and
                     self.minOccurs > 0):
-                itype = {' const': self.langTypeNS}
+                itype = OrderedDict([(' const', self.langTypeNS)])
             elif self.hasUnitsCompanion:
                 qtype = self.langTypeNS
                 if self.minOccurs == 0:
                     if self.maxOccurs == 1:
-                        itype = {' const': "const std::shared_ptr<%s>&" % qtype,
-                                 '': "std::shared_ptr<%s>&" % qtype}
+                        itype = OrderedDict([('', "std::shared_ptr<%s>&" % qtype),
+                                             (' const', "const std::shared_ptr<%s>&" % qtype)])
                     else:
-                        itype = {' const': "const std::vector<%s>&" % qtype,
-                                 '': "std::vector<%s>&" % qtype}
+                        itype = OrderedDict([('', "std::vector<%s>&" % qtype),
+                                             (' const', "const std::vector<%s>&" % qtype)])
                 elif self.minOccurs == 0 and self.maxOccurs == 1:
-                    itype = {' const': "const %s&" % qtype,
-                             '': "%s&" % qtype}
+                    itype = OrderedDict([('', "%s&" % qtype),
+                                         (' const', "const %s&" % qtype)])
                 else:
-                    itype = {' const': "const std::vector<%s>&" % qtype,
-                             '': "std::vector<%s>&" % qtype}
+                    itype = OrderedDict([('', "std::vector<%s>&" % qtype),
+                                         (' const', "const std::vector<%s>&" % qtype)])
             elif self.isEnumeration:
                 if self.minOccurs == 0:
-                    itype = {' const': "const std::shared_ptr<%s>"
-                             % ns_sep,
-                             '':       "std::shared_ptr<%s>"
-                             % ns_sep}
+                    itype = OrderedDict([('',       "std::shared_ptr<%s>"
+                                          % ns_sep),
+                                         (' const', "const std::shared_ptr<%s>"
+                                          % ns_sep)])
                 else:
-                    itype = {' const': "const %s&" % self.langTypeNS,
-                             '':       "%s&" % self.langTypeNS}
+                    itype = OrderedDict([('',       "%s&" % self.langTypeNS),
+                                         (' const', "const %s&" % self.langTypeNS)])
             elif self.isReference or self.isBackReference:
-                itype = {' const': "const std::weak_ptr<%s>" % ns_sep,
-                         '':       "std::weak_ptr<%s>" % ns_sep}
+                itype = OrderedDict([('',       "std::weak_ptr<%s>" % ns_sep),
+                                     (' const', "const std::weak_ptr<%s>" % ns_sep)])
             elif self.maxOccurs == 1 and (
                     not self.parent.isAbstract or
                     self.isAttribute or not self.isComplex() or
@@ -650,21 +652,21 @@ class OMEModelProperty(OMEModelEntity):
                 if self.minOccurs == 0 or (
                         not self.model.opts.lang.hasPrimitiveType(
                             self.langType) and not self.isEnumeration):
-                    itype = {' const':
-                             "const std::shared_ptr<%s>"
-                             % ns_sep,
-                             '':
-                             "std::shared_ptr<%s>"
-                             % ns_sep}
+                    itype = OrderedDict([('',
+                                          "std::shared_ptr<%s>"
+                                          % ns_sep),
+                                         (' const',
+                                          "const std::shared_ptr<%s>"
+                                          % ns_sep)])
                 else:
-                    itype = {' const': "const %s&" % self.langTypeNS}
+                    itype = OrderedDict([(' const', "const %s&" % self.langTypeNS)])
             elif self.maxOccurs > 1 and not self.parent.isAbstract:
-                itype = {' const':
-                         "const std::vector<std::shared_ptr<%s>>"
-                         % ns_sep,
-                         '':
-                         "std::vector<std::shared_ptr<%s>>"
-                         % ns_sep}
+                itype = OrderedDict([('',
+                                      "std::vector<std::shared_ptr<%s>>"
+                                      % ns_sep),
+                                     (' const',
+                                      "const std::vector<std::shared_ptr<%s>>"
+                                      % ns_sep)])
 
         return itype
     retType = property(_get_retType, doc="""The property's return type.""")
@@ -728,10 +730,10 @@ class OMEModelProperty(OMEModelEntity):
                 itype = self.argType()
             elif (self.maxOccurs > 1 and
                   not self.parent.isAbstract):
-                itype = {' const': "const std::shared_ptr<%s>&"
-                         % ns_sep,
-                         '':       "std::shared_ptr<%s>&"
-                         % ns_sep}
+                itype = OrderedDict([('',       "std::shared_ptr<%s>&"
+                                      % ns_sep),
+                                     (' const', "const std::shared_ptr<%s>&"
+                                      % ns_sep)])
 
         return itype
     elementRetType = property(
@@ -759,23 +761,23 @@ class OMEModelProperty(OMEModelEntity):
                 ns_sep = ' ' + ns_sep
             if (self.model.opts.lang.hasFundamentalType(self.langType) and
                     self.minOccurs > 0):
-                itype = {' const': self.langTypeNS}
+                itype = OrderedDict([(' const', self.langTypeNS)])
             elif self.isEnumeration:
                 if self.minOccurs == 0:
-                    itype = {' const':
-                             "std::shared_ptr<const %s>" %
-                             ns_sep,
-                             '':
-                             "std::shared_ptr<%s>" %
-                             ns_sep}
+                    itype = OrderedDict([('',
+                                          "std::shared_ptr<%s>" %
+                                          ns_sep),
+                                         (' const',
+                                          "std::shared_ptr<const %s>" %
+                                          ns_sep)])
                 else:
-                    itype = {' const': "const %s&" % self.langTypeNS,
-                             '':       "%s&" % self.langTypeNS}
+                    itype = OrderedDict([('',       "%s&" % self.langTypeNS),
+                                         (' const', "const %s&" % self.langTypeNS)])
             elif self.isReference or self.isBackReference:
-                itype = {' const': "std::shared_ptr<const %s>"
-                         % ns_sep,
-                         '':       "std::shared_ptr<%s>"
-                         % ns_sep}
+                itype = OrderedDict([('',       "std::shared_ptr<%s>"
+                                      % ns_sep),
+                                     (' const', "std::shared_ptr<const %s>"
+                                      % ns_sep)])
             elif self.maxOccurs == 1 and (
                     not self.parent.isAbstract or
                     self.isAttribute or not self.isComplex() or
@@ -783,21 +785,21 @@ class OMEModelProperty(OMEModelEntity):
                 if self.minOccurs == 0 or (
                         not self.model.opts.lang.hasPrimitiveType(
                             self.langType) and not self.isEnumeration):
-                    itype = {' const': "std::shared_ptr<const %s>"
-                             % ns_sep,
-                             '': "std::shared_ptr<%s>"
-                             % ns_sep}
+                    itype = OrderedDict([('', "std::shared_ptr<%s>"
+                                          % ns_sep),
+                                         (' const', "std::shared_ptr<const %s>"
+                                          % ns_sep)])
                 else:
-                    itype = {' const': "const %s&" % self.langTypeNS,
-                             '':       "%s&" % self.langTypeNS}
+                    itype = OrderedDict([('',       "%s&" % self.langTypeNS),
+                                         (' const', "const %s&" % self.langTypeNS)])
             elif (self.maxOccurs > 1 and
                     not self.parent.isAbstract):
-                itype = {' const':
-                         "const std::vector<std::shared_ptr<%s>>"
-                         % ns_sep,
-                         '':
-                         "std::vector<std::shared_ptr<%s>>"
-                         % ns_sep}
+                itype = OrderedDict([('',
+                                      "std::vector<std::shared_ptr<%s>>"
+                                      % ns_sep),
+                                     (' const',
+                                      "const std::vector<std::shared_ptr<%s>>"
+                                      % ns_sep)])
 
         return itype
     assignableType = property(
@@ -986,7 +988,7 @@ class OMEModelProperty(OMEModelEntity):
 
     def _get_header(self):
         header = None
-        if self.name in self.model.opts.lang.model_type_map.keys() and not self.name in self.model.opts.lang.primitive_type_map.keys():
+        if self.name in list(self.model.opts.lang.model_type_map.keys()) and not self.name in list(self.model.opts.lang.primitive_type_map.keys()):
             pass
         elif self.langType is None:
             pass
@@ -1041,7 +1043,7 @@ class OMEModelProperty(OMEModelEntity):
 
     def _get_source_deps(self):
         deps = set()
-        if self.name in self.model.opts.lang.model_type_map.keys():
+        if self.name in list(self.model.opts.lang.model_type_map.keys()):
             pass
         elif self.langType is None:
             pass
@@ -1074,7 +1076,7 @@ class OMEModelProperty(OMEModelEntity):
                 if self.isReference:
                     # Make sure that the reference is a real generated object.
                     o = self.model.getObjectByName("%sRef" % path)
-                    if o is not None and o in self.model.objects.values():
+                    if o is not None and o in list(self.model.objects.values()):
                         deps.add("ome/xml/model/%sRef.h" % path)
             o = self.model.getObjectByName(self.name)
             if o is not None:
@@ -1094,7 +1096,7 @@ class OMEModelProperty(OMEModelEntity):
 
     def _get_fwd(self):
         fwd = set()
-        if self.name in self.model.opts.lang.model_type_map.keys():
+        if self.name in list(self.model.opts.lang.model_type_map.keys()):
             pass
         elif isinstance(self.model.opts.lang, language.CXX):
             if not self.model.opts.lang.hasPrimitiveType(self.langType):

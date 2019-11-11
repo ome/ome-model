@@ -4,6 +4,8 @@
 # argv1 = doc dir containing conf.py
 # argv2 = manpage directory to contain generated manpages
 
+from __future__ import absolute_import
+from __future__ import print_function
 import imp
 import os.path
 import sys
@@ -19,4 +21,4 @@ if __name__ == "__main__":
 
     if hasattr(conf, 'man_pages'):
         for man in conf.man_pages:
-            print os.path.join(sys.argv[3], "%s.%s" % (man[1], man[4]))
+            print(os.path.join(sys.argv[3], "%s.%s" % (man[1], man[4])))

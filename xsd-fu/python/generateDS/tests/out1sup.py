@@ -4,11 +4,15 @@
 # Generated Tue Aug 11 11:57:44 2009 by generateDS.py version 1.18c.
 #
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 import getopt
 from string import lower as str_lower
 from xml.dom import minidom
 from xml.dom import Node
+import six
+from six.moves import range
 
 #
 # User methods
@@ -19,7 +23,7 @@ from xml.dom import Node
 
 try:
     from generatedssuper import GeneratedsSuper
-except ImportError, exp:
+except ImportError as exp:
 
     class GeneratedsSuper:
         def format_string(self, input_data, input_name=''):
@@ -64,7 +68,7 @@ def showIndent(outfile, level):
         outfile.write('    ')
 
 def quote_xml(inStr):
-    s1 = (isinstance(inStr, basestring) and inStr or
+    s1 = (isinstance(inStr, six.string_types) and inStr or
           '%s' % inStr)
     s1 = s1.replace('&', '&amp;')
     s1 = s1.replace('<', '&lt;')
@@ -72,7 +76,7 @@ def quote_xml(inStr):
     return s1
 
 def quote_attrib(inStr):
-    s1 = (isinstance(inStr, basestring) and inStr or
+    s1 = (isinstance(inStr, six.string_types) and inStr or
           '%s' % inStr)
     s1 = s1.replace('&', '&amp;')
     s1 = s1.replace('<', '&lt;')
@@ -280,7 +284,7 @@ class people(GeneratedsSuper):
         global counter
         counter += 1
         depth += 1
-        print '%d. class: people  depth: %d' % (counter, depth, )
+        print('%d. class: people  depth: %d' % (counter, depth, ))
         members = people._member_data_items
         for member in members:
             s1 = member.get_name()
@@ -295,7 +299,7 @@ class people(GeneratedsSuper):
                 else:
                     s4 = '<instance>'
             s5 = '%s%s%s  %s' % (s1.ljust(16), s2.ljust(16), s3.rjust(4), s4, )
-            print '   ', s5
+            print('   ', s5)
         for member in members:
             if member.get_container():
                 for child in getattr(self, member.get_name()):
@@ -514,7 +518,7 @@ class person(GeneratedsSuper):
         if attrs.get('id'):
             try:
                 self.id = int(attrs.get('id').value)
-            except ValueError, exp:
+            except ValueError as exp:
                 raise ValueError('Bad integer attribute (id): %s' % exp)
         if attrs.get('value'):
             self.value = attrs.get('value').value
@@ -544,7 +548,7 @@ class person(GeneratedsSuper):
                 sval_ = child_.firstChild.nodeValue
                 try:
                     ival_ = int(sval_)
-                except ValueError, exp:
+                except ValueError as exp:
                     raise ValueError('requires integer (imagesize): %s' % exp)
                 self.imagesize = ival_
             self.validate_imagesize(self.imagesize)    # validate type imagesize
@@ -560,7 +564,7 @@ class person(GeneratedsSuper):
                 sval_ = child_.firstChild.nodeValue
                 try:
                     ival_ = int(sval_)
-                except ValueError, exp:
+                except ValueError as exp:
                     raise ValueError('requires integer (category): %s' % exp)
                 self.category = ival_
         elif child_.nodeType == Node.ELEMENT_NODE and \
@@ -597,7 +601,7 @@ class person(GeneratedsSuper):
         global counter
         counter += 1
         depth += 1
-        print '%d. class: person  depth: %d' % (counter, depth, )
+        print('%d. class: person  depth: %d' % (counter, depth, ))
         members = person._member_data_items
         for member in members:
             s1 = member.get_name()
@@ -612,7 +616,7 @@ class person(GeneratedsSuper):
                 else:
                     s4 = '<instance>'
             s5 = '%s%s%s  %s' % (s1.ljust(16), s2.ljust(16), s3.rjust(4), s4, )
-            print '   ', s5
+            print('   ', s5)
         for member in members:
             if member.get_container():
                 for child in getattr(self, member.get_name()):
@@ -710,7 +714,7 @@ class scale(GeneratedsSuper):
         global counter
         counter += 1
         depth += 1
-        print '%d. class: scale  depth: %d' % (counter, depth, )
+        print('%d. class: scale  depth: %d' % (counter, depth, ))
         members = scale._member_data_items
         for member in members:
             s1 = member.get_name()
@@ -725,7 +729,7 @@ class scale(GeneratedsSuper):
                 else:
                     s4 = '<instance>'
             s5 = '%s%s%s  %s' % (s1.ljust(16), s2.ljust(16), s3.rjust(4), s4, )
-            print '   ', s5
+            print('   ', s5)
         for member in members:
             if member.get_container():
                 for child in getattr(self, member.get_name()):
@@ -823,7 +827,7 @@ class BasicEmptyType(GeneratedsSuper):
         global counter
         counter += 1
         depth += 1
-        print '%d. class: BasicEmptyType  depth: %d' % (counter, depth, )
+        print('%d. class: BasicEmptyType  depth: %d' % (counter, depth, ))
         members = BasicEmptyType._member_data_items
         for member in members:
             s1 = member.get_name()
@@ -838,7 +842,7 @@ class BasicEmptyType(GeneratedsSuper):
                 else:
                     s4 = '<instance>'
             s5 = '%s%s%s  %s' % (s1.ljust(16), s2.ljust(16), s3.rjust(4), s4, )
-            print '   ', s5
+            print('   ', s5)
         for member in members:
             if member.get_container():
                 for child in getattr(self, member.get_name()):
@@ -957,7 +961,7 @@ class hot_agent(GeneratedsSuper):
                 sval_ = child_.firstChild.nodeValue
                 try:
                     fval_ = float(sval_)
-                except ValueError, exp:
+                except ValueError as exp:
                     raise ValueError('requires float or double (priority): %s' %exp)
                 self.priority = fval_
     def walk_and_update(self, brackets):
@@ -979,7 +983,7 @@ class hot_agent(GeneratedsSuper):
         global counter
         counter += 1
         depth += 1
-        print '%d. class: hot_agent  depth: %d' % (counter, depth, )
+        print('%d. class: hot_agent  depth: %d' % (counter, depth, ))
         members = hot_agent._member_data_items
         for member in members:
             s1 = member.get_name()
@@ -994,7 +998,7 @@ class hot_agent(GeneratedsSuper):
                 else:
                     s4 = '<instance>'
             s5 = '%s%s%s  %s' % (s1.ljust(16), s2.ljust(16), s3.rjust(4), s4, )
-            print '   ', s5
+            print('   ', s5)
         for member in members:
             if member.get_container():
                 for child in getattr(self, member.get_name()):
@@ -1136,7 +1140,7 @@ class booster(GeneratedsSuper):
         global counter
         counter += 1
         depth += 1
-        print '%d. class: booster  depth: %d' % (counter, depth, )
+        print('%d. class: booster  depth: %d' % (counter, depth, ))
         members = booster._member_data_items
         for member in members:
             s1 = member.get_name()
@@ -1151,7 +1155,7 @@ class booster(GeneratedsSuper):
                 else:
                     s4 = '<instance>'
             s5 = '%s%s%s  %s' % (s1.ljust(16), s2.ljust(16), s3.rjust(4), s4, )
-            print '   ', s5
+            print('   ', s5)
         for member in members:
             if member.get_container():
                 for child in getattr(self, member.get_name()):
@@ -1245,7 +1249,7 @@ class client(GeneratedsSuper):
                 sval_ = child_.firstChild.nodeValue
                 try:
                     ival_ = int(sval_)
-                except ValueError, exp:
+                except ValueError as exp:
                     raise ValueError('requires integer (refid): %s' % exp)
                 self.refid = ival_
     def walk_and_update(self, brackets):
@@ -1267,7 +1271,7 @@ class client(GeneratedsSuper):
         global counter
         counter += 1
         depth += 1
-        print '%d. class: client  depth: %d' % (counter, depth, )
+        print('%d. class: client  depth: %d' % (counter, depth, ))
         members = client._member_data_items
         for member in members:
             s1 = member.get_name()
@@ -1282,7 +1286,7 @@ class client(GeneratedsSuper):
                 else:
                     s4 = '<instance>'
             s5 = '%s%s%s  %s' % (s1.ljust(16), s2.ljust(16), s3.rjust(4), s4, )
-            print '   ', s5
+            print('   ', s5)
         for member in members:
             if member.get_container():
                 for child in getattr(self, member.get_name()):
@@ -1380,7 +1384,7 @@ class Richtlinie(GeneratedsSuper):
         global counter
         counter += 1
         depth += 1
-        print '%d. class: Richtlinie  depth: %d' % (counter, depth, )
+        print('%d. class: Richtlinie  depth: %d' % (counter, depth, ))
         members = Richtlinie._member_data_items
         for member in members:
             s1 = member.get_name()
@@ -1395,7 +1399,7 @@ class Richtlinie(GeneratedsSuper):
                 else:
                     s4 = '<instance>'
             s5 = '%s%s%s  %s' % (s1.ljust(16), s2.ljust(16), s3.rjust(4), s4, )
-            print '   ', s5
+            print('   ', s5)
         for member in members:
             if member.get_container():
                 for child in getattr(self, member.get_name()):
@@ -1415,7 +1419,7 @@ Options:
 """
 
 def usage():
-    print USAGE_TEXT
+    print(USAGE_TEXT)
     sys.exit(1)
 
 

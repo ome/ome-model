@@ -14,6 +14,8 @@ the appropriate options to ``use_setuptools()``.
 This file can also be run as a script to install or upgrade setuptools.
 """
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 import os
 
@@ -76,10 +78,10 @@ def _validate_md5(egg_name, data):
     if egg_name in md5_data:
         digest = md5(data).hexdigest()
         if digest != md5_data[egg_name]:
-            print >>sys.stderr, (
+            print((
                 "md5 validation of %s failed!  (Possible download problem?)"
                 % egg_name
-            )
+            ), file=sys.stderr)
             sys.exit(2)
     return data
 
@@ -114,15 +116,15 @@ def use_setuptools(version=DEFAULT_VERSION, download_base=DEFAULT_URL,
     try:
         pkg_resources.require("setuptools>="+version)
         return
-    except pkg_resources.VersionConflict, e:
+    except pkg_resources.VersionConflict as e:
         if was_imported:
-            print >>sys.stderr, (
+            print((
                 "The required version of setuptools (>=%s) is not available,"
                 " and\ncan't be installed while this script is running.\m"
                 "Please install a more recent version first, using "
                 " 'easy_install -U setuptools'."
                 "\n\n(Currently using %r)"
-            ) % (version, e.args[0])
+            ) % (version, e.args[0]), file=sys.stderr)
             sys.exit(2)
         else:
             del pkg_resources, sys.modules['pkg_resources']  # reload ok
@@ -143,7 +145,7 @@ def download_setuptools(
     `delay` is the number of seconds to pause before an actual download
     attempt.
     """
-    import urllib2
+    import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
     egg_name = "setuptools-%s-py%s.egg" % (version, sys.version[:3])
     url = download_base + egg_name
     saveto = os.path.join(to_dir, egg_name)
@@ -170,7 +172,7 @@ and place it in this directory before rerunning this script.)
             from time import sleep
             sleep(delay)
             log.warn("Downloading %s", url)
-            src = urllib2.urlopen(url)
+            src = six.moves.urllib.request.urlopen(url)
             # Read/write all in one block, so we don't create a corrupt file
             # if the download is interrupted.
             data = _validate_md5(egg_name, src.read())
@@ -200,10 +202,10 @@ def main(argv, version=DEFAULT_VERSION):
                 os.unlink(egg)
     else:
         if setuptools.__version__ == '0.0.1':
-            print >>sys.stderr, (
+            print((
                 "You have an obsolete version of setuptools installed."
                 " Please remove it from your system entirely before rerunning"
-                " this script.")
+                " this script."), file=sys.stderr)
             sys.exit(2)
 
     req = "setuptools>="+version
@@ -222,9 +224,9 @@ def main(argv, version=DEFAULT_VERSION):
             from setuptools.command.easy_install import main
             main(argv)
         else:
-            print ("Setuptools version", version,
-                   "or greater has been installed.")
-            print '(Run "ez_setup.py -U setuptools" to reinstall or upgrade.)'
+            print(("Setuptools version", version,
+                   "or greater has been installed."))
+            print('(Run "ez_setup.py -U setuptools" to reinstall or upgrade.)')
 
 
 def update_md5(filenames):
@@ -250,7 +252,7 @@ def update_md5(filenames):
 
     match = re.search("\nmd5_data = {\n([^}]+)}", src)
     if not match:
-        print >>sys.stderr, "Internal error!"
+        print("Internal error!", file=sys.stderr)
         sys.exit(2)
 
     src = src[:match.start(1)] + repl + src[match.end(1):]

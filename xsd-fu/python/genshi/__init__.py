@@ -19,6 +19,7 @@ in concept to SAX parsing events) which can be processed in a uniform manner
 independently of where or how they are produced.
 """
 
+from __future__ import absolute_import
 __docformat__ = 'restructuredtext en'
 __version__ = '0.7'
 

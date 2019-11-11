@@ -11,6 +11,7 @@
 # individuals. For the exact contribution history, see the revision
 # history and logs, available at http://genshi.edgewall.org/log/.
 
+from __future__ import absolute_import
 import doctest
 import os
 import pickle
@@ -25,6 +26,7 @@ from genshi.input import XML
 from genshi.template.base import BadDirectiveError, TemplateSyntaxError
 from genshi.template.loader import TemplateLoader, TemplateNotFound
 from genshi.template.markup import MarkupTemplate
+import six
 
 
 class MarkupTemplateTestCase(unittest.TestCase):
@@ -83,7 +85,7 @@ class MarkupTemplateTestCase(unittest.TestCase):
         xml = '<p xmlns:py="http://genshi.edgewall.org/" py:do="nothing" />'
         try:
             tmpl = MarkupTemplate(xml, filename='test.html')
-        except BadDirectiveError, e:
+        except BadDirectiveError as e:
             self.assertEqual('test.html', e.filename)
             self.assertEqual(1, e.lineno)
 
@@ -92,7 +94,7 @@ class MarkupTemplateTestCase(unittest.TestCase):
         try:
             tmpl = MarkupTemplate(xml, filename='test.html').generate()
             self.fail('Expected TemplateSyntaxError')
-        except TemplateSyntaxError, e:
+        except TemplateSyntaxError as e:
             self.assertEqual('test.html', e.filename)
             self.assertEqual(1, e.lineno)
 
@@ -103,7 +105,7 @@ class MarkupTemplateTestCase(unittest.TestCase):
         try:
             tmpl = MarkupTemplate(xml, filename='test.html')
             self.fail('Expected TemplateSyntaxError')
-        except TemplateSyntaxError, e:
+        except TemplateSyntaxError as e:
             self.assertEqual('test.html', e.filename)
             self.assertEqual(2, e.lineno)
 
@@ -116,7 +118,7 @@ class MarkupTemplateTestCase(unittest.TestCase):
         try:
             tmpl = MarkupTemplate(xml, filename='test.html')
             self.fail('Expected TemplateSyntaxError')
-        except TemplateSyntaxError, e:
+        except TemplateSyntaxError as e:
             self.assertEqual('test.html', e.filename)
             self.assertEqual(3, e.lineno)
 
@@ -196,7 +198,7 @@ class MarkupTemplateTestCase(unittest.TestCase):
         </div>""".encode('iso-8859-1'), encoding='iso-8859-1')
         self.assertEqual(u"""<?xml version="1.0" encoding="iso-8859-1"?>\n<div>
           \xf6
-        </div>""", unicode(tmpl.generate()))
+        </div>""", six.text_type(tmpl.generate()))
 
     def test_latin1_encoded_explicit_encoding(self):
         tmpl = MarkupTemplate(u"""<div xmlns:py="http://genshi.edgewall.org/">
@@ -204,7 +206,7 @@ class MarkupTemplateTestCase(unittest.TestCase):
         </div>""".encode('iso-8859-1'), encoding='iso-8859-1')
         self.assertEqual(u"""<div>
           \xf6
-        </div>""", unicode(tmpl.generate()))
+        </div>""", six.text_type(tmpl.generate()))
 
     def test_exec_with_trailing_space(self):
         """
@@ -580,7 +582,33 @@ class MarkupTemplateTestCase(unittest.TestCase):
         finally:
             shutil.rmtree(dirname)
 
-    def test_allow_exec_false(self): 
+    def test_include_inline_recursive(self):
+        dirname = tempfile.mkdtemp(suffix='genshi_test')
+        try:
+            file1 = open(os.path.join(dirname, 'tmpl1.html'), 'w')
+            try:
+                file1.write(
+                    '<div xmlns:xi="http://www.w3.org/2001/XInclude"'
+                    '                xmlns:py="http://genshi.edgewall.org/">'
+                    '$depth'
+                    '<py:with vars="depth = depth + 1">'
+                    '<xi:include href="tmpl1.html"'
+                    '            py:if="depth &lt; 3"/>'
+                    '</py:with>'
+                    '</div>'
+                )
+            finally:
+                file1.close()
+
+            loader = TemplateLoader([dirname], auto_reload=False)
+            tmpl = loader.load(os.path.join(dirname, 'tmpl1.html'))
+            self.assertEqual(
+                "<div>0<div>1<div>2</div></div></div>",
+                tmpl.generate(depth=0).render(encoding=None))
+        finally:
+            shutil.rmtree(dirname)
+
+    def test_allow_exec_false(self):
         xml = ("""<?python
           title = "A Genshi Template"
           ?>
@@ -593,7 +621,7 @@ class MarkupTemplateTestCase(unittest.TestCase):
             tmpl = MarkupTemplate(xml, filename='test.html',
                                   allow_exec=False)
             self.fail('Expected SyntaxError')
-        except TemplateSyntaxError, e:
+        except TemplateSyntaxError as e:
             pass
 
     def test_allow_exec_true(self): 

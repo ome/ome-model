@@ -13,10 +13,13 @@
 
 """Emulation of the proper abstract syntax tree API for Python 2.4."""
 
+from __future__ import absolute_import
 import compiler
 import compiler.ast
 
 from genshi.template import _ast24 as _ast
+import six
+from six.moves import zip
 
 __all__ = ['_ast', 'parse']
 __docformat__ = 'restructuredtext en'
@@ -378,7 +381,7 @@ class ASTUpgrader(object):
     def visit_Const(self, node):
         if node.value is None: # appears in slices
             return None
-        elif isinstance(node.value, basestring):
+        elif isinstance(node.value, six.string_types):
             return self._new(_ast.Str, node.value)
         else:
             return self._new(_ast.Num, node.value)

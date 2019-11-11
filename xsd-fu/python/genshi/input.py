@@ -15,16 +15,20 @@
 sources.
 """
 
+from __future__ import absolute_import
 from itertools import chain
 import codecs
-import htmlentitydefs as entities
-import HTMLParser as html
+import six.moves.html_entities as entities
+import six.moves.html_parser as html
 from xml.parsers import expat
 
 from genshi.core import Attrs, QName, Stream, stripentities
 from genshi.core import START, END, XML_DECL, DOCTYPE, TEXT, START_NS, \
                         END_NS, START_CDATA, END_CDATA, PI, COMMENT
 from genshi.compat import StringIO, BytesIO
+from six import unichr
+import six
+from six.moves import zip
 
 
 __all__ = ['ET', 'ParseError', 'XMLParser', 'XML', 'HTMLParser', 'HTML']
@@ -156,7 +160,7 @@ class XMLParser(object):
                                 del self.expat # get rid of circular references
                             done = True
                         else:
-                            if isinstance(data, unicode):
+                            if isinstance(data, six.text_type):
                                 data = data.encode('utf-8')
                             self.expat.Parse(data, False)
                     for event in self._queue:
@@ -164,7 +168,7 @@ class XMLParser(object):
                     self._queue = []
                     if done:
                         break
-            except expat.ExpatError, e:
+            except expat.ExpatError as e:
                 msg = str(e)
                 raise ParseError(msg, self.filename, e.lineno, e.offset)
         return Stream(_generate()).filter(_coalesce)
@@ -333,7 +337,7 @@ class HTMLParser(html.HTMLParser, object):
                             self.close()
                             done = True
                         else:
-                            if not isinstance(data, unicode):
+                            if not isinstance(data, six.text_type):
                                 raise UnicodeError("source returned bytes, but no encoding specified")
                             self.feed(data)
                     for kind, data, pos in self._queue:
@@ -345,7 +349,7 @@ class HTMLParser(html.HTMLParser, object):
                         for tag in open_tags:
                             yield END, QName(tag), pos
                         break
-            except html.HTMLParseError, e:
+            except html.HTMLParseError as e:
                 msg = '%s: line %d, column %d' % (e.msg, e.lineno, e.offset)
                 raise ParseError(msg, self.filename, e.lineno, e.offset)
         return Stream(_generate()).filter(_coalesce)
@@ -434,7 +438,7 @@ def HTML(text, encoding=None):
     :raises ParseError: if the HTML text is not well-formed, and error recovery
                         fails
     """
-    if isinstance(text, unicode):
+    if isinstance(text, six.text_type):
         # If it's unicode text the encoding should be set to None.
         # The option to pass in an incorrect encoding is for ease
         # of writing doctests that work in both Python 2.x and 3.x.

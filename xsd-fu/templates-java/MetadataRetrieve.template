@@ -61,7 +61,7 @@
     return False
 
   def sorted_properties(o):
-    return sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
+    return sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name)
 %}\
 \
 \
@@ -302,7 +302,7 @@ public interface MetadataRetrieve extends BaseMetadata {
 {% end %}\
 {% end %}\
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if o.langBaseType != 'Object' %}\
 {% if debug %}\
@@ -312,12 +312,12 @@ public interface MetadataRetrieve extends BaseMetadata {
   /**
    * Get the text value of ${o.name}.
    *
-{% for param in indexes[o.topLevelName].items()[0][1] %}\
+{% for param in list(indexes[o.topLevelName].values())[0] %}\
    * @param ${param['argname']} the ${param['type']} index.
 {% end for %}\
    * @return the text value.
    */
-  ${o.langBaseType} get${o.topLevelName}Value(${indexes_string(indexes[o.topLevelName].items()[0][1])});
+  ${o.langBaseType} get${o.topLevelName}Value(${indexes_string(list(indexes[o.topLevelName].values())[0])});
 
 {% end %}\
 
@@ -382,7 +382,7 @@ public interface MetadataRetrieve extends BaseMetadata {
 
   // -- Entity retrieval (code generated definitions) --
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}
 {% if debug %}\
@@ -396,7 +396,7 @@ public interface MetadataRetrieve extends BaseMetadata {
 
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% if debug %}\
   // ${prop.minOccurs}:${prop.maxOccurs}
   // Is multi path? ${is_multi_path[o.name]}
@@ -437,7 +437,7 @@ ${getter(k, o, prop, v)}
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\

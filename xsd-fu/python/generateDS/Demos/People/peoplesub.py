@@ -4,6 +4,8 @@
 # Generated Tue Jan 30 12:32:05 2007 by generateDS.py.
 #
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 from xml.dom import minidom
 from xml.sax import handler, make_parser
@@ -60,7 +62,7 @@ class SaxSelectorHandler(handler.ContentHandler):
 
 
 def parseSelect(inFileName):
-    infile = file(inFileName, 'r')
+    infile = open(inFileName, 'r')
     topElementName = None
     parser = make_parser()
     documentHandler = SaxSelectorHandler()
@@ -71,10 +73,10 @@ def parseSelect(inFileName):
         except StopIteration:
             topElementName = documentHandler.getTopElementName()
         if topElementName is None:
-            raise RuntimeError, 'no top level element'
+            raise RuntimeError('no top level element')
         topElementName = topElementName.replace('-', '_').replace(':', '_')
         if topElementName not in supermod.__dict__:
-            raise RuntimeError, 'no class for top element: %s' % topElementName
+            raise RuntimeError('no class for top element: %s' % topElementName)
         topElement = supermod.__dict__[topElementName]
         infile.seek(0)
         doc = minidom.parse(infile)
@@ -157,7 +159,7 @@ Usage: python ???.py <infilename>
 """
 
 def usage():
-    print USAGE_TEXT
+    print(USAGE_TEXT)
     sys.exit(-1)
 
 

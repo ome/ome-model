@@ -13,10 +13,12 @@
 
 """Various utility classes and functions."""
 
-import htmlentitydefs as entities
+from __future__ import absolute_import
+import six.moves.html_entities as entities
 import re
 
-from compat import any, all, stringrepr
+from .compat import any, all, stringrepr
+from six import unichr
 
 __docformat__ = 'restructuredtext en'
 

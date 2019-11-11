@@ -13,6 +13,7 @@
 
 """Basic templating functionality."""
 
+from __future__ import absolute_import
 from collections import deque
 import os
 import sys
@@ -20,6 +21,7 @@ import sys
 from genshi.compat import StringIO, BytesIO
 from genshi.core import Attrs, Stream, StreamEventKind, START, TEXT, _ensure
 from genshi.input import ParseError
+import six
 
 __all__ = ['Context', 'DirectiveFactory', 'Template', 'TemplateError',
            'TemplateRuntimeError', 'TemplateSyntaxError', 'BadDirectiveError']
@@ -179,7 +181,7 @@ class Context(object):
         
         :return: the number of variables in the context
         """
-        return len(self.items())
+        return len(list(self.items()))
 
     def __setitem__(self, key, value):
         """Set a variable in the current scope.
@@ -321,12 +323,11 @@ class DirectiveFactoryMeta(type):
         return type.__new__(cls, name, bases, d)
 
 
-class DirectiveFactory(object):
+class DirectiveFactory(six.with_metaclass(DirectiveFactoryMeta, object)):
     """Base for classes that provide a set of template directives.
     
     :since: version 0.6
     """
-    __metaclass__ = DirectiveFactoryMeta
 
     directives = []
     """A list of ``(name, cls)`` tuples that define the set of directives
@@ -379,7 +380,7 @@ class Template(DirectiveFactory):
     """
 
     serializer = None
-    _number_conv = unicode # function used to convert numbers to event data
+    _number_conv = six.text_type # function used to convert numbers to event data
 
     def __init__(self, source, filepath=None, filename=None, loader=None,
                  encoding=None, lookup='strict', allow_exec=True):
@@ -411,13 +412,13 @@ class Template(DirectiveFactory):
         self._prepared = False
 
         if not isinstance(source, Stream) and not hasattr(source, 'read'):
-            if isinstance(source, unicode):
+            if isinstance(source, six.text_type):
                 source = StringIO(source)
             else:
                 source = BytesIO(source)
         try:
             self._stream = self._parse(source, encoding)
-        except ParseError, e:
+        except ParseError as e:
             raise TemplateSyntaxError(e.msg, self.filepath, e.lineno, e.offset)
 
     def __getstate__(self):
@@ -452,8 +453,7 @@ class Template(DirectiveFactory):
     @property
     def stream(self):
         if not self._prepared:
-            self._stream = list(self._prepare(self._stream))
-            self._prepared = True
+            self._prepare_self()
         return self._stream
 
     def _parse(self, source, encoding):
@@ -470,12 +470,19 @@ class Template(DirectiveFactory):
         """
         raise NotImplementedError
 
-    def _prepare(self, stream):
+    def _prepare_self(self, inlined=None):
+        if not self._prepared:
+            self._stream = list(self._prepare(self._stream, inlined))
+            self._prepared = True
+
+    def _prepare(self, stream, inlined):
         """Call the `attach` method of every directive found in the template.
         
         :param stream: the event stream of the template
         """
         from genshi.template.loader import TemplateNotFound
+        if inlined is None:
+            inlined = set((self.filepath,))
 
         for kind, data, pos in stream:
             if kind is SUB:
@@ -486,7 +493,7 @@ class Template(DirectiveFactory):
                                                       namespaces, pos)
                     if directive:
                         directives.append(directive)
-                substream = self._prepare(substream)
+                substream = self._prepare(substream, inlined)
                 if directives:
                     yield kind, (directives, list(substream)), pos
                 else:
@@ -495,27 +502,42 @@ class Template(DirectiveFactory):
             else:
                 if kind is INCLUDE:
                     href, cls, fallback = data
-                    if isinstance(href, basestring) and \
-                            not getattr(self.loader, 'auto_reload', True):
+                    tmpl_inlined = False
+                    if (isinstance(href, six.string_types) and
+                            not getattr(self.loader, 'auto_reload', True)):
                         # If the path to the included template is static, and
                         # auto-reloading is disabled on the template loader,
-                        # the template is inlined into the stream
+                        # the template is inlined into the stream provided it
+                        # is not already in the stack of templates being
+                        # processed.
+                        tmpl = None
                         try:
                             tmpl = self.loader.load(href, relative_to=pos[0],
                                                     cls=cls or self.__class__)
-                            for event in tmpl.stream:
-                                yield event
                         except TemplateNotFound:
                             if fallback is None:
                                 raise
-                            for event in self._prepare(fallback):
+                        if tmpl is not None:
+                            if tmpl.filepath not in inlined:
+                                inlined.add(tmpl.filepath)
+                                tmpl._prepare_self(inlined)
+                                for event in tmpl.stream:
+                                    yield event
+                                inlined.discard(tmpl.filepath)
+                                tmpl_inlined = True
+                        else:
+                            for event in self._prepare(fallback, inlined):
                                 yield event
+                            tmpl_inlined = True
+                    if tmpl_inlined:
                         continue
-                    elif fallback:
+                    if fallback:
                         # Otherwise the include is performed at run time
-                        data = href, cls, list(self._prepare(fallback))
-
-                yield kind, data, pos
+                        data = href, cls, list(
+                            self._prepare(fallback, inlined))
+                    yield kind, data, pos
+                else:
+                    yield kind, data, pos
 
     def generate(self, *args, **kwargs):
         """Apply the template to the given context data.
@@ -580,16 +602,16 @@ class Template(DirectiveFactory):
                         # First check for a string, otherwise the iterable test
                         # below succeeds, and the string will be chopped up into
                         # individual characters
-                        if isinstance(result, basestring):
+                        if isinstance(result, six.string_types):
                             yield TEXT, result, pos
-                        elif isinstance(result, (int, float, long)):
+                        elif isinstance(result, (int, float, int)):
                             yield TEXT, number_conv(result), pos
                         elif hasattr(result, '__iter__'):
                             push(stream)
                             stream = _ensure(result)
                             break
                         else:
-                            yield TEXT, unicode(result), pos
+                            yield TEXT, six.text_type(result), pos
 
                 elif kind is SUB:
                     # This event is a list of directives and a list of nested
@@ -618,7 +640,7 @@ class Template(DirectiveFactory):
         for event in stream:
             if event[0] is INCLUDE:
                 href, cls, fallback = event[1]
-                if not isinstance(href, basestring):
+                if not isinstance(href, six.string_types):
                     parts = []
                     for subkind, subdata, subpos in self._flatten(href, ctxt,
                                                                   **vars):

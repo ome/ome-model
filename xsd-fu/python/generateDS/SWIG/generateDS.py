@@ -28,10 +28,14 @@
 
 from __future__ import generators   # only needed for Python 2.2
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys, os.path
 import getopt
 from xml.sax import saxexts, saxlib, saxutils
 from xml.sax import handler
+from six.moves import range
+from six.moves import input
 
 
 ##from IPython.Shell import IPythonShellEmbed
@@ -109,7 +113,7 @@ class XschemaElement:
         # If there is a namespace, replace it with an underscore.
         self.unmappedCleanName = self.name.replace(':', '_')
         self.cleanName = mapName(self.unmappedCleanName)
-        if 'maxOccurs' in self.attrs.keys():
+        if 'maxOccurs' in list(self.attrs.keys()):
             max = self.attrs['maxOccurs']
             if max == 'unbounded':
                 max = 99999
@@ -124,7 +128,7 @@ class XschemaElement:
         else:
             max = 1
         self.maxOccurs = max
-        if 'type' in self.attrs.keys():
+        if 'type' in list(self.attrs.keys()):
             type1 = self.attrs['type']
             if type1 == 'xs:string' or \
                 type1 == 'xs:integer' or \
@@ -160,7 +164,7 @@ class XschemaHandler(handler.ContentHandler):
         return self.root
 
     def showError(self, msg):
-        print msg
+        print(msg)
         sys.exit(-1)
 
     def startElement(self, name, attrs):
@@ -168,7 +172,7 @@ class XschemaHandler(handler.ContentHandler):
         #      (name, len(self.stack))
         if name == 'xs:element':
             self.inElement = 1
-            if 'name' in attrs.keys() and 'type' in attrs.keys():
+            if 'name' in list(attrs.keys()) and 'type' in list(attrs.keys()):
                 if attrs['type'] == 'xs:string' or \
                        attrs['type'] == 'xs:integer' or \
                        attrs['type'] == 'xs:float':
@@ -176,7 +180,7 @@ class XschemaHandler(handler.ContentHandler):
                     #self.stack[-1].addChild(element)
                 else:
                     element = XschemaElement(attrs['name'], attrs)
-            elif 'name' in attrs.keys():
+            elif 'name' in list(attrs.keys()):
                 element = XschemaElement(attrs['name'], attrs)
             elif 'type' in attrs:
                 element = XschemaElement('', attrs)
@@ -191,8 +195,8 @@ class XschemaHandler(handler.ContentHandler):
             self.inChoice = 1
         elif name == 'xs:attribute':
             self.inAttribute = 1
-            if 'name' in attrs.keys():
-                if not 'type' in attrs.keys():
+            if 'name' in list(attrs.keys()):
+                if not 'type' in list(attrs.keys()):
                     attrs['type'] = 'xs:string'
                 self.stack[-1].addAttributeDefs(attrs)
         elif name == 'xs:schema':
@@ -216,7 +220,7 @@ class XschemaHandler(handler.ContentHandler):
         elif name == 'xs:schema':
             self.inSchema = 0
             if len(self.stack) != 1:
-                print '*** error stack'
+                print('*** error stack')
                 sys.exit(-1)
             self.root = self.stack[0]
 
@@ -453,7 +457,7 @@ def generateBuildFn(outfile, prefix, element, delayed):
             outfile.write(s1)
             s1 = "                    %s += text_.nodeValue\n" % name
             outfile.write(s1)
-            if 'maxOccurs' in child.attrs.keys() and \
+            if 'maxOccurs' in list(child.attrs.keys()) and \
                 child.attrs['maxOccurs'] == 'unbounded':
                 s1 = "                self.%s.append(%s)\n" % (name, name)
                 outfile.write(s1)
@@ -480,7 +484,7 @@ def generateBuildFn(outfile, prefix, element, delayed):
             outfile.write(s1)
             s1 = "                        showError('*** requires integer -- %s' % child.toxml())\n"
             outfile.write(s1)
-            if 'maxOccurs' in child.attrs.keys() and \
+            if 'maxOccurs' in list(child.attrs.keys()) and \
                 child.attrs['maxOccurs'] == 'unbounded':
                 s1 = "                    self.%s.append(ival)\n" % name
                 outfile.write(s1)
@@ -507,7 +511,7 @@ def generateBuildFn(outfile, prefix, element, delayed):
             outfile.write(s1)
             s1 = "                        showError('*** requires float -- %s' % child.toxml())\n"
             outfile.write(s1)
-            if 'maxOccurs' in child.attrs.keys() and \
+            if 'maxOccurs' in list(child.attrs.keys()) and \
                 child.attrs['maxOccurs'] == 'unbounded':
                 s1 = "                    self.%s.append(fval)\n" % name
                 outfile.write(s1)
@@ -533,7 +537,7 @@ def generateBuildFn(outfile, prefix, element, delayed):
             outfile.write(s1)
             s1 = "                obj.build(child)\n"
             outfile.write(s1)
-            if 'maxOccurs' in child.attrs.keys() and \
+            if 'maxOccurs' in list(child.attrs.keys()) and \
                 child.attrs['maxOccurs'] == 'unbounded':
                 s1 = "                self.%s.append(obj)\n" % name
                 outfile.write(s1)
@@ -568,7 +572,7 @@ def buildCtorArgs(element):
         mappedName = mapName(mappedName)
         #IPShell(vars(), '*** (generateCtor) attribute.')
         atype = attrDef['type']
-        if 'maxOccurs' in attrDef.keys() and \
+        if 'maxOccurs' in list(attrDef.keys()) and \
             attrDef['maxOccurs'] == 'unbounded':
             s2 += ', %s=[]' % mappedName
         elif atype == 'xs:string':
@@ -636,7 +640,7 @@ def generateGettersAndSetters(outfile, element):
         s1 = '    def get%s(self): return self.%s\n' % \
             (name.capitalize(), mappedName)
         outfile.write(s1)
-        if 'maxOccurs' in attrDef.keys() and \
+        if 'maxOccurs' in list(attrDef.keys()) and \
             attrDef['maxOccurs'] == 'unbounded':
             s1 = '    def add%s(self, %s): self.%s.append(%s)\n' % \
                 (name.capitalize(), mappedName, mappedName, mappedName)
@@ -890,11 +894,11 @@ def makeFile(outFileName):
     global Force
     outFile = None
     if (not Force) and os.path.exists(outFileName):
-        reply = raw_input('File %s exists.  Overwrite? (y/n): ' % outFileName)
+        reply = input('File %s exists.  Overwrite? (y/n): ' % outFileName)
         if reply == 'y':
-            outFile = file(outFileName, 'w')
+            outFile = open(outFileName, 'w')
     else:
-        outFile = file(outFileName, 'w')
+        outFile = open(outFileName, 'w')
     return outFile
 
 
@@ -949,7 +953,7 @@ Options:
 """
 
 def usage():
-    print USAGE_TEXT
+    print(USAGE_TEXT)
     sys.exit(-1)
 
 

@@ -15,12 +15,14 @@
 streams.
 """
 
+from __future__ import absolute_import
 from itertools import chain
 import re
 
 from genshi.core import escape, Attrs, Markup, Namespace, QName, StreamEventKind
 from genshi.core import START, END, TEXT, XML_DECL, DOCTYPE, START_NS, END_NS, \
                         START_CDATA, END_CDATA, PI, COMMENT, XML_NAMESPACE
+import six
 
 __all__ = ['encode', 'get_serializer', 'DocType', 'XMLSerializer',
            'XHTMLSerializer', 'HTMLSerializer', 'TextSerializer']
@@ -71,7 +73,7 @@ def get_serializer(method='xml', **kwargs):
     :see: `XMLSerializer`, `XHTMLSerializer`, `HTMLSerializer`, `TextSerializer`
     :since: version 0.4.1
     """
-    if isinstance(method, basestring):
+    if isinstance(method, six.string_types):
         method = {'xml':   XMLSerializer,
                   'xhtml': XHTMLSerializer,
                   'html':  HTMLSerializer,
@@ -316,7 +318,9 @@ class XHTMLSerializer(XMLSerializer):
                               'param'])
     _BOOLEAN_ATTRS = frozenset(['selected', 'checked', 'compact', 'declare',
                                 'defer', 'disabled', 'ismap', 'multiple',
-                                'nohref', 'noresize', 'noshade', 'nowrap'])
+                                'nohref', 'noresize', 'noshade', 'nowrap',
+                                'autofocus', 'readonly', 'required',
+                                'formnovalidate'])
     _PRESERVE_SPACE = frozenset([
         QName('pre'), QName('http://www.w3.org/1999/xhtml}pre'),
         QName('textarea'), QName('http://www.w3.org/1999/xhtml}textarea')
@@ -579,7 +583,7 @@ class TextSerializer(object):
                 data = event[1]
                 if strip_markup and type(data) is Markup:
                     data = data.striptags().stripentities()
-                yield unicode(data)
+                yield six.text_type(data)
 
 
 class EmptyTagFilter(object):
@@ -820,7 +824,7 @@ class DocTypeInserter(object):
 
         :param doctype: DOCTYPE as a string or DocType object.
         """
-        if isinstance(doctype, basestring):
+        if isinstance(doctype, six.string_types):
             doctype = DocType.get(doctype)
         self.doctype_event = (DOCTYPE, doctype, (None, -1, -1))
 

@@ -13,8 +13,10 @@
 
 """Various Python version compatibility classes and functions."""
 
+from __future__ import absolute_import
 import sys
 from types import CodeType
+import six
 
 
 IS_PYTHON2 = (sys.version_info[0] == 2)
@@ -34,6 +36,15 @@ else:
         raise RuntimeError(
                 'Python 2 compatibility function. Not usable in Python 3.')
 
+
+# We need to test if an object is an instance of a string type in places
+
+if IS_PYTHON2:
+    def isstring(obj):
+        return isinstance(obj, six.string_types)
+else:
+    def isstring(obj):
+        return isinstance(obj, str)
 
 # We need to differentiate between StringIO and BytesIO in places
 
@@ -93,7 +104,7 @@ try:
     next = next
 except NameError:
     def next(iterator):
-        return iterator.next()
+        return next(iterator)
 
 # Compatibility fallback implementations for Python < 2.5
 
@@ -112,4 +123,3 @@ except NameError:
             if not x:
                 return False
         return True
-

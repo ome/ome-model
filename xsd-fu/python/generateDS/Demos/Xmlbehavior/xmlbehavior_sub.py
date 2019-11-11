@@ -4,6 +4,8 @@
 # Generated Tue Jun 29 16:14:16 2004 by generateDS.py.
 #
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 from xml.dom import minidom
 from xml.sax import handler, make_parser
@@ -150,7 +152,7 @@ Usage: python ???.py <infilename>
 """
 
 def usage():
-    print USAGE_TEXT
+    print(USAGE_TEXT)
     sys.exit(-1)
 
 

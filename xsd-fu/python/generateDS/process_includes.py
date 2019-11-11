@@ -23,11 +23,14 @@ Examples:
 #
 # Imports
 
+from __future__ import absolute_import
+from __future__ import print_function
 import sys
 import os
 import getopt
 import re
-import urllib
+import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
+from six.moves import input
 
 #
 # Try to import lxml first, and if that fails try ElementTree.
@@ -37,17 +40,17 @@ WhichElementTree = ''
 try:
     from lxml import etree
     WhichElementTree = 'lxml'
-except ImportError, e:
+except ImportError as e:
     from xml.etree import ElementTree as etree
     WhichElementTree = 'elementtree'
 if WhichElementTree != 'lxml' or etree.LXML_VERSION[0] < 2:
-    print '***'
-    print '*** Error: Must install lxml (v. >= 2.0) or use "--no-process-includes".'
-    print '***     Override this error by modifying the above test.'
-    print '***     But, see the docs before doing so:'
-    print '***       http://www.rexx.com/~dkuhlman/generateDS.html#include-file-processing'
-    print '***'
-    raise RuntimeError, 'Must install lxml (v. >= 2.0) or use "--no-process-includes".'
+    print('***')
+    print('*** Error: Must install lxml (v. >= 2.0) or use "--no-process-includes".')
+    print('***     Override this error by modifying the above test.')
+    print('***     But, see the docs before doing so:')
+    print('***       http://www.rexx.com/~dkuhlman/generateDS.html#include-file-processing')
+    print('***')
+    raise RuntimeError('Must install lxml (v. >= 2.0) or use "--no-process-includes".')
 #print WhichElementTree, etree
 
 
@@ -134,7 +137,7 @@ def process_include_tree(root):
             locn = child.attrib['schemaLocation']
             if locn.startswith('ftp:') or locn.startswith('http:'):
                 try:
-                    path, msg = urllib.urlretrieve(locn)
+                    path, msg = six.moves.urllib.request.urlretrieve(locn)
                     idx = process_path(root, idx, path)
                 except:
                     msg = "Can't retrieve import file %s.  Aborting." % (locn, )
@@ -161,7 +164,7 @@ def make_file(outFileName):
     global FORCE
     outFile = None
     if (not FORCE) and os.path.exists(outFileName):
-        reply = raw_input('File %s exists.  Overwrite? (y/n): ' % outFileName)
+        reply = input('File %s exists.  Overwrite? (y/n): ' % outFileName)
         if reply == 'y':
             outFile = open(outFileName, 'w')
     else:
@@ -172,7 +175,7 @@ def make_file(outFileName):
 USAGE_TEXT = __doc__
 
 def usage():
-    print USAGE_TEXT
+    print(USAGE_TEXT)
     sys.exit(1)
 
 

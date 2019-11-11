@@ -34,34 +34,22 @@ Generate code to process OME-XML from an OME-XML schema.
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from __future__ import absolute_import
 import itertools
 import logging
 import sys
 import os
 import re
 import codecs
-
-# Needed to import modeltools
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.realpath(__file__)), 'python'))
-
-from util import odict
+from collections import OrderedDict
 
 from ome.modeltools.template import TemplateInfo
 from ome.modeltools import config
 from ome.modeltools import language
 from ome.modeltools import generateds
 
-try:
-    from genshi.template import NewTextTemplate
-except ImportError:
-    print("""The genshi module was not found, but is required by xsd-fu.
-If this is provided by your distribution, install the
-"python-genshi" package or its equivalent.  Otherwise, run
-"pip install genshi" (you may need to install pip first).""", file=sys.stderr)
+from genshi.template import NewTextTemplate
 
-    sys.exit(1)
-
-from configobj import ConfigObj
 from getopt import gnu_getopt, GetoptError
 from glob import glob
 from xml import sax
@@ -166,7 +154,7 @@ def main(model, opts):
     base, filename = os.path.split(opts.lang.templatepath('CLASS'))
     name, extension = os.path.splitext(filename)
     for obj in model.objects.values():
-        if obj.name in opts.lang.model_type_map.keys():
+        if obj.name in list(opts.lang.model_type_map.keys()):
             continue
 
         parents = model.resolve_parents(obj.name)
@@ -181,7 +169,7 @@ def main(model, opts):
             used_files.add(os.path.realpath(CUSTOM_CLASS_TEMPLATE))
             customContent = customTemplate.generate(
                 fu=fu, klass=obj, parents=parents, model=model, opts=opts, lang=opts.lang, debug=opts.debug)
-            customContent = customContent.render(encoding='utf-8')
+            customContent = customContent.render(encoding='utf-8').decode('utf-8')
         customTemplates = glob(os.path.join(
                 base, "%s_%s_update_*%s" % (name, obj.name, extension)))
         # BEGIN Custom templates for update()
@@ -194,7 +182,7 @@ def main(model, opts):
             customTemplate = NewTextTemplate(codecs.open(customTemplate, encoding='utf-8'), encoding='utf-8')
             content = customTemplate.generate(
                 fu=fu, klass=obj, parents=parents, model=model, opts=opts, lang=opts.lang, debug=opts.debug)
-            content = content.render(encoding='utf-8')
+            content = content.render(encoding='utf-8').decode('utf-8')
             customUpdatePropertyContent[propertyName] = content
         # END Custom templates for update()
         # BEGIN Custom templates for asXMLElement()
@@ -209,7 +197,7 @@ def main(model, opts):
             customTemplate = NewTextTemplate(codecs.open(customTemplate, encoding='utf-8'), encoding='utf-8')
             content = customTemplate.generate(
                 fu=fu, klass=obj, parents=parents, model=model, opts=opts, lang=opts.lang, debug=opts.debug)
-            content = content.render(encoding='utf-8')
+            content = content.render(encoding='utf-8').decode('utf-8')
             customAsXMLElementPropertyContent[propertyName] = content
         # END Custom templates for asXMLElment()
 
@@ -426,8 +414,6 @@ def enumHandlersMain(model, opts):
         used_files.add(os.path.realpath(file))
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_omexml_model_enum_handlers_package)
-    base = os.path.join(os.path.split(os.path.abspath(__file__))[0], "cfg")
-    configobj = ConfigObj(os.path.join(base, "enum_handler.cfg"))
     template = NewTextTemplate(codecs.open(opts.lang.templatepath('ENUM_HANDLER'), encoding='utf-8').read(), encoding='utf-8')
     used_files.add(os.path.realpath(opts.lang.templatepath('ENUM_HANDLER')))
     for obj in model.objects.values():
@@ -454,7 +440,7 @@ def enumHandlersMain(model, opts):
                 os.makedirs(outputDirectory)
 
             classContent = template.generate(fu=fu, klass=prop, model=model, opts=opts, lang=opts.lang, debug=opts.debug,
-                             enum_value_name=enum_value_name, config=configobj).render(encoding='utf-8')
+                                             enum_value_name=enum_value_name, config=config.ENUM_HANDLERS).render(encoding='utf-8')
 
             if not opts.dryrun:
                 f = codecs.open(fullname, "w", encoding='utf-8')
@@ -536,7 +522,7 @@ def resolve_hierarchy(results, model, names, func, child=None, key=None, level=0
     is_multi_path = False
     if names is None:
         return is_multi_path
-    for name in names.keys():
+    for name in sorted(names.keys()):
         o = model.getObjectByName(name)
         # Set our key and instantiate our index list if we're the first level
         if level == 1:
@@ -547,7 +533,7 @@ def resolve_hierarchy(results, model, names, func, child=None, key=None, level=0
         # We only want to add the index if the object count at this level
         # is greater than 1.
         max_occurs = max_occurs_under_parent(model, name, child)
-        if len(names.keys()) > 1:
+        if len(list(names.keys())) > 1:
             is_multi_path = True
         if o.isConcreteSubstitution:
             parents = dict()
@@ -582,7 +568,7 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     is_multi_path = dict()
     for obj in model.objects.values():
         name = obj.name
-        indexes[name] = odict()
+        indexes[name] = OrderedDict()
         parents[name] = model.resolve_parents(name)
         is_multi_path[name] = resolve_hierarchy(indexes[name], model,
                             {name: parents[name]},
@@ -618,7 +604,7 @@ def processMetadataTemplate(template, outputFilename, model, opts):
             indexes=indexes, opts=opts, lang=opts.lang, debug=opts.debug)
         if objectName not in customContent:
             customContent[objectName] = dict()
-        customContent[objectName][propertyName] = customTemplate.render(encoding='utf-8')
+        customContent[objectName][propertyName] = customTemplate.render(encoding='utf-8').decode('utf-8')
 
     fullname = opts.lang.generatedFilename(outputFilename, opts.filetype)
 
@@ -756,9 +742,9 @@ def validateMetadataConverter():
     storeFilename = os.path.join(relpath, "MetadataStore")
     retrieveFilename = os.path.join(relpath, "MetadataRetrieve")
     convertFilename = os.path.join(os.path.join(root, opts.lang.getConverterDir()), opts.lang.getConverterName())
-    storeFile = file(os.path.join(opts.outdir, opts.lang.generatedFilename(storeFilename, opts.filetype)))
-    retrieveFile = file(os.path.join(opts.outdir, opts.lang.generatedFilename(retrieveFilename, opts.filetype)))
-    convertFile = file(os.path.join(opts.outdir, convertFilename + opts.lang.source_suffix))
+    storeFile = open(os.path.join(opts.outdir, opts.lang.generatedFilename(storeFilename, opts.filetype)))
+    retrieveFile = open(os.path.join(opts.outdir, opts.lang.generatedFilename(retrieveFilename, opts.filetype)))
+    convertFile = open(os.path.join(opts.outdir, convertFilename + opts.lang.source_suffix))
     storegrepper = None
     retrievegrepper = None
     convertgrepper = None

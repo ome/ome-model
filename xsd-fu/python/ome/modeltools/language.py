@@ -25,6 +25,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import absolute_import
 import copy
 import os
 
@@ -185,7 +186,7 @@ class Language(object):
         return False
 
     def hasPrimitiveType(self, type):
-        if (type in self.primitive_type_map.values() or
+        if (type in list(self.primitive_type_map.values()) or
                 type in self.primitive_types):
             return True
         return False
@@ -219,7 +220,7 @@ class Language(object):
             return None
             
     def getSubstitutionTypes(self):
-        return self.substitutionGroup_map.keys()
+        return list(self.substitutionGroup_map.keys())
             
     def isPrimitiveBase(self, type):
         if type in self.primitive_base_types:

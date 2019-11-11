@@ -25,7 +25,8 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from util import odict
+from __future__ import absolute_import
+from collections import OrderedDict
 import logging
 import re
 
@@ -50,7 +51,7 @@ class OMEModelObject(OMEModelEntity):
         self.base = element.getBase()
         self.name = element.getName()
         self.type = element.getType()
-        self.properties = odict()
+        self.properties = OrderedDict()
         self.isAbstract = False
         self.isParentOrdered = False
         self.isChildOrdered = False
@@ -198,7 +199,7 @@ class OMEModelObject(OMEModelEntity):
             base = self.model.getObjectByName(base)
             if base is None:
                 return properties
-            properties += base.properties.values()
+            properties += list(base.properties.values())
             base = base.base
     baseObjectProperties = property(
         _get_baseObjectProperties,
@@ -285,7 +286,7 @@ class OMEModelObject(OMEModelEntity):
 
     def _get_header(self):
         header = None
-        if self.name in self.model.opts.lang.model_type_map.keys():
+        if self.name in list(self.model.opts.lang.model_type_map.keys()):
             pass
         elif isinstance(self.model.opts.lang, language.Java):
             header = "ome.xml.model.%s" % self.name
@@ -331,7 +332,7 @@ class OMEModelObject(OMEModelEntity):
     def _get_source_deps(self):
         deps = set()
 
-        if self.name in self.model.opts.lang.model_type_map.keys():
+        if self.name in list(self.model.opts.lang.model_type_map.keys()):
             pass
         elif isinstance(self.model.opts.lang, language.Java):
             pass
@@ -351,7 +352,7 @@ class OMEModelObject(OMEModelEntity):
     def _get_fwd(self):
         fwd = set()
 
-        if self.name in self.model.opts.lang.model_type_map.keys():
+        if self.name in list(self.model.opts.lang.model_type_map.keys()):
             pass
         elif isinstance(self.model.opts.lang, language.Java):
             pass
@@ -379,7 +380,7 @@ class OMEModelObject(OMEModelEntity):
         parent = None
 
         if parents is not None:
-            parent = self.model.getObjectByName(parents.keys()[0])
+            parent = self.model.getObjectByName(list(parents.keys())[0])
 
         return parent
 

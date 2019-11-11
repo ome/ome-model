@@ -13,6 +13,9 @@
 
 """Implementation of a number of stream filters."""
 
+from __future__ import absolute_import
+from six import unichr
+import six
 try:
     any
 except NameError:
@@ -101,13 +104,13 @@ class HTMLFormFiller(object):
                                 checked = False
                                 if isinstance(value, (list, tuple)):
                                     if declval is not None:
-                                        checked = declval in [unicode(v) for v
+                                        checked = declval in [six.text_type(v) for v
                                                               in value]
                                     else:
                                         checked = any(value)
                                 else:
                                     if declval is not None:
-                                        checked = declval == unicode(value)
+                                        checked = declval == six.text_type(value)
                                     elif type == 'checkbox':
                                         checked = bool(value)
                                 if checked:
@@ -123,7 +126,7 @@ class HTMLFormFiller(object):
                                     value = value[0]
                                 if value is not None:
                                     attrs |= [
-                                        (QName('value'), unicode(value))
+                                        (QName('value'), six.text_type(value))
                                     ]
                     elif tagname == 'select':
                         name = attrs.get('name')
@@ -166,10 +169,10 @@ class HTMLFormFiller(object):
                     select_value = None
                 elif in_select and tagname == 'option':
                     if isinstance(select_value, (tuple, list)):
-                        selected = option_value in [unicode(v) for v
+                        selected = option_value in [six.text_type(v) for v
                                                     in select_value]
                     else:
-                        selected = option_value == unicode(select_value)
+                        selected = option_value == six.text_type(select_value)
                     okind, (tag, attrs), opos = option_start
                     if selected:
                         attrs |= [(QName('selected'), 'selected')]
@@ -185,7 +188,7 @@ class HTMLFormFiller(object):
                     option_text = []
                 elif in_textarea and tagname == 'textarea':
                     if textarea_value:
-                        yield TEXT, unicode(textarea_value), pos
+                        yield TEXT, six.text_type(textarea_value), pos
                         textarea_value = None
                     in_textarea = False
                 yield kind, data, pos

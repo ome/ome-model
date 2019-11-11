@@ -61,7 +61,7 @@
           return False
 
   def sorted_properties(o):
-    return sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
+    return sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name)
 %}\
 \
 \
@@ -226,7 +226,7 @@ public interface MetadataStore extends BaseMetadata
    */
   void setUUID(String uuid);
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if o.langBaseType != 'Object' %}\
 {% if debug %}\
@@ -237,11 +237,11 @@ public interface MetadataStore extends BaseMetadata
    * Set the text value of ${o.name}.
    *
    * @param value text value.
-{% for param in indexes[o.name].items()[0][1] %}\
+{% for param in list(indexes[o.name].values())[0] %}\
    * @param ${param['argname']} the ${param['type']} index.
 {% end for %}\
    */
-  void set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])});
+  void set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])});
 
 {% end %}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}\
@@ -256,7 +256,7 @@ public interface MetadataStore extends BaseMetadata
 
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% if debug %}\
   // ${prop.minOccurs}:${prop.maxOccurs}
   // Is multi path? ${is_multi_path[o.name]}
@@ -298,7 +298,7 @@ ${setter(k, o, prop, v)}
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\

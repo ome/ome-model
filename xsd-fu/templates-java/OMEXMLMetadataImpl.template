@@ -14,8 +14,8 @@
   {
 {% if debug %}\
     // MARKER [A-IMP]
-{% end debug %}\
     // Parents: ${repr(parents[obj.name])}
+{% end debug %}\
 {% if obj.isReference %}\
     // ${obj.name} is a reference
     return ${join_accessors(obj.name, parent, obj.name, -1, ["sizeOfLinked%sList()" % obj.name.replace('Ref', '')])};
@@ -42,8 +42,8 @@
   {
 {% if debug %}\
     // MARKER [B-IMP]
-{% end debug %}\
     // Parents: ${repr(parents[obj.name])}
+{% end debug %}\
 {% choose %}\
 {% when is_abstract(parent) and prop.isReference and prop.maxOccurs > 1 %}\
     // ${parent} is abstract proprietary, is reference and occurs more than once
@@ -88,8 +88,8 @@
   {
 {% if debug %}\
     // MARKER [C-IMP]
-{% end debug %}\
     // Parents: ${repr(parents[obj.name])}
+{% end debug %}\
 {% choose %}\
 {% when is_abstract(parent) and prop.isReference %}\
     // ${prop.name} is abstract and is a reference
@@ -192,7 +192,7 @@ ${customContent[obj.name][prop.name]}
     return False
 
   def sorted_properties(o):
-    return sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name))
+    return sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name)
 
   def join_accessors(name, parent, prop=None, accessorIndex=None, additionalJoins=None):
     results = dict()
@@ -244,10 +244,10 @@ ${customContent[obj.name][prop.name]}
     o = model.getObjectByName(name)
     fu.resolve_hierarchy(results, model, {name: parents[name]}, accessor_string, min_occurs=1)
     if len(results.keys()) == 0:
-      raise Exception("Zero KEYS No accessor for: name:%s parent:%s prop:%s === %s" % (name, parents[name].keys()[0], prop, results))
-    if parents[name].keys()[0] not in results.keys():
-      raise Exception("Invalid KEY No accessor for: name:%s parent:%s === %s" % (name, parents[name].keys()[0], results))
-    return results[parents[name].keys()[0]]
+      raise Exception("Zero KEYS No accessor for: name:%s parent:%s prop:%s === %s" % (name, list(parents[name].keys())[0], prop, results))
+    if list(parents[name].keys())[0] not in results.keys():
+      raise Exception("Invalid KEY No accessor for: name:%s parent:%s === %s" % (name, list(parents[name].keys())[0], results))
+    return results[list(parents[name].keys())[0]]
 
 %}\
 \
@@ -425,12 +425,14 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
 
   // -- Entity counting (code generated definitions) --
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if o.langBaseType != 'Object' %}\
+{% if debug %}\
   // Element's text data
   // ${repr(indexes[o.name])}
-  public void set${o.name}Value(${o.langBaseType} value, ${indexes_string(indexes[o.name].items()[0][1])})
+{% end debug %}\
+  public void set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])})
   {
     OME o0 = root;
     if (o0.sizeOfImageList() == imageIndex)
@@ -456,7 +458,7 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
     o4.setValue(value);
   }
 
-  public ${o.langBaseType} get${o.name}Value(${indexes_string(indexes[o.name].items()[0][1])})
+  public ${o.langBaseType} get${o.name}Value(${indexes_string(list(indexes[o.name].values())[0])})
   {
     return root.getImage(imageIndex).getPixels().getTiffData(tiffDataIndex).getUUID().getValue();
   }
@@ -503,19 +505,21 @@ ${counter(k, o, v)}\
 
   // -- Entity retrieval (code generated definitions) --
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}
   //
   // ${o.name} property storage
+{% if debug %}\
   //
   // Indexes: ${repr(indexes[o.name])}
   // ${repr(parents[o.name])}
   // Is multi path? ${is_multi_path[o.name]}
+{% end debug %}\
 
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
   // ${prop.minOccurs}:${prop.maxOccurs}
   // Is multi path? ${is_multi_path[o.name]}
   // Ignoring ${prop.name} property of reference ${o.name}
@@ -547,7 +551,7 @@ ${getter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\
@@ -639,18 +643,20 @@ ${getter(k, o, prop, v)}\
 
   // -- Entity storage (code generated definitions) --
 
-{% for o in sorted(model.objects.values(), lambda x, y: cmp(x.name, y.name)) %}\
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if (parents[o.name] is not None and not o.isAbstract) or o.isConcreteSubstitution %}
   //
   // ${o.name} property storage
+{% if debug %}\
   //
   // ${repr(parents[o.name])}
   // Is multi path? ${is_multi_path[o.name]}
+{% end debug %}\
 
 {% choose %}\
 {% when o.isReference %}\
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
   // ${prop.minOccurs}:${prop.maxOccurs}
   // Is multi path? ${is_multi_path[o.name]}
   // Ignoring ${prop.name} property of reference ${o.name}
@@ -682,7 +688,7 @@ ${setter(k, o, prop, v)}\
 {% end %}\
 {% end %}\
 \
-{% for prop in sorted(o.properties.values() + o.baseObjectProperties, lambda x, y: cmp(x.name, y.name)) %}\
+{% for prop in sorted(list(o.properties.values()) + o.baseObjectProperties, key=lambda x: x.name) %}\
 {% choose %}\
 {% when prop.isBackReference %}\
 {% if debug %}\

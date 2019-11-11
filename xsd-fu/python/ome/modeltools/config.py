@@ -25,6 +25,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from __future__ import absolute_import
 import re
 
 # Default logger configuration
@@ -102,3 +103,37 @@ BACKREF_REGEX = re.compile(r'_BackReference')
 
 p = r'^([A-Z]{1})[a-z0-9]+|([A-Z0-9]+)[A-Z]{1}[a-z]+|([A-Z]+)[0-9]*|([a-z]+$)'
 PREFIX_CASE_REGEX = re.compile(p)
+
+ENUM_HANDLERS = {
+    'AcquisitionMode': [
+        ('.*Widefield.*', 'WideField'),
+        ('^Laser Scan Confocal$', 'LaserScanningConfocalMicroscopy'),
+        ('^Swept Field Confocal$', 'SweptFieldConfocal')
+    ],
+    'Correction': [
+        ('.*Pl.*Apo.*', 'PlanApo'),
+        ('.*Pl.*Flu.*', 'PlanFluor'),
+        ('^\\s*Vio.*Corr.*', 'VioletCorrected'),
+        ('.*S.*Flu.*', 'SuperFluor'),
+        ('.*Neo.*flu.*', 'Neofluar'),
+        ('.*Flu.*tar.*', 'Fluotar'),
+        ('.*Fluo.*', 'Fluor'),
+        ('.*Flua.*', 'Fluar'),
+        ('^\\s*Apo.*', 'Apo')
+    ],
+    'DetectorType': [
+        ('.*EM.*CCD.*', 'EM-CCD'),
+        ('.*CCD.*', 'CCD'),
+        ('.*CMOS.*', 'CMOS')
+    ],
+    'Immersion': [
+        ('^\\s*Dry\\s*', 'Air'),
+        ('^\\s*OI\\s*', 'Oil'),
+        ('.*Oil.*', 'Oil'),
+        ('.*Oel.*', 'Oil'),
+        ('.*Wasser.*', 'Water'),
+        ('.*Gly.*', 'Glycerol'),
+        ('^\\s*Wl\\s*', 'Water'),
+        ('^\\s*W\\s*', 'Water')
+    ]
+}

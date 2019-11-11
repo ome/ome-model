@@ -13,6 +13,7 @@
 
 """Markup templating engine."""
 
+from __future__ import absolute_import
 from itertools import chain
 
 from genshi.core import Attrs, Markup, Namespace, Stream, StreamEventKind
@@ -93,7 +94,7 @@ class MarkupTemplate(Template):
                 try:
                     suite = Suite(data[1], self.filepath, pos[1],
                                   lookup=self.lookup)
-                except SyntaxError, err:
+                except SyntaxError as err:
                     raise TemplateSyntaxError(err, self.filepath,
                                               pos[1] + (err.lineno or 1) - 1,
                                               pos[2] + (err.offset or 0))
@@ -230,7 +231,8 @@ class MarkupTemplate(Template):
 
             elif kind is END:
                 if fallbacks and data == xinclude_ns['fallback']:
-                    assert streams.pop() is fallbacks[-1]
+                    fallback_stream = streams.pop()
+                    assert fallback_stream is fallbacks[-1]
                 elif data == xinclude_ns['include']:
                     fallback = None
                     if len(fallbacks) == len(includes):
@@ -283,10 +285,10 @@ class MarkupTemplate(Template):
 
             yield kind, data, pos
 
-    def _prepare(self, stream):
-        return Template._prepare(self,
-            self._extract_includes(self._interpolate_attrs(stream))
-        )
+    def _prepare(self, stream, inlined=None):
+        return Template._prepare(
+            self, self._extract_includes(self._interpolate_attrs(stream)),
+            inlined=inlined)
 
     def add_directives(self, namespace, factory):
         """Register a custom `DirectiveFactory` for a given namespace.
