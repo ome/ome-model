@@ -13,7 +13,7 @@ jdk:
   - openjdk8
 
 env:
-  - MAVEN_SKIP_RC=true MAVEN_OPTS=-Dpython=python3
+  - MAVEN_OPTS=-Dpython=python3
 
 matrix:
   fast_finish: true
@@ -21,3 +21,4 @@ matrix:
 before_install:
   - python3 --version
   - pip install --user -r requirements.txt
+  - export MAVEN_SKIP_RC=true
