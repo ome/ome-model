@@ -14,12 +14,10 @@ jdk:
 
 env:
   - MAVEN_OPTS=-Dpython=python3
-  - MAVEN_OPTS=-Dpython=python2
 
 matrix:
   fast_finish: true
 
 before_install:
-  - python2 --version
   - python3 --version
   - pip install --user -r requirements.txt
