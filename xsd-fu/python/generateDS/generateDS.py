@@ -93,7 +93,7 @@ import sys
 import os.path
 import time
 import getopt
-import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
+import urllib.request, urllib.error, urllib.parse
 import imp
 from xml.sax import handler, make_parser
 import xml.sax.xmlreader
@@ -101,9 +101,6 @@ import logging
 import keyword
 from io import StringIO
 from collections import OrderedDict
-import six
-from six.moves import range
-from six.moves import input
 
 # Default logger configuration
 ## logging.basicConfig(level=logging.DEBUG, 
@@ -3653,12 +3650,12 @@ def get_impl_body(classBehavior, baseImplUrl, implUrl):
         if baseImplUrl:
             implUrl = '%s%s' % (baseImplUrl, implUrl)
         try:
-            implFile = six.moves.urllib.request.urlopen(implUrl)
+            implFile = urllib.request.urlopen(implUrl)
             impl = implFile.read()
             implFile.close()
-        except six.moves.urllib.error.HTTPError:
+        except urllib.error.HTTPError:
             err_msg('*** Implementation at %s not found.\n' % implUrl)
-        except six.moves.urllib.error.URLError:
+        except urllib.error.URLError:
             err_msg('*** Connection refused for URL: %s\n' % implUrl)
     return impl
 
@@ -4259,7 +4256,7 @@ def parseAndGenerate(outfileName, subclassFilename, prefix,
 def debug_show_elements(root):
     #print 'ElementDict:', ElementDict
     print(('=' * 50))
-    for name, obj in six.iteritems(ElementDict):
+    for name, obj in ElementDict.iteritems:
         print(('element:', name, obj.getName(), obj.type))
     print(('=' * 50))
     #ipshell('debug')
