@@ -12,11 +12,18 @@ jdk:
   - openjdk11
   - openjdk8
 
+env:
+  - PYTHON=python3
+
 matrix:
   fast_finish: true
 
 before_install:
   - python3 --version
   - pip install --user -r requirements.txt
-  - export MAVEN_SKIP_RC=true
-  - export MAVEN_OPTS=-Dpython=python3
+
+install:
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dpython="$PYTHON"
+
+script:
+  - mvn test -B -Dpython="$PYTHON"
