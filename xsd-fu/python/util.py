@@ -27,9 +27,6 @@ import re
 import textwrap
 import time
 
-import six
-from six.moves import zip
-from six.moves import map
 from operator import itemgetter
 
 missing = object()
