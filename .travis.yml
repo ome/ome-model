@@ -13,7 +13,7 @@ jdk:
   - openjdk8
 
 env:
-  - MAVEN_OPTS=-Dpython=python3
+  - MAVEN_SKIP_RC=true MAVEN_OPTS=-Dpython=python3
 
 matrix:
   fast_finish: true
