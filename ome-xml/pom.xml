@@ -79,7 +79,7 @@
 
   <properties>
     <project.rootdir>${basedir}/..</project.rootdir>
-    <python>python</python>
+    <python>python3</python>
     <xsdfu.script>../xsd-fu/xsd-fu</xsdfu.script>
     <xsdfu.modelpath>${basedir}/target/generated-sources/xsd-fu</xsdfu.modelpath>
     <xsdfu.metadatapath>${basedir}/target/generated-sources/xsd-fu</xsdfu.metadatapath>
