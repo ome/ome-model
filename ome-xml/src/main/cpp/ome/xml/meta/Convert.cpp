@@ -1565,6 +1565,7 @@ namespace
     convertRootAttributes()
     {
       transfer(&MR::getUUID,                   &MS::setUUID);
+      transfer(&MR::getCreator,                &MS::setCreator);
       transfer(&MR::getRightsRightsHeld,       &MS::setRightsRightsHeld);
       transfer(&MR::getRightsRightsHolder,     &MS::setRightsRightsHolder);
       transfer(&MR::getBinaryOnlyMetadataFile, &MS::setBinaryOnlyMetadataFile);

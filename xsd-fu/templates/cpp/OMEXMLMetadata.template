@@ -1009,6 +1009,24 @@ ${counter(k, o, v)}\
 
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in base class.
+        const std::string&
+        getCreator() const;
+{% end header %}\
+{% if fu.SOURCE_TYPE == "source" %}\
+      const std::string&
+      OMEXMLMetadata::getCreator() const
+      {
+        std::shared_ptr<const std::string> creator = root->getCreator();
+        if (creator)
+          return *creator;
+        else
+          throw MetadataException("OMEXMLMetadata", "getCreator",
+                                  "Internal metadata store inconsistency: null object");
+      }
+{% end source %}\
+
+{% if fu.SOURCE_TYPE == "header" %}\
+        // Documented in base class.
         const ome::xml::model::primitives::OrderedMultimap&
         getMapAnnotationValue(index_type mapAnnotationIndex) const;
 {% end header %}\
@@ -1155,6 +1173,20 @@ ${getter(k, o, prop, v)}\
       {
         std::shared_ptr<std::string> newString(std::make_shared<std::string>(uuid));
         root->setUUID(newString);
+      }
+{% end source %}\
+
+{% if fu.SOURCE_TYPE == "header" %}\
+        // Documented in base class.
+        void
+        setCreator(const std::string& creator);
+{% end header %}\
+{% if fu.SOURCE_TYPE == "source" %}\
+      void
+      OMEXMLMetadata::setCreator(const std::string& creator)
+      {
+        std::shared_ptr<std::string> newString(std::make_shared<std::string>(creator));
+        root->setCreator(newString);
       }
 {% end source %}\
 

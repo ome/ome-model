@@ -380,6 +380,17 @@ public interface MetadataRetrieve extends BaseMetadata {
   /** Gets the UUID associated with this collection of metadata. */
   String getUUID();
 
+  /**
+   * Get the Creator associated with this collection of metadata.
+   *
+   * @return the Creator.
+   */
+  /** Gets the Creator associated with this collection of metadata. */
+  default String getCreator()
+  {
+    return null;
+  }
+
   // -- Entity retrieval (code generated definitions) --
 
 {% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\

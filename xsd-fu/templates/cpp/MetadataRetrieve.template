@@ -436,6 +436,14 @@ namespace ome
         getUUID() const = 0;
 
         /**
+         * Get the Creator associated with this collection of metadata.
+         *
+         * @returns the Creator.
+         */
+        virtual const std::string&
+        getCreator() const = 0;
+
+        /**
          * Get the map value of MapAnnotation.
          *
          * @param mapAnnotationIndex the MapAnnotation index.
