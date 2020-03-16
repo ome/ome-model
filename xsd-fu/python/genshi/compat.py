@@ -13,10 +13,9 @@
 
 """Various Python version compatibility classes and functions."""
 
-from __future__ import absolute_import
+import _ast
 import sys
 from types import CodeType
-import six
 
 
 IS_PYTHON2 = (sys.version_info[0] == 2)
@@ -41,7 +40,7 @@ else:
 
 if IS_PYTHON2:
     def isstring(obj):
-        return isinstance(obj, six.string_types)
+        return isinstance(obj, str)
 else:
     def isstring(obj):
         return isinstance(obj, str)
@@ -49,9 +48,9 @@ else:
 # We need to differentiate between StringIO and BytesIO in places
 
 if IS_PYTHON2:
-    from StringIO import StringIO
+    from io import StringIO
     try:
-        from cStringIO import StringIO as BytesIO
+        from io import StringIO as BytesIO
     except ImportError:
         BytesIO = StringIO
 else:
@@ -86,17 +85,38 @@ if IS_PYTHON2:
                         lineno, code.co_lnotab, (), ())
 else:
     def get_code_params(code):
-        return (code.co_nlocals, code.co_kwonlyargcount, code.co_stacksize,
-                code.co_flags, code.co_code, code.co_consts, code.co_names,
-                code.co_varnames, code.co_filename, code.co_name,
-                code.co_firstlineno, code.co_lnotab, (), ())
+        params = [code.co_nlocals, code.co_kwonlyargcount, code.co_stacksize,
+                  code.co_flags, code.co_code, code.co_consts, code.co_names,
+                  code.co_varnames, code.co_filename, code.co_name,
+                  code.co_firstlineno, code.co_lnotab, (), ()]
+        if hasattr(code, "co_posonlyargcount"):
+            # PEP 570 added "positional only arguments"
+            params.insert(1, code.co_posonlyargcount)
+        return tuple(params)
+
 
     def build_code_chunk(code, filename, name, lineno):
-        return CodeType(0, code.co_nlocals, code.co_kwonlyargcount,
-                        code.co_stacksize, code.co_flags | 0x0040,
-                        code.co_code, code.co_consts, code.co_names,
-                        code.co_varnames, filename, name, lineno,
-                        code.co_lnotab, (), ())
+        params =  [0, code.co_nlocals, code.co_kwonlyargcount,
+                  code.co_stacksize, code.co_flags | 0x0040,
+                  code.co_code, code.co_consts, code.co_names,
+                  code.co_varnames, filename, name, lineno,
+                  code.co_lnotab, (), ()]
+        if hasattr(code, "co_posonlyargcount"):
+            # PEP 570 added "positional only arguments"
+            params.insert(2, code.co_posonlyargcount)
+        return CodeType(*params)
+
+
+# In Python 3.8, Str and Ellipsis was replaced by Constant
+
+try:
+    _ast_Ellipsis = _ast.Ellipsis
+    _ast_Str = _ast.Str
+    _ast_Str_value = lambda obj: obj.s
+except AttributeError:
+    _ast_Ellipsis = _ast_Str = _ast.Constant
+    _ast_Str_value = lambda obj: obj.value
+
 
 # Compatibility fallback implementations for Python < 2.6
 
@@ -104,7 +124,7 @@ try:
     next = next
 except NameError:
     def next(iterator):
-        return next(iterator)
+        return iterator.__next__()
 
 # Compatibility fallback implementations for Python < 2.5
 

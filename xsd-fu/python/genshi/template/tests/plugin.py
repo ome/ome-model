@@ -12,7 +12,6 @@
 # individuals. For the exact contribution history, see the revision
 # history and logs, available at http://genshi.edgewall.org/log/.
 
-from __future__ import absolute_import
 import doctest
 import os
 import unittest
@@ -166,7 +165,7 @@ class MarkupTemplateEnginePluginTestCase(unittest.TestCase):
     def test_helper_functions(self):
         plugin = MarkupTemplateEnginePlugin()
         tmpl = plugin.load_template(PACKAGE + '.templates.functions')
-        output = plugin.render({'snippet': u'<b>Foo</b>'}, template=tmpl)
+        output = plugin.render({'snippet': '<b>Foo</b>'}, template=tmpl)
         self.assertEqual("""<div>
 False
 bar

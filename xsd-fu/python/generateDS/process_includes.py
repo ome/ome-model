@@ -23,14 +23,13 @@ Examples:
 #
 # Imports
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 import sys
 import os
 import getopt
 import re
-import six.moves.urllib.request, six.moves.urllib.parse, six.moves.urllib.error
-from six.moves import input
+import urllib.request, urllib.parse, urllib.error
 
 #
 # Try to import lxml first, and if that fails try ElementTree.
@@ -137,7 +136,7 @@ def process_include_tree(root):
             locn = child.attrib['schemaLocation']
             if locn.startswith('ftp:') or locn.startswith('http:'):
                 try:
-                    path, msg = six.moves.urllib.request.urlretrieve(locn)
+                    path, msg = urllib.request.urlretrieve(locn)
                     idx = process_path(root, idx, path)
                 except:
                     msg = "Can't retrieve import file %s.  Aborting." % (locn, )
@@ -164,7 +163,7 @@ def make_file(outFileName):
     global FORCE
     outFile = None
     if (not FORCE) and os.path.exists(outFileName):
-        reply = input('File %s exists.  Overwrite? (y/n): ' % outFileName)
+        reply = eval(input('File %s exists.  Overwrite? (y/n): ' % outFileName))
         if reply == 'y':
             outFile = open(outFileName, 'w')
     else:

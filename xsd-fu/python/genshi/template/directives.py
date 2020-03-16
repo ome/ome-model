@@ -13,15 +13,12 @@
 
 """Implementation of the various template directives."""
 
-from __future__ import absolute_import
 from genshi.core import QName, Stream
 from genshi.path import Path
 from genshi.template.base import TemplateRuntimeError, TemplateSyntaxError, \
                                  EXPR, _apply_directives, _eval_expr
 from genshi.template.eval import Expression, ExpressionASTTransformer, \
                                  _ast, _parse
-import six
-from six.moves import range
 
 __all__ = ['AttrsDirective', 'ChooseDirective', 'ContentDirective',
            'DefDirective', 'ForDirective', 'IfDirective', 'MatchDirective',
@@ -38,7 +35,7 @@ class DirectiveMeta(type):
         return type.__new__(cls, name, bases, d)
 
 
-class Directive(six.with_metaclass(DirectiveMeta, object)):
+class Directive(object, metaclass=DirectiveMeta):
     """Abstract base class for template directives.
     
     A directive is basically a callable that takes three positional arguments:
@@ -178,7 +175,7 @@ class AttrsDirective(Directive):
                 elif not isinstance(attrs, list): # assume it's a dict
                     attrs = list(attrs.items())
                 attrib |= [
-                    (QName(n), v is not None and six.text_type(v).strip() or None)
+                    (QName(n), v is not None and str(v).strip() or None)
                     for n, v in attrs
                 ]
             yield kind, (tag, attrib), pos
@@ -268,13 +265,21 @@ class DefDirective(Directive):
         if isinstance(ast, _ast.Call):
             self.name = ast.func.id
             for arg in ast.args:
-                # only names
-                self.args.append(arg.id)
+                if hasattr(_ast, 'Starred') and isinstance(arg, _ast.Starred):
+                    # Python 3.5+
+                    self.star_args = arg.value.id
+                else:
+                    # only names
+                    self.args.append(arg.id)
             for kwd in ast.keywords:
-                self.args.append(kwd.arg)
-                exp = Expression(kwd.value, template.filepath,
-                                 lineno, lookup=template.lookup)
-                self.defaults[kwd.arg] = exp
+                if kwd.arg is None:
+                    # Python 3.5+
+                    self.dstar_args = kwd.value.id
+                else:
+                    self.args.append(kwd.arg)
+                    exp = Expression(kwd.value, template.filepath,
+                                     lineno, lookup=template.lookup)
+                    self.defaults[kwd.arg] = exp
             if getattr(ast, 'starargs', None):
                 self.star_args = ast.starargs.id
             if getattr(ast, 'kwargs', None):

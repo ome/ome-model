@@ -30,7 +30,6 @@ an OME XML (http://www.ome-xml.org) XSD document.
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import absolute_import
 from collections import OrderedDict
 import logging
 

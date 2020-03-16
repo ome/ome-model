@@ -11,7 +11,6 @@
 # individuals. For the exact contribution history, see the revision
 # history and logs, available at http://genshi.edgewall.org/log/.
 
-from __future__ import absolute_import
 import doctest
 import os
 import shutil
@@ -21,7 +20,6 @@ import unittest
 from genshi.template.base import TemplateSyntaxError
 from genshi.template.loader import TemplateLoader
 from genshi.template.text import OldTextTemplate, NewTextTemplate
-from six.moves import range
 
 
 class OldTextTemplateTestCase(unittest.TestCase):
@@ -54,15 +52,15 @@ class OldTextTemplateTestCase(unittest.TestCase):
         self.assertEqual('\n', tmpl.generate(foo=False).render(encoding=None))
 
     def test_latin1_encoded(self):
-        text = u'$foo\xf6$bar'.encode('iso-8859-1')
+        text = '$foo\xf6$bar'.encode('iso-8859-1')
         tmpl = OldTextTemplate(text, encoding='iso-8859-1')
-        self.assertEqual(u'x\xf6y',
+        self.assertEqual('x\xf6y',
                          tmpl.generate(foo='x', bar='y').render(encoding=None))
 
     def test_unicode_input(self):
-        text = u'$foo\xf6$bar'
+        text = '$foo\xf6$bar'
         tmpl = OldTextTemplate(text)
-        self.assertEqual(u'x\xf6y',
+        self.assertEqual('x\xf6y',
                          tmpl.generate(foo='x', bar='y').render(encoding=None))
 
     def test_empty_lines1(self):
@@ -98,13 +96,13 @@ class OldTextTemplateTestCase(unittest.TestCase):
     def test_include(self):
         file1 = open(os.path.join(self.dirname, 'tmpl1.txt'), 'wb')
         try:
-            file1.write(u"Included\n".encode("utf-8"))
+            file1.write("Included\n".encode("utf-8"))
         finally:
             file1.close()
 
         file2 = open(os.path.join(self.dirname, 'tmpl2.txt'), 'wb')
         try:
-            file2.write(u"""----- Included data below this line -----
+            file2.write("""----- Included data below this line -----
             #include tmpl1.txt
             ----- Included data above this line -----""".encode("utf-8"))
         finally:
@@ -149,15 +147,15 @@ class NewTextTemplateTestCase(unittest.TestCase):
         self.assertEqual('\n', tmpl.generate(foo=False).render(encoding=None))
 
     def test_latin1_encoded(self):
-        text = u'$foo\xf6$bar'.encode('iso-8859-1')
+        text = '$foo\xf6$bar'.encode('iso-8859-1')
         tmpl = NewTextTemplate(text, encoding='iso-8859-1')
-        self.assertEqual(u'x\xf6y',
+        self.assertEqual('x\xf6y',
                          tmpl.generate(foo='x', bar='y').render(encoding=None))
 
     def test_unicode_input(self):
-        text = u'$foo\xf6$bar'
+        text = '$foo\xf6$bar'
         tmpl = NewTextTemplate(text)
-        self.assertEqual(u'x\xf6y',
+        self.assertEqual('x\xf6y',
                          tmpl.generate(foo='x', bar='y').render(encoding=None))
 
     def test_empty_lines1(self):
@@ -252,13 +250,13 @@ class NewTextTemplateTestCase(unittest.TestCase):
     def test_include(self):
         file1 = open(os.path.join(self.dirname, 'tmpl1.txt'), 'wb')
         try:
-            file1.write(u"Included".encode("utf-8"))
+            file1.write("Included".encode("utf-8"))
         finally:
             file1.close()
 
         file2 = open(os.path.join(self.dirname, 'tmpl2.txt'), 'wb')
         try:
-            file2.write(u"""----- Included data below this line -----
+            file2.write("""----- Included data below this line -----
 {% include tmpl1.txt %}
 ----- Included data above this line -----""".encode("utf-8"))
         finally:
@@ -274,13 +272,13 @@ Included
     def test_include_expr(self):
          file1 = open(os.path.join(self.dirname, 'tmpl1.txt'), 'wb')
          try:
-             file1.write(u"Included".encode("utf-8"))
+             file1.write("Included".encode("utf-8"))
          finally:
              file1.close()
  
          file2 = open(os.path.join(self.dirname, 'tmpl2.txt'), 'wb')
          try:
-             file2.write(u"""----- Included data below this line -----
+             file2.write("""----- Included data below this line -----
     {% include ${'%s.txt' % ('tmpl1',)} %}
     ----- Included data above this line -----""".encode("utf-8"))
          finally:

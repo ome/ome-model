@@ -11,7 +11,6 @@
 # individuals. For the exact contribution history, see the revision
 # history and logs, available at http://genshi.edgewall.org/log/.
 
-from __future__ import absolute_import
 import doctest
 import re
 import sys
@@ -19,7 +18,6 @@ import unittest
 
 from genshi.template import directives, MarkupTemplate, TextTemplate, \
                             TemplateRuntimeError, TemplateSyntaxError
-from six.moves import range
 
 
 class AttrsDirectiveTestCase(unittest.TestCase):
@@ -1192,12 +1190,12 @@ class WithDirectiveTestCase(unittest.TestCase):
         </div>""", tmpl.generate(foo={'bar': 42}).render(encoding=None))
 
     def test_unicode_expr(self):
-        tmpl = MarkupTemplate(u"""<div xmlns:py="http://genshi.edgewall.org/">
+        tmpl = MarkupTemplate("""<div xmlns:py="http://genshi.edgewall.org/">
           <span py:with="weeks=(u'一', u'二', u'三', u'四', u'五', u'六', u'日')">
             $weeks
           </span>
         </div>""")
-        self.assertEqual(u"""<div>
+        self.assertEqual("""<div>
           <span>
             一二三四五六日
           </span>

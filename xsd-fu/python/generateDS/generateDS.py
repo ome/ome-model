@@ -87,26 +87,20 @@ Options:
 
 #from __future__ import generators   # only needed for Python 2.2
 
-from __future__ import absolute_import
-from __future__ import print_function
+
+
 import sys
 import os.path
 import time
 import getopt
-import six.moves.urllib.request, six.moves.urllib.error, six.moves.urllib.parse
+import urllib.request, urllib.error, urllib.parse
 import imp
 from xml.sax import handler, make_parser
 import xml.sax.xmlreader
 import logging
 import keyword
-try:
-  from StringIO import StringIO
-except ImportError:
-  from io import StringIO
+from io import StringIO
 from collections import OrderedDict
-import six
-from six.moves import range
-from six.moves import input
 
 # Default logger configuration
 ## logging.basicConfig(level=logging.DEBUG, 
@@ -310,7 +304,7 @@ def dbgprint(level, msg):
 
 def pplist(lst):
     for count, item in enumerate(lst):
-        print('%d. %s' % (count, item))
+        print(('%d. %s' % (count, item)))
 
 
 
@@ -1022,7 +1016,7 @@ class XschemaHandler(handler.ContentHandler):
             # If there is an attribute "xmlns" and its value is
             #   "http://www.w3.org/2001/XMLSchema", then remember and
             #   use that namespace prefix.
-            for name, value in attrs.items():
+            for name, value in list(attrs.items()):
                 if name[:6] == 'xmlns:':
                     nameSpace = name[6:] + ':'
                     if value == 'http://www.w3.org/2001/XMLSchema':
@@ -1066,7 +1060,7 @@ class XschemaHandler(handler.ContentHandler):
             #   then copy the attributes to the item on top of the stack.
             if len(self.stack) > 1 and len(attrs) > 0:
                 parentDict = self.stack[-1].getAttrs()
-                for key in attrs.keys():
+                for key in list(attrs.keys()):
                     parentDict[key] = attrs[key]
             self.inComplexType = 1
         elif name == SequenceType:
@@ -1564,7 +1558,7 @@ def generateExportAttributes(outfile, element, hasAttributes):
     if len(element.getAttributeDefs()) > 0:
         hasAttributes += 1
         attrDefs = element.getAttributeDefs()
-        for key in attrDefs.keys():
+        for key in list(attrDefs.keys()):
             attrDef = attrDefs[key]
             name = attrDef.getName()
             cleanName = mapName(cleanupName(name))
@@ -3177,7 +3171,7 @@ def generateMemberSpec(outfile, element):
     else:
         content = ['    _member_data_items = [']
     add = content.append
-    for attrName, attrDef in element.getAttributeDefs().items():
+    for attrName, attrDef in list(element.getAttributeDefs().items()):
         item1 = attrName
         item2 = attrDef.getType()
         item3 = 0
@@ -3656,12 +3650,12 @@ def get_impl_body(classBehavior, baseImplUrl, implUrl):
         if baseImplUrl:
             implUrl = '%s%s' % (baseImplUrl, implUrl)
         try:
-            implFile = six.moves.urllib.request.urlopen(implUrl)
+            implFile = urllib.request.urlopen(implUrl)
             impl = implFile.read()
             implFile.close()
-        except six.moves.urllib.error.HTTPError:
+        except urllib.error.HTTPError:
             err_msg('*** Implementation at %s not found.\n' % implUrl)
-        except six.moves.urllib.error.URLError:
+        except urllib.error.URLError:
             err_msg('*** Connection refused for URL: %s\n' % implUrl)
     return impl
 
@@ -4058,7 +4052,7 @@ def generateFromTree(outfile, prefix, elements, processed):
 
 def generateSimpleTypes(outfile, prefix, simpleTypeDict):
     wrt = outfile.write
-    for simpletype in simpleTypeDict.keys():
+    for simpletype in list(simpleTypeDict.keys()):
         wrt('class %s(object):\n' % simpletype)
         wrt('    pass\n')
         wrt('\n\n')
@@ -4124,7 +4118,7 @@ def makeFile(outFileName):
     global Force
     outFile = None
     if (not Force) and os.path.exists(outFileName):
-        reply = input('File %s exists.  Overwrite? (y/n): ' % outFileName)
+        reply = eval(input('File %s exists.  Overwrite? (y/n): ' % outFileName))
         if reply == 'y':
             outFile = open(outFileName, 'w')
     else:
@@ -4261,10 +4255,10 @@ def parseAndGenerate(outfileName, subclassFilename, prefix,
 
 def debug_show_elements(root):
     #print 'ElementDict:', ElementDict
-    print('=' * 50)
-    for name, obj in six.iteritems(ElementDict):
-        print('element:', name, obj.getName(), obj.type)
-    print('=' * 50)
+    print(('=' * 50))
+    for name, obj in ElementDict.iteritems:
+        print(('element:', name, obj.getName(), obj.type))
+    print(('=' * 50))
     #ipshell('debug')
 ##     root.show(sys.stdout, 0)
 ##     print '=' * 50
@@ -4372,7 +4366,7 @@ def main():
             if MemberSpecs not in ('list', 'dict', ):
                 raise RuntimeError('Option --member-specs must be "list" or "dict".')
     if showVersion:
-        print('generateDS.py version %s' % VERSION)
+        print(('generateDS.py version %s' % VERSION))
         sys.exit(0)
     XsdNameSpace = nameSpace
     Namespacedef = namespacedef

@@ -15,7 +15,6 @@
 parts that are literal strings, and others that are Python expressions.
 """
 
-from __future__ import absolute_import
 from itertools import chain
 import os
 import re

@@ -11,7 +11,6 @@
 # individuals. For the exact contribution history, see the revision
 # history and logs, available at http://genshi.edgewall.org/log/.
 
-from __future__ import absolute_import
 import doctest
 import os
 import pickle
@@ -26,7 +25,6 @@ from genshi.input import XML
 from genshi.template.base import BadDirectiveError, TemplateSyntaxError
 from genshi.template.loader import TemplateLoader, TemplateNotFound
 from genshi.template.markup import MarkupTemplate
-import six
 
 
 class MarkupTemplateTestCase(unittest.TestCase):
@@ -192,21 +190,21 @@ class MarkupTemplateTestCase(unittest.TestCase):
         </div>""", str(tmpl.generate()))
 
     def test_latin1_encoded_with_xmldecl(self):
-        tmpl = MarkupTemplate(u"""<?xml version="1.0" encoding="iso-8859-1" ?>
+        tmpl = MarkupTemplate("""<?xml version="1.0" encoding="iso-8859-1" ?>
         <div xmlns:py="http://genshi.edgewall.org/">
           \xf6
         </div>""".encode('iso-8859-1'), encoding='iso-8859-1')
-        self.assertEqual(u"""<?xml version="1.0" encoding="iso-8859-1"?>\n<div>
+        self.assertEqual("""<?xml version="1.0" encoding="iso-8859-1"?>\n<div>
           \xf6
-        </div>""", six.text_type(tmpl.generate()))
+        </div>""", str(tmpl.generate()))
 
     def test_latin1_encoded_explicit_encoding(self):
-        tmpl = MarkupTemplate(u"""<div xmlns:py="http://genshi.edgewall.org/">
+        tmpl = MarkupTemplate("""<div xmlns:py="http://genshi.edgewall.org/">
           \xf6
         </div>""".encode('iso-8859-1'), encoding='iso-8859-1')
-        self.assertEqual(u"""<div>
+        self.assertEqual("""<div>
           \xf6
-        </div>""", six.text_type(tmpl.generate()))
+        </div>""", str(tmpl.generate()))
 
     def test_exec_with_trailing_space(self):
         """

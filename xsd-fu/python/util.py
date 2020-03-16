@@ -19,7 +19,7 @@
 
 """Various utility classes and functions."""
 
-from __future__ import absolute_import
+
 import codecs
 from datetime import timedelta, tzinfo
 import os
@@ -27,20 +27,7 @@ import re
 import textwrap
 import time
 
-import six
-from six.moves import zip
-from six.moves import map
-try:
-    # assigned so they're importable
-    frozenset = frozenset
-    set = set
-except NameError:
-    from sets import Set as set
-try:
-    from operator import itemgetter
-except ImportError:
-    def itemgetter(item):
-        return lambda obj: obj[item]
+from operator import itemgetter
 
 missing = object()
 
@@ -250,14 +237,7 @@ class FixedOffsetTimezone(tzinfo):
         return ZERO
 
 
-try:
-    from pytz import UTC
-except ImportError:
-    UTC = FixedOffsetTimezone(0, 'UTC')
-    """`tzinfo` object for UTC (Universal Time).
-
-    :type: `tzinfo`
-    """
+from pytz import UTC
 
 STDOFFSET = timedelta(seconds=-time.timezone)
 if time.daylight:

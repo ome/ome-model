@@ -11,7 +11,6 @@
 # individuals. For the exact contribution history, see the revision
 # history and logs, available at http://genshi.edgewall.org/log/.
 
-from __future__ import absolute_import
 import doctest
 import os
 import pickle
@@ -24,7 +23,6 @@ from genshi.template.base import Context
 from genshi.template.eval import Expression, Suite, Undefined, UndefinedError, \
                                  UNDEFINED
 from genshi.compat import BytesIO, IS_PYTHON2, wrapped_bytes
-from six.moves import range
 
 
 class ExpressionTestCase(unittest.TestCase):
@@ -60,26 +58,26 @@ class ExpressionTestCase(unittest.TestCase):
     def test_str_literal(self):
         self.assertEqual('foo', Expression('"foo"').evaluate({}))
         self.assertEqual('foo', Expression('"""foo"""').evaluate({}))
-        self.assertEqual(u'foo'.encode('utf-8'),
+        self.assertEqual('foo'.encode('utf-8'),
                          Expression(wrapped_bytes("b'foo'")).evaluate({}))
         self.assertEqual('foo', Expression("'''foo'''").evaluate({}))
         self.assertEqual('foo', Expression("u'foo'").evaluate({}))
         self.assertEqual('foo', Expression("r'foo'").evaluate({}))
 
     def test_str_literal_non_ascii(self):
-        expr = Expression(u"u'\xfe'")
-        self.assertEqual(u'þ', expr.evaluate({}))
         expr = Expression("u'\xfe'")
-        self.assertEqual(u'þ', expr.evaluate({}))
+        self.assertEqual('þ', expr.evaluate({}))
+        expr = Expression("u'\xfe'")
+        self.assertEqual('þ', expr.evaluate({}))
         # On Python2 strings are converted to unicode if they contained
         # non-ASCII characters.
         # On Py3k, we have no need to do this as non-prefixed strings aren't
         # raw.
         expr = Expression(wrapped_bytes(r"b'\xc3\xbe'"))
         if IS_PYTHON2:
-            self.assertEqual(u'þ', expr.evaluate({}))
+            self.assertEqual('þ', expr.evaluate({}))
         else:
-            self.assertEqual(u'þ'.encode('utf-8'), expr.evaluate({}))
+            self.assertEqual('þ'.encode('utf-8'), expr.evaluate({}))
 
     def test_num_literal(self):
         self.assertEqual(42, Expression("42").evaluate({}))
@@ -836,12 +834,12 @@ assert f() == 42
                 self.attr = 'foo'
         obj = Something()
         Suite("del obj.attr").execute({'obj': obj})
-        self.failIf(hasattr(obj, 'attr'))
+        self.assertFalse(hasattr(obj, 'attr'))
 
     def test_delitem(self):
         d = {'k': 'foo'}
         Suite("del d['k']").execute({'d': d})
-        self.failIf('k' in d, repr(d))
+        self.assertFalse('k' in d, repr(d))
 
     if sys.version_info >= (2, 5):
         def test_with_statement(self):

@@ -13,8 +13,7 @@
 
 """Support for "safe" evaluation of Python expressions."""
 
-from __future__ import absolute_import
-import six.moves.builtins
+import builtins
 
 from textwrap import dedent
 from types import CodeType
@@ -26,9 +25,7 @@ from genshi.template.base import TemplateRuntimeError
 from genshi.util import flatten
 
 from genshi.compat import get_code_params, build_code_chunk, isstring, \
-                          IS_PYTHON2
-import six
-from six.moves import zip
+                          IS_PYTHON2, _ast_Str
 
 __all__ = ['Code', 'Expression', 'Suite', 'LenientLookup', 'StrictLookup',
            'Undefined', 'UndefinedError']
@@ -78,7 +75,7 @@ class Code(object):
                       if `None`, the appropriate transformation is chosen
                       depending on the mode
         """
-        if isinstance(source, six.string_types):
+        if isinstance(source, str):
             self.source = source
             node = _parse(source, mode=self.mode)
         else:
@@ -97,7 +94,7 @@ class Code(object):
                              filename=filename, lineno=lineno, xform=xform)
         if lookup is None:
             lookup = LenientLookup
-        elif isinstance(lookup, six.string_types):
+        elif isinstance(lookup, str):
             lookup = {'lenient': LenientLookup, 'strict': StrictLookup}[lookup]
         self._globals = lookup.globals
 
@@ -267,7 +264,7 @@ class Undefined(object):
     def __iter__(self):
         return iter([])
 
-    def __nonzero__(self):
+    def __bool__(self):
         return False
 
     def __repr__(self):
@@ -337,7 +334,7 @@ class LookupBase(object):
         try:
             return obj[key]
         except (AttributeError, KeyError, IndexError, TypeError) as e:
-            if isinstance(key, six.string_types):
+            if isinstance(key, str):
                 val = getattr(obj, key, UNDEFINED)
                 if val is UNDEFINED:
                     val = cls.undefined(key, owner=obj)
@@ -427,8 +424,8 @@ def _parse(source, mode='eval'):
             if first.rstrip().endswith(':') and not rest[0].isspace():
                 rest = '\n'.join(['    %s' % line for line in rest.splitlines()])
             source = '\n'.join([first, rest])
-    if isinstance(source, six.text_type):
-        source = (u'\ufeff' + source).encode('utf-8')
+    if isinstance(source, str):
+        source = ('\ufeff' + source).encode('utf-8')
     return parse(source, mode)
 
 
@@ -438,11 +435,11 @@ def _compile(node, source=None, mode='eval', filename=None, lineno=-1,
         filename = '<string>'
     if IS_PYTHON2:
         # Python 2 requires non-unicode filenames
-        if isinstance(filename, six.text_type):
+        if isinstance(filename, str):
             filename = filename.encode('utf-8', 'replace')
     else:
         # Python 3 requires unicode filenames
-        if not isinstance(filename, six.text_type):
+        if not isinstance(filename, str):
             filename = filename.decode('utf-8', 'replace')
     if lineno <= 0:
         lineno = 1
@@ -486,7 +483,7 @@ def _new(class_, *args, **kwargs):
     return ret
 
 
-BUILTINS = six.moves.builtins.__dict__.copy()
+BUILTINS = builtins.__dict__.copy()
 BUILTINS.update({'Markup': Markup, 'Undefined': Undefined})
 CONSTANTS = frozenset(['False', 'True', 'None', 'NotImplemented', 'Ellipsis'])
 
@@ -530,11 +527,11 @@ class TemplateASTTransformer(ASTTransformer):
         return names
 
     def visit_Str(self, node):
-        if not isinstance(node.s, six.text_type):
+        if not isinstance(node.s, str):
             try: # If the string is ASCII, return a `str` object
                 node.s.decode('ascii')
             except ValueError: # Otherwise return a `unicode` object
-                return _new(_ast.Str, node.s.decode('utf-8'))
+                return _new(_ast_Str, node.s.decode('utf-8'))
         return node
 
     def visit_ClassDef(self, node):
@@ -559,7 +556,7 @@ class TemplateASTTransformer(ASTTransformer):
                 node = _new(_ast.Expr, _new(_ast.Call,
                     _new(_ast.Name, '_star_import_patch'), [
                         _new(_ast.Name, '__data__'),
-                        _new(_ast.Str, node.module)
+                        _new(_ast_Str, node.module)
                     ], (), ()))
             return node
         if len(self.locals) > 1:
@@ -603,6 +600,11 @@ class TemplateASTTransformer(ASTTransformer):
         finally:
             self.locals.pop()
 
+    # Only used in Python 3.5+
+    def visit_Starred(self, node):
+        node.value = self.visit(node.value)
+        return node
+
     def visit_Name(self, node):
         # If the name refers to a local inside a lambda, list comprehension, or
         # generator expression, leave it alone
@@ -611,7 +613,7 @@ class TemplateASTTransformer(ASTTransformer):
             # Otherwise, translate the name ref into a context lookup
             name = _new(_ast.Name, '_lookup_name', _ast.Load())
             namearg = _new(_ast.Name, '__data__', _ast.Load())
-            strarg = _new(_ast.Str, node.id)
+            strarg = _new(_ast_Str, node.id)
             node = _new(_ast.Call, name, [namearg, strarg], [])
         elif isinstance(node.ctx, _ast.Store):
             if len(self.locals) > 1:
@@ -630,7 +632,7 @@ class ExpressionASTTransformer(TemplateASTTransformer):
             return ASTTransformer.visit_Attribute(self, node)
 
         func = _new(_ast.Name, '_lookup_attr', _ast.Load())
-        args = [self.visit(node.value), _new(_ast.Str, node.attr)]
+        args = [self.visit(node.value), _new(_ast_Str, node.attr)]
         return _new(_ast.Call, func, args, [])
 
     def visit_Subscript(self, node):

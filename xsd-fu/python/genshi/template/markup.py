@@ -13,7 +13,6 @@
 
 """Markup templating engine."""
 
-from __future__ import absolute_import
 from itertools import chain
 
 from genshi.core import Attrs, Markup, Namespace, Stream, StreamEventKind
@@ -312,7 +311,7 @@ class MarkupTemplate(Template):
 
         def _strip(stream, append):
             depth = 1
-            next = stream.next
+            next = stream.__next__
             while 1:
                 event = next()
                 if event[0] is START:

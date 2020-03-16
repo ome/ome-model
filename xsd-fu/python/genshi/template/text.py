@@ -26,7 +26,6 @@ recommended for new projects, and existing projects may want to migrate to the
 new syntax to remain compatible with future Genshi releases.
 """
 
-from __future__ import absolute_import
 import re
 
 from genshi.core import TEXT
@@ -36,7 +35,6 @@ from genshi.template.eval import Suite
 from genshi.template.directives import *
 from genshi.template.directives import Directive
 from genshi.template.interpolation import interpolate
-import six
 
 __all__ = ['NewTextTemplate', 'OldTextTemplate', 'TextTemplate']
 __docformat__ = 'restructuredtext en'
@@ -102,7 +100,7 @@ class NewTextTemplate(Template):
 
     >>> tmpl = NewTextTemplate('''Dear $name,
     ... 
-    ... \{# This is a comment #}
+    ... \\{# This is a comment #}
     ... We have the following items for you:
     ... {% for item in items %}\
     ...  * $item
@@ -164,7 +162,7 @@ class NewTextTemplate(Template):
         depth = 0
 
         source = source.read()
-        if not isinstance(source, six.text_type):
+        if not isinstance(source, str):
             source = source.decode(encoding or 'utf-8', 'replace')
         offset = 0
         lineno = 1
@@ -281,7 +279,7 @@ class OldTextTemplate(Template):
         depth = 0
 
         source = source.read()
-        if not isinstance(source, six.text_type):
+        if not isinstance(source, str):
             source = source.decode(encoding or 'utf-8', 'replace')
         offset = 0
         lineno = 1
