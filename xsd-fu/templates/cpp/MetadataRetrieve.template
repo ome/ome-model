@@ -431,8 +431,6 @@ namespace ome
          * Get the UUID associated with this collection of metadata.
          *
          * @returns the UUID.
-         *
-         * @todo Can this be a const reference?
          */
         virtual const std::string&
         getUUID() const = 0;

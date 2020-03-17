@@ -1000,7 +1000,7 @@ ${counter(k, o, v)}\
       {
         std::shared_ptr<const std::string> uuid = root->getUUID();
         if (uuid)
-          return *root->getUUID();
+          return *uuid;
         else
           throw MetadataException("OMEXMLMetadata", "getUUID",
                                   "Internal metadata store inconsistency: null object");
