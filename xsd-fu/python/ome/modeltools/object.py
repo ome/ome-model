@@ -234,8 +234,6 @@ class OMEModelObject(OMEModelEntity):
         name = self.langBaseType
         if isinstance(self.model.opts.lang, language.Java):
             name = "ome.xml.model.%s" % self.langBaseType
-        if isinstance(self.model.opts.lang, language.CXX):
-            name = "::ome::xml::model::%s" % self.langBaseType
         return name
     langBaseTypeNS = property(
         _get_langBaseTypeNS, doc="The model object's type with namespace.")
@@ -252,12 +250,6 @@ class OMEModelObject(OMEModelEntity):
                 pass
         if name is None:
             name = self.argumentName
-
-        if isinstance(self.model.opts.lang, language.CXX):
-            if (name == "namespace"):
-                name = "namespace_"
-            elif (name == "union"):
-                name = "union_"
 
         return name
 
@@ -289,44 +281,11 @@ class OMEModelObject(OMEModelEntity):
             pass
         elif isinstance(self.model.opts.lang, language.Java):
             header = "ome.xml.model.%s" % self.name
-        elif isinstance(self.model.opts.lang, language.CXX):
-            path = re.sub("::", "/", self.name)
-            header = "ome/xml/model/%s.h" % path
         return header
     header = property(
         _get_header,
         doc="The model object's include/import name. "
         "Does not include dependent headers.")
-
-    def _get_header_deps(self):
-        deps = set()
-
-        myself = None
-
-        if isinstance(self.model.opts.lang, language.Java):
-            myself = "ome.xml.model.%s" % self.langBaseType
-            if self.parentName is not None:
-                deps.add("ome.xml.model.%s" % self.parentName)
-        elif isinstance(self.model.opts.lang, language.CXX):
-            if self.langBaseType is not None:
-                path = re.sub("::", "/", self.langBaseType)
-                myself = "ome/xml/model/%s.h" % path
-            if (self.parentName is not None and
-                    self.parentName != self.model.opts.lang.base_class):
-                path = re.sub("::", "/", self.parentName)
-                deps.add("ome/xml/model/%s.h" % path)
-
-        for prop in self.properties.values():
-            for dep in prop.header_dependencies:
-                deps.add(dep)
-
-        if myself in deps:
-            deps.remove(myself)
-
-        return sorted(deps)
-    header_dependencies = property(
-        _get_header_deps,
-        doc="""The object's dependencies for include/import in headers.""")
 
     def _get_source_deps(self):
         deps = set()
@@ -335,10 +294,6 @@ class OMEModelObject(OMEModelEntity):
             pass
         elif isinstance(self.model.opts.lang, language.Java):
             pass
-        elif isinstance(self.model.opts.lang, language.CXX):
-            path = re.sub("::", "/", self.name)
-            deps.add("ome/xml/model/%s.h" % path)
-            deps.add("ome/xml/model/OMEModel.h")
 
         for prop in self.properties.values():
             deps.update(prop.source_dependencies)
@@ -347,26 +302,6 @@ class OMEModelObject(OMEModelEntity):
     source_dependencies = property(
         _get_source_deps,
         doc="""The object's dependencies for include/import in sources.""")
-
-    def _get_fwd(self):
-        fwd = set()
-
-        if self.name in list(self.model.opts.lang.model_type_map.keys()):
-            pass
-        elif isinstance(self.model.opts.lang, language.Java):
-            pass
-        elif isinstance(self.model.opts.lang, language.CXX):
-            fwd.add("OMEModel")
-
-        for prop in self.properties.values():
-            for f in prop.forward:
-                fwd.add(f)
-        if self.name in fwd:
-            fwd.remove(self.name)
-
-        return sorted(fwd)
-    forward = property(
-        _get_fwd, doc="The object's forward declarations for cycle breaking.")
 
     def _get_parents(self):
         return self.model.resolve_parents(self.name)

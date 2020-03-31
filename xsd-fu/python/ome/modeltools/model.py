@@ -127,33 +127,6 @@ class OMEModel(object):
                 return simpleType
         return None
 
-    def getAllHeaders(self):
-        headers = set()
-        for o in self.objects.values():
-            h = o.header_dependencies
-            if h is not None:
-                headers.union(h)
-        return sorted(headers)
-
-    def getEnumHeaders(self):
-        headers = set()
-        for obj in self.objects.values():
-            for prop in obj.properties.values():
-                if not prop.isEnumeration:
-                    continue
-                h = prop.header
-                if h is not None:
-                    headers.add(h)
-        return sorted(headers)
-
-    def getObjectHeaders(self):
-        headers = set()
-        for obj in self.objects.values():
-            h = obj.header
-            if h is not None:
-                headers.add(h)
-        return sorted(headers)
-
     def processAttributes(self, element):
         """
         Process all the attributes for a given element (a leaf).
@@ -345,21 +318,6 @@ class OMEModel(object):
             parents[parent] = self.resolve_parents(parent)
         return parents
 
-    def _get_header_deps(self):
-        deps = set()
-
-        for o in self.objects.values():
-            dep = o.header
-            if dep is not None:
-                deps.add(dep)
-
-            deps.update(o.header_dependencies)
-
-        return sorted(deps)
-    header_dependencies = property(
-        _get_header_deps,
-        doc="""The model's dependencies for include/import in headers.""")
-        
     def populateSubstitutionGroups(self, elements):
         """
         Creates a mapping between substitution group elements and their type elements

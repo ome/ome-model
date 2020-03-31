@@ -118,8 +118,8 @@ Additional tools
 ----------------
 
 The :program:`xsd-fu` code generator digests the OME data model schema and
-produces an object oriented C++ and Java infrastructure to ease working
-with an XML DOM tree.
+produces an object oriented Java infrastructure to ease working with an XML
+DOM tree.
 
 |
 

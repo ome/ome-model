@@ -31,7 +31,6 @@ import os
 from ome.modeltools.exceptions import ModelProcessingError
 
 TYPE_SOURCE = "source"
-TYPE_HEADER = "header"
 
 
 class Language(object):
@@ -121,7 +120,6 @@ class Language(object):
         self.name = None
         self.template_dir = None
         self.source_suffix = None
-        self.header_suffix = None
         self.converter_dir = None
         self.converter_name = None
 
@@ -160,8 +158,6 @@ class Language(object):
         gen_name = None
         if type == TYPE_SOURCE and self.source_suffix is not None:
             gen_name = name + self.source_suffix
-        elif type == TYPE_HEADER and self.header_suffix is not None:
-            gen_name = name + self.header_suffix
         else:
             raise ModelProcessingError(
                 "Invalid language/filetype combination: %s/%s"
@@ -309,7 +305,6 @@ class Java(Language):
         self.name = "Java"
         self.template_dir = "templates/java"
         self.source_suffix = ".java"
-        self.header_suffix = None
         self.converter_name = "MetadataConverter"
         self.converter_dir = "ome-xml/src/main/java/ome/xml/meta"
 
@@ -344,92 +339,6 @@ class Java(Language):
         return sig
 
 
-class CXX(Language):
-    def __init__(self, namespace, templatepath):
-        super(CXX, self).__init__(namespace, templatepath)
-
-        self.package_separator = '::'
-
-        self.template_map['OMEXML_METADATA'] = 'OMEXMLMetadata.template'
-
-        self.fundamental_types = set([
-            "bool",
-            "char", "signed char", "unsigned char",
-            "short", "signed short", "unsigned short",
-            "int", "signed int", "unsigned int",
-            "long", "signed long", "unsigned long",
-            "long long", "signed long long", "unsigned long long",
-            "float", "double", "long double",
-            "int8_t", "uint8_t",
-            "int16_t", "uint16_t",
-            "int32_t", "uint32_t",
-            "int64_t", "uint64_t"])
-
-        self.primitive_types = self.primitive_types.union(set([
-            "Color",
-            "NonNegativeFloat",
-            "NonNegativeInteger",
-            "NonNegativeLong",
-            "PercentFraction",
-            "PositiveFloat",
-            "PositiveInteger",
-            "PositiveLong",
-            "Timestamp"]))
-
-        self.primitive_type_map[namespace + 'boolean'] = 'bool'
-        self.primitive_type_map[namespace + 'string'] = 'std::string'
-        self.primitive_type_map[namespace + 'integer'] = 'int32_t'
-        self.primitive_type_map[namespace + 'int'] = 'int32_t'
-        self.primitive_type_map[namespace + 'long'] = 'int64_t'
-        self.primitive_type_map[namespace + 'float'] = 'double'
-        self.primitive_type_map[namespace + 'double'] = 'double'
-        self.primitive_type_map[namespace + 'anyURI'] = 'std::string'
-        self.primitive_type_map[namespace + 'hexBinary'] = 'std::string'
-        self.primitive_type_map['base64Binary'] = 'std::vector<uint8_t>'
-        self.primitive_type_map['Map'] = 'OrderedMultimap'
-
-        self.model_type_map['Map'] = None
-        self.model_type_map['M'] = None
-        self.model_type_map['K'] = None
-        self.model_type_map['V'] = None
-
-        self.type_map = copy.deepcopy(self.primitive_type_map)
-        self._initTypeMap()
-        self.type_map['MIMEtype'] = 'std::string'
-
-        self.name = "C++"
-        self.template_dir = "templates/cpp"
-        self.source_suffix = ".cpp"
-        self.header_suffix = ".h"
-        self.converter_name = "Convert"
-        self.converter_dir = "ome-xml/src/main/cpp/ome/xml/meta"
-
-        self.omexml_model_package = "ome::xml::model"
-        self.omexml_model_enums_package = "ome::xml::model::enums"
-        self.omexml_model_quantity_package = "ome::xml::model::primitives"
-        self.omexml_model_omexml_model_enum_handlers_package = \
-            "ome::xml::model::enums::handlers"
-        self.metadata_package = "ome::xml::meta"
-        self.omexml_metadata_package = "ome::xml::meta"
-
-    def getDefaultModelBaseClass(self):
-        return "detail::OMEModelObject"
-
-    def typeToUnitsType(self, unitType, valueType=None):
-        if valueType is None:
-            return "%s::Quantity<%s > " % (self.omexml_model_quantity_package, unitType)
-        else:
-            return "%s::Quantity<%s, %s > " % (self.omexml_model_quantity_package, unitType, valueType)
-
-    def index_signature(self, name, max_occurs, level, dummy=False):
-        """Makes a C++ method signature dictionary from an index name."""
-
-        sig = super(CXX, self).index_signature(name, max_occurs, level, dummy)
-        sig['argtype'] = 'index_type'
-
-        return sig
-
-
 def create(language, namespace, templatepath):
     """
     Create a language by name.
@@ -439,8 +348,6 @@ def create(language, namespace, templatepath):
 
     if language == "Java":
         lang = Java(namespace, templatepath)
-    elif language == "C++":
-        lang = CXX(namespace, templatepath)
     else:
         raise ModelProcessingError(
             "Invalid language: %s" % language)

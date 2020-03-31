@@ -85,11 +85,6 @@ class OMEModelEntity(object):
     def _get_argumentName(self):
         argumentName = config.REF_REGEX.sub('', self.name)
         argumentName = self.lowerCasePrefix(argumentName)
-        if isinstance(self.model.opts.lang, language.CXX):
-            if (argumentName == "namespace"):
-                argumentName = "namespace_"
-            elif (argumentName == "union"):
-                argumentName = "union_"
         return argumentName
     argumentName = property(
         _get_argumentName,
