@@ -350,5 +350,6 @@ if not (sys.version_info[0] == 2 and sys.version_info[1] <= 5):
 # Regular expressions that match URIs that should not be checked when doing a linkcheck build
 linkcheck_ignore = [
     "http://www.definiens.com",
-    "https://www.imagic.ch/"
+    "https://www.imagic.ch/",
+    "https://github.com/ome/"
 ]
