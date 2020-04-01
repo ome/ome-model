@@ -226,6 +226,15 @@ public interface MetadataStore extends BaseMetadata
    */
   void setUUID(String uuid);
 
+  /**
+   * Set the Creator associated with this collection of metadata.
+   *
+   * @param creator the Creator to set.
+   */
+  default void setCreator(String creator)
+  {
+  }
+
 {% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
 {% if o.name not in fu.METADATA_OBJECT_IGNORE %}\
 {% if o.langBaseType != 'Object' %}\

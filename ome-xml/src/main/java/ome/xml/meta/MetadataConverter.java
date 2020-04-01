@@ -4476,6 +4476,14 @@ public final class MetadataConverter {
     catch (NullPointerException e) { }
 
     try {
+      String creator = src.getCreator();
+      if (creator != null) {
+        dest.setCreator(creator);
+      }
+    }
+    catch (NullPointerException e) { }
+
+    try {
       String rightsHeld = src.getRightsRightsHeld();
       if (rightsHeld != null) {
         dest.setRightsRightsHeld(rightsHeld);
