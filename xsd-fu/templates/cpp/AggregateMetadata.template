@@ -747,6 +747,26 @@ ${counter(k, o, v)}\
 
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in base class.
+        const std::string&
+        getCreator() const;
+{% end header %}\
+{% if fu.SOURCE_TYPE == "source" %}\
+      const std::string&
+      AggregateMetadata::getCreator() const
+      {
+        for (const auto& i : delegates)
+          {
+            std::shared_ptr<MetadataRetrieve> retrieve = std::dynamic_pointer_cast<MetadataRetrieve>(i);
+            if (retrieve)
+              return retrieve->getCreator();
+          }
+        throw MetadataException("AggregateMetadata", "getCreator",
+                                "no delegate MetadataRetrieve implementation");
+      }
+{% end source %}\
+
+{% if fu.SOURCE_TYPE == "header" %}\
+        // Documented in base class.
         const ome::xml::model::primitives::OrderedMultimap&
         getMapAnnotationValue(index_type mapAnnotationIndex) const;
 {% end header %}\
@@ -760,7 +780,7 @@ ${counter(k, o, v)}\
             if (retrieve)
               return retrieve->getMapAnnotationValue(mapAnnotationIndex);
           }
-        throw MetadataException("AggregateMetadata", "getUUID",
+        throw MetadataException("AggregateMetadata", "getMapAnnotationValue",
                                 "no delegate MetadataRetrieve implementation");
       }
 {% end source %}\
@@ -784,7 +804,7 @@ ${counter(k, o, v)}\
             if (retrieve)
               return retrieve->getGenericExcitationSourceMap(instrumentIndex, lightSourceIndex);
           }
-        throw MetadataException("AggregateMetadata", "getUUID",
+        throw MetadataException("AggregateMetadata", "getGenericExcitationSourceMap",
                                 "no delegate MetadataRetrieve implementation");
       }
 {% end source %}\
@@ -806,7 +826,7 @@ ${counter(k, o, v)}\
             if (retrieve)
               return retrieve->getImagingEnvironmentMap(imageIndex);
           }
-        throw MetadataException("AggregateMetadata", "getUUID",
+        throw MetadataException("AggregateMetadata", "getImagingEnvironmentMap",
                                 "no delegate MetadataRetrieve implementation");
       }
 {% end source %}\
@@ -928,6 +948,26 @@ ${getter(k, o, prop, v)}\
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in base class.
         void
+        setCreator(const std::string& creator);
+{% end header %}\
+{% if fu.SOURCE_TYPE == "source" %}\
+      void
+      AggregateMetadata::setCreator(const std::string& creator)
+      {
+        for (auto& i : delegates)
+          {
+            std::shared_ptr<MetadataStore> store = std::dynamic_pointer_cast<MetadataStore>(i);
+            if (store)
+              store->setCreator(creator);
+          }
+        throw MetadataException("AggregateMetadata", "setCreator",
+                                "no delegate MetadataStore implementation");
+      }
+{% end source %}\
+
+{% if fu.SOURCE_TYPE == "header" %}\
+        // Documented in base class.
+        void
         setMapAnnotationValue(const ome::xml::model::primitives::OrderedMultimap& value,
                               index_type                                          mapAnnotationIndex);
 {% end header %}\
@@ -942,7 +982,7 @@ ${getter(k, o, prop, v)}\
             if (store)
               store->setMapAnnotationValue(value, mapAnnotationIndex);
           }
-        throw MetadataException("AggregateMetadata", "setUUID",
+        throw MetadataException("AggregateMetadata", "setMapAnnotationValue",
                                 "no delegate MetadataStore implementation");
       }
 {% end source %}\
@@ -968,7 +1008,7 @@ ${getter(k, o, prop, v)}\
             if (store)
               store->setGenericExcitationSourceMap(value, instrumentIndex, lightSourceIndex);
           }
-        throw MetadataException("AggregateMetadata", "setUUID",
+        throw MetadataException("AggregateMetadata", "setGenericExcitationSourceMap",
                                 "no delegate MetadataStore implementation");
       }
 {% end source %}\
@@ -992,7 +1032,7 @@ ${getter(k, o, prop, v)}\
             if (store)
               store->setImagingEnvironmentMap(value, imageIndex);
           }
-        throw MetadataException("AggregateMetadata", "setUUID",
+        throw MetadataException("AggregateMetadata", "setImagingEnvironmentMap",
                                 "no delegate MetadataStore implementation");
       }
 {% end source %}\

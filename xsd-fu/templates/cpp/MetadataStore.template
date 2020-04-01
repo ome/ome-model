@@ -251,6 +251,14 @@ namespace ome
         setUUID(const std::string& uuid) = 0;
 
         /**
+         * Set the Creator associated with this collection of metadata.
+         *
+         * @param creator the Creator to set.
+         */
+        virtual void
+        setCreator(const std::string& creator) = 0;
+
+        /**
          * Set the map value of MapAnnotation.
          *
          * @param value the map value to set.

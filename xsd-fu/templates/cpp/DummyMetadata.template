@@ -561,6 +561,20 @@ ${counter(k, o, v)}\
 
 {% if fu.SOURCE_TYPE == "header" %}\
         // Documented in base class.
+        const std::string&
+        getCreator() const;
+{% end header %}\
+{% if fu.SOURCE_TYPE == "source" %}\
+      const std::string&
+      DummyMetadata::getCreator() const
+      {
+        throw MetadataException("DummyMetadata", "getCreator",
+                                "intentionally not implemented");
+      }
+{% end source %}\
+
+{% if fu.SOURCE_TYPE == "header" %}\
+        // Documented in base class.
         const ome::xml::model::primitives::OrderedMultimap&
         getMapAnnotationValue(index_type mapAnnotationIndex) const;
 {% end header %}\
@@ -705,6 +719,18 @@ ${getter(k, o, prop, v)}\
 {% if fu.SOURCE_TYPE == "source" %}\
       void
       DummyMetadata::setUUID(const std::string& /* uuid */)
+      {
+      }
+{% end source %}\
+
+{% if fu.SOURCE_TYPE == "header" %}\
+        // Documented in base class.
+        void
+        setCreator(const std::string& creator);
+{% end header %}\
+{% if fu.SOURCE_TYPE == "source" %}\
+      void
+      DummyMetadata::setCreator(const std::string& /* creator */)
       {
       }
 {% end source %}\
