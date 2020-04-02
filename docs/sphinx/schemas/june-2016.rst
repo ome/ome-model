@@ -44,7 +44,7 @@ Details
   ``Shape.Visible`` have been dropped. This simplifies graphical aspects in
   the data model in favor of more generic enumerated values independent of the
   rendering framework, making it easier to implement across clients (see this
-  `Design issue <https://github.com/openmicroscopy/design/issues/19>`_ for an
+  `Design issue <https://github.com/ome/design/issues/19>`_ for an
   example discussion).
 - The ``Marker`` enumeration has been reduced to ``Arrow`` only, dropping
   ``Circle`` and ``Square``. This affects the ``Line.MarkerStart``,
