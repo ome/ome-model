@@ -1,3 +1,19 @@
+## 6.1.0 (2020-04-07)
+
+### Python 3 support
+
+* Update code-generation for building on Python 3.6, 3.7 [#65](https://github.com/ome/ome-model/pull/65)
+* Add support for Python 3.8 and make code-generation Python 3 only [#105](https://github.com/ome/ome-model/pull/105)
+* Uncap Sphinx version [#109](https://github.com/ome/ome-model/pull/109)
+
+### OME-XML
+
+* Add getters and setters for OME@Creator attribute for ome.xml.metadata interfaces and implementations [#108](https://github.com/ome/ome-model/pull/108)
+
+### C++
+
+* Remove unmaintained C++ OME-XML implementation [#111](https://github.com/ome/ome-model/pull/111)
+
 ## 6.0.1 (2019-05-09)
 
 ### Java

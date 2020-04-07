@@ -23,7 +23,7 @@ import sys
 from setuptools import setup
 
 
-version = '6.1.0.dev'
+version = '6.1.0'
 url = "https://github.com/ome/ome-model/"
 
 setup(
@@ -50,4 +50,5 @@ setup(
     zip_safe=False,
     download_url='%s/v%s.tar.gz' % (url, version),
     keywords=['OME', 'Model'],
+    python_requires='>=3',
 )
