@@ -68,7 +68,6 @@ def usage(error):
     Prints usage so that we don't have to. :)
     """
     java = language.create("Java", config.DEFAULT_NAMESPACE, "/path/to/schemas")
-    cpp = language.create("C++", config.DEFAULT_NAMESPACE, "/path/to/schemas")
 
     cmd = sys.argv[0]
     print("""Error: %s
@@ -113,24 +112,15 @@ Default Java OME-XML enum handler package: "%s"
 Default Java metadata package: "%s"
 Default Java OME-XML metadata package: "%s"
 
-Default C++ OME-XML package: "%s"
-Default C++ OME-XML enum package: "%s"
-Default C++ OME-XML quantity package: "%s"
-Default C++ metadata package: "%s"
-Default C++ OME-XML metadata package: "%s"
-
 Examples:
   %s -l Java -n '%s' --ome-xml-model-package=%s -o omexml /path/to/schemas/ome.xsd
-  %s -l C++ -n '%s' --ome-xml-model-package=%s -o omexml /path/to/schemas/ome.xsd
 
 Report bugs to OME Devel <ome-devel@lists.openmicroscopy.org.uk>""" % \
     (error,
      cmd,
      java.modelNamespace,
      java.omexml_model_package, java.omexml_model_enums_package, java.omexml_model_omexml_model_enum_handlers_package, java.metadata_package, java.omexml_metadata_package,
-     cpp.omexml_model_package, cpp.omexml_model_enums_package, cpp.omexml_model_quantity_package, cpp.metadata_package, cpp.omexml_metadata_package,
-     cmd, java.modelNamespace, java.omexml_model_package,
-     cmd, cpp.modelNamespace, cpp.omexml_model_package))
+     cmd, java.modelNamespace, java.omexml_model_package))
     sys.exit(2)
 
 def main(model, opts):
@@ -206,10 +196,6 @@ def main(model, opts):
         fu.GUARD = guard(fullname)
         fu.CLASS_PREFIX = class_prefix(fullname)
 
-        if (isinstance(opts.lang, language.CXX) and
-            opts.filetype == language.TYPE_SOURCE):
-            fullname = opts.lang.generatedFilename("AllModelObjects", opts.filetype)
-            fullname = os.path.join("ome", "xml", "model", fullname)
         fullname = os.path.join(opts.outdir, fullname)
 
         if opts.print_generated:
@@ -227,19 +213,8 @@ def main(model, opts):
         classContent = classContent.render(encoding='utf-8')
 
         if not opts.dryrun:
-            if (isinstance(opts.lang, language.CXX) and
-                opts.filetype == language.TYPE_SOURCE):
-                aggregate_content += classContent.decode('utf-8')
-            else:
-                f = codecs.open(fullname, "w", encoding='utf-8')
-                f.write(classContent.decode('utf-8'))
-                f.close()
-
-    if not opts.dryrun:
-        if (isinstance(opts.lang, language.CXX) and
-            opts.filetype == language.TYPE_SOURCE):
             f = codecs.open(fullname, "w", encoding='utf-8')
-            f.write(aggregate_content)
+            f.write(classContent.decode('utf-8'))
             f.close()
 
     if opts.print_depends:
@@ -321,10 +296,6 @@ def enumTypesMain(model, opts):
         fu.CLASS_PREFIX = class_prefix(fullname)
         fu.SOURCE_TYPE = opts.filetype;
 
-        if (isinstance(opts.lang, language.CXX) and
-            opts.filetype == language.TYPE_SOURCE):
-            fullname = opts.lang.generatedFilename("AllModelEnums", opts.filetype)
-            fullname = os.path.join("ome", "xml", "model", "enums", fullname)
         fullname = os.path.join(opts.outdir, fullname)
 
         if opts.print_generated:
@@ -338,62 +309,9 @@ def enumTypesMain(model, opts):
                                          enum_value_name=enum_value_name).render(encoding='utf-8')
 
         if not opts.dryrun:
-            if (isinstance(opts.lang, language.CXX) and
-                opts.filetype == language.TYPE_SOURCE):
-                aggregate_content += classContent.decode('utf-8')
-            else:
-                f = codecs.open(fullname, "w", encoding='utf-8')
-                f.write(classContent.decode('utf-8'))
-                f.close()
-
-    if not opts.dryrun:
-        if (isinstance(opts.lang, language.CXX) and
-            opts.filetype == language.TYPE_SOURCE):
             f = codecs.open(fullname, "w", encoding='utf-8')
-            f.write(aggregate_content)
+            f.write(classContent.decode('utf-8'))
             f.close()
-
-    if opts.print_depends:
-        for file in sorted(used_files):
-            print(file)
-
-def enumTypesIncludeAll(model, opts):
-    """
-    Generate header to include all enum headers.
-    """
-
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
-
-    fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_enums_package)
-    template = NewTextTemplate(codecs.open(opts.lang.templatepath('ENUM_INCLUDEALL'), encoding='utf-8').read(), encoding='utf-8')
-    used_files.add(os.path.realpath(opts.lang.templatepath('ENUM_INCLUDEALL')))
-    headers = model.getEnumHeaders()
-
-    fullname = opts.lang.generatedFilename("enums", language.TYPE_HEADER)
-    fullname = os.path.join("ome", "xml", "model", fullname)
-
-    fu.GUARD = guard(fullname)
-    fu.CLASS_PREFIX = class_prefix(fullname)
-    fu.SOURCE_TYPE = language.TYPE_HEADER;
-    fu.HEADERS = sorted(headers);
-
-    fullname = os.path.join(opts.outdir, fullname)
-
-    if opts.print_generated:
-        print(fullname)
-
-    outputDirectory = os.path.dirname(fullname)
-    if not opts.dryrun and not os.path.exists(outputDirectory):
-        os.makedirs(outputDirectory)
-
-    classContent = template.generate(fu=fu, model=model, opts=opts, lang=opts.lang, debug=opts.debug).render(encoding='utf-8')
-
-    if not opts.dryrun:
-        f = codecs.open(fullname, "w", encoding='utf-8')
-        f.write(classContent.decode('utf-8'))
-        f.close()
 
     if opts.print_depends:
         for file in sorted(used_files):
@@ -570,8 +488,6 @@ def processMetadataTemplate(template, outputFilename, model, opts):
                             {name: parents[name]},
                             opts.lang.index_signature)
 
-    object_headers = model.getObjectHeaders()
-
     fu = TemplateInfo(None, None)
     fu.max_occurs_under_parent = max_occurs_under_parent
     fu.resolve_hierarchy = resolve_hierarchy
@@ -581,7 +497,6 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     fu.COMPLEX_OVERRIDE = config.COMPLEX_OVERRIDE
     fu.ANNOTATION_OVERRIDE = config.ANNOTATION_OVERRIDE
     fu.DEFAULT_BASE_CLASS = model.opts.lang.getDefaultModelBaseClass()
-    fu.OBJECT_HEADERS = sorted(object_headers);
 
     base, filename = os.path.split(template)
     name, extension = os.path.splitext(filename)
@@ -669,9 +584,7 @@ def metadataMain(model, opts):
                 os.path.join(relpath, "DummyMetadata"),
                 model, opts)
 
-    if ((isinstance(opts.lang, language.Java) or
-         (isinstance(opts.lang, language.CXX) and
-          opts.filetype == language.TYPE_HEADER)) and
+    if (isinstance(opts.lang, language.Java) and
         not opts.dryrun):
         validateMetadataConverter()
 
@@ -744,13 +657,6 @@ def validateMetadataConverter():
     storegrepper = None
     retrievegrepper = None
     convertgrepper = None
-    if isinstance(opts.lang, language.CXX):
-        storeregexp = re.compile('^ *([gs]et[a-zA-Z0-9][a-zA-Z0-9]*).*')
-        retrieveregexp = re.compile('^ *(get[a-zA-Z0-9][a-zA-Z0-9]*).*')
-        convertregexp = re.compile('(?:&M[RS]::|src\.|dest\.|src_store->)([gs]et[a-zA-Z0-9][a-zA-Z0-9]*)')
-        storegrepper = grep(storeregexp, lambda line: storeregexp.search(line))
-        retrievegrepper = grep(retrieveregexp, lambda line: retrieveregexp.search(line))
-        convertgrepper = grep(convertregexp, lambda line: convertregexp.findall(line))
     if isinstance(opts.lang, language.Java):
         regexp = re.compile(r'(?<=[\s\.:])([gs]et[a-zA-Z0-9]+)')
         grepper = grep(regexp, lambda line: regexp.search(line))
@@ -848,10 +754,8 @@ class options:
             if option in ('-f', '--file-type'):
                 if argument == language.TYPE_SOURCE:
                     self.filetype = language.TYPE_SOURCE
-                elif argument == language.TYPE_HEADER:
-                    self.filetype = language.TYPE_HEADER
                 else:
-                    usage("Invalid filetype; source and header are the only valid options")
+                    usage("Invalid filetype; source is the only valid option")
                     sys.exit(1)
             elif option in ('-l', '--language'):
                 self.lang = argument
@@ -925,9 +829,6 @@ if __name__ == '__main__':
     if opts.command == "omexml_model_all":
         main(model, opts)
         enumTypesMain(model, opts)
-        if isinstance(opts.lang, language.CXX) and opts.filetype == language.TYPE_HEADER:
-            enumTypesIncludeAll(model, opts)
-            quantityTypesMain(model, opts)
         if isinstance(opts.lang, language.Java):
             enumHandlersMain(model, opts)
     elif opts.command == "omexml_metadata_all":
