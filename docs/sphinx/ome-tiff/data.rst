@@ -22,7 +22,7 @@ Biological datasets
 
 The following OME-TIFF datasets consist of tubulin histone GFP coexpressing
 *C. elegans* embryos. Many thanks to
-`Josh Bembenek <http://loci.wisc.edu/people/josh-bembenek>`_ for preparing
+`Josh Bembenek <https://www.bembeneklab.org/>`_ for preparing
 and imaging this sample data.
 
 The datasets were acquired on a multiphoton workstation (2.1 GHz Athlon
