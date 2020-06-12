@@ -351,5 +351,6 @@ if not (sys.version_info[0] == 2 and sys.version_info[1] <= 5):
 linkcheck_ignore = [
     "http://www.definiens.com",
     "https://www.imagic.ch/",
-    "https://github.com/ome/"
+    "https://github.com/ome/",
+    "https://strandls.com", # SSL certificate verify failed
 ]
