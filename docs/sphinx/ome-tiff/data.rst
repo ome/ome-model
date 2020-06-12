@@ -81,7 +81,7 @@ ROI
 
 An OME-TIFF dataset representative of the :doc:`ROI </developers/roi>`
 section of the OME Data Model, derived from the public
-`MitoCheck <http://www.mitocheck.org/>`_ project.
+`MitoCheck <https://www.mitocheck.org/>`_ project.
 
 .. list-table::
   :header-rows: 1
