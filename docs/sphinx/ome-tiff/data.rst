@@ -27,7 +27,7 @@ and imaging this sample data.
 
 The datasets were acquired on a multiphoton workstation (2.1 GHz Athlon
 XP 3200+ with 1GB of RAM) using
-`WiscScan <http://loci.wisc.edu/software/wiscscan>`_. All image
+`WiscScan <https://eliceirilab.org/software/wiscscan/>`_. All image
 planes were collected at 512 × 512 resolution in 8-bit grayscale, with an
 integration value of 2.
 
