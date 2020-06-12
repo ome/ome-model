@@ -1,3 +1,7 @@
+## 6.1.1 (2020-06-04)
+
+* Fix various documentation hyperlinks [#112](https://github.com/ome/ome-model/pull/112) [#113](https://github.com/ome/ome-model/pull/113) [#114](https://github.com/ome/ome-model/pull/114)
+
 ## 6.1.0 (2020-04-07)
 
 ### Python 3 support
