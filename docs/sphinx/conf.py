@@ -189,7 +189,7 @@ rst_epilog = """
 .. _roadmap: https://trac.openmicroscopy.org/ome/roadmap
 .. _OME artifactory: http://artifacts.openmicroscopy.org
 .. _Open Microscopy Environment: https://www.openmicroscopy.org/
-.. _Glencoe Software, Inc.: http://www.glencoesoftware.com/
+.. _Glencoe Software, Inc.: https://www.glencoesoftware.com/
 .. _Pillow: http://pillow.readthedocs.org
 .. _Matplotlib: http://matplotlib.org/
 .. _Django 1.8: https://docs.djangoproject.com/en/1.8/releases/1.8/
@@ -351,5 +351,6 @@ if not (sys.version_info[0] == 2 and sys.version_info[1] <= 5):
 linkcheck_ignore = [
     "http://www.definiens.com",
     "https://www.imagic.ch/",
-    "https://github.com/ome/"
+    "https://github.com/ome/",
+    "https://strandls.com", # SSL certificate verify failed
 ]
