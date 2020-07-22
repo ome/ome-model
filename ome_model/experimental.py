@@ -114,8 +114,7 @@ class Image(object):
                 self, name, color, samplesPerPixel
             ))
 
-    def add_tiff(self, filename, c=None, t=None, z=None, ifd=None,
-                 planeCount=None):
+    def add_tiff(self, filename, c=0, t=0, z=0, ifd=None, planeCount=None):
 
         if c is None and t is None and z is None:
             # If no mapping specified, assume single plane TIFF which name
