@@ -354,3 +354,7 @@ linkcheck_ignore = [
     "https://github.com/ome/",
     "https://strandls.com", # SSL certificate verify failed
 ]
+
+# Some websites e.g. NCBI PMC URLs will return a 403 error code with the
+# default Sphinx user agent
+user_agent = "Mozilla/5.0"
