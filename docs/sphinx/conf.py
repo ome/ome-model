@@ -353,8 +353,6 @@ linkcheck_ignore = [
     "https://www.imagic.ch/",
     "https://github.com/ome/",
     "https://strandls.com", # SSL certificate verify failed
-]
-
-# Some websites e.g. NCBI PMC URLs will return a 403 error code with the
-# default Sphinx user agent
-user_agent = "Mozilla/5.0"
+    # See https://www.ncbi.nlm.nih.gov/pmc/about/copyright/
+    # The PMC web site restricts access by the default Sphinx agent
+    "https://www.ncbi.nlm.nih.gov/pmc/.*",
