@@ -356,3 +356,4 @@ linkcheck_ignore = [
     # See https://www.ncbi.nlm.nih.gov/pmc/about/copyright/
     # The PMC web site restricts access by the default Sphinx agent
     "https://www.ncbi.nlm.nih.gov/pmc/.*",
+]
