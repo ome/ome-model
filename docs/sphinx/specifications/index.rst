@@ -56,7 +56,7 @@ Definitions of values stored
 The figure :ref:`figure-spec-stored` is ©2010 Linkert et al. Figure originally
 published as Figure 2, 
 Linkert et al (2010), J. Cell Biol. 189(5):777-782
-(http://jcb.rupress.org/content/189/5/777)
+(https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2878938/)
 
 .. note:: AcquiredDate was renamed to AcquisitionDate in June 2012
 
