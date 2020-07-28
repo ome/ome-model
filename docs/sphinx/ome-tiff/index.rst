@@ -52,7 +52,6 @@ Public image repositories allowing image downloads as OME-TIFF
 
 * `ASCB CELL Image Library <http://www.cellimagelibrary.org/>`_
 * `Harvard Medical School LINCS Project <http://lincs.hms.harvard.edu/>`_
-* `JCB DataViewer <http://jcb-dataviewer.rupress.org/>`_
 * `Stowers Institute Original Data Repository <http://www.stowers.org/research/publications/odr>`_
 
 |
