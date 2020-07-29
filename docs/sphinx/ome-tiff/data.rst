@@ -246,7 +246,7 @@ five focal planes is saved as a separate OME-TIFF named
 
 The third dataset contains a plate with 4 wells at position A2, B1, B3 and C2.
 The first three wells contain one field of view and the fourth well contains
-2 fields of views. Each well sampole is saved as a separate OME-TIFF.
+2 fields of view. Each well sample is saved as a separate OME-TIFF.
 
 .. list-table::
   :header-rows: 1
