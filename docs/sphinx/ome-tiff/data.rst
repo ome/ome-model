@@ -244,7 +244,7 @@ white text on each plane giving its time, z-depth and channel. Each of the
 five focal planes is saved as a separate OME-TIFF named
 :file:`multifile-Zxx.ome.tiff` where `xx` is the index of the focal plane.
 
-The third datasets contain a plate with 4 wells at position A2, B1, B3 and C2.
+The third dataset contains a plate with 4 wells at position A2, B1, B3 and C2.
 The first three wells contain one field of view and the fourth well contains
 2 fields of views. Each well sampole is saved as a separate OME-TIFF.
 
