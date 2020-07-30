@@ -236,7 +236,17 @@ resource.
 Multi-file OME-TIFF filesets
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-This section lists various examples of OME-TIFF datasets distributed across multiple TIFF files. Both datasets contain a set of 18 × 24 pixel images with black and white text on each plane giving its time, z-depth and channel. Each of the five focal planes is saved as a separate OME-TIFF named :file:`multifile-Zxx.ome.tiff` where `xx` is the index of the focal plane.
+This section lists various examples of OME-TIFF datasets distributed across
+multiple TIFF files.
+
+The first two datasets contain a set of 18 × 24 pixel images with black and
+white text on each plane giving its time, z-depth and channel. Each of the
+five focal planes is saved as a separate OME-TIFF named
+:file:`multifile-Zxx.ome.tiff` where `xx` is the index of the focal plane.
+
+The third dataset contains a plate with 4 wells at position A2, B1, B3 and C2.
+The first three wells contain one field of view and the fourth well contains
+2 fields of view. Each well sample is saved as a separate OME-TIFF.
 
 .. list-table::
   :header-rows: 1
@@ -251,10 +261,15 @@ This section lists various examples of OME-TIFF datasets distributed across mult
      * :file:`multifile-Z1.ome.tiff`
      * :file:`multifile-Z[2-5].ome.tiff`
 
-  -  * :ometiff_downloads:`Companion OME-XML fileset <companion>`
+  -  * :ometiff_downloads:`Companion OME-TIFF fileset <companion>`
      * 18 × 24 × 5 × 1 × 1
      * :file:`multifile.companion.ome`
      * :file:`multifile-Z[1-5].ome.tiff`
+
+  -  * :ometiff_downloads:`Companion OME-TIFF plate <plate-companion>`
+     * 96 × 96 × 1 × 1 × 1
+     * :file:`hcs.companion.ome`
+     * :file:`well-*.ome.tiff`
 
 \*
   The full OME-XML metadata describing the whole fileset is either embedded
