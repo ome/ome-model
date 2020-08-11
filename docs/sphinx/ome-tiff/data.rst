@@ -93,7 +93,7 @@ section of the OME Data Model, derived from the public
 
   -  * :ometiff_downloads:`00001_01.ome.tiff <MitoCheck/00001_01.ome.tiff>`
      * 1344 × 1024 × 1 × 1 × 93
-     * `IDR <http://idr.openmicroscopy.org/webclient/?show=well-771034>`_
+     * `IDR <https://idr.openmicroscopy.org/search/?query=Name:mitocheck>`_
      * `Public Domain <https://creativecommons.org/publicdomain/mark/1.0/>`_
 
 See `Neumann B et al. (2010). Phenotypic profiling of the human genome by time-lapse microscopy reveals cell division genes. Nature 464(7289):721 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3108885/>`__.
