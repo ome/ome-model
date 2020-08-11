@@ -16,18 +16,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
-#
-import os
-import sys
 
 from setuptools import setup
 
 
-version = '6.1.1.dev'
+def get_version():
+    import xml.etree.ElementTree as ElementTree
+    tree = ElementTree.parse('pom.xml')
+    ns = {'maven': 'http://maven.apache.org/POM/4.0.0'}
+    version = tree.find('maven:version', ns).text
+    print(version)
+    return version.replace('-SNAPSHOT', '.dev0')
+
+
+version = get_version()
 url = "https://github.com/ome/ome-model/"
 
 setup(
-    version=version,
+    version=get_version(),
     packages=["ome_model"],
     name='ome-model',
     description="Core OME model library (EXPERIMENTAL)",
