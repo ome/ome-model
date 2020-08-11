@@ -131,7 +131,7 @@ class Image(object):
             uuid=UUID(filename)))
 
     def validate(self):
-        assert (len(self.data["Channels"]) ==
+        assert (len(self.data["Channels"]) <=
                 int(self.data["Pixels"]["SizeC"])), str(self.data)
         return self.data
 
