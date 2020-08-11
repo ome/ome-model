@@ -36,16 +36,18 @@ class Channel(object):
 
     def __init__(self,
                  image,
-                 name,
-                 color,
+                 name=None,
+                 color=None,
                  samplesPerPixel=1,
                  ):
         self.data = {
             'ID': 'Channel:%s' % self.ID,
-            'Name': name,
-            'Color': str(color),
             'SamplesPerPixel': str(samplesPerPixel),
         }
+        if name:
+            self.data["Name"] = name
+        if color:
+            self.data["Color"] = str(color),
         Channel.ID += 1
 
 
@@ -108,10 +110,10 @@ class Image(object):
         for tiff in tiffs:
             self.add_tiff(tiff)
 
-    def add_channel(self, name, color, samplesPerPixel=1):
+    def add_channel(self, name=None, color=None, samplesPerPixel=1):
         self.data["Channels"].append(
             Channel(
-                self, name, color, samplesPerPixel
+                self, name=name, color=color, samplesPerPixel=samplesPerPixel
             ))
 
     def add_tiff(self, filename, c=0, t=0, z=0, ifd=None, planeCount=None):
