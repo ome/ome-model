@@ -40,3 +40,4 @@ deploy:
   distributions: sdist
   on:
     tags: true
+    jdk: openjdk8
