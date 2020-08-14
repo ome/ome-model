@@ -57,7 +57,7 @@ class TestImage(object):
     @pytest.mark.parametrize('name', [None, '', 'channel-test'])
     @pytest.mark.parametrize('color', [None, '-1', '65535'])
     def test_channel(self, tmpdir, name, color):
-        f = str(tmpdir.join('image.companion.ome'))
+        f = str(tmpdir.join('3channels.companion.ome'))
 
         i = Image("test", 256, 512, 3, 4, 5)
         i.add_channel()
@@ -93,3 +93,28 @@ class TestImage(object):
         else:
             assert 'Color' not in channels[2].attrib
         assert channels[2].attrib['SamplesPerPixel'] == '1'
+
+
+    def test_rgb_channel(self, tmpdir):
+        f = str(tmpdir.join('rgb.companion.ome'))
+
+        i = Image("test", 256, 512, 3, 4, 5)
+        i.add_channel(samplesPerPixel=3)
+        create_companion(images=[i], out=f)
+
+        root = ElementTree.parse(f).getroot()
+        images = root.findall('OME:Image', namespaces=NS)
+        assert len(images) == 1
+        assert images[0].attrib['Name'] == 'test'
+        pixels = images[0].findall('OME:Pixels', namespaces=NS)
+        assert len(pixels) == 1
+        assert pixels[0].attrib['SizeX'] == '256'
+        assert pixels[0].attrib['SizeY'] == '512'
+        assert pixels[0].attrib['SizeZ'] == '3'
+        assert pixels[0].attrib['SizeC'] == '4'
+        assert pixels[0].attrib['SizeT'] == '5'
+        channels = pixels[0].findall('OME:Channel', namespaces=NS)
+        assert len(channels) == 1
+        assert 'Name' not in channels[0].attrib
+        assert 'Color' not in channels[0].attrib
+        assert channels[0].attrib['SamplesPerPixel'] == '3'
