@@ -1,3 +1,15 @@
+## 6.1.2 (2020-08-12)
+
+### Documentation
+
+* Fix links to external resources [#116](https://github.com/ome/ome-model/pull/116) [#118](https://github.com/ome/ome-model/pull/118)
+* Add HCS companion fileset to the OME-TIFF sample data page [#117](https://github.com/ome/ome-model/pull/117)
+
+### Python
+
+* Fix default z,c,t values of add_tiffdata() [#115](https://github.com/ome/ome-model/pull/115)
+* Automatically deploy to PyPI on tags [#119](https://github.com/ome/ome-model/pull/119)
+
 ## 6.1.1 (2020-06-04)
 
 * Fix various documentation hyperlinks [#112](https://github.com/ome/ome-model/pull/112) [#113](https://github.com/ome/ome-model/pull/113) [#114](https://github.com/ome/ome-model/pull/114)

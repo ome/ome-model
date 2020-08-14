@@ -32,3 +32,12 @@ install:
 
 script:
   - mvn test -B -Dpython="$PYTHON"
+
+deploy:
+  provider: pypi
+  user: $PYPI_USER
+  password: $PYPI_PASSWORD
+  distributions: sdist
+  on:
+    tags: true
+    jdk: openjdk8

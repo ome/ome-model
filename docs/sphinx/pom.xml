@@ -8,12 +8,12 @@
   <parent>
     <groupId>org.openmicroscopy</groupId>
     <artifactId>ome-model</artifactId>
-    <version>6.1.2-SNAPSHOT</version>
+    <version>6.1.3-SNAPSHOT</version>
     <relativePath>../..</relativePath>
   </parent>
 
   <groupId>org.openmicroscopy</groupId>
-  <version>6.1.2-SNAPSHOT</version>
+  <version>6.1.3-SNAPSHOT</version>
 
   <artifactId>ome-model-doc</artifactId>
   <packaging>pom</packaging>
