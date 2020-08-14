@@ -25,6 +25,7 @@
 
 
 from ome_model.experimental import Image, create_companion
+import pytest
 import xml.etree.ElementTree as ElementTree
 
 NS = {'OME': 'http://www.openmicroscopy.org/Schemas/OME/2016-06'}
@@ -52,3 +53,43 @@ class TestImage(object):
         assert pixels[0].attrib['SizeT'] == '5'
         channels = pixels[0].findall('OME:Channel', namespaces=NS)
         assert len(channels) == 0
+
+    @pytest.mark.parametrize('name', [None, '', 'channel-test'])
+    @pytest.mark.parametrize('color', [None, '-1', '65535'])
+    def test_channel(self, tmpdir, name, color):
+        f = str(tmpdir.join('image.companion.ome'))
+
+        i = Image("test", 256, 512, 3, 4, 5)
+        i.add_channel()
+        i.add_channel(name="Blue", color="65535", samplesPerPixel=1)
+        i.add_channel(name=name, color=color)
+        create_companion(images=[i], out=f)
+
+        root = ElementTree.parse(f).getroot()
+        images = root.findall('OME:Image', namespaces=NS)
+        assert len(images) == 1
+        assert images[0].attrib['Name'] == 'test'
+        pixels = images[0].findall('OME:Pixels', namespaces=NS)
+        assert len(pixels) == 1
+        assert pixels[0].attrib['SizeX'] == '256'
+        assert pixels[0].attrib['SizeY'] == '512'
+        assert pixels[0].attrib['SizeZ'] == '3'
+        assert pixels[0].attrib['SizeC'] == '4'
+        assert pixels[0].attrib['SizeT'] == '5'
+        channels = pixels[0].findall('OME:Channel', namespaces=NS)
+        assert len(channels) == 3
+        assert 'Name' not in channels[0].attrib
+        assert 'Color' not in channels[0].attrib
+        assert channels[0].attrib['SamplesPerPixel'] == '1'
+        assert channels[1].attrib['Name'] == 'Blue'
+        assert channels[1].attrib['Color'] == '65535'
+        assert channels[1].attrib['SamplesPerPixel'] == '1'
+        if name:
+            assert channels[2].attrib['Name'] == name
+        else:
+            assert 'Name' not in channels[2].attrib
+        if color:
+            assert channels[2].attrib['Color'] == color
+        else:
+            assert 'Color' not in channels[2].attrib
+        assert channels[2].attrib['SamplesPerPixel'] == '1'
