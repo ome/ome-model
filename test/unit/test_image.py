@@ -54,6 +54,9 @@ class TestImage(object):
         channels = pixels[0].findall('OME:Channel', namespaces=NS)
         assert len(channels) == 0
 
+
+class TestChannel(object):
+
     @pytest.mark.parametrize('name', [None, '', 'channel-test'])
     @pytest.mark.parametrize('color', [None, '-1', '65535'])
     def test_channel(self, tmpdir, name, color):
@@ -94,7 +97,6 @@ class TestImage(object):
             assert 'Color' not in channels[2].attrib
         assert channels[2].attrib['SamplesPerPixel'] == '1'
 
-
     def test_rgb_channel(self, tmpdir):
         f = str(tmpdir.join('rgb.companion.ome'))
 
@@ -118,3 +120,21 @@ class TestImage(object):
         assert 'Name' not in channels[0].attrib
         assert 'Color' not in channels[0].attrib
         assert channels[0].attrib['SamplesPerPixel'] == '3'
+
+    def test_too_many_channels(self, tmpdir):
+        f = str(tmpdir.join('invalid.companion.ome'))
+
+        i = Image("test", 512, 512, 1, 2, 1)
+        i.add_channel()
+        i.add_channel()
+        i.add_channel()
+        with pytest.raises(AssertionError):
+            create_companion(images=[i], out=f)
+
+    def test_too_many_channel_samples(self, tmpdir):
+        f = str(tmpdir.join('invalid.companion.ome'))
+
+        i = Image("test", 512, 512, 1, 2, 1)
+        i.add_channel(samplesPerPixel=3)
+        with pytest.raises(AssertionError):
+            create_companion(images=[i], out=f)
