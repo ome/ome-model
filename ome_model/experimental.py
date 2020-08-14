@@ -47,7 +47,7 @@ class Channel(object):
         if name:
             self.data["Name"] = name
         if color:
-            self.data["Color"] = str(color),
+            self.data["Color"] = str(color)
         Channel.ID += 1
 
 
