@@ -46,6 +46,19 @@ class Channel(object):
         Channel.ID += 1
 
 
+class Plane(object):
+
+    def __init__(self, TheC=0, TheZ=0, TheT=0, options={}):
+        self.data = {
+            'TheC': str(TheC),
+            'TheZ': str(TheZ),
+            'TheT': str(TheT),
+        }
+        if options:
+            for key, value in options.items():
+                self.data[key] = value
+
+
 class UUID(object):
     def __init__(self,
                  filename=None
@@ -100,6 +113,7 @@ class Image(object):
             },
             'Channels': [],
             'TIFFs': [],
+            'Planes': [],
         }
         Image.ID += 1
         for tiff in tiffs:
@@ -124,6 +138,13 @@ class Image(object):
             ifd=ifd,
             planeCount=planeCount,
             uuid=UUID(filename)))
+
+    def add_plane(self, c=0, t=0, z=0, options={}):
+        assert c < int(self.data['Pixels']['SizeC'])
+        assert z < int(self.data['Pixels']['SizeZ'])
+        assert t < int(self.data['Pixels']['SizeT'])
+        self.data["Planes"].append(Plane(
+            TheC=c, TheT=t, TheZ=z, options=options))
 
     def validate(self):
         sizeC = int(self.data["Pixels"]["SizeC"])
@@ -227,6 +248,9 @@ def create_companion(plates=[], images=[], out=None):
             if tiff.uuid:
                 ET.SubElement(
                     tiffdata, "UUID", tiff.uuid.data).text = tiff.uuid.value
+
+        for plane in i["Planes"]:
+            ET.SubElement(pixels, "Plane", attrib=plane.data)
 
     # https://stackoverflow.com/a/48671499/56887
     kwargs = dict(encoding="UTF-8")
