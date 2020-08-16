@@ -56,7 +56,7 @@ class TestImage(object):
         channels = pixels[0].findall('OME:Channel', namespaces=NS)
         assert len(channels) == 0
 
-    @pytest.mark.parametrize('dimension_order' , [
+    @pytest.mark.parametrize('dimension_order', [
         'XYZCT', 'XYZTC', 'XYCZT', 'XYCTZ', 'XYTZC', 'XYTCZ'])
     def test_dimensionorder(self, tmpdir, dimension_order):
         f = str(tmpdir.join('image.companion.ome'))
@@ -80,10 +80,10 @@ class TestImage(object):
         channels = pixels[0].findall('OME:Channel', namespaces=NS)
         assert len(channels) == 0
 
-    @pytest.mark.parametrize('pixel_type' , [
+    @pytest.mark.parametrize('pixel_type', [
         'int8', 'int16', 'int32', 'uint8', 'uint16', 'uint32',
         'float', 'double', 'complex', 'double-complex', 'bit'])
-    def test_dimensionorder(self, tmpdir, pixel_type):
+    def test_pixeltypes(self, tmpdir, pixel_type):
         f = str(tmpdir.join('image.companion.ome'))
 
         i = Image("test", 256, 512, 3, 4, 5, type=pixel_type)
