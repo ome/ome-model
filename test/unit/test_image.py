@@ -153,7 +153,7 @@ class TestChannel(object):
     def test_rgb_channel(self, tmpdir):
         f = str(tmpdir.join('rgb.companion.ome'))
 
-        i = Image("test", 256, 512, 3, 4, 5)
+        i = Image("test", 256, 512, 1, 3, 1)
         i.add_channel(samplesPerPixel=3)
         create_companion(images=[i], out=f)
 
@@ -165,9 +165,9 @@ class TestChannel(object):
         assert len(pixels) == 1
         assert pixels[0].attrib['SizeX'] == '256'
         assert pixels[0].attrib['SizeY'] == '512'
-        assert pixels[0].attrib['SizeZ'] == '3'
-        assert pixels[0].attrib['SizeC'] == '4'
-        assert pixels[0].attrib['SizeT'] == '5'
+        assert pixels[0].attrib['SizeZ'] == '1'
+        assert pixels[0].attrib['SizeC'] == '3'
+        assert pixels[0].attrib['SizeT'] == '1'
         assert pixels[0].attrib['DimensionOrder'] == 'XYZTC'
         assert pixels[0].attrib['Type'] == 'uint16'
         channels = pixels[0].findall('OME:Channel', namespaces=NS)
