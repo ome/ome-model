@@ -5,9 +5,10 @@ import re
 import sys
 import uuid
 import xml.etree.ElementTree as ET
+from .version import __version__
 
 OME_ATTRIBUTES = {
-    'Creator': "ome_model/experimental.py",
+    'Creator': "ome_model %s" % __version__,
     'UUID': "urn:uuid:%s" % uuid.uuid4(),
     'xmlns': 'http://www.openmicroscopy.org/Schemas/OME/2016-06',
     'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
