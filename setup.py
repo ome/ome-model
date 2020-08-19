@@ -31,7 +31,7 @@ def get_version():
 
 def write_version(version):
     with open('ome_model/version.py', 'w') as f:
-        f.write('__version__ = "%s"' % version)
+        f.write('__version__ = "%s"\n' % version)
 
 
 version = get_version()
