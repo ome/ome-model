@@ -6,11 +6,6 @@ import sys
 import uuid
 import xml.etree.ElementTree as ET
 
-if sys.version_info[0] > 2:
-    PYTHON = 3
-else:
-    PYTHON = 2
-
 OME_ATTRIBUTES = {
     'Creator': "ome_model/experimental.py",
     'UUID': "urn:uuid:%s" % uuid.uuid4(),
@@ -230,12 +225,9 @@ def create_companion(plates=[], images=[], out=None):
 
     # https://stackoverflow.com/a/48671499/56887
     kwargs = dict(encoding="UTF-8")
-    if PYTHON >= 3:
-        kwargs["xml_declaration"] = True
-        if not out:
-            out = sys.stdout.buffer
-    elif not out:
-        out = sys.stdout
+    kwargs["xml_declaration"] = True
+    if not out:
+        out = sys.stdout.buffer
     ET.ElementTree(root).write(out, **kwargs)
 
 
