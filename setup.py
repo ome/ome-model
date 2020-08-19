@@ -29,7 +29,13 @@ def get_version():
     return version.replace('-SNAPSHOT', '.dev0')
 
 
+def write_version(version):
+    with open('ome_model/version.py', 'w') as f:
+        f.write('__version__ = "%s"' % version)
+
+
 version = get_version()
+write_version(version)
 url = "https://github.com/ome/ome-model/"
 
 setup(
