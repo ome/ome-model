@@ -227,7 +227,10 @@ def create_companion(plates=[], images=[], out=None):
     kwargs = dict(encoding="UTF-8")
     kwargs["xml_declaration"] = True
     if not out:
-        out = sys.stdout.buffer
+        try:
+            out = sys.stdout.buffer
+        except AttributeError:
+            out = sys.stdout
     ET.ElementTree(root).write(out, **kwargs)
 
 
