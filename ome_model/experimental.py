@@ -36,16 +36,18 @@ class Channel(object):
 
     def __init__(self,
                  image,
-                 name,
-                 color,
+                 name=None,
+                 color=None,
                  samplesPerPixel=1,
                  ):
         self.data = {
             'ID': 'Channel:%s' % self.ID,
-            'Name': name,
-            'Color': str(color),
             'SamplesPerPixel': str(samplesPerPixel),
         }
+        if name:
+            self.data["Name"] = name
+        if color:
+            self.data["Color"] = str(color)
         Channel.ID += 1
 
 
@@ -108,10 +110,10 @@ class Image(object):
         for tiff in tiffs:
             self.add_tiff(tiff)
 
-    def add_channel(self, name, color, samplesPerPixel=1):
+    def add_channel(self, name=None, color=None, samplesPerPixel=1):
         self.data["Channels"].append(
             Channel(
-                self, name, color, samplesPerPixel
+                self, name=name, color=color, samplesPerPixel=samplesPerPixel
             ))
 
     def add_tiff(self, filename, c=0, t=0, z=0, ifd=None, planeCount=None):
@@ -129,8 +131,11 @@ class Image(object):
             uuid=UUID(filename)))
 
     def validate(self):
-        assert (len(self.data["Channels"]) ==
-                int(self.data["Pixels"]["SizeC"])), str(self.data)
+        sizeC = int(self.data["Pixels"]["SizeC"])
+        assert (len(self.data["Channels"]) <= sizeC), str(self.data)
+        channel_samples = sum([int(x.data['SamplesPerPixel'])
+                              for x in self.data["Channels"]])
+        assert channel_samples <= sizeC, str(self.data)
         return self.data
 
 

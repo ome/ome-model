@@ -1,9 +1,8 @@
 ---
+os: linux
+dist: bionic
 language: java
 
-sudo: false
-
-# http://docs.travis-ci.com/user/caching/#Arbitrary-directories
 cache:
   directories:
     - $HOME/.m2
@@ -13,25 +12,27 @@ addons:
     packages:
       - python3-pip
 
-jdk:
-  - openjdk11
-  - openjdk8
+before_install: pip3 install --user -r requirements.txt
 
-env:
-  - PYTHON=python3
-
-matrix:
+jobs:
   fast_finish: true
-
-before_install:
-  - python3 --version
-  - pip3 install --user -r requirements.txt
-
-install:
-  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dpython="$PYTHON"
-
-script:
-  - mvn test -B -Dpython="$PYTHON"
+  include:
+    - name: jdk8
+      language: java
+      jdk: openjdk8
+      install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dpython=python3
+      script: mvn test -B -Dpython=python3
+    - name: JDK11
+      language: java
+      jdk: openjdk11
+      install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dpython=python3
+      script: mvn test -B -Dpython=python3
+    - name: Python36
+      python: "3.6"
+      install: pip3 install --upgrade pip wheel pytest tox virtualenv
+      script:
+        - ulimit -n 4096
+        - tox -e py36
 
 deploy:
   provider: pypi
@@ -40,4 +41,4 @@ deploy:
   distributions: sdist
   on:
     tags: true
-    jdk: openjdk8
+    python: "3.6"
