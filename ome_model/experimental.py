@@ -230,6 +230,8 @@ def create_companion(plates=[], images=[], out=None):
         try:
             out = sys.stdout.buffer
         except AttributeError:
+            # ipykernel.iostream.OutStream (used by Jupyter Notebook) does not
+            # have a .buffer attribute
             out = sys.stdout
     ET.ElementTree(root).write(out, **kwargs)
 
