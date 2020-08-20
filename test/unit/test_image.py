@@ -25,11 +25,24 @@
 
 
 from ome_model.experimental import Image, create_companion
+from ome_model.version import __version__
 import pytest
 import xml.etree.ElementTree as ElementTree
 
 NS = {'OME': 'http://www.openmicroscopy.org/Schemas/OME/2016-06'}
 ElementTree.register_namespace('OME', NS['OME'])
+
+
+class TestOME(object):
+
+    def test_ome(self, tmpdir):
+        f = str(tmpdir.join('root.companion.ome'))
+
+        create_companion(out=f)
+
+        root = ElementTree.parse(f).getroot()
+        assert root.tag == '{%s}OME' % NS['OME']
+        assert root.attrib['Creator'] == 'ome_model %s' % __version__
 
 
 class TestImage(object):
