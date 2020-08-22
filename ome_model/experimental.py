@@ -48,14 +48,21 @@ class Channel(object):
 
 class Plane(object):
 
+    ALLOWED_KEYS = (
+        'DeltaT', 'DeltaTUnit', 'ExposureTime', 'ExposureTimeUnit',
+        'PositionX', 'PositionXUnit', 'PositionY', 'PositionYUnit',
+        'PositionZ', 'PositionZUnit')
+
     def __init__(self, TheC=0, TheZ=0, TheT=0, options={}):
         self.data = {
             'TheC': str(TheC),
             'TheZ': str(TheZ),
             'TheT': str(TheT),
         }
-        if options:
-            for key, value in options.items():
+        if not options:
+            return
+        for key, value in options.items():
+            if key in self.ALLOWED_KEYS:
                 self.data[key] = value
 
 
