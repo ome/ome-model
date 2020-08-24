@@ -283,11 +283,16 @@ class TestPlane(object):
         assert planes[0].attrib['PositionZ'] == '0.0'
         assert planes[0].attrib['PositionZUnit'] == 'reference frame'
 
-    def test_invalid_plane_index(self, tmpdir):
+    @pytest.mark.parametrize('invalidindex', [-1, 1])
+    def test_invalid_plane_index(self, tmpdir, invalidindex):
 
         i = Image("test", 512, 512, 1, 1, 1)
         with pytest.raises(AssertionError):
-            i.add_plane(z=1, c=0, t=0)
+            i.add_plane(z=invalidindex, c=0, t=0)
+        with pytest.raises(AssertionError):
+            i.add_plane(z=0, c=invalidindex, t=0)
+        with pytest.raises(AssertionError):
+            i.add_plane(z=0, c=0, t=invalidindex)
 
     def test_invalid_plane_option(self, tmpdir):
         f = str(tmpdir.join('invalid_plane_options.companion.ome'))

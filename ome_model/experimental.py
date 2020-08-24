@@ -146,9 +146,9 @@ class Image(object):
             uuid=UUID(filename)))
 
     def add_plane(self, c=0, t=0, z=0, options={}):
-        assert c < int(self.data['Pixels']['SizeC'])
-        assert z < int(self.data['Pixels']['SizeZ'])
-        assert t < int(self.data['Pixels']['SizeT'])
+        assert c >= 0 and c < int(self.data['Pixels']['SizeC'])
+        assert z >= 0 and z < int(self.data['Pixels']['SizeZ'])
+        assert t >= 0 and t < int(self.data['Pixels']['SizeT'])
         self.data["Planes"].append(Plane(
             TheC=c, TheT=t, TheZ=z, options=options))
 
