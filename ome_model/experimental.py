@@ -59,11 +59,10 @@ class Plane(object):
             'TheZ': str(TheZ),
             'TheT': str(TheT),
         }
-        if not options:
-            return
-        for key, value in options.items():
-            if key in self.ALLOWED_KEYS:
-                self.data[key] = value
+        if options:
+            for key, value in options.items():
+                if key in self.ALLOWED_KEYS:
+                    self.data[key] = value
 
 
 class UUID(object):
