@@ -8,4 +8,4 @@ target
 build
 dist
 ome_model.egg-info
-ome_model/version.py
+ome_model/__init__.py

@@ -25,7 +25,7 @@
 
 
 from ome_model.experimental import Image, create_companion
-from ome_model.version import __version__
+from ome_model import __version__
 import pytest
 import xml.etree.ElementTree as ElementTree
 

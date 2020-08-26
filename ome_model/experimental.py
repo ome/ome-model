@@ -5,7 +5,7 @@ import re
 import sys
 import uuid
 import xml.etree.ElementTree as ET
-from .version import __version__
+from . import __version__
 
 OME_ATTRIBUTES = {
     'Creator': "ome_model %s" % __version__,
