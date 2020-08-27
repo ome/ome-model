@@ -193,3 +193,135 @@ class TestChannel(object):
         i.add_channel(samplesPerPixel=3)
         with pytest.raises(AssertionError):
             create_companion(images=[i], out=f)
+
+
+class TestPlane(object):
+
+    def test_planes(self, tmpdir):
+        f = str(tmpdir.join('planes.companion.ome'))
+
+        i = Image("test", 256, 512, 1, 2, 2)
+        i.add_plane(c=0, z=0, t=0)
+        i.add_plane(c=0, z=0, t=1)
+        i.add_plane(c=1, z=0, t=0)
+        i.add_plane(c=1, z=0, t=1)
+        create_companion(images=[i], out=f)
+
+        root = ElementTree.parse(f).getroot()
+        images = root.findall('OME:Image', namespaces=NS)
+        assert len(images) == 1
+        assert images[0].attrib['Name'] == 'test'
+        pixels = images[0].findall('OME:Pixels', namespaces=NS)
+        assert len(pixels) == 1
+        assert pixels[0].attrib['SizeX'] == '256'
+        assert pixels[0].attrib['SizeY'] == '512'
+        assert pixels[0].attrib['SizeZ'] == '1'
+        assert pixels[0].attrib['SizeC'] == '2'
+        assert pixels[0].attrib['SizeT'] == '2'
+        assert pixels[0].attrib['DimensionOrder'] == 'XYZTC'
+        assert pixels[0].attrib['Type'] == 'uint16'
+        planes = pixels[0].findall('OME:Plane', namespaces=NS)
+        assert len(planes) == 4
+        assert planes[0].attrib['TheZ'] == '0'
+        assert planes[0].attrib['TheC'] == '0'
+        assert planes[0].attrib['TheT'] == '0'
+        assert planes[1].attrib['TheZ'] == '0'
+        assert planes[1].attrib['TheC'] == '0'
+        assert planes[1].attrib['TheT'] == '1'
+        assert planes[2].attrib['TheZ'] == '0'
+        assert planes[2].attrib['TheC'] == '1'
+        assert planes[2].attrib['TheT'] == '0'
+        assert planes[3].attrib['TheZ'] == '0'
+        assert planes[3].attrib['TheC'] == '1'
+        assert planes[3].attrib['TheT'] == '1'
+
+    def test_plane_options(self, tmpdir):
+        f = str(tmpdir.join('plane_options.companion.ome'))
+
+        i = Image("test", 512, 512, 1, 1, 1)
+        options = {
+            'DeltaT': '0.0',
+            'DeltaTUnit': 's',
+            'ExposureTime': '100',
+            'ExposureTimeUnit': 'ms',
+            'PositionX': '0.0',
+            'PositionXUnit': 'reference frame',
+            'PositionY': '0.0',
+            'PositionYUnit': 'reference frame',
+            'PositionZ': '0.0',
+            'PositionZUnit': 'reference frame',
+        }
+        i.add_plane(z=0, c=0, t=0, options=options)
+        create_companion(images=[i], out=f)
+
+        root = ElementTree.parse(f).getroot()
+        images = root.findall('OME:Image', namespaces=NS)
+        assert len(images) == 1
+        assert images[0].attrib['Name'] == 'test'
+        pixels = images[0].findall('OME:Pixels', namespaces=NS)
+        assert len(pixels) == 1
+        assert pixels[0].attrib['SizeX'] == '512'
+        assert pixels[0].attrib['SizeY'] == '512'
+        assert pixels[0].attrib['SizeZ'] == '1'
+        assert pixels[0].attrib['SizeC'] == '1'
+        assert pixels[0].attrib['SizeT'] == '1'
+        assert pixels[0].attrib['DimensionOrder'] == 'XYZTC'
+        assert pixels[0].attrib['Type'] == 'uint16'
+        planes = pixels[0].findall('OME:Plane', namespaces=NS)
+        assert len(planes) == 1
+        assert planes[0].attrib['TheZ'] == '0'
+        assert planes[0].attrib['TheC'] == '0'
+        assert planes[0].attrib['TheT'] == '0'
+        assert planes[0].attrib['DeltaT'] == '0.0'
+        assert planes[0].attrib['DeltaTUnit'] == 's'
+        assert planes[0].attrib['ExposureTime'] == '100'
+        assert planes[0].attrib['ExposureTimeUnit'] == 'ms'
+        assert planes[0].attrib['PositionX'] == '0.0'
+        assert planes[0].attrib['PositionXUnit'] == 'reference frame'
+        assert planes[0].attrib['PositionY'] == '0.0'
+        assert planes[0].attrib['PositionYUnit'] == 'reference frame'
+        assert planes[0].attrib['PositionZ'] == '0.0'
+        assert planes[0].attrib['PositionZUnit'] == 'reference frame'
+
+    @pytest.mark.parametrize('invalidindex', [-1, 1])
+    def test_invalid_plane_index(self, tmpdir, invalidindex):
+
+        i = Image("test", 512, 512, 1, 1, 1)
+        with pytest.raises(AssertionError):
+            i.add_plane(z=invalidindex, c=0, t=0)
+        with pytest.raises(AssertionError):
+            i.add_plane(z=0, c=invalidindex, t=0)
+        with pytest.raises(AssertionError):
+            i.add_plane(z=0, c=0, t=invalidindex)
+
+    def test_invalid_plane_option(self, tmpdir):
+        f = str(tmpdir.join('invalid_plane_options.companion.ome'))
+
+        i = Image("test", 512, 512, 1, 1, 1)
+        options = {
+            'EmissionWavelength': '512.0',
+            'EmissionWavelengthUnit': 'nm',
+        }
+        i.add_plane(z=0, c=0, t=0, options=options)
+        create_companion(images=[i], out=f)
+
+        root = ElementTree.parse(f).getroot()
+        images = root.findall('OME:Image', namespaces=NS)
+        assert len(images) == 1
+        assert images[0].attrib['Name'] == 'test'
+        pixels = images[0].findall('OME:Pixels', namespaces=NS)
+        assert len(pixels) == 1
+        assert pixels[0].attrib['SizeX'] == '512'
+        assert pixels[0].attrib['SizeY'] == '512'
+        assert pixels[0].attrib['SizeZ'] == '1'
+        assert pixels[0].attrib['SizeC'] == '1'
+        assert pixels[0].attrib['SizeT'] == '1'
+        assert pixels[0].attrib['DimensionOrder'] == 'XYZTC'
+        assert pixels[0].attrib['Type'] == 'uint16'
+        planes = pixels[0].findall('OME:Plane', namespaces=NS)
+        assert len(planes) == 1
+        assert planes[0].attrib['TheZ'] == '0'
+        assert planes[0].attrib['TheC'] == '0'
+        assert planes[0].attrib['TheT'] == '0'
+        assert 'EmissionWavelength' not in planes[0].attrib
+        assert 'EmissionWavelengthUnit' not in planes[0].attrib
