@@ -29,7 +29,13 @@ def get_version():
     return version.replace('-SNAPSHOT', '.dev0')
 
 
+def write_version(version):
+    with open('ome_model/__init__.py', 'w') as f:
+        f.write('__version__ = "%s"\n' % version)
+
+
 version = get_version()
+write_version(version)
 url = "https://github.com/ome/ome-model/"
 
 setup(
@@ -39,13 +45,12 @@ setup(
     description="Core OME model library (EXPERIMENTAL)",
     long_description="TBD",
     classifiers=[
-          'Development Status :: 2 - Pre-Alpha',
+          'Development Status :: 4 - Beta',
           'Intended Audience :: Developers',
-          'License :: OSI Approved :: GNU General Public License v2 '
-          'or later (GPLv2+)',
+          'License :: OSI Approved :: BSD License',
           'Natural Language :: English',
           'Operating System :: OS Independent',
-          'Programming Language :: Python :: 2',
+          'Programming Language :: Python :: 3',
           'Topic :: Software Development :: Libraries :: Python Modules',
       ],  # Get strings from
           # http://pypi.python.org/pypi?%3Aaction=list_classifiers
