@@ -33,12 +33,12 @@ jobs:
       script:
         - ulimit -n 4096
         - tox -e py36
-
-deploy:
-  provider: pypi
-  user: $PYPI_USER
-  password: $PYPI_PASSWORD
-  distributions: sdist
-  on:
-    tags: true
-    python: "3.6"
+    - name: deploy
+      python: "3.6"
+      deploy:
+        provider: pypi
+        user: $PYPI_USER
+        password: $PYPI_PASSWORD
+        distributions: sdist
+        on:
+          tags: true
