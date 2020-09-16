@@ -1,3 +1,12 @@
+## 6.2.0 (2020-09-16)
+
+### Python
+
+* Allow version introspection [#123](https://github.com/ome/ome-model/pull/123)
+* Add support for population of plane metadata [#122](https://github.com/ome/ome-model/pull/122)
+* Ensure stdout works in Jupyter Notebooks [#121](https://github.com/ome/ome-model/pull/121)
+* Make channel names and color optional [#120](https://github.com/ome/ome-model/pull/120)
+
 ## 6.1.2 (2020-08-12)
 
 ### Documentation
