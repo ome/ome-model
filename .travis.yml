@@ -17,28 +17,34 @@ before_install: pip3 install --user -r requirements.txt
 jobs:
   fast_finish: true
   include:
-    - name: jdk8
+    - stage: test
+      name: jdk8
       language: java
       jdk: openjdk8
       install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dpython=python3
       script: mvn test -B -Dpython=python3
-    - name: JDK11
+    - stage: test
+      name: JDK11
       language: java
       jdk: openjdk11
       install: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V -Dpython=python3
       script: mvn test -B -Dpython=python3
-    - name: Python36
+    - stage: test
+      name: Python36
       python: "3.6"
       install: pip3 install --upgrade pip wheel pytest tox virtualenv
       script:
         - ulimit -n 4096
         - tox -e py36
-
-deploy:
-  provider: pypi
-  user: $PYPI_USER
-  password: $PYPI_PASSWORD
-  distributions: sdist
-  on:
-    tags: true
-    python: "3.6"
+    - stage: deploy
+      name: deploy
+      python: "3.6"
+      install: skip
+      script: skip
+      deploy:
+        provider: pypi
+        user: $PYPI_USER
+        password: $PYPI_PASSWORD
+        distributions: sdist
+        on:
+          tags: true
