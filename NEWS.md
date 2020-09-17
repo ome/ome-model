@@ -1,3 +1,9 @@
+## 6.2.1 (2020-09-17)
+
+### Python
+
+* Fix PyPI deployment [#124](https://github.com/ome/ome-model/pull/124)
+
 ## 6.2.0 (2020-09-16)
 
 ### Python
