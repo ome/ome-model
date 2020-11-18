@@ -16,6 +16,7 @@ import re
 import sys
 import unittest
 
+from genshi.compat import IS_PYTHON2
 from genshi.template import directives, MarkupTemplate, TextTemplate, \
                             TemplateRuntimeError, TemplateSyntaxError
 
@@ -426,7 +427,7 @@ class ForDirectiveTestCase(unittest.TestCase):
             <b>3</b>
             <b>4</b>
             <b>5</b>
-        </doc>""", tmpl.generate(items=list(range(1, 6))).render(encoding=None))
+        </doc>""", tmpl.generate(items=range(1, 6)).render(encoding=None))
 
     def test_as_element(self):
         """
@@ -443,7 +444,7 @@ class ForDirectiveTestCase(unittest.TestCase):
             <b>3</b>
             <b>4</b>
             <b>5</b>
-        </doc>""", tmpl.generate(items=list(range(1, 6))).render(encoding=None))
+        </doc>""", tmpl.generate(items=range(1, 6)).render(encoding=None))
 
     def test_multi_assignment(self):
         """
@@ -496,7 +497,8 @@ class ForDirectiveTestCase(unittest.TestCase):
             while frame.tb_next:
                 frame = frame.tb_next
                 frames.append(frame)
-            self.assertEqual("<Expression u'iter(foo)'>",
+            expected_iter_str = "u'iter(foo)'" if IS_PYTHON2 else "'iter(foo)'"
+            self.assertEqual("<Expression %s>" % expected_iter_str,
                              frames[-1].tb_frame.f_code.co_name)
             self.assertEqual('test.html',
                              frames[-1].tb_frame.f_code.co_filename)
@@ -1190,12 +1192,12 @@ class WithDirectiveTestCase(unittest.TestCase):
         </div>""", tmpl.generate(foo={'bar': 42}).render(encoding=None))
 
     def test_unicode_expr(self):
-        tmpl = MarkupTemplate("""<div xmlns:py="http://genshi.edgewall.org/">
+        tmpl = MarkupTemplate(u"""<div xmlns:py="http://genshi.edgewall.org/">
           <span py:with="weeks=(u'一', u'二', u'三', u'四', u'五', u'六', u'日')">
             $weeks
           </span>
         </div>""")
-        self.assertEqual("""<div>
+        self.assertEqual(u"""<div>
           <span>
             一二三四五六日
           </span>
