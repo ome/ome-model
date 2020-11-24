@@ -267,8 +267,8 @@ ${customUpdatePropertyContent[prop.name]}
     if (!element.hasAttribute("ID") && getID() == null)
     {
       // TODO: Should be its own exception
-      throw new RuntimeException(String.format(
-        "${klass.name} missing required ID property."));
+      throw new RuntimeException(
+        "${klass.name} missing required ID property.");
     }
     if (element.hasAttribute("ID"))
     {
