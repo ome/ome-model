@@ -256,7 +256,7 @@ public class AggregateMetadata implements IMetadata
   // -- Fields --
 
   /** The active metadata store delegates. */
-  private List<BaseMetadata> delegates;
+  private final List<BaseMetadata> delegates;
 
   // -- Constructor --
 
