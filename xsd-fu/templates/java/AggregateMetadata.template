@@ -14,9 +14,8 @@
 {% def counter(parent, obj, indexes) %}\
   public int get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}Count(${indexes_string(indexes[:-1])})
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataRetrieve)
       {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
@@ -33,9 +32,8 @@
 {% when len(indexes) > 0 and prop.maxOccurs > 1 %}\
   public ${prop.metadataStoreRetType} get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}(${indexes_string(indexes)}, ${index_string(prop.name)})
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataRetrieve)
       {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
@@ -49,9 +47,8 @@
 {% when len(indexes) > 0 %}\
   public ${prop.metadataStoreRetType} get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}(${indexes_string(indexes)})
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataRetrieve)
       {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
@@ -65,9 +62,8 @@
 {% otherwise %}\
   public ${prop.metadataStoreRetType} get{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}${prop.name}()
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataRetrieve)
       {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
@@ -89,9 +85,8 @@
 {% end debug %}\
   public void set{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}(${prop.metadataStoreArgType} ${prop.argumentName}, ${indexes_string(indexes)}, ${index_string(prop.name)})
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataStore)
       {
         MetadataStore store = (MetadataStore) o;
@@ -106,9 +101,8 @@
 {% end debug %}\
   public void set{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}(${prop.metadataStoreArgType} ${prop.argumentName}, ${indexes_string(indexes)})
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataStore)
       {
         MetadataStore store = (MetadataStore) o;
@@ -123,9 +117,8 @@
 {% end debug %}\
   public void set{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}(${prop.metadataStoreArgType} ${prop.argumentName})
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataStore)
       {
         MetadataStore store = (MetadataStore) o;
@@ -275,9 +268,8 @@ public class AggregateMetadata implements IMetadata
   /* @see MetadataStore#createRoot() */
   public void createRoot()
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataStore)
       {
         ((MetadataStore) o).createRoot();
@@ -309,8 +301,7 @@ public class AggregateMetadata implements IMetadata
   // -- Entity counting (manual definitions) --
 
   public int getBooleanAnnotationAnnotationCount(int booleanAnnotationIndex) {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -322,8 +313,7 @@ public class AggregateMetadata implements IMetadata
   }
 
   public int getCommentAnnotationAnnotationCount(int commentAnnotationIndex) {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -335,8 +325,7 @@ public class AggregateMetadata implements IMetadata
   }
 
   public int getDoubleAnnotationAnnotationCount(int doubleAnnotationIndex) {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -348,8 +337,7 @@ public class AggregateMetadata implements IMetadata
   }
 
   public int getFileAnnotationAnnotationCount(int fileAnnotationIndex) {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -361,8 +349,7 @@ public class AggregateMetadata implements IMetadata
   }
 
   public int getListAnnotationAnnotationCount(int listAnnotationIndex) {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -374,8 +361,7 @@ public class AggregateMetadata implements IMetadata
   }
 
   public int getLongAnnotationAnnotationCount(int longAnnotationIndex) {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -387,8 +373,7 @@ public class AggregateMetadata implements IMetadata
   }
 
   public int getMapAnnotationAnnotationCount(int mapAnnotationIndex) {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -400,8 +385,7 @@ public class AggregateMetadata implements IMetadata
   }
 
   public int getTagAnnotationAnnotationCount(int tagAnnotationIndex) {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -413,8 +397,7 @@ public class AggregateMetadata implements IMetadata
   }
 
   public int getTermAnnotationAnnotationCount(int termAnnotationIndex) {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -427,8 +410,7 @@ public class AggregateMetadata implements IMetadata
 
   public int getTimestampAnnotationAnnotationCount(int timestampAnnotationIndex)
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result = retrieve.getTimestampAnnotationAnnotationCount(
@@ -440,8 +422,7 @@ public class AggregateMetadata implements IMetadata
   }
 
   public int getXMLAnnotationAnnotationCount(int xmlAnnotationIndex) {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -459,9 +440,8 @@ public class AggregateMetadata implements IMetadata
 {% for k, v in indexes[abstractClass].items() %}\
   public String get${abstractClass}Type(${indexes_string(v)})
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataRetrieve)
       {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
@@ -474,8 +454,7 @@ public class AggregateMetadata implements IMetadata
 
   public int get{% if is_multi_path[abstractClass] %}${k}{% end %}${abstractClass}Count(${indexes_string(v[:-1])})
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();) {
-      Object o = iter.next();
+    for (Object o : delegates) {
       if (o instanceof MetadataRetrieve) {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
         int result =
@@ -498,9 +477,8 @@ public class AggregateMetadata implements IMetadata
 {% end debug %}\
   public void set${o.name}Value(${o.langBaseType} value, ${indexes_string(list(indexes[o.name].values())[0])})
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataStore)
       {
         ((MetadataStore) o).set${o.name}Value(value, ${indexes_name_string(list(indexes[o.name].values())[0])});
@@ -510,9 +488,8 @@ public class AggregateMetadata implements IMetadata
 
   public ${o.langBaseType} get${o.name}Value(${indexes_string(list(indexes[o.name].values())[0])})
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataRetrieve)
       {
         ${o.langBaseType} result = ((MetadataRetrieve) o).get${o.name}Value(${indexes_name_string(list(indexes[o.name].values())[0])});
@@ -542,9 +519,8 @@ ${counter(k, o, v)}\
   /** Gets the UUID associated with this collection of metadata. */
   public String getUUID()
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataRetrieve)
       {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
@@ -574,9 +550,8 @@ ${counter(k, o, v)}\
   /** Gets the Map value associated with this annotation */
   public List<MapPair> getMapAnnotationValue(int mapAnnotationIndex)
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataRetrieve)
       {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
@@ -590,9 +565,8 @@ ${counter(k, o, v)}\
   /** Gets the Map value associated with this generic light source */
   public List<MapPair> getGenericExcitationSourceMap(int instrumentIndex, int lightSourceIndex)
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataRetrieve)
       {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
@@ -606,9 +580,8 @@ ${counter(k, o, v)}\
   /** Gets the Map value associated with this imaging environment */
   public List<MapPair> getImagingEnvironmentMap(int imageIndex)
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataRetrieve)
       {
         MetadataRetrieve retrieve = (MetadataRetrieve) o;
@@ -711,9 +684,8 @@ ${getter(k, o, prop, v)}\
   /** Sets the UUID associated with this collection of metadata. */
   public void setUUID(String uuid)
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataStore)
       {
         ((MetadataStore) o).setUUID(uuid);
@@ -737,9 +709,8 @@ ${getter(k, o, prop, v)}\
   /** Sets the Map value associated with this annotation */
   public void setMapAnnotationValue(List<MapPair> value, int mapAnnotationIndex)
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataStore)
       {
         MetadataStore store = (MetadataStore) o;
@@ -751,9 +722,8 @@ ${getter(k, o, prop, v)}\
   /** Sets the Map value associated with this generic light source */
   public void setGenericExcitationSourceMap(List<MapPair> map, int instrumentIndex, int lightSourceIndex)
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataStore)
       {
         MetadataStore store = (MetadataStore) o;
@@ -765,9 +735,8 @@ ${getter(k, o, prop, v)}\
   /** Sets the Map value associated with this imaging environment */
   public void setImagingEnvironmentMap(List<MapPair> map, int imageIndex)
   {
-    for (Iterator iter = delegates.iterator(); iter.hasNext();)
+    for (Object o : delegates)
     {
-      Object o = iter.next();
       if (o instanceof MetadataStore)
       {
         MetadataStore store = (MetadataStore) o;
