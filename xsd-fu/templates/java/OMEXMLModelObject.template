@@ -592,6 +592,7 @@ ${customUpdatePropertyContent[prop.name]}
   // Attribute property which is Units enumeration ${prop.name}
 {% end debug %}\
   // Property ${prop.name} is a unit companion
+  @SuppressWarnings("SameReturnValue")
   public static String get${prop.methodName}XsdDefault()
   {
     return "${prop.defaultXsdValue}";
