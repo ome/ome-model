@@ -21,12 +21,9 @@ from setuptools import setup
 
 
 def get_version():
-    import xml.etree.ElementTree as ElementTree
-    tree = ElementTree.parse('pom.xml')
-    ns = {'maven': 'http://maven.apache.org/POM/4.0.0'}
-    version = tree.find('maven:version', ns).text
-    print(version)
-    return version.replace('-SNAPSHOT', '.dev0')
+    with open('VERSION', 'r') as f:
+        version = f.readline().rstrip('\r\n')
+        return version.replace('-SNAPSHOT', '.dev0')
 
 
 def write_version(version):
