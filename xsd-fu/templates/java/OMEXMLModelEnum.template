@@ -45,20 +45,15 @@
 
 package ${lang.omexml_model_enums_package};
 
-
-import ${lang.units_package}.quantity.Angle;
-import ${lang.units_package}.quantity.ElectricPotential;
-import ${lang.units_package}.quantity.Frequency;
-import ${lang.units_package}.quantity.Length;
-import ${lang.units_package}.quantity.Power;
-import ${lang.units_package}.quantity.Pressure;
-import ${lang.units_package}.quantity.Temperature;
-import ${lang.units_package}.quantity.${lang.typeToUnitsType("UnitsTime")};
-import ${lang.units_package}.unit.Unit;
-
+{% if klass.isUnitsEnumeration %}\
 import ${lang.omexml_model_omexml_model_enum_handlers_package}.${klass.langType}EnumHandler;
 import ome.xml.model.primitives.*;
+import ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)};
+import ome.units.unit.Unit;
+import ome.units.UNITS;
+{% end if klass.isUnitsEnumeration %}\
 
+@SuppressWarnings("SpellCheckingInspection")
 public enum ${klass.langType} implements Enumeration
 {
 {% for value in klass.possibleValues %}\
