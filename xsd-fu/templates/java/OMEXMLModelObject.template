@@ -227,7 +227,6 @@ ${customContent}\
 {% end if klass.langBaseType == 'String' %}\
     }
 {% end %}\
-    String tagName = element.getTagName();
 {% for prop in klass.properties.values() %}\
 {% choose %}\
 {% when prop.name in customUpdatePropertyContent %}\
