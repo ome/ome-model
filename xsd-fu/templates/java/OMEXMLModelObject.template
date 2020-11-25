@@ -368,7 +368,7 @@ ${customUpdatePropertyContent[prop.name]}
         (Element) ${prop.name}_nodeList.get(0), model));
 {% end %}\
 {% if prop.langTypeNS == 'List<MapPair>' %}\
-      List<MapPair> p = new java.util.ArrayList<MapPair>();
+      List<MapPair> p = new java.util.ArrayList<>();
       NodeList children = ${prop.name}_nodeList.get(0).getChildNodes();
 
       for (int i=0; i<children.getLength(); i++) {
@@ -521,7 +521,7 @@ ${customUpdatePropertyContent[prop.name]}
 
   public List<${prop.langType}> copyLinked${prop.methodName}List()
   {
-    return new ArrayList<${prop.langType}>(${prop.instanceVariableName});
+    return new ArrayList<>(${prop.instanceVariableName});
   }
 
   public ${prop.langType} getLinked${prop.methodName}(int index)
@@ -626,7 +626,7 @@ ${customUpdatePropertyContent[prop.name]}
 
   public List<${prop.langType}> copy${prop.methodName}List()
   {
-    return new ArrayList<${prop.langType}>(${prop.instanceVariableName});
+    return new ArrayList<>(${prop.instanceVariableName});
   }
 
   public ${prop.langType} get${prop.methodName}(int index)

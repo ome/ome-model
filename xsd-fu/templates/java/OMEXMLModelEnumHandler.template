@@ -85,7 +85,7 @@ public class ${klass.langType}EnumHandler implements IEnumerationHandler {
   private static final Hashtable<String, String> patterns = makePatterns();
 
   private static Hashtable<String, String> makePatterns() {
-    Hashtable<String, String> p = new Hashtable<String, String>();
+    Hashtable<String, String> p = new Hashtable<>();
     // BEGIN Schema enumeration mappings
 {% for value in klass.possibleValues %}\
     p.put("^\\\s*${value}\\\s*", "${value}");
