@@ -683,7 +683,7 @@ ${customUpdatePropertyContent[prop.name]}
     super.asXMLElement(document, ${klass.name}_element);
 
 {% for prop in klass.properties.values() %}\
-{% if not prop.isUnitsEnumeration %}\
+{% if not prop.isUnitsEnumeration and not prop.isBackReference %}\
     if (${prop.instanceVariableName} != null)
     {
 {% choose %}\
@@ -738,9 +738,6 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% end if %}\
       o.asXMLElement(document, child);
       ${klass.name}_element.appendChild(child);
-{% end when %}\
-{% when prop.isBackReference %}\
-      // *** IGNORING *** Skipped back reference ${prop.name}
 {% end when %}\
 {% when prop.hasUnitsCompanion and prop.maxOccurs == 1 and prop.isAttribute %}\
 {% if debug %}\
@@ -846,7 +843,10 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% end otherwise %}\
 {% end choose %}\
     }
-{% end if %}\
+{% end if not prop.isUnitsEnumeration and not prop.isBackReference %}\
+{% if prop.isBackReference %}\
+    // *** IGNORING *** Skipped back reference ${prop.name}
+{% end if prop.isBackReference %}\
 {% end for %}\
 
     return ${klass.name}_element;
