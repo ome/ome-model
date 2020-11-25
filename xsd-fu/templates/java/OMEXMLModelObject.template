@@ -526,6 +526,7 @@ ${customUpdatePropertyContent[prop.name]}
     return ${prop.instanceVariableName}.set(index, o);
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   public boolean link${prop.methodName}(${prop.langType} o)
   {
 {% if not prop.isBackReference and not fu.link_overridden(prop.name, klass.name) %}\
@@ -540,6 +541,7 @@ ${customUpdatePropertyContent[prop.name]}
     return ${prop.instanceVariableName}.add(o);
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   public boolean unlink${prop.methodName}(${prop.langType} o)
   {
 {% if not prop.isBackReference and not fu.link_overridden(prop.name, klass.name) %}\
