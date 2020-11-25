@@ -219,7 +219,12 @@ ${customContent}\
     // Element's text data
     String value_textContent = element.getTextContent();
     if (value_textContent.trim().length() > 0) {
+{% if klass.langBaseType != 'String' %}\
       value = ${klass.langBaseType}.valueOf(value_textContent);
+{% end if klass.langBaseType != 'String' %}\
+{% if klass.langBaseType == 'String' %}\
+      value = value_textContent;
+{% end if klass.langBaseType == 'String' %}\
     }
 {% end %}\
     String tagName = element.getTagName();
