@@ -131,6 +131,7 @@ public class ${klass.langType}EnumHandler implements IEnumerationHandler {
 
 {% if klass.isUnitsEnumeration %}\
 {% if lang.units_implementation_is == "ome" %}
+  @SuppressWarnings("unused")
   public Enumeration getEnumeration(${klass.model.opts.lang.typeToUnitsType(klass.langType)} inUnit)
     throws EnumerationException {
     return getEnumeration(inUnit.unit().getSymbol());
