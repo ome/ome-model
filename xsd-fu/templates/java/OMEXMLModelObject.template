@@ -466,7 +466,9 @@ ${customUpdatePropertyContent[prop.name]}
 {% if prop.isReference %}\
     if (reference instanceof ${prop.name})
     {
+{% if prop.maxOccurs != 1 or not fu.link_overridden(prop.name, klass.name) %}\
       ${prop.langType} o_casted = (${prop.langType}) o;
+{% end %}\
 {% if not fu.link_overridden(prop.name, klass.name) %}\
 {% if not fu.backReference_overridden(prop.name, klass.name) %}\
       o_casted.link${klass.type}(this);
@@ -478,8 +480,11 @@ ${customUpdatePropertyContent[prop.name]}
 {% if prop.maxOccurs > 1 %}\
       ${prop.instanceVariableName}.add(o_casted);
 {% end %}\
-{% if prop.maxOccurs == 1 %}\
+{% if prop.maxOccurs == 1 and not fu.link_overridden(prop.name, klass.name) %}\
       ${prop.instanceVariableName} = o_casted;
+{% end %}\
+{% if prop.maxOccurs == 1 and fu.link_overridden(prop.name, klass.name) %}\
+      ${prop.instanceVariableName} = (${prop.langType}) o;
 {% end %}\
       return true;
     }
