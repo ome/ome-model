@@ -82,11 +82,17 @@ public enum ${klass.langType} implements Enumeration
 {% end %}\
 {% end %}\
 
+{% if len(klass.possibleValues) == 1 %}\
+  @SuppressWarnings("SameParameterValue")
+{% end %}\
   ${klass.langType}(String value)
   {
     this.value = value;
   }
 
+{% if len(klass.possibleValues) == 1 %}\
+  @SuppressWarnings({"SameParameterValue", "SameReturnValue"})
+{% end %}\
   public static ${klass.langType} fromString(String value)
     throws EnumerationException
   {
@@ -110,6 +116,7 @@ public enum ${klass.langType} implements Enumeration
     throw new EnumerationException(s);
   }
 
+  @SuppressWarnings("unused")
   public String getValue()
   {
     return value;
