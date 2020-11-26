@@ -1512,7 +1512,7 @@ public final class MetadataConverter {
   private static List<String> convertInstruments(MetadataRetrieve src,
     MetadataStore dest)
   {
-    List<String> lightSourceIds = new ArrayList<String>();
+    List<String> lightSourceIds = new ArrayList<>();
     int instrumentCount = 0;
     try {
       instrumentCount = src.getInstrumentCount();

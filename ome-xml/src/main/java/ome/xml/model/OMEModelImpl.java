@@ -50,10 +50,10 @@ import org.slf4j.LoggerFactory;
 public class OMEModelImpl implements OMEModel {
 
   private final Map<String, OMEModelObject> modelObjects =
-    new HashMap<String, OMEModelObject>();
+          new HashMap<>();
 
   private final Map<OMEModelObject, List<Reference>> references =
-    new HashMap<OMEModelObject, List<Reference>>();
+          new HashMap<>();
 
   /** Logger for this class. */
   private static final Logger LOGGER =
@@ -104,7 +104,7 @@ public class OMEModelImpl implements OMEModel {
     }
     List<Reference> bList = references.get(a);
     if (bList == null) {
-      bList = new ArrayList<Reference>();
+      bList = new ArrayList<>();
       references.put(a, bList);
     }
     return bList.add(b);

@@ -95,7 +95,7 @@ public abstract class AbstractOMEModelObject implements OMEModelObject {
    */
   public static List<Element> getChildrenByTagName(
       Element parent, String name) {
-    List<Element> toReturn = new ArrayList<Element>();
+    List<Element> toReturn = new ArrayList<>();
     NodeList children = parent.getChildNodes();
     for (int i = 0; i < children.getLength(); i++) {
       Node child = children.item(i);
