@@ -418,7 +418,7 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
     ${abstractClass} o = root.${".".join(basic_accessor(abstractClass))};
     String className = o.getClass().getName();
     return className.substring(
-      className.lastIndexOf('.') + 1, className.length());
+      className.lastIndexOf('.') + 1);
   }
 {% end %}\
 {% end %}\
