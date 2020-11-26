@@ -102,11 +102,7 @@ public class OMEModelImpl implements OMEModel {
     if (b == null) {
       return false;
     }
-    List<Reference> bList = references.get(a);
-    if (bList == null) {
-      bList = new ArrayList<>();
-      references.put(a, bList);
-    }
+    List<Reference> bList = references.computeIfAbsent(a, k -> new ArrayList<>());
     return bList.add(b);
   }
 
