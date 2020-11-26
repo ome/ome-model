@@ -168,18 +168,11 @@ public class ${klass.langType}EnumHandler implements IEnumerationHandler {
   public static <T extends PrimitiveNumber> ${klass.model.opts.lang.typeToUnitsType(klass.langType)} getQuantity(T inValue, ${klass.langType} inModelUnit)
     throws EnumerationException
   {
-    if (inValue instanceof NonNegativeFloat) {
-      NonNegativeFloat typedValue = (NonNegativeFloat) inValue;
-      return new ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
-    }
-    if (inValue instanceof NonNegativeInteger) {
-      NonNegativeInteger typedValue = (NonNegativeInteger) inValue;
-      return new ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
-    }
-    if (inValue instanceof NonNegativeLong) {
-      NonNegativeLong typedValue = (NonNegativeLong) inValue;
-      return new ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
-    }
+    // "Positive" variants are listed before "NonNegative" variants because they extend the "NonNegative" variants and
+    // would otherwise be ignored because the "NonNegative" test would be chosen for both "Positive" and "NonNegative"
+    // types.  We also process Long before Integer for the same reason since the static analyser also found this led
+    // to the Long codepath being picked for the Integer type, though it's not as clear why that is happening.  The
+    // current order passes static analysis with all codepaths being correctly visited.
     if (inValue instanceof PercentFraction) {
       PercentFraction typedValue = (PercentFraction) inValue;
       return new ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
@@ -188,12 +181,24 @@ public class ${klass.langType}EnumHandler implements IEnumerationHandler {
       PositiveFloat typedValue = (PositiveFloat) inValue;
       return new ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
     }
-    if (inValue instanceof PositiveInteger) {
-      PositiveInteger typedValue = (PositiveInteger) inValue;
+    if (inValue instanceof NonNegativeFloat) {
+      NonNegativeFloat typedValue = (NonNegativeFloat) inValue;
       return new ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
     }
     if (inValue instanceof PositiveLong) {
       PositiveLong typedValue = (PositiveLong) inValue;
+      return new ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
+    }
+    if (inValue instanceof NonNegativeLong) {
+      NonNegativeLong typedValue = (NonNegativeLong) inValue;
+      return new ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
+    }
+    if (inValue instanceof PositiveInteger) {
+      PositiveInteger typedValue = (PositiveInteger) inValue;
+      return new ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
+    }
+    if (inValue instanceof NonNegativeInteger) {
+      NonNegativeInteger typedValue = (NonNegativeInteger) inValue;
       return new ome.units.quantity.${klass.model.opts.lang.typeToUnitsType(klass.langType)}(typedValue.getValue(), getBaseUnit(inModelUnit));
     }
     LOGGER.warn("Unknown type '{}' cannot be used to create a '${klass.model.opts.lang.typeToUnitsType(klass.langType)}' quantity",
