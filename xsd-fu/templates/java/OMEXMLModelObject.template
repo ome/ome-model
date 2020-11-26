@@ -680,7 +680,12 @@ ${customUpdatePropertyContent[prop.name]}
 {% if klass.langBaseType != 'Object' %}\
     // Element's text data
     if (this.value != null) {
+{% if klass.langBaseType != 'String' %}\
       ${klass.name}_element.setTextContent(this.value.toString());
+{% end if %}\
+{% if klass.langBaseType == 'String' %}\
+      ${klass.name}_element.setTextContent(this.value);
+{% end if %}\
     }
 
 {% end if NOT Object %}\
@@ -704,7 +709,12 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% when prop.hasBaseAttribute %}\
       // Element's text data
 {% if not prop.type == 'base64Binary' %}\
+{% if prop.instanceVariableType != 'String' %}\
       ${klass.name}_element.setTextContent(${prop.instanceVariableName}.toString());
+{% end if %}\
+{% if prop.instanceVariableType == 'String' %}\
+      ${klass.name}_element.setTextContent(${prop.instanceVariableName});
+{% end if %}\
 {% end if not prop.type %}\
 {% if prop.type == 'base64Binary' %}\
       String encodedString = Base64.getEncoder().encodeToString(${prop.instanceVariableName});
@@ -775,7 +785,12 @@ ${customAsXMLElementPropertyContent[prop.name]}
       // MARKER [III]
 {% end debug %}\
       // Attribute property ${prop.name}
+{% if prop.instanceVariableType != 'String' %}\
       ${klass.name}_element.setAttribute("${prop.name}", ${prop.instanceVariableName}.toString());
+{% end if %}\
+{% if prop.instanceVariableType == 'String' %}\
+      ${klass.name}_element.setAttribute("${prop.name}", ${prop.instanceVariableName});
+{% end if %}\
 {% end when %}\
 {% when prop.maxOccurs == 1 and prop.isComplex() %}\
       // Element property ${prop.name} which is complex (has
@@ -810,7 +825,12 @@ ${customAsXMLElementPropertyContent[prop.name]}
     // sub-elements)
     Element ${prop.instanceVariableName}_element =
       document.createElementNS(NAMESPACE, "${prop.name}");
+{% if prop.instanceVariableType != 'String' %}\
       ${prop.instanceVariableName}_element.setTextContent(${prop.instanceVariableName}.toString());
+{% end if %}\
+{% if prop.instanceVariableType == 'String' %}\
+      ${prop.instanceVariableName}_element.setTextContent(${prop.instanceVariableName});
+{% end if %}\
       ${klass.name}_element.appendChild(${prop.instanceVariableName}_element);
 {% end when %}\
 {% when prop.maxOccurs > 1 and prop.isComplex() %}\
