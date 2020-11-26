@@ -44,7 +44,7 @@ public class PercentFraction extends PrimitiveType<Float> implements PrimitiveNu
 
   public PercentFraction(Float value) {
     super(value);
-    if (value == null || value.floatValue() < 0.0 || value.floatValue() > 1.0) {
+    if (value == null || value < 0.0 || value > 1.0) {
       throw new IllegalArgumentException(
           value + " must be non-null and between 0.0 and 1.0 inclusive.");
     }

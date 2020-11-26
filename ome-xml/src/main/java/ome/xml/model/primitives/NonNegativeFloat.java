@@ -44,7 +44,7 @@ public class NonNegativeFloat extends PrimitiveType<Double> implements Primitive
 
   public NonNegativeFloat(Double value) {
     super(value);
-    if (value == null || value.doubleValue() < 0) {
+    if (value == null || value < 0) {
       throw new IllegalArgumentException(
           value + " must be neither null nor strictly negative.");
     }

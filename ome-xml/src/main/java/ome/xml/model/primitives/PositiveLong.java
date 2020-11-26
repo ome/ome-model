@@ -44,7 +44,7 @@ public class PositiveLong extends NonNegativeLong {
 
   public PositiveLong(Long value) {
     super(value);
-    if (value == null || value.longValue() < 1) {
+    if (value == null || value < 1) {
       throw new IllegalArgumentException(
           value + " must be non-null and strictly positive.");
     }
