@@ -49,10 +49,10 @@ import org.slf4j.LoggerFactory;
  */
 public class OMEModelImpl implements OMEModel {
 
-  private Map<String, OMEModelObject> modelObjects = 
+  private final Map<String, OMEModelObject> modelObjects =
     new HashMap<String, OMEModelObject>();
 
-  private Map<OMEModelObject, List<Reference>> references =
+  private final Map<OMEModelObject, List<Reference>> references =
     new HashMap<OMEModelObject, List<Reference>>();
 
   /** Logger for this class. */

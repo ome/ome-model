@@ -44,7 +44,7 @@ import java.util.HashSet;
  */
 public class ReferenceList<T> extends ArrayList<T> {
 
-  private Set<T> backingSet = new HashSet<T>();
+  private final Set<T> backingSet = new HashSet<T>();
 
   public ReferenceList() {
     super();
