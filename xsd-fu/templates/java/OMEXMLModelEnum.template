@@ -82,7 +82,7 @@ public enum ${klass.langType} implements Enumeration
 {% end %}\
 {% end %}\
 
-  private ${klass.langType}(String value)
+  ${klass.langType}(String value)
   {
     this.value = value;
   }
