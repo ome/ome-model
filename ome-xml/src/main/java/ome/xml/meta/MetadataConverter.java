@@ -2301,7 +2301,7 @@ public final class MetadataConverter {
 
         int wellAnnotationRefCount = 0;
         try {
-          src.getWellAnnotationRefCount(i, q);
+          wellAnnotationRefCount = src.getWellAnnotationRefCount(i, q);
         }
         catch (NullPointerException e) { }
         for (int a=0; a<wellAnnotationRefCount; a++) {
