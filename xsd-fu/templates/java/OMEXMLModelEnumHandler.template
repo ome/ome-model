@@ -144,10 +144,15 @@ public class ${klass.langType}EnumHandler implements IEnumerationHandler {
     theResult = ${klass.model.opts.lang.typeToDefault(klass.langType)};
 {% for value in klass.possibleValues %}\
 {% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('enum', None) is not None %}\
+{% if klass.model.opts.lang.typeToDefault(klass.langType) != "UNITS.{}".format(klass.enumProperties[value].enum) %}\
     if (${klass.langType}.${klass.enumProperties[value].enum}.equals(inModelUnit))
     {
       theResult = UNITS.${klass.enumProperties[value].enum};
     }
+{% end %}\
+{% if klass.model.opts.lang.typeToDefault(klass.langType) == "UNITS.{}".format(klass.enumProperties[value].enum) %}\
+    // Skip default unit ${klass.enumProperties[value].enum}
+{% end %}\
 {% end %}\
 {% if klass.enumProperties is None or not value in klass.enumProperties or klass.enumProperties[value].get('enum', None) is None %}\
     if (${klass.langType}.${enum_value_name(value, klass.isUnitsEnumeration).upper()}.equals(inModelUnit))
