@@ -357,8 +357,7 @@ ${customUpdatePropertyContent[prop.name]}
       // Element property ${prop.name} which is complex (has
       // sub-elements)
 {% if prop.langTypeNS != 'List<MapPair>' %}\
-      set${prop.methodName}(new ${prop.langType}(
-        (Element) ${prop.name}_nodeList.get(0), model));
+      set${prop.methodName}(new ${prop.langType}(${prop.name}_nodeList.get(0), model));
 {% end %}\
 {% if prop.langTypeNS == 'List<MapPair>' %}\
       List<MapPair> p = new java.util.ArrayList<>();
