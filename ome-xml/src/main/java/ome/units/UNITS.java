@@ -51,6 +51,7 @@ import java.math.BigInteger;
  */
 public final class UNITS
 {
+  @SuppressWarnings("SameReturnValue")
   public String getName()
   {
     return "OME-combined";
