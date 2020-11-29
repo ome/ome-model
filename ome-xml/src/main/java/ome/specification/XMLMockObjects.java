@@ -290,7 +290,7 @@ public class XMLMockObjects
   public static final Double CUT_OUT = 300.0;
 
   /** Root of the file. */
-  protected OME ome;
+  protected final OME ome;
 
   /** The instrument used for the metadata. */
   protected Instrument instrument;

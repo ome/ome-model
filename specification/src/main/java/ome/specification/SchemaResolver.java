@@ -54,20 +54,20 @@ public class SchemaResolver implements LSResourceResolver
     private DOMImplementationLS theDOMImplementationLS;
 
     // the static string to strip when mapping schema locations
-    private static String GIT_MASTER_PATH  = "http://git.openmicroscopy.org/src/master/components/specification";
-    private static String GIT_DEVELOP_PATH = "http://git.openmicroscopy.org/src/develop/components/specification";
-    private static String MAIN_PATH = "http://www.openmicroscopy.org/Schemas/";
-    private static String MAIN_SEARCH_PATH = "/released-schema/";
-    private static String LEGACY_AC_PATH = "http://www.openmicroscopy.org/XMLschemas/AnalysisChain/RC1/";
-    private static String LEGACY_AM_PATH = "http://www.openmicroscopy.org/XMLschemas/AnalysisModule/RC1/";
-    private static String LEGACY_BF_PATH = "http://www.openmicroscopy.org/XMLschemas/BinaryFile/RC1/";
-    private static String LEGACY_CA_PATH = "http://www.openmicroscopy.org/XMLschemas/CA/RC1/";
-    private static String LEGACY_CL_PATH = "http://www.openmicroscopy.org/XMLschemas/CLI/RC1/";
-    private static String LEGACY_DH_PATH = "http://www.openmicroscopy.org/XMLschemas/DataHistory/IR3/";
-    private static String LEGACY_ML_PATH = "http://www.openmicroscopy.org/XMLschemas/MLI/IR2/";
-    private static String LEGACY_OM_PATH = "http://www.openmicroscopy.org/XMLschemas/OME/FC/";
-    private static String LEGACY_ST_PATH = "http://www.openmicroscopy.org/XMLschemas/STD/RC2/";
-    private static String LEGACY_SEARCH_PATH = "/released-schema/2003-FC/";
+    private static final String GIT_MASTER_PATH  = "http://git.openmicroscopy.org/src/master/components/specification";
+    private static final String GIT_DEVELOP_PATH = "http://git.openmicroscopy.org/src/develop/components/specification";
+    private static final String MAIN_PATH = "http://www.openmicroscopy.org/Schemas/";
+    private static final String MAIN_SEARCH_PATH = "/released-schema/";
+    private static final String LEGACY_AC_PATH = "http://www.openmicroscopy.org/XMLschemas/AnalysisChain/RC1/";
+    private static final String LEGACY_AM_PATH = "http://www.openmicroscopy.org/XMLschemas/AnalysisModule/RC1/";
+    private static final String LEGACY_BF_PATH = "http://www.openmicroscopy.org/XMLschemas/BinaryFile/RC1/";
+    private static final String LEGACY_CA_PATH = "http://www.openmicroscopy.org/XMLschemas/CA/RC1/";
+    private static final String LEGACY_CL_PATH = "http://www.openmicroscopy.org/XMLschemas/CLI/RC1/";
+    private static final String LEGACY_DH_PATH = "http://www.openmicroscopy.org/XMLschemas/DataHistory/IR3/";
+    private static final String LEGACY_ML_PATH = "http://www.openmicroscopy.org/XMLschemas/MLI/IR2/";
+    private static final String LEGACY_OM_PATH = "http://www.openmicroscopy.org/XMLschemas/OME/FC/";
+    private static final String LEGACY_ST_PATH = "http://www.openmicroscopy.org/XMLschemas/STD/RC2/";
+    private static final String LEGACY_SEARCH_PATH = "/released-schema/2003-FC/";
 
     public SchemaResolver() throws ClassNotFoundException, InstantiationException, IllegalAccessException
     {
