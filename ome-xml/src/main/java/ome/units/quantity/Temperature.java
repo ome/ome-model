@@ -158,7 +158,7 @@ public class Temperature extends Quantity implements Comparable<Temperature>
   @Override
   public String toString()
   {
-      String result = this.getClass().getName() +
+      return this.getClass().getName() +
               ": " +
               "value[" +
               value +
@@ -166,7 +166,6 @@ public class Temperature extends Quantity implements Comparable<Temperature>
               unit.getSymbol() +
               "] stored as " +
               value.getClass().getName();
-      return result;
   }
 
   @Override

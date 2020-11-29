@@ -158,7 +158,7 @@ public class Angle extends Quantity implements Comparable<Angle>
   @Override
   public String toString()
   {
-    String result = this.getClass().getName() +
+    return this.getClass().getName() +
             ": " +
             "value[" +
             value +
@@ -166,7 +166,6 @@ public class Angle extends Quantity implements Comparable<Angle>
             unit.getSymbol() +
             "] stored as " +
             value.getClass().getName();
-    return result;
   }
 
   @Override

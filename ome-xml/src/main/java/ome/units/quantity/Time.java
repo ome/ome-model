@@ -158,7 +158,7 @@ public class Time extends Quantity implements Comparable<Time>
   @Override
   public String toString()
   {
-      String result = this.getClass().getName() +
+      return this.getClass().getName() +
               ": " +
               "value[" +
               value +
@@ -166,7 +166,6 @@ public class Time extends Quantity implements Comparable<Time>
               unit.getSymbol() +
               "] stored as " +
               value.getClass().getName();
-      return result;
   }
 
   @Override

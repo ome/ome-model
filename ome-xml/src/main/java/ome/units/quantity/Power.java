@@ -158,7 +158,7 @@ public class Power extends Quantity implements Comparable<Power>
   @Override
   public String toString()
   {
-      String result = this.getClass().getName() +
+      return this.getClass().getName() +
               ": " +
               "value[" +
               value +
@@ -166,7 +166,6 @@ public class Power extends Quantity implements Comparable<Power>
               unit.getSymbol() +
               "] stored as " +
               value.getClass().getName();
-      return result;
   }
 
   @Override

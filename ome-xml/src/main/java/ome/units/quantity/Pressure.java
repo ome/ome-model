@@ -158,7 +158,7 @@ public class Pressure extends Quantity implements Comparable<Pressure>
   @Override
   public String toString()
   {
-      String result = this.getClass().getName() +
+      return this.getClass().getName() +
               ": " +
               "value[" +
               value +
@@ -166,7 +166,6 @@ public class Pressure extends Quantity implements Comparable<Pressure>
               unit.getSymbol() +
               "] stored as " +
               value.getClass().getName();
-      return result;
   }
 
   @Override
