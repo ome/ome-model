@@ -739,8 +739,8 @@ public class XMLMockObjects
       Mask m = new Mask();
       m.setX(0.0);
       m.setY(0.0);
-      m.setWidth(new Double(SIZE_X));
-      m.setHeight(new Double(SIZE_Y));
+      m.setWidth((double) SIZE_X);
+      m.setHeight((double) SIZE_Y);
       m.setBinData(createBinData(SIZE_X,SIZE_Y,BYTES_PER_PIXEL));
       shape = m;
     }
