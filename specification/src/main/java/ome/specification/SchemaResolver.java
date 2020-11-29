@@ -69,7 +69,7 @@ public class SchemaResolver implements LSResourceResolver
     private static final String LEGACY_ST_PATH = "http://www.openmicroscopy.org/XMLschemas/STD/RC2/";
     private static final String LEGACY_SEARCH_PATH = "/released-schema/2003-FC/";
 
-    public SchemaResolver() throws ClassNotFoundException, InstantiationException, IllegalAccessException
+    public SchemaResolver() throws InstantiationException
     {
         // Create the objects necessary to make the correct LSInput return types
         theDOMImplementationLS = null;
