@@ -134,8 +134,7 @@ public class Unit<Q extends Quantity>
         inUnit.measurementSystem +
         "]");
     }
-    Double theResult = (((inValue.doubleValue()*scaleFactor)+offset)-inUnit.offset)/inUnit.scaleFactor;
-    return theResult;
+    return (((inValue.doubleValue()*scaleFactor)+offset)-inUnit.offset)/inUnit.scaleFactor;
   }
 
   // Begin "protected" functions
