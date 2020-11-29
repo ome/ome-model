@@ -215,17 +215,13 @@ public class OmeValidator
 
         // Version - two step parse then validate (throws error as exception)
         DocumentBuilder builder = dbf.newDocumentBuilder();
-        FileInputStream is = null;
-        try {
-            is = new FileInputStream(file);
+        try (FileInputStream is = new FileInputStream(file)) {
             Document theDoc = builder.parse(is);
-            Validator validator=theSchema.newValidator();
+            Validator validator = theSchema.newValidator();
             validator.validate(new DOMSource(theDoc));
             return theDoc;
         } catch (Exception e) {
             throw new Exception("Cannot parse the file", e);
-        } finally {
-            if (is != null) is.close();
         }
     }
 
