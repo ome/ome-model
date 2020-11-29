@@ -1474,31 +1474,27 @@ public class XMLMockObjects
     }
     List<Dichroic> dichroics = instrument.copyDichroicList();
     index = 0;
-    Iterator<Dichroic> j = dichroics.iterator();
-    while (j.hasNext()) {
-        j.next().setLinkedAnnotation(index, new LongAnnotation());
-        index++;
+    for (Dichroic dichroic : dichroics) {
+      dichroic.setLinkedAnnotation(index, new LongAnnotation());
+      index++;
     }
     List<Filter> filters = instrument.copyFilterList();
     index = 0;
-    Iterator<Filter> k = filters.iterator();
-    while (k.hasNext()) {
-        k.next().setLinkedAnnotation(index, new TermAnnotation());
-        index++;
+    for (Filter filter : filters) {
+      filter.setLinkedAnnotation(index, new TermAnnotation());
+      index++;
     }
     List<LightSource> lights = instrument.copyLightSourceList();
     index = 0;
-    Iterator<LightSource> l = lights.iterator();
-    while (l.hasNext()) {
-        l.next().setLinkedAnnotation(index, new DoubleAnnotation());
-        index++;
+    for (LightSource light : lights) {
+      light.setLinkedAnnotation(index, new DoubleAnnotation());
+      index++;
     }
     List<Objective> objectives = instrument.copyObjectiveList();
     index = 0;
-    Iterator<Objective> m = objectives.iterator();
-    while (m.hasNext()) {
-        m.next().setLinkedAnnotation(index,new MapAnnotation());
-        index++;
+    for (Objective objective : objectives) {
+      objective.setLinkedAnnotation(index, new MapAnnotation());
+      index++;
     }
     Image image = createImage(0, true);
     ObjectiveSettings settings = createObjectiveSettings(0);
