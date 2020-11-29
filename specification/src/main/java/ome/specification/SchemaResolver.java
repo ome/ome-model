@@ -131,7 +131,7 @@ public class SchemaResolver implements LSResourceResolver
         String type, String namespaceURI, String publicId,
         String systemId, String baseURI)
     {
-        LSInput theResult = null;
+        LSInput theResult;
 
         // Match the requested schema locations and create the appropriate LSInput object
         if (systemId.equals("http://www.w3.org/2001/xml.xsd"))
@@ -204,7 +204,7 @@ public class SchemaResolver implements LSResourceResolver
     private LSInput makeSubstutionStream(
         String theResourcePath, String systemId)
     {
-        LSInput theResult = null;
+        LSInput theResult;
         theResult = theDOMImplementationLS.createLSInput();
         InputStream theResourcesStream = getClass().getResourceAsStream(theResourcePath);
         theResult.setByteStream(theResourcesStream);

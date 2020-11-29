@@ -989,7 +989,7 @@ public class XMLMockObjects
     plate.setWellOriginX(new Length(0.0, UNITS.MICROMETER));
     plate.setWellOriginY(new Length(1.0, UNITS.MICROMETER));
     plate.setStatus("Plate status");
-    PlateAcquisition pa = null;
+    PlateAcquisition pa;
     List<PlateAcquisition> pas = new ArrayList<>();
     int v;
     if (numberOfPlateAcquisition > 0) {
@@ -1012,7 +1012,7 @@ public class XMLMockObjects
     Image image;
     int i = totalPlateIndex*rows*columns*fields*numberOfPlateAcquisition;
     Iterator<PlateAcquisition> k;
-    int kk = 0;
+    int kk;
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
         well = new Well();
