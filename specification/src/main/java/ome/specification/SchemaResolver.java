@@ -198,7 +198,7 @@ public class SchemaResolver implements LSResourceResolver
      * Creates the LSInput object from the resource path
      *
      * @param theResourcePath Path to the schema in the Specification jar.
-     * @param systemId
+     * @param systemId the system identifier
      * @return The requested LSInput object.
      */
     private LSInput makeSubstutionStream(
