@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -221,7 +222,7 @@ public class XMLWriter
 				"{http://xml.apache.org/xslt}indent-amount", "4");
 		Source source = new DOMSource(document);
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		Result result = new StreamResult(new OutputStreamWriter(os, "utf-8"));
+		Result result = new StreamResult(new OutputStreamWriter(os, StandardCharsets.UTF_8));
 		transformer.transform(source, result);
 		return os.toString();
 	}
