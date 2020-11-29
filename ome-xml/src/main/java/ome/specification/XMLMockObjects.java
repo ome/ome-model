@@ -990,7 +990,7 @@ public class XMLMockObjects
     plate.setWellOriginY(new Length(1.0, UNITS.MICROMETER));
     plate.setStatus("Plate status");
     PlateAcquisition pa = null;
-    List<PlateAcquisition> pas = new ArrayList<PlateAcquisition>();
+    List<PlateAcquisition> pas = new ArrayList<>();
     int v;
     if (numberOfPlateAcquisition > 0) {
       for (int i = 0; i < numberOfPlateAcquisition; i++) {
