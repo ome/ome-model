@@ -256,8 +256,7 @@ public class OmeValidator
         try {
             dbf.setSchema(theSchema);
             is = new FileInputStream(file);
-            Document theDoc = builder.parse(is);
-            return theDoc;
+            return builder.parse(is);
         } catch (Exception e) {
             throw new Exception("Cannot parse the file", e);
         } finally {
