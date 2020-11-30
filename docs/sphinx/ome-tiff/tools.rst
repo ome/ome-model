@@ -156,7 +156,7 @@ are only 2 mistakes in the file.
    -  frame counts in TIFF files
 
 Alternatively, you can use the more general online `W3C XML
-validator <http://www.w3.org/2001/03/webdata/xsv>`_ to validate your
+validator <http://www.utilities-online.info/xsdvalidation>`_ to validate your
 OME-XML blocks. For best results, be sure to check the "keep going"
 option.
 
