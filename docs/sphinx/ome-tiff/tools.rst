@@ -155,10 +155,8 @@ are only 2 mistakes in the file.
    -  correct TiffData block usage
    -  frame counts in TIFF files
 
-Alternatively, you can use the more general online `W3C XML
-validator <http://www.utilities-online.info/xsdvalidation>`_ to validate your
-OME-XML blocks. For best results, be sure to check the "keep going"
-option.
+Alternatively you can chose a freely available online validator 
+to validate your OME-XML blocks e.g. one from `www.utilities-online.info <http://www.utilities-online.info/xsdvalidation>`_ .
 
 Another option is to use a commercial XML application such as Turbo XML
 to work with and validate your OME-XML documents.
