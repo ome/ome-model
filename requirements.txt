@@ -5,3 +5,4 @@
 #
 six
 Sphinx
+Genshi
