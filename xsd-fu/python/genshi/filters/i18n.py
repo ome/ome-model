@@ -18,22 +18,19 @@ templates.
 :note: Directives support added since version 0.6
 """
 
-try:
-    any
-except NameError:
-    from genshi.util import any
 from gettext import NullTranslations
 import os
 import re
 from types import FunctionType
 
+import six
+
 from genshi.core import Attrs, Namespace, QName, START, END, TEXT, \
                         XML_NAMESPACE, _ensure, StreamEventKind
-from genshi.template.eval import _ast
 from genshi.template.base import DirectiveFactory, EXPR, SUB, _apply_directives
 from genshi.template.directives import Directive, StripDirective
 from genshi.template.markup import MarkupTemplate, EXEC
-from genshi.compat import IS_PYTHON2, _ast_Str, _ast_Str_value
+from genshi.compat import ast, IS_PYTHON2, _ast_Str, _ast_Str_value
 
 __all__ = ['Translator', 'extract']
 __docformat__ = 'restructuredtext en'
@@ -74,7 +71,7 @@ class CommentDirective(I18NDirective):
     >>> translator = Translator()
     >>> translator.setup(tmpl)
     >>> list(translator.extract(tmpl.stream))
-    [(2, None, u'Foo', [u'As in Foo Bar'])]
+    [(2, None, 'Foo', ['As in Foo Bar'])]
     """
     __slots__ = ['comment']
 
@@ -99,7 +96,7 @@ class MsgDirective(ExtractableI18NDirective):
     >>> translator = Translator()
     >>> translator.setup(tmpl)
     >>> list(translator.extract(tmpl.stream))
-    [(2, None, u'[1:Foo]\n    [2:Bar]', []), (6, None, u'Foo [1:bar]!', [])]
+    [(2, None, '[1:Foo]\n    [2:Bar]', []), (6, None, 'Foo [1:bar]!', [])]
     >>> print(tmpl.generate().render())
     <html>
       <div><p>Foo</p>
@@ -116,8 +113,8 @@ class MsgDirective(ExtractableI18NDirective):
     ... </html>''')
     >>> translator.setup(tmpl)
     >>> list(translator.extract(tmpl.stream)) #doctest: +NORMALIZE_WHITESPACE
-    [(2, None, u'[1:First Name: %(fname)s]\n    [2:Last Name: %(lname)s]', []),
-    (6, None, u'Foo [1:bar]!', [])]
+    [(2, None, '[1:First Name: %(fname)s]\n    [2:Last Name: %(lname)s]', []),
+    (6, None, 'Foo [1:bar]!', [])]
 
     >>> tmpl = MarkupTemplate('''<html xmlns:i18n="http://genshi.edgewall.org/i18n">
     ...   <div i18n:msg="fname, lname">
@@ -298,8 +295,8 @@ class ChooseDirective(ExtractableI18NDirective):
     >>> translator = Translator()
     >>> translator.setup(tmpl)
     >>> list(translator.extract(tmpl.stream)) #doctest: +NORMALIZE_WHITESPACE
-    [(2, 'ngettext', (u'There is %(num)s coin',
-                      u'There are %(num)s coins'), [])]
+    [(2, 'ngettext', ('There is %(num)s coin',
+                      'There are %(num)s coins'), [])]
 
     >>> tmpl = MarkupTemplate('''<html xmlns:i18n="http://genshi.edgewall.org/i18n">
     ...   <div i18n:choose="num; num">
@@ -331,8 +328,8 @@ class ChooseDirective(ExtractableI18NDirective):
     ... </html>''')
     >>> translator.setup(tmpl)
     >>> list(translator.extract(tmpl.stream)) #doctest: +NORMALIZE_WHITESPACE
-    [(2, 'ngettext', (u'There is %(num)s coin',
-                      u'There are %(num)s coins'), [])]
+    [(2, 'ngettext', ('There is %(num)s coin',
+                      'There are %(num)s coins'), [])]
     """
     __slots__ = ['numeral', 'params', 'lineno']
 
@@ -349,7 +346,7 @@ class ChooseDirective(ExtractableI18NDirective):
     def attach(cls, template, stream, value, namespaces, pos):
         if type(value) is dict:
             numeral = value.get('numeral', '').strip()
-            assert numeral is not '', "at least pass the numeral param"
+            assert numeral != '', "at least pass the numeral param"
             params = [v.strip() for v in value.get('params', '').split(',')]
             value = '%s; ' % numeral + ', '.join(params)
         return super(ChooseDirective, cls).attach(template, stream, value,
@@ -480,8 +477,8 @@ class ChooseDirective(ExtractableI18NDirective):
         # XXX: should we test which form was chosen like this!?!?!?
         # There should be no match in any catalogue for these singular and
         # plural test strings
-        singular = 'O\x85\xbe\xa9\xa8az\xc3?\xe6\xa1\x02n\x84\x93'
-        plural = '\xcc\xfb+\xd3Pn\x9d\tT\xec\x1d\xda\x1a\x88\x00'
+        singular = u'O\x85\xbe\xa9\xa8az\xc3?\xe6\xa1\x02n\x84\x93'
+        plural = u'\xcc\xfb+\xd3Pn\x9d\tT\xec\x1d\xda\x1a\x88\x00'
         return ngettext(singular, plural, numeral) == plural
 
 
@@ -703,7 +700,7 @@ class Translator(DirectiveFactory):
             if kind is START:
                 tag, attrs = data
                 if tag in self.ignore_tags or \
-                        isinstance(attrs.get(xml_lang), str):
+                        isinstance(attrs.get(xml_lang), six.string_types):
                     skip += 1
                     yield kind, data, pos
                     continue
@@ -713,7 +710,7 @@ class Translator(DirectiveFactory):
 
                 for name, value in attrs:
                     newval = value
-                    if isinstance(value, str):
+                    if isinstance(value, six.string_types):
                         if translate_attrs and name in include_attrs:
                             newval = gettext(value)
                     else:
@@ -732,7 +729,7 @@ class Translator(DirectiveFactory):
             elif translate_text and kind is TEXT:
                 text = data.strip()
                 if text:
-                    data = data.replace(text, str(gettext(text)))
+                    data = data.replace(text, six.text_type(gettext(text)))
                 yield kind, data, pos
 
             elif kind is SUB:
@@ -793,10 +790,10 @@ class Translator(DirectiveFactory):
         ... </html>''', filename='example.html')
         >>> for line, func, msg, comments in Translator().extract(tmpl.stream):
         ...    print('%d, %r, %r' % (line, func, msg))
-        3, None, u'Example'
-        6, None, u'Example'
-        7, '_', u'Hello, %(name)s'
-        8, 'ngettext', (u'You have %d item', u'You have %d items', None)
+        3, None, 'Example'
+        6, None, 'Example'
+        7, '_', 'Hello, %(name)s'
+        8, 'ngettext', ('You have %d item', 'You have %d items', None)
         
         :param stream: the event stream to extract strings from; can be a
                        regular stream or a template stream
@@ -830,7 +827,7 @@ class Translator(DirectiveFactory):
             if kind is START and not skip:
                 tag, attrs = data
                 if tag in self.ignore_tags or \
-                        isinstance(attrs.get(xml_lang), str):
+                        isinstance(attrs.get(xml_lang), six.string_types):
                     skip += 1
                     continue
 
@@ -917,7 +914,7 @@ class Translator(DirectiveFactory):
 
     def _extract_attrs(self, event, gettext_functions, search_text):
         for name, value in event[1][1]:
-            if search_text and isinstance(value, str):
+            if search_text and isinstance(value, six.string_types):
                 if name in self.include_attrs:
                     text = value.strip()
                     if text:
@@ -1170,12 +1167,12 @@ def extract_from_code(code, gettext_functions):
     >>> from genshi.template.eval import Expression
     >>> expr = Expression('_("Hello")')
     >>> list(extract_from_code(expr, GETTEXT_FUNCTIONS))
-    [('_', u'Hello')]
+    [('_', 'Hello')]
     
     >>> expr = Expression('ngettext("You have %(num)s item", '
     ...                            '"You have %(num)s items", num)')
     >>> list(extract_from_code(expr, GETTEXT_FUNCTIONS))
-    [('ngettext', (u'You have %(num)s item', u'You have %(num)s items', None))]
+    [('ngettext', ('You have %(num)s item', 'You have %(num)s items', None))]
     
     :param code: the `Code` object
     :type code: `genshi.template.eval.Code`
@@ -1183,15 +1180,15 @@ def extract_from_code(code, gettext_functions):
     :since: version 0.5
     """
     def _walk(node):
-        if isinstance(node, _ast.Call) and isinstance(node.func, _ast.Name) \
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) \
                 and node.func.id in gettext_functions:
             strings = []
             def _add(arg):
                 if isinstance(arg, _ast_Str) \
-                        and isinstance(_ast_Str_value(arg), str):
+                        and isinstance(_ast_Str_value(arg), six.text_type):
                     strings.append(_ast_Str_value(arg))
                 elif isinstance(arg, _ast_Str):
-                    strings.append(str(_ast_Str_value(arg), 'utf-8'))
+                    strings.append(six.text_type(_ast_Str_value(arg), 'utf-8'))
                 elif arg:
                     strings.append(None)
             [_add(arg) for arg in node.args]
@@ -1211,7 +1208,7 @@ def extract_from_code(code, gettext_functions):
                 if isinstance(child, list):
                     for elem in child:
                         children.append(elem)
-                elif isinstance(child, _ast.AST):
+                elif isinstance(child, ast.AST):
                     children.append(child)
             for child in children:
                 for funcname, strings in _walk(child):
@@ -1232,22 +1229,22 @@ def extract(fileobj, keywords, comment_tags, options):
     :rtype: ``iterator``
     """
     template_class = options.get('template_class', MarkupTemplate)
-    if isinstance(template_class, str):
+    if isinstance(template_class, six.string_types):
         module, clsname = template_class.split(':', 1)
         template_class = getattr(__import__(module, {}, {}, [clsname]), clsname)
     encoding = options.get('encoding', None)
 
     extract_text = options.get('extract_text', True)
-    if isinstance(extract_text, str):
+    if isinstance(extract_text, six.string_types):
         extract_text = extract_text.lower() in ('1', 'on', 'yes', 'true')
 
     ignore_tags = options.get('ignore_tags', Translator.IGNORE_TAGS)
-    if isinstance(ignore_tags, str):
+    if isinstance(ignore_tags, six.string_types):
         ignore_tags = ignore_tags.split()
     ignore_tags = [QName(tag) for tag in ignore_tags]
 
     include_attrs = options.get('include_attrs', Translator.INCLUDE_ATTRS)
-    if isinstance(include_attrs, str):
+    if isinstance(include_attrs, six.string_types):
         include_attrs = include_attrs.split()
     include_attrs = [QName(attr) for attr in include_attrs]
 

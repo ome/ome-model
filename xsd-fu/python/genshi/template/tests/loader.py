@@ -372,7 +372,7 @@ class TemplateLoaderTestCase(unittest.TestCase):
     def test_load_with_default_encoding(self):
         f = open(os.path.join(self.dirname, 'tmpl.html'), 'wb')
         try:
-            f.write('<div>\xf6</div>'.encode('iso-8859-1'))
+            f.write(u'<div>\xf6</div>'.encode('iso-8859-1'))
         finally:
             f.close()
         loader = TemplateLoader([self.dirname], default_encoding='iso-8859-1')
@@ -381,7 +381,7 @@ class TemplateLoaderTestCase(unittest.TestCase):
     def test_load_with_explicit_encoding(self):
         f = open(os.path.join(self.dirname, 'tmpl.html'), 'wb')
         try:
-            f.write('<div>\xf6</div>'.encode('iso-8859-1'))
+            f.write(u'<div>\xf6</div>'.encode('iso-8859-1'))
         finally:
             f.close()
         loader = TemplateLoader([self.dirname], default_encoding='utf-8')

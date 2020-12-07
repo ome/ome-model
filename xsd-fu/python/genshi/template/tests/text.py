@@ -52,15 +52,15 @@ class OldTextTemplateTestCase(unittest.TestCase):
         self.assertEqual('\n', tmpl.generate(foo=False).render(encoding=None))
 
     def test_latin1_encoded(self):
-        text = '$foo\xf6$bar'.encode('iso-8859-1')
+        text = u'$foo\xf6$bar'.encode('iso-8859-1')
         tmpl = OldTextTemplate(text, encoding='iso-8859-1')
-        self.assertEqual('x\xf6y',
+        self.assertEqual(u'x\xf6y',
                          tmpl.generate(foo='x', bar='y').render(encoding=None))
 
     def test_unicode_input(self):
-        text = '$foo\xf6$bar'
+        text = u'$foo\xf6$bar'
         tmpl = OldTextTemplate(text)
-        self.assertEqual('x\xf6y',
+        self.assertEqual(u'x\xf6y',
                          tmpl.generate(foo='x', bar='y').render(encoding=None))
 
     def test_empty_lines1(self):
@@ -74,7 +74,7 @@ class OldTextTemplateTestCase(unittest.TestCase):
           * 0
           * 1
           * 2
-""", tmpl.generate(items=list(range(3))).render(encoding=None))
+""", tmpl.generate(items=range(3)).render(encoding=None))
 
     def test_empty_lines2(self):
         tmpl = OldTextTemplate("""Your items:
@@ -91,18 +91,18 @@ class OldTextTemplateTestCase(unittest.TestCase):
 
           * 2
 
-""", tmpl.generate(items=list(range(3))).render(encoding=None))
+""", tmpl.generate(items=range(3)).render(encoding=None))
 
     def test_include(self):
         file1 = open(os.path.join(self.dirname, 'tmpl1.txt'), 'wb')
         try:
-            file1.write("Included\n".encode("utf-8"))
+            file1.write(u"Included\n".encode("utf-8"))
         finally:
             file1.close()
 
         file2 = open(os.path.join(self.dirname, 'tmpl2.txt'), 'wb')
         try:
-            file2.write("""----- Included data below this line -----
+            file2.write(u"""----- Included data below this line -----
             #include tmpl1.txt
             ----- Included data above this line -----""".encode("utf-8"))
         finally:
@@ -147,15 +147,15 @@ class NewTextTemplateTestCase(unittest.TestCase):
         self.assertEqual('\n', tmpl.generate(foo=False).render(encoding=None))
 
     def test_latin1_encoded(self):
-        text = '$foo\xf6$bar'.encode('iso-8859-1')
+        text = u'$foo\xf6$bar'.encode('iso-8859-1')
         tmpl = NewTextTemplate(text, encoding='iso-8859-1')
-        self.assertEqual('x\xf6y',
+        self.assertEqual(u'x\xf6y',
                          tmpl.generate(foo='x', bar='y').render(encoding=None))
 
     def test_unicode_input(self):
-        text = '$foo\xf6$bar'
+        text = u'$foo\xf6$bar'
         tmpl = NewTextTemplate(text)
-        self.assertEqual('x\xf6y',
+        self.assertEqual(u'x\xf6y',
                          tmpl.generate(foo='x', bar='y').render(encoding=None))
 
     def test_empty_lines1(self):
@@ -169,7 +169,7 @@ class NewTextTemplateTestCase(unittest.TestCase):
   * 0
   * 1
   * 2
-""", tmpl.generate(items=list(range(3))).render(encoding=None))
+""", tmpl.generate(items=range(3)).render(encoding=None))
 
     def test_empty_lines1_with_crlf(self):
         tmpl = NewTextTemplate('Your items:\r\n'
@@ -182,7 +182,7 @@ class NewTextTemplateTestCase(unittest.TestCase):
 '\r\n'
 '  * 0\r\n'
 '  * 1\r\n'
-'  * 2\r\n', tmpl.generate(items=list(range(3))).render(encoding=None))
+'  * 2\r\n', tmpl.generate(items=range(3)).render(encoding=None))
 
     def test_empty_lines2(self):
         tmpl = NewTextTemplate("""Your items:
@@ -199,7 +199,7 @@ class NewTextTemplateTestCase(unittest.TestCase):
 
   * 2
 
-""", tmpl.generate(items=list(range(3))).render(encoding=None))
+""", tmpl.generate(items=range(3)).render(encoding=None))
 
     def test_empty_lines2_with_crlf(self):
         tmpl = NewTextTemplate('Your items:\r\n'
@@ -215,7 +215,7 @@ class NewTextTemplateTestCase(unittest.TestCase):
 '  * 1\r\n'
 '\r\n'
 '  * 2\r\n'
-'\r\n', tmpl.generate(items=list(range(3))).render(encoding=None))
+'\r\n', tmpl.generate(items=range(3)).render(encoding=None))
 
     def test_exec_with_trailing_space(self):
         """
@@ -250,13 +250,13 @@ class NewTextTemplateTestCase(unittest.TestCase):
     def test_include(self):
         file1 = open(os.path.join(self.dirname, 'tmpl1.txt'), 'wb')
         try:
-            file1.write("Included".encode("utf-8"))
+            file1.write(u"Included".encode("utf-8"))
         finally:
             file1.close()
 
         file2 = open(os.path.join(self.dirname, 'tmpl2.txt'), 'wb')
         try:
-            file2.write("""----- Included data below this line -----
+            file2.write(u"""----- Included data below this line -----
 {% include tmpl1.txt %}
 ----- Included data above this line -----""".encode("utf-8"))
         finally:
@@ -272,13 +272,13 @@ Included
     def test_include_expr(self):
          file1 = open(os.path.join(self.dirname, 'tmpl1.txt'), 'wb')
          try:
-             file1.write("Included".encode("utf-8"))
+             file1.write(u"Included".encode("utf-8"))
          finally:
              file1.close()
  
          file2 = open(os.path.join(self.dirname, 'tmpl2.txt'), 'wb')
          try:
-             file2.write("""----- Included data below this line -----
+             file2.write(u"""----- Included data below this line -----
     {% include ${'%s.txt' % ('tmpl1',)} %}
     ----- Included data above this line -----""".encode("utf-8"))
          finally:

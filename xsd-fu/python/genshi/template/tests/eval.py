@@ -58,26 +58,26 @@ class ExpressionTestCase(unittest.TestCase):
     def test_str_literal(self):
         self.assertEqual('foo', Expression('"foo"').evaluate({}))
         self.assertEqual('foo', Expression('"""foo"""').evaluate({}))
-        self.assertEqual('foo'.encode('utf-8'),
+        self.assertEqual(u'foo'.encode('utf-8'),
                          Expression(wrapped_bytes("b'foo'")).evaluate({}))
         self.assertEqual('foo', Expression("'''foo'''").evaluate({}))
         self.assertEqual('foo', Expression("u'foo'").evaluate({}))
         self.assertEqual('foo', Expression("r'foo'").evaluate({}))
 
     def test_str_literal_non_ascii(self):
+        expr = Expression(u"u'\xfe'")
+        self.assertEqual(u'þ', expr.evaluate({}))
         expr = Expression("u'\xfe'")
-        self.assertEqual('þ', expr.evaluate({}))
-        expr = Expression("u'\xfe'")
-        self.assertEqual('þ', expr.evaluate({}))
+        self.assertEqual(u'þ', expr.evaluate({}))
         # On Python2 strings are converted to unicode if they contained
         # non-ASCII characters.
         # On Py3k, we have no need to do this as non-prefixed strings aren't
         # raw.
         expr = Expression(wrapped_bytes(r"b'\xc3\xbe'"))
         if IS_PYTHON2:
-            self.assertEqual('þ', expr.evaluate({}))
+            self.assertEqual(u'þ', expr.evaluate({}))
         else:
-            self.assertEqual('þ'.encode('utf-8'), expr.evaluate({}))
+            self.assertEqual(u'þ'.encode('utf-8'), expr.evaluate({}))
 
     def test_num_literal(self):
         self.assertEqual(42, Expression("42").evaluate({}))
@@ -85,7 +85,7 @@ class ExpressionTestCase(unittest.TestCase):
             self.assertEqual(42, Expression("42L").evaluate({}))
         self.assertEqual(.42, Expression(".42").evaluate({}))
         if IS_PYTHON2:
-            self.assertEqual(0o7, Expression("07").evaluate({}))
+            self.assertEqual(7, Expression("07").evaluate({}))
         self.assertEqual(0xF2, Expression("0xF2").evaluate({}))
         self.assertEqual(0XF2, Expression("0XF2").evaluate({}))
 
@@ -236,7 +236,7 @@ class ExpressionTestCase(unittest.TestCase):
         self.assertEqual(42, Expression("foo()").evaluate({'foo': lambda: 42}))
         data = {'foo': 'bar'}
         self.assertEqual('BAR', Expression("foo.upper()").evaluate(data))
-        data = {'foo': {'bar': list(range(42))}}
+        data = {'foo': {'bar': range(42)}}
         self.assertEqual(42, Expression("len(foo.bar)").evaluate(data))
 
     def test_call_keywords(self):
@@ -254,7 +254,7 @@ class ExpressionTestCase(unittest.TestCase):
         self.assertEqual(42, expr.evaluate({'foo': foo, 'bar': {"x": 42}}))
 
     def test_lambda(self):
-        data = {'items': list(range(5))}
+        data = {'items': range(5)}
         expr = Expression("filter(lambda x: x > 2, items)")
         self.assertEqual([3, 4], list(expr.evaluate(data)))
 
@@ -268,19 +268,19 @@ class ExpressionTestCase(unittest.TestCase):
 
     def test_list_comprehension(self):
         expr = Expression("[n for n in numbers if n < 2]")
-        self.assertEqual([0, 1], expr.evaluate({'numbers': list(range(5))}))
+        self.assertEqual([0, 1], expr.evaluate({'numbers': range(5)}))
 
         expr = Expression("[(i, n + 1) for i, n in enumerate(numbers)]")
         self.assertEqual([(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)],
-                         expr.evaluate({'numbers': list(range(5))}))
+                         expr.evaluate({'numbers': range(5)}))
 
         expr = Expression("[offset + n for n in numbers]")
         self.assertEqual([2, 3, 4, 5, 6],
-                         expr.evaluate({'numbers': list(range(5)), 'offset': 2}))
+                         expr.evaluate({'numbers': range(5), 'offset': 2}))
 
         expr = Expression("[n for group in groups for n in group]")
         self.assertEqual([0, 1, 0, 1, 2],
-                         expr.evaluate({'groups': [list(range(2)), list(range(3))]}))
+                         expr.evaluate({'groups': [range(2), range(3)]}))
 
         expr = Expression("[(a, b) for a in x for b in y]")
         self.assertEqual([('x0', 'y0'), ('x0', 'y1'), ('x1', 'y0'), ('x1', 'y1')],
@@ -298,19 +298,19 @@ class ExpressionTestCase(unittest.TestCase):
 
     def test_generator_expression(self):
         expr = Expression("list(n for n in numbers if n < 2)")
-        self.assertEqual([0, 1], expr.evaluate({'numbers': list(range(5))}))
+        self.assertEqual([0, 1], expr.evaluate({'numbers': range(5)}))
 
         expr = Expression("list((i, n + 1) for i, n in enumerate(numbers))")
         self.assertEqual([(0, 1), (1, 2), (2, 3), (3, 4), (4, 5)],
-                         expr.evaluate({'numbers': list(range(5))}))
+                         expr.evaluate({'numbers': range(5)}))
 
         expr = Expression("list(offset + n for n in numbers)")
         self.assertEqual([2, 3, 4, 5, 6],
-                         expr.evaluate({'numbers': list(range(5)), 'offset': 2}))
+                         expr.evaluate({'numbers': range(5), 'offset': 2}))
 
         expr = Expression("list(n for group in groups for n in group)")
         self.assertEqual([0, 1, 0, 1, 2],
-                         expr.evaluate({'groups': [list(range(2)), list(range(3))]}))
+                         expr.evaluate({'groups': [range(2), range(3)]}))
 
         expr = Expression("list((a, b) for a in x for b in y)")
         self.assertEqual([('x0', 'y0'), ('x0', 'y1'), ('x1', 'y0'), ('x1', 'y1')],
@@ -338,17 +338,18 @@ class ExpressionTestCase(unittest.TestCase):
 
     def test_slice_with_vars(self):
         expr = Expression("numbers[start:end]")
-        self.assertEqual([0, 1], expr.evaluate({'numbers': list(range(5)), 'start': 0,
-                                                'end': 2}))
+        res = expr.evaluate({'numbers': list(range(5)), 'start': 0, 'end': 2})
+        self.assertEqual([0, 1], res)
 
     def test_slice_copy(self):
         expr = Expression("numbers[:]")
-        self.assertEqual([0, 1, 2, 3, 4], expr.evaluate({'numbers': list(range(5))}))
+        res = expr.evaluate({'numbers': list(range(5))})
+        self.assertEqual([0, 1, 2, 3, 4], res)
 
     def test_slice_stride(self):
         expr = Expression("numbers[::stride]")
-        self.assertEqual([0, 2, 4], expr.evaluate({'numbers': list(range(5)),
-                                                   'stride': 2}))
+        res = expr.evaluate({'numbers': list(range(5)), 'stride': 2})
+        self.assertEqual([0, 2, 4], res)
 
     def test_slice_negative_start(self):
         expr = Expression("numbers[-1:]")
@@ -356,7 +357,33 @@ class ExpressionTestCase(unittest.TestCase):
 
     def test_slice_negative_end(self):
         expr = Expression("numbers[:-1]")
-        self.assertEqual([0, 1, 2, 3], expr.evaluate({'numbers': list(range(5))}))
+        res = expr.evaluate({'numbers': list(range(5))})
+        self.assertEqual([0, 1, 2, 3], res)
+
+    def test_slice_constant(self):
+        expr = Expression("numbers[1]")
+        res = expr.evaluate({"numbers": list(range(5))})
+        self.assertEqual(res, 1)
+
+    def test_slice_call(self):
+        def f():
+            return 2
+        expr = Expression("numbers[f()]")
+        res = expr.evaluate({"numbers": list(range(5)), "f": f})
+        self.assertEqual(res, 2)
+
+    def test_slice_name(self):
+        expr = Expression("numbers[v]")
+        res = expr.evaluate({"numbers": list(range(5)), "v": 2})
+        self.assertEqual(res, 2)
+
+    def test_slice_attribute(self):
+        class ValueHolder:
+            def __init__(self):
+                self.value = 3
+        expr = Expression("numbers[obj.value]")
+        res = expr.evaluate({"numbers": list(range(5)), "obj": ValueHolder()})
+        self.assertEqual(res, 3)
 
     def test_access_undefined(self):
         expr = Expression("nothing", filename='index.html', lineno=50,
@@ -477,6 +504,41 @@ class ExpressionTestCase(unittest.TestCase):
                 self.fail("never found the frame I was looking for")
             self.assertEqual('index.html', code.co_filename)
             self.assertEqual(50, frame.tb_lineno)
+
+    def test_getitem_with_constant_string(self):
+        data = dict(dict={'some': 'thing'})
+        self.assertEqual('thing', Expression("dict['some']").evaluate(data))
+
+    def test_getitem_with_simple_index(self):
+        data = dict(values={
+            True: 'bar',
+            2.5: 'baz',
+            None: 'quox',
+            42: 'quooox',
+            b'foo': 'foobar'
+        })
+        self.assertEqual('bar', Expression('values[True]').evaluate(data))
+        self.assertEqual('baz', Expression('values[2.5]').evaluate(data))
+        self.assertEqual('quooox', Expression('values[42]').evaluate(data))
+        self.assertEqual('foobar', Expression('values[b"foo"]').evaluate(data))
+        self.assertEqual('quox', Expression('values[None]').evaluate(data))
+
+    def test_array_indices(self):
+        data = dict(items=[1, 2, 3])
+        self.assertEqual(1, Expression('items[0]').evaluate(data))
+        self.assertEqual(3, Expression('items[-1]').evaluate(data))
+
+    def test_item_access_for_attributes(self):
+        class MyClass(object):
+            myattr = 'Bar'
+        data = {'mine': MyClass(), 'key': 'myattr'}
+        self.assertEqual('Bar', Expression('mine.myattr').evaluate(data))
+        self.assertEqual('Bar', Expression('mine["myattr"]').evaluate(data))
+        self.assertEqual('Bar', Expression('mine[key]').evaluate(data))
+
+    def test_function_in_item_access(self):
+        data = dict(values={'foo': 'bar'})
+        self.assertEqual('bar', Expression('values[str("foo")]').evaluate(data))
 
 
 class SuiteTestCase(unittest.TestCase):
@@ -834,37 +896,36 @@ assert f() == 42
                 self.attr = 'foo'
         obj = Something()
         Suite("del obj.attr").execute({'obj': obj})
-        self.assertFalse(hasattr(obj, 'attr'))
+        self.failIf(hasattr(obj, 'attr'))
 
     def test_delitem(self):
         d = {'k': 'foo'}
         Suite("del d['k']").execute({'d': d})
-        self.assertFalse('k' in d, repr(d))
+        self.failIf('k' in d, repr(d))
 
-    if sys.version_info >= (2, 5):
-        def test_with_statement(self):
-            fd, path = mkstemp()
-            f = os.fdopen(fd, "w")
-            try:
-                f.write('foo\nbar\n')
-                f.seek(0)
-                f.close()
+    def test_with_statement(self):
+        fd, path = mkstemp()
+        f = os.fdopen(fd, "w")
+        try:
+            f.write('foo\nbar\n')
+            f.seek(0)
+            f.close()
 
-                d = {'path': path}
-                suite = Suite("""from __future__ import with_statement
+            d = {'path': path}
+            suite = Suite("""from __future__ import with_statement
 lines = []
 with open(path) as file:
     for line in file:
         lines.append(line)
 """)
-                suite.execute(d)
-                self.assertEqual(['foo\n', 'bar\n'], d['lines'])
-            finally:
-                os.remove(path)
+            suite.execute(d)
+            self.assertEqual(['foo\n', 'bar\n'], d['lines'])
+        finally:
+            os.remove(path)
 
-        def test_yield_expression(self):
-            d = {}
-            suite = Suite("""from genshi.compat import next
+    def test_yield_expression(self):
+        d = {}
+        suite = Suite("""
 results = []
 def counter(maximum):
     i = 0
@@ -879,8 +940,8 @@ results.append(next(it))
 results.append(it.send(3))
 results.append(next(it))
 """)
-            suite.execute(d)
-            self.assertEqual([0, 3, 4], d['results'])
+        suite.execute(d)
+        self.assertEqual([0, 3, 4], d['results'])
 
     if sys.version_info >= (3, 3):
         def test_with_statement_with_multiple_items(self):
@@ -904,6 +965,71 @@ with open(path) as file1, open(path) as file2:
                 self.assertEqual(['foo\n', 'foo\n'], d['lines'])
             finally:
                 os.remove(path)
+
+    def test_slice(self):
+        suite = Suite("x = numbers[0:2]")
+        data = {"numbers": [0, 1, 2, 3]}
+        suite.execute(data)
+        self.assertEqual([0, 1], data["x"])
+
+    def test_slice_with_vars(self):
+        suite = Suite("x = numbers[start:end]")
+        data = {"numbers": [0, 1, 2, 3], "start": 0, "end": 2}
+        suite.execute(data)
+        self.assertEqual([0, 1], data["x"])
+
+    def test_slice_copy(self):
+        suite = Suite("x = numbers[:]")
+        data = {"numbers": [0, 1, 2, 3]}
+        suite.execute(data)
+        self.assertEqual([0, 1, 2, 3], data["x"])
+
+    def test_slice_stride(self):
+        suite = Suite("x = numbers[::stride]")
+        data = {"numbers": [0, 1, 2, 3, 4], "stride": 2}
+        suite.execute(data)
+        self.assertEqual([0, 2, 4], data["x"])
+
+    def test_slice_negative_start(self):
+        suite = Suite("x = numbers[-1:]")
+        data = {"numbers": [0, 1, 2, 3, 4], "stride": 2}
+        suite.execute(data)
+        self.assertEqual([4], data["x"])
+
+    def test_slice_negative_end(self):
+        suite = Suite("x = numbers[:-1]")
+        data = {"numbers": [0, 1, 2, 3, 4], "stride": 2}
+        suite.execute(data)
+        self.assertEqual([0, 1, 2, 3], data["x"])
+
+    def test_slice_constant(self):
+        suite = Suite("x = numbers[1]")
+        data = {"numbers": [0, 1, 2, 3, 4]}
+        suite.execute(data)
+        self.assertEqual(1, data["x"])
+
+    def test_slice_call(self):
+        def f():
+            return 2
+        suite = Suite("x = numbers[f()]")
+        data = {"numbers": [0, 1, 2, 3, 4], "f": f}
+        suite.execute(data)
+        self.assertEqual(2, data["x"])
+
+    def test_slice_name(self):
+        suite = Suite("x = numbers[v]")
+        data = {"numbers": [0, 1, 2, 3, 4], "v": 2}
+        suite.execute(data)
+        self.assertEqual(2, data["x"])
+
+    def test_slice_attribute(self):
+        class ValueHolder:
+            def __init__(self):
+                self.value = 3
+        suite = Suite("x = numbers[obj.value]")
+        data = {"numbers": [0, 1, 2, 3, 4], "obj": ValueHolder()}
+        suite.execute(data)
+        self.assertEqual(3, data["x"])
 
 
 def suite():
