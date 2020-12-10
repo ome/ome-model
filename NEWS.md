@@ -1,3 +1,18 @@
+## 6.2.2 (2020-12-10)
+
+### Java
+
+* OMEModelImpl: do not permit the addition of null references [#125](https://github.com/ome/ome-model/pull/125)
+
+### Documentation
+
+* Fix external reference to XML validator [#137](https://github.com/ome/ome-model/pull/137)
+
+### Infrastructure
+
+* Switch to GitHub workflows
+* Python 3.9 support: upgrade to Genshi 0.7.5 and consume upstream package [#127](https://github.com/ome/ome-model/pull/127) [#138](https://github.com/ome/ome-model/pull/138)
+
 ## 6.2.1 (2020-09-17)
 
 ### Python
