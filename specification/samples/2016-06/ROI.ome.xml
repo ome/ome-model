@@ -55,7 +55,7 @@
     <Union>
       <Mask ID="Shape:7" Height="2" Width="2" X="1" Y="1">
         <Transform A00="1.00" A01="0.00" A02="2.0" A10="0.00" A11="1.00" A12="2.0"/>
-        <BinData BigEndian="true" Length="4">AOnpAA==</BinData>
+        <BinData BigEndian="true" Length="1">YA==</BinData>
       </Mask>
     </Union>
   </ROI>
