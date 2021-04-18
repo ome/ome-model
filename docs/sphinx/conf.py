@@ -357,4 +357,5 @@ linkcheck_ignore = [
     # The PMC web site restricts access by the default Sphinx agent
     "https://www.ncbi.nlm.nih.gov/pmc/.*",
     "https://eliceirilab.org/.*", # ConnectTimeoutError
+    "https://fei.com/.*", # SSL certificate expired
 ]
