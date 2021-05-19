@@ -105,6 +105,10 @@ class Image(object):
                  tiffs=[],
                  order="XYZTC",
                  type="uint16",
+                 physSizeX="1.0", physSizeY="1.0", physSizeZ="1.0",
+                 unitX="px",
+                 unitY="px",
+                 unitZ="px",
                  ):
         self.data = {
             'Image': {'ID': 'Image:%s' % self.ID, 'Name': name},
@@ -117,6 +121,12 @@ class Image(object):
                 'SizeZ': str(sizeZ),
                 'SizeT': str(sizeT),
                 'SizeC': str(sizeC),
+                'PhysicalSizeX': str(physSizeX),
+                'PhysicalSizeXUnit': unitX,
+                'PhysicalSizeY': str(physSizeY),
+                'PhysicalSizeYUnit': unitY,
+                'PhysicalSizeZ': str(physSizeZ),
+                'PhysicalSizeZUnit': unitZ,
             },
             'Channels': [],
             'TIFFs': [],
