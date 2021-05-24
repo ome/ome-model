@@ -154,6 +154,22 @@
         </xsl:element>
       </xsl:for-each>
 
+      <!-- Transform the CustomAttributes into XMLAnnotation -->
+      <xsl:if test="(count(//*[local-name() = 'CustomAttributes'])) &gt; 0">
+        <xsl:element name="StructuredAnnotations" namespace="{$newSANS}">
+          <xsl:comment>Append Custom Attributes as XMLAnnotation</xsl:comment>
+          <xsl:for-each select="//*[local-name() = 'CustomAttributes']">
+            <xsl:if test="count(@*|node()) &gt; 0">
+              <xsl:element name="XMLAnnotation" namespace="{$newSANS}">
+                <xsl:attribute name="ID">Annotation:1</xsl:attribute>
+                <xsl:element name="Value" namespace="{$newSANS}">
+                  <xsl:apply-templates select="@*|node()"/>
+                </xsl:element>
+              </xsl:element>
+            </xsl:if>
+          </xsl:for-each>
+        </xsl:element>
+      </xsl:if>
     </OME>
   </xsl:template>
 
@@ -849,19 +865,8 @@
     </xsl:element>
   </xsl:template>
 
-  <!-- Transform the CustomAttributes into XMLAnnotation -->
-  <xsl:template match="CA:CustomAttributes">
-    <xsl:if test="count(@*|node()) &gt; 0">
-      <xsl:element name="StructuredAnnotations" namespace="{$newSANS}">
-        <xsl:element name="XMLAnnotation" namespace="{$newSANS}">
-          <xsl:attribute name="ID">Annotation:1</xsl:attribute>
-          <xsl:element name="Value" namespace="{$newSANS}">
-            <xsl:apply-templates select="@*|node()"/>
-          </xsl:element>
-        </xsl:element>
-      </xsl:element>
-    </xsl:if>
-  </xsl:template>
+  <!-- Remove CustomAttributes -->
+  <xsl:template match="CA:CustomAttributes"/>
 
   <!--
       Remove AcquiredPixels and DefaultPixels attributes.
