@@ -161,8 +161,9 @@
             <xsl:comment>Append Custom Attributes as XMLAnnotation</xsl:comment>
             <xsl:for-each select="//*[local-name() = 'CustomAttributes']">
               <xsl:if test="count(@*|node()) &gt; 0">
+                <xsl:variable name="annotationIndex" select="(count(//*[local-name() = 'XMLAnnotation'])) + position()" />
                 <xsl:element name="XMLAnnotation" namespace="{$newSANS}">
-                  <xsl:attribute name="ID">Annotation:1</xsl:attribute>
+                  <xsl:attribute name="ID"><xsl:value-of select="concat('Annotation:', $annotationIndex)"/></xsl:attribute>
                   <xsl:element name="Value" namespace="{$newSANS}">
                     <xsl:apply-templates select="@*|node()"/>
                   </xsl:element>
@@ -196,13 +197,20 @@
   <xsl:template match="SA:*">
     <xsl:element name="{name()}" namespace="{$newSANS}">
       <xsl:apply-templates select="@*|node()"/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="SA:StructuredAnnotations">
+    <xsl:element name="{name()}" namespace="{$newSANS}">
+      <xsl:apply-templates select="@*|node()"/>
       <!-- Transform the CustomAttributes into XMLAnnotation -->
       <xsl:if test="(count(//*[local-name() = 'CustomAttributes'])) &gt; 0">
         <xsl:comment>Append Custom Attributes as XMLAnnotation</xsl:comment>
         <xsl:for-each select="//*[local-name() = 'CustomAttributes']">
           <xsl:if test="count(@*|node()) &gt; 0">
+          <xsl:variable name="annotationIndex" select="(count(//*[local-name() = 'XMLAnnotation'])) + position()" />
             <xsl:element name="XMLAnnotation" namespace="{$newSANS}">
-              <xsl:attribute name="ID">Annotation:1</xsl:attribute>
+              <xsl:attribute name="ID"><xsl:value-of select="concat('Annotation:', $annotationIndex)"/></xsl:attribute>
               <xsl:element name="Value" namespace="{$newSANS}">
                 <xsl:apply-templates select="@*|node()"/>
               </xsl:element>
