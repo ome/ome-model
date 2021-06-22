@@ -70,3 +70,31 @@ class TestPlate(object):
         assert pixels[0].attrib['Type'] == 'uint16'
         channels = pixels[0].findall('OME:Channel', namespaces=NS)
         assert len(channels) == 0
+
+    def test_multiple_rows_columns_wellsamples(self, tmpdir):
+        f = str(tmpdir.join('plate.companion.ome'))
+
+        p = Plate("test", 4, 5)
+        for row in range(4):
+            for column in range(5):
+                well = p.add_well(row, column)
+                for field in range(6):
+                    i = Image("test", 256, 512, 3, 4, 5)
+                    well.add_wellsample(field, i)
+        create_companion(plates=[p], out=f)
+
+        root = ElementTree.parse(f).getroot()
+        plates = root.findall('OME:Plate', namespaces=NS)
+        assert len(plates) == 1
+        assert plates[0].attrib['Name'] == 'test'
+        wells = plates[0].findall('OME:Well', namespaces=NS)
+        assert len(wells) == 20
+        for i in range(20):
+            wellsamples = wells[i].findall('OME:WellSample', namespaces=NS)
+            assert len(wellsamples) == 6
+            imagerefs = wellsamples[0].findall('OME:ImageRef', namespaces=NS)
+            assert len(imagerefs) == 120
+            imageids = [x.attrib['ID'] for x in imagerefs]
+        images = root.findall('OME:Image', namespaces=NS)
+        assert len(images) == 120
+        assert [x.attrib['ID'] for x in images] == imageidsq
