@@ -54,11 +54,11 @@ class TestPlate(object):
         assert len(wellsamples) == 1
         imagerefs = wellsamples[0].findall('OME:ImageRef', namespaces=NS)
         assert len(imagerefs) == 1
-        assert imagerefs[0].attrib['ID'] == 'Image:0'
+        imageid = imagerefs[0].attrib['ID']
         images = root.findall('OME:Image', namespaces=NS)
         assert len(images) == 1
         assert images[0].attrib['Name'] == 'test'
-        assert images[0].attrib['ID'] == 'Image:0'
+        assert images[0].attrib['ID'] == imageid
         pixels = images[0].findall('OME:Pixels', namespaces=NS)
         assert len(pixels) == 1
         assert pixels[0].attrib['SizeX'] == '256'
@@ -89,12 +89,40 @@ class TestPlate(object):
         assert plates[0].attrib['Name'] == 'test'
         wells = plates[0].findall('OME:Well', namespaces=NS)
         assert len(wells) == 20
+        imageids = []
         for i in range(20):
             wellsamples = wells[i].findall('OME:WellSample', namespaces=NS)
             assert len(wellsamples) == 6
-            imagerefs = wellsamples[0].findall('OME:ImageRef', namespaces=NS)
-            assert len(imagerefs) == 120
-            imageids = [x.attrib['ID'] for x in imagerefs]
+            for ws in wellsamples:
+                imagerefs = ws.findall('OME:ImageRef', namespaces=NS)
+                assert len(imagerefs) == 1
+                imageids.append(imagerefs[0].attrib['ID'])
+        assert len(imageids) == 120
         images = root.findall('OME:Image', namespaces=NS)
         assert len(images) == 120
-        assert [x.attrib['ID'] for x in images] == imageidsq
+        assert [x.attrib['ID'] for x in images] == imageids
+
+    def test_multiple_plates_one_per_file(self, tmpdir):
+
+        files = [str(tmpdir.join('%s.companion.ome' % i)) for i in range(4)]
+        for i in range(4):
+            p = Plate("test %s" % i, 1, 1)
+            well = p.add_well(0, 0)
+            img = Image("test %s" % i, 256, 512, 3, 4, 5)
+            well.add_wellsample(0, img)
+            create_companion(plates=[p], out=files[i])
+
+        for i in range(4):
+            root = ElementTree.parse(files[i]).getroot()
+            plates = root.findall('OME:Plate', namespaces=NS)
+            assert len(plates) == 1
+            assert plates[0].attrib['Name'] == 'test %s' % i
+            wells = plates[0].findall('OME:Well', namespaces=NS)
+            assert len(wells) == 1
+            wellsamples = wells[0].findall('OME:WellSample', namespaces=NS)
+            assert len(wellsamples) == 1
+            imagerefs = wellsamples[0].findall('OME:ImageRef', namespaces=NS)
+            assert len(imagerefs) == 1
+            images = root.findall('OME:Image', namespaces=NS)
+            assert len(images) == 1
+            assert images[0].attrib['Name'] == 'test %s' % i
