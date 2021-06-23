@@ -1,3 +1,23 @@
+## 6.2.3 (2021-06-23)
+
+### Specification
+
+* 2008-09 to 2009-09 XSLT transforms: Fix loss of CustomAttributes [#145](https://github.com/ome/ome-model/pull/145)
+
+### Java
+
+* MetadataConverter: Fix dropping of WellAnnotationRefs during conversion [#131](https://github.com/ome/ome-model/pull/131)
+
+### Python
+
+* ome_model: do not use mutable default arguments [#149](https://github.com/ome/ome-model/pull/149)
+
+### Infrastructure
+
+* Dependencies: bump ome-common to 6.0.7 and logback-classic/logback-core to 1.2.0
+* Remove legacy Appveyor configuration [#148](https://github.com/ome/ome-model/pull/148)
+* Exclude broken links to www.fei.com [#141](https://github.com/ome/ome-model/pull/141)
+
 ## 6.2.2 (2020-12-10)
 
 ### Java
