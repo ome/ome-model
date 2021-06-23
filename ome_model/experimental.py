@@ -102,7 +102,7 @@ class Image(object):
     def __init__(self,
                  name,
                  sizeX, sizeY, sizeZ, sizeC, sizeT,
-                 tiffs=[],
+                 tiffs=None,
                  order="XYZTC",
                  type="uint16",
                  ):
@@ -123,8 +123,9 @@ class Image(object):
             'Planes': [],
         }
         Image.ID += 1
-        for tiff in tiffs:
-            self.add_tiff(tiff)
+        if tiffs:
+            for tiff in tiffs:
+                self.add_tiff(tiff)
 
     def add_channel(self, name=None, color=None, samplesPerPixel=1):
         self.data["Channels"].append(
@@ -223,12 +224,16 @@ def parse_tiff(tiff):
     return (m.group("channel"), m.group("time"), m.group("slice"))
 
 
-def create_companion(plates=[], images=[], out=None):
+def create_companion(plates=None, images=None, out=None):
     """
     Create a companion OME-XML for a given experiment.
     Assumes 2D TIFFs
     """
     root = ET.Element("OME", attrib=OME_ATTRIBUTES)
+    if not plates:
+        plates = []
+    if not images:
+        images = []
 
     for plate in plates:
         p = ET.SubElement(root, "Plate", attrib=plate.data['Plate'])
