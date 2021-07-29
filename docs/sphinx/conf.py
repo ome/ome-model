@@ -358,4 +358,6 @@ linkcheck_ignore = [
     "https://www.ncbi.nlm.nih.gov/pmc/.*",
     "https://eliceirilab.org/.*", # ConnectTimeoutError
     "https://www.fei.com/.*", # SSL certificate expired
+    "http://www.perkinelmer.com/", # 500 Error
+
 ]
