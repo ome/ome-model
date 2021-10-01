@@ -359,5 +359,5 @@ linkcheck_ignore = [
     "https://eliceirilab.org/.*", # ConnectTimeoutError
     "https://www.fei.com/.*", # SSL certificate expired
     "http://www.perkinelmer.com/", # 500 Error
-
+    "http://mayachitra.com/", # SSL certificate expired
 ]
