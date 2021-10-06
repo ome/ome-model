@@ -102,6 +102,7 @@ class Image(object):
     def __init__(self,
                  name,
                  sizeX, sizeY, sizeZ, sizeC, sizeT,
+                 pixX=None, pixY=None, pixZ=None,
                  tiffs=None,
                  order="XYZTC",
                  type="uint16",
@@ -126,6 +127,12 @@ class Image(object):
         if tiffs:
             for tiff in tiffs:
                 self.add_tiff(tiff)
+        if pixX:
+            self.data['Pixels']['PhysicalSizeX'] = str(pixX)
+        if pixY:
+            self.data['Pixels']['PhysicalSizeY'] = str(pixY)
+        if pixZ:
+            self.data['Pixels']['PhysicalSizeZ'] = str(pixZ)
 
     def add_channel(self, name=None, color=None, samplesPerPixel=1):
         self.data["Channels"].append(
@@ -167,7 +174,7 @@ class Plate(object):
 
     ID = 0
 
-    def __init__(self, name, rows, columns):
+    def __init__(self, name):
         self.data = {
             'Plate': {'ID': 'Plate:%s' % self.ID, 'Name': name},
             'Wells': [],
