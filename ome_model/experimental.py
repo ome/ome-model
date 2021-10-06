@@ -103,7 +103,7 @@ class Image(object):
                  name,
                  sizeX, sizeY, sizeZ, sizeC, sizeT,
                  physSizeX=None, physSizeY=None, physSizeZ=None,
-                 physSizeUnitX=None, physSizeUnitY=None, physSizeUnitZ=None,
+                 physSizeXUnit=None, physSizeYUnit=None, physSizeZUnit=None,
                  tiffs=None,
                  order="XYZTC",
                  type="uint16",
@@ -130,16 +130,16 @@ class Image(object):
                 self.add_tiff(tiff)
         if physSizeX:
             self.data['Pixels']['PhysicalSizeX'] = str(physSizeX)
-            if physSizeUnitX:
-                self.data['Pixels']['PhysicalSizeXUnit'] = str(physSizeUnitX)
+            if physSizeXUnit:
+                self.data['Pixels']['PhysicalSizeXUnit'] = str(physSizeXUnit)
         if physSizeY:
             self.data['Pixels']['PhysicalSizeY'] = str(physSizeY)
-            if physSizeUnitY:
-                self.data['Pixels']['PhysicalSizeYUnit'] = str(physSizeUnitY)
+            if physSizeYUnit:
+                self.data['Pixels']['PhysicalSizeYUnit'] = str(physSizeYUnit)
         if physSizeZ:
             self.data['Pixels']['PhysicalSizeZ'] = str(physSizeZ)
-            if physSizeUnitZ:
-                self.data['Pixels']['PhysicalSizeZUnit'] = str(physSizeUnitZ)
+            if physSizeZUnit:
+                self.data['Pixels']['PhysicalSizeZUnit'] = str(physSizeZUnit)
 
     def add_channel(self, name=None, color=None, samplesPerPixel=1):
         self.data["Channels"].append(
