@@ -22,7 +22,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 # #L%
-
+import pytest
 
 from ome_model.experimental import Plate, Image, create_companion
 import xml.etree.ElementTree as ElementTree
@@ -33,10 +33,14 @@ ElementTree.register_namespace('OME', NS['OME'])
 
 class TestPlate(object):
 
-    def test_minimal_plate(self, tmpdir):
+    @pytest.mark.parametrize('rc', [True, False])
+    def test_minimal_plate(self, tmpdir, rc):
         f = str(tmpdir.join('plate.companion.ome'))
 
-        p = Plate("test", 1, 1)
+        if rc:
+            p = Plate("test", 1, 2)
+        else:
+            p = Plate("test")
         well = p.add_well(0, 0)
         i = Image("test", 256, 512, 3, 4, 5)
         well.add_wellsample(0, i)
@@ -46,6 +50,9 @@ class TestPlate(object):
         plates = root.findall('OME:Plate', namespaces=NS)
         assert len(plates) == 1
         assert plates[0].attrib['Name'] == 'test'
+        if rc:
+            assert plates[0].attrib['Rows'] == '1'
+            assert plates[0].attrib['Columns'] == '2'
         wells = plates[0].findall('OME:Well', namespaces=NS)
         assert len(wells) == 1
         assert wells[0].attrib['Row'] == '0'
