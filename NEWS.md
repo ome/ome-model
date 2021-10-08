@@ -1,3 +1,13 @@
+## 6.3.0 (2021-10-08)
+
+### Python
+
+* ome_model: add support for setting physical sizes and units [#151](https://github.com/ome/ome-model/pull/151)
+
+### Documentation
+
+* Exclude external link failing the linkcheck [#150](https://github.com/ome/ome-model/pull/150)
+
 ## 6.2.3 (2021-06-23)
 
 ### Specification
