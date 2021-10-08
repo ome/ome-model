@@ -102,6 +102,8 @@ class Image(object):
     def __init__(self,
                  name,
                  sizeX, sizeY, sizeZ, sizeC, sizeT,
+                 physSizeX=None, physSizeY=None, physSizeZ=None,
+                 physSizeXUnit=None, physSizeYUnit=None, physSizeZUnit=None,
                  tiffs=None,
                  order="XYZTC",
                  type="uint16",
@@ -126,6 +128,18 @@ class Image(object):
         if tiffs:
             for tiff in tiffs:
                 self.add_tiff(tiff)
+        if physSizeX:
+            self.data['Pixels']['PhysicalSizeX'] = str(physSizeX)
+            if physSizeXUnit:
+                self.data['Pixels']['PhysicalSizeXUnit'] = str(physSizeXUnit)
+        if physSizeY:
+            self.data['Pixels']['PhysicalSizeY'] = str(physSizeY)
+            if physSizeYUnit:
+                self.data['Pixels']['PhysicalSizeYUnit'] = str(physSizeYUnit)
+        if physSizeZ:
+            self.data['Pixels']['PhysicalSizeZ'] = str(physSizeZ)
+            if physSizeZUnit:
+                self.data['Pixels']['PhysicalSizeZUnit'] = str(physSizeZUnit)
 
     def add_channel(self, name=None, color=None, samplesPerPixel=1):
         self.data["Channels"].append(
@@ -167,12 +181,16 @@ class Plate(object):
 
     ID = 0
 
-    def __init__(self, name, rows, columns):
+    def __init__(self, name, rows=None, columns=None):
         self.data = {
             'Plate': {'ID': 'Plate:%s' % self.ID, 'Name': name},
             'Wells': [],
         }
         Plate.ID += 1
+        if rows:
+            self.data['Plate']['Rows'] = str(rows)
+        if columns:
+            self.data['Plate']['Columns'] = str(columns)
 
     def add_well(self, row, column):
         well = Well(self, row, column)

@@ -118,6 +118,40 @@ class TestImage(object):
         channels = pixels[0].findall('OME:Channel', namespaces=NS)
         assert len(channels) == 0
 
+    @pytest.mark.parametrize('pixel_size_x', [None, "2", "0.2"])
+    @pytest.mark.parametrize('pixel_size_y', [None, "2", "0.2"])
+    @pytest.mark.parametrize('pixel_size_z', [None, "2", "0.2"])
+    @pytest.mark.parametrize('pixel_size_x_unit', [None, 'cm', 'm'])
+    @pytest.mark.parametrize('pixel_size_y_unit', [None, 'cm', 'm'])
+    @pytest.mark.parametrize('pixel_size_z_unit', [None, 'cm', 'm'])
+    def test_pixelzies(self, tmpdir, pixel_size_x, pixel_size_y,
+                       pixel_size_z, pixel_size_x_unit, pixel_size_y_unit,
+                       pixel_size_z_unit):
+        f = str(tmpdir.join('image.companion.ome'))
+
+        i = Image("test", 256, 512, 3, 4, 5, physSizeX=pixel_size_x,
+                  physSizeY=pixel_size_y, physSizeZ=pixel_size_z,
+                  physSizeXUnit=pixel_size_x_unit,
+                  physSizeYUnit=pixel_size_y_unit,
+                  physSizeZUnit=pixel_size_z_unit, type="unit8")
+        create_companion(images=[i], out=f)
+
+        root = ElementTree.parse(f).getroot()
+        images = root.findall('OME:Image', namespaces=NS)
+        pixels = images[0].findall('OME:Pixels', namespaces=NS)[0]
+        if pixel_size_x:
+            assert pixels.attrib['PhysicalSizeX'] == pixel_size_x
+            if pixel_size_x_unit:
+                assert pixels.attrib['PhysicalSizeXUnit'] == pixel_size_x_unit
+        if pixel_size_y:
+            assert pixels.attrib['PhysicalSizeY'] == pixel_size_y
+            if pixel_size_y_unit:
+                assert pixels.attrib['PhysicalSizeYUnit'] == pixel_size_y_unit
+        if pixel_size_z:
+            assert pixels.attrib['PhysicalSizeZ'] == pixel_size_z
+            if pixel_size_z_unit:
+                assert pixels.attrib['PhysicalSizeZUnit'] == pixel_size_z_unit
+
 
 class TestChannel(object):
 
