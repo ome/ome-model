@@ -10,10 +10,9 @@ metadata processing facilities form the backbone of the
 Download
 --------
 
-**ome-xml.jar** is included in **bioformats_package.jar** available to
-download from the :bf_downloads:`Bio-Formats download page <>`. Alternatively,
-the individual artifact **ome-xml.jar** is hosted at `Maven Central <http://search.maven.org/>`_ under the group ``org.openmicroscopy``. The
-license is `LGPL <http://www.gnu.org/licenses/lgpl.html>`_.
+The ``ome-xml`` artifacts are hosted on the
+`Maven Central Repository <https://search.maven.org/>`_ under the group ``org.openmicroscopy`` and distributed under the
+`2-Clause BSD license <https://opensource.org/licenses/BSD-2-Clause>`_.
 
 Installation
 ------------
@@ -39,7 +38,5 @@ Source code
 -----------
 
 The OME-XML Java library is an open source project—the source code is
-freely accessible via our Git repository. See 
-:bf_doc:`these instructions <developers/building-bioformats.html>` for details
-on accessing the code.
+freely accessible via the https://github.com/ome/ome-model Git repository.
 

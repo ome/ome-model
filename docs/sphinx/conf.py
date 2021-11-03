@@ -167,7 +167,7 @@ extlinks = {
     'bf_source' : (bf_github_root + 'blob/'+ branch + '/%s', ''),
     'bf_sourcedir' : (bf_github_root + 'tree/'+ branch + '/%s', ''),
     # API
-    'javadoc' : (downloads_root + '/latest/bio-formats/api/%s', ''),
+    'javadoc' : ("https://javadoc.io/doc/org.openmicroscopy/ome-xml/%s", ''),
     # Doc links
     'devs_doc' : (docs_root + '/contributing/%s', ''),
     'omero_doc' : (docs_root + '/latest/omero/%s', ''),
