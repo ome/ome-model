@@ -114,7 +114,4 @@ Alternatively, you can browse the
 :schema_doc:`current version of the entire Schema <ome.html>` online.
 
 Transforms are available which convert between the the different versions
-of the schemas. They can be downloaded from:
-
-:schema:`http://www.openmicroscopy.org/Schemas/Transforms/ <Transforms/>`
-
+of the schemas.
