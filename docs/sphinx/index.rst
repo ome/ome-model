@@ -139,6 +139,7 @@ Data Model history
     :titlesonly:
 
     schemas/index
+    schemas/transformations
     schemas/june-2016-2
     schemas/june-2016
     schemas/january-2015
