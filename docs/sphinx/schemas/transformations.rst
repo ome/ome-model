@@ -4,30 +4,72 @@ Transformations
 Available transformations
 -------------------------
 
-====================== ========== ==================
-Available transforms   Direction  Status
-====================== ========== ==================
-2003-FC-to-2007-06.xsl upgrade    excellent
-2003-FC-to-2008-09.xsl upgrade    excellent
-2007-06-to-2008-02.xsl upgrade    excellent
-2007-06-to-2008-09.xsl upgrade    excellent
-2008-02-to-2008-09.xsl upgrade    excellent
-2008-09-to-2009-09.xsl upgrade    excellent
-2009-09-to-2010-04.xsl upgrade    excellent
-2010-04-to-2010-06.xsl upgrade    excellent
-2010-06-to-2011-06.xsl upgrade    excellent
-2011-06-to-2012-06.xsl upgrade    excellent
-2012-06-to-2013-06.xsl upgrade    excellent
-2013-06-to-2015-01.xsl upgrade    excellent
-2015-01-to-2016-06.xsl upgrade    excellent
-2010-06-to-2003-FC.xsl downgrade  poor (very lossy)
-2010-06-to-2008-02.xsl downgrade  fair (lossy)
-2011-06-to-2010-06.xsl downgrade  good
-2012-06-to-2011-06.xsl downgrade  good
-2013-06-to-2012-06.xsl downgrade  good
-2015-01-to-2013-06.xsl downgrade  good
-2016-06-to-2015-01.xsl downgrade  good
-====================== ========== ==================
+.. list-table::
+   :header-rows: 1
+
+   * - Available transforms
+     - Direction
+     - Status
+   * - :schema:`2003-FC-to-2007-06.xsl <Transforms/2016-06-to-2015-01.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2003-FC-to-2008-09.xsl <Transforms/2003-FC-to-2008-09.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2007-06-to-2008-02.xsl <Transforms/2007-06-to-2008-02.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2007-06-to-2008-09.xsl <Transforms/2007-06-to-2008-09.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2008-02-to-2008-09.xsl <Transforms/2008-02-to-2008-09.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2009-09-to-2010-04.xsl <Transforms/2009-09-to-2010-04.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2010-04-to-2010-06.xsl <Transforms/2010-04-to-2010-06.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2010-04-to-2010-06.xsl <Transforms/2010-04-to-2010-06.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2010-06-to-2011-06.xsl <Transforms/2010-06-to-2011-06.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2011-06-to-2012-06.xsl <Transforms/2011-06-to-2012-06.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2012-06-to-2013-06.xsl <Transforms/2012-06-to-2013-06.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2013-06-to-2015-01.xsl <Transforms/2013-06-to-2015-01.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2015-01-to-2016-06.xsl <Transforms/2015-01-to-2016-06.xsl>`
+     - upgrade
+     - excellent
+   * - :schema:`2010-06-to-2003-FC.xsl <Transforms/2010-06-to-2003-FC.xsl>`
+     - downgrade
+     - poor
+   * - :schema:`2010-06-to-2008-02.xsl <Transforms/2010-06-to-2008-02.xsl>`
+     - downgrade
+     - fair
+   * - :schema:`2011-06-to-2010-06.xsl <Transforms/2011-06-to-2010-06.xsl>`
+     - downgrade
+     - good
+   * - :schema:`2012-06-to-2011-06.xsl <Transforms/2012-06-to-2011-06.xsl>`
+     - downgrade
+     - good
+   * - :schema:`2013-06-to-2012-06.xsl <Transforms/2013-06-to-2012-06.xsl>`
+     - downgrade
+     - good
+   * - :schema:`2015-01-to-2013-06.xsl <Transforms/2015-01-to-2013-06.xsl>`
+     - downgrade
+     - good
+   * - :schema:`2016-06-to-2015-01.xsl <Transforms/2016-06-to-2015-01.xsl>`
+     - downgrade
+     - good
 
 Quality of transformations
 --------------------------
