@@ -12,64 +12,64 @@ Available transformations
      - Status
    * - :schema:`2003-FC-to-2007-06.xsl <Transforms/2016-06-to-2015-01.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2003-FC-to-2008-09.xsl <Transforms/2003-FC-to-2008-09.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2007-06-to-2008-02.xsl <Transforms/2007-06-to-2008-02.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2007-06-to-2008-09.xsl <Transforms/2007-06-to-2008-09.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2008-02-to-2008-09.xsl <Transforms/2008-02-to-2008-09.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2009-09-to-2010-04.xsl <Transforms/2009-09-to-2010-04.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2010-04-to-2010-06.xsl <Transforms/2010-04-to-2010-06.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2010-04-to-2010-06.xsl <Transforms/2010-04-to-2010-06.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2010-06-to-2011-06.xsl <Transforms/2010-06-to-2011-06.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2011-06-to-2012-06.xsl <Transforms/2011-06-to-2012-06.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2012-06-to-2013-06.xsl <Transforms/2012-06-to-2013-06.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2013-06-to-2015-01.xsl <Transforms/2013-06-to-2015-01.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2015-01-to-2016-06.xsl <Transforms/2015-01-to-2016-06.xsl>`
      - upgrade
-     - excellent
+     - :term:`excellent`
    * - :schema:`2010-06-to-2003-FC.xsl <Transforms/2010-06-to-2003-FC.xsl>`
      - downgrade
-     - poor
+     - :term:`poor`
    * - :schema:`2010-06-to-2008-02.xsl <Transforms/2010-06-to-2008-02.xsl>`
      - downgrade
-     - fair
+     - :term:`fair`
    * - :schema:`2011-06-to-2010-06.xsl <Transforms/2011-06-to-2010-06.xsl>`
      - downgrade
-     - good
+     - :term:`good`
    * - :schema:`2012-06-to-2011-06.xsl <Transforms/2012-06-to-2011-06.xsl>`
      - downgrade
-     - good
+     - :term:`good`
    * - :schema:`2013-06-to-2012-06.xsl <Transforms/2013-06-to-2012-06.xsl>`
      - downgrade
-     - good
+     - :term:`good`
    * - :schema:`2015-01-to-2013-06.xsl <Transforms/2015-01-to-2013-06.xsl>`
      - downgrade
-     - good
+     - :term:`good`
    * - :schema:`2016-06-to-2015-01.xsl <Transforms/2016-06-to-2015-01.xsl>`
      - downgrade
-     - good
+     - :term:`good`
 
 Quality of transformations
 --------------------------
@@ -93,173 +93,179 @@ Quality of transformations
      - 2016-06
    * - 2003-FC
      -
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
    * - 2007-06
-     - poor
+     - :term:`poor`
      -
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
    * - 2008-02
-     - poor
-     - poor
+     - :term:`poor`
+     - :term:`poor`
      -
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
    * - 2008-09
-     - poor
-     - poor
-     - poor
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`poor`
      -
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
    * - 2009-09
-     - poor
-     - poor
-     - poor
-     - poor
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`poor`
      -
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
    * - 2010-04
-     - poor
-     - poor
-     - poor
-     - fair
-     - fair
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`fair`
+     - :term:`fair`
      -
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
    * - 2010-06
-     - poor
-     - poor
-     - fair
-     - fair
-     - fair
-     - fair
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
      -
-     - excellent
-     - excellent
-     - excellent
-     - excellent
-     - excellent
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
    * - 2011-06
-     - poor
-     - poor
-     - fair
-     - fair
-     - fair
-     - fair
-     - good
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`good`
      -
-     - excellent
-     - excellent
-     - excellent
-     - excellent
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
    * - 2012-06
-     - poor
-     - poor
-     - fair
-     - fair
-     - fair
-     - fair
-     - good
-     - good
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`good`
+     - :term:`good`
      -
-     - excellent
-     - excellent
-     - excellent
+     - :term:`excellent`
+     - :term:`excellent`
+     - :term:`excellent`
    * - 2013-06
-     - poor
-     - poor
-     - fair
-     - fair
-     - fair
-     - fair
-     - good
-     - good
-     - good
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`good`
+     - :term:`good`
+     - :term:`good`
      -
-     - excellent
-     - excellent
+     - :term:`excellent`
+     - :term:`excellent`
    * - 2015-01
-     - poor
-     - poor
-     - fair
-     - fair
-     - fair
-     - fair
-     - good
-     - good
-     - good
-     - good
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`good`
+     - :term:`good`
+     - :term:`good`
+     - :term:`good`
      -
-     - excellent
+     - :term:`excellent`
    * - 2016-06
-     - poor
-     - poor
-     - fair
-     - fair
-     - fair
-     - fair
-     - good
-     - good
-     - good
-     - good
-     - good
+     - :term:`poor`
+     - :term:`poor`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`fair`
+     - :term:`good`
+     - :term:`good`
+     - :term:`good`
+     - :term:`good`
+     - :term:`good`
      -
 
 Key to quality
 --------------
 
--  **poor** (very lossy) - the bare minimum of metadata is preserved to
-   allow image display, all other metadata is lost
--  **fair** (lossy) - a portion of the metadata is preserved, at least
-   enough to display the image and some other data, it will be far from
-   complete however
--  **good** - most information is preserved, it may be possible to do a
-   better job but could be difficult for technical reasons or require
-   custom code not just a transform
--  **excellent** - as much information as possible is preserved, some
-   values can still be lost if there are completely incompatible with
-   the new schema
+.. glossary::
 
+    :term:`poor`
+        the bare minimum of metadata is preserved to allow image display, all
+        other metadata is lost
+
+    :term:`fair`
+        a portion of the metadata is preserved, at least enough to display the
+        image and some other data, it will be far from complete however
+
+    :term:`good`
+        most information is preserved, it may be possible to do a better job
+        but could be difficult for technical reasons or require custom code
+        not just a transform
+
+    :term:`excellent`
+        as much information as possible is preserved, some values can still be
+        lost if there are completely incompatible with the new schema
