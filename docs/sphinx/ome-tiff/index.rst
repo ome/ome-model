@@ -32,7 +32,7 @@ OME-TIFF is supported by:
 * `Accelrys Inc. <http://accelrys.com/>`_
 * `Bitplane AG <http://www.bitplane.com/>`_
 * `Carl Zeiss Microscopy GmbH <https://www.zeiss.com/microscopy/int/home.html>`_
-* `Cytiva <https://www.cytivalifesciences.com/en/gb>`_ (formerly GE Healthcare, Applied Precision)
+* `Cytiva <https://www.cytivalifesciences.com/>`_ (formerly GE Healthcare, Applied Precision)
 * `Definiens <http://www.definiens.com>`_
 * `DRVision Technologies LLC <https://www.drvtechnologies.com>`_
 * `iMagic <https://www.imagic.ch/en>`_
