@@ -1,4 +1,4 @@
-.. _TIFF: https://www.adobe.io/open/standards/TIFF.html
+.. _TIFF: https://www.loc.gov/preservation/digital/formats/fdd/fdd000022.shtml
 .. _RFC 2119: https://www.ietf.org/rfc/rfc2119.txt
 
 OME-TIFF specification
