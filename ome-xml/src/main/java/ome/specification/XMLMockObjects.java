@@ -1093,7 +1093,6 @@ public class XMLMockObjects
     plane.setTheZ(new NonNegativeInteger(z));
     plane.setTheC(new NonNegativeInteger(c));
     plane.setTheT(new NonNegativeInteger(z));
-    plane.setHashSHA1("1234567890ABCDEF1234");
     return plane;
   }
 
