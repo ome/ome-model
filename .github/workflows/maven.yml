@@ -14,6 +14,15 @@ jobs:
         java: [1.8, 11, 17]
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.7', '3.8', '3.9']
+        exclude:
+          - java: 11
+            python-version: '3.8'
+          - java: 11
+            python-version: '3.9'
+          - java: 17
+            python-version: '3.8'
+          - java: 17
+            python-version: '3.9'
     runs-on: ${{ matrix.os }}
     env:
       maven_commands: install
