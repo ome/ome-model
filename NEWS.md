@@ -1,3 +1,20 @@
+## 6.3.1 (2022-05-19)
+
+### Java
+
+*  Bump logback dependencies to `ch.qos.logback:logback-core:1.2.9` and `ch.qos.logback:logback-classic:1.2.9` ([#160](https://github.com/ome/ome-model/pull/160))
+*  Bump ome-common dependency to `org.openmicroscopy:ome-common:6.0.9`
+
+### Documentation
+
+* Update link to TIFF standard ([#157](https://github.com/ome/ome-model/pull/157))
+* Add XSLT transformations page ([#154](https://github.com/ome/ome-model/pull/154))
+* Add reference to javadoc.io ([#153](https://github.com/ome/ome-model/pull/153))
+
+### Infrastructure
+
+* Add JDK17 to the GitHub workflows testing matrix ([#159](https://github.com/ome/ome-model/pull/159))
+
 ## 6.3.0 (2021-10-08)
 
 ### Python
