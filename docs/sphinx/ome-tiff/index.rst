@@ -29,7 +29,7 @@ Support
 
 OME-TIFF is supported by:
 
-* `Accelrys Inc. <http://accelrys.com/>`_
+* `BIOVIA <https://www.3ds.com/products-services/biovia/>`_
 * `Bitplane AG <http://www.bitplane.com/>`_
 * `Carl Zeiss Microscopy GmbH <https://www.zeiss.com/microscopy/int/home.html>`_
 * `Cytiva <https://www.cytivalifesciences.com/>`_ (formerly GE Healthcare, Applied Precision)
