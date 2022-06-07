@@ -514,7 +514,7 @@ image plane. Additionally:
 - the offsets of all sub-resolutions IFDs must be referenced from the IFD of
   the full-resolution plane using the SubIFDs TIFF extension tag 330 as
   defined in the TIFF Tech Note 1 of the
-  `Adobe PageMaker® 6.0 TIFF Technical Notes <https://www.adobe.io/content/dam/udp/en/open/standards/tiff/TIFFPM6.pdf>`_.
+  `Adobe PageMaker® 6.0 TIFF Technical Notes <https://web.archive.org/web/20180810205521/https://www.adobe.io/content/udp/en/open/standards/TIFF/_jcr_content/contentbody/download_1704706507/file.res/TIFFPM6.pdf>`_.
   The list of sub-resolution offsets must be ordered by plane size from
   largest to smallest,
 - the IFD offsets of pyramidal levels must neither be referenced in the primary
