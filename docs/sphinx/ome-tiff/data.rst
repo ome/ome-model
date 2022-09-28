@@ -56,9 +56,10 @@ version since their initial creation.
 Plate
 ^^^^^
 
-An OME-TIFF dataset representative of the
+Two OME-TIFF datasets representative of the
 :doc:`High Content Screening </developers/screen-plate-well>` section of the
-OME Data Model, derived from the public
+OME Data Model, derived from a 384 wells plate of the BBBC017 image set
+available from the
 `Broad Bioimage Benchmark Collection <https://data.broadinstitute.org/bbbc/>`_.
 
 .. list-table::
@@ -69,7 +70,12 @@ OME Data Model, derived from the public
      * Provenance
      * Copyright
 
-  -  * :ometiff_downloads:`NIRHTa-001.ome.tiff <BBBC/NIRHTa-001.ome.tiff>`
+  -  * :ometiff_downloads:`Single file OME-TIFF <BBBC017/single-file>`
+     * 512 × 512 × 1 × 3 × 1
+     * `BBBC017 <https://data.broadinstitute.org/bbbc/BBBC017/>`_
+     * `CC-BY-NC-SA 3.0 <https://creativecommons.org/licenses/by-nc-sa/3.0>`_
+
+  -  * :ometiff_downloads:`Multi-file OME-TIFF <BBBC017/multi-file>`
      * 512 × 512 × 1 × 3 × 1
      * `BBBC017 <https://data.broadinstitute.org/bbbc/BBBC017/>`_
      * `CC-BY-NC-SA 3.0 <https://creativecommons.org/licenses/by-nc-sa/3.0>`_
