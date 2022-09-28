@@ -82,6 +82,14 @@ available from the
 
 See `Ljosa V, Sokolnicki KL, Carpenter AE (2012). Annotated high-throughput microscopy image sets for validation. Nature Methods 9(7):637 <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3627348/>`__.
 
+.. note::
+
+    An OME-TIFF file representative of the same plate had been previously generated and made
+    available under :ometiff_downloads:`NIRHTa-001.ome.tiff <BBBC/NIRHTa-001.ome.tiff>`. Although
+    the file is syntactically valid, the plate layout is incorrect due to a conversion issue.
+    This file should be considered as deprecated and superseded by the two representative plate
+    examples described above.
+
 ROI
 ^^^
 
