@@ -49,11 +49,11 @@ import org.slf4j.LoggerFactory;
  */
 public class OMEModelImpl implements OMEModel {
 
-  private Map<String, OMEModelObject> modelObjects = 
-    new HashMap<String, OMEModelObject>();
+  private final Map<String, OMEModelObject> modelObjects =
+          new HashMap<>();
 
-  private Map<OMEModelObject, List<Reference>> references =
-    new HashMap<OMEModelObject, List<Reference>>();
+  private final Map<OMEModelObject, List<Reference>> references =
+          new HashMap<>();
 
   /** Logger for this class. */
   private static final Logger LOGGER =
@@ -102,11 +102,7 @@ public class OMEModelImpl implements OMEModel {
     if (b == null) {
       return false;
     }
-    List<Reference> bList = references.get(a);
-    if (bList == null) {
-      bList = new ArrayList<Reference>();
-      references.put(a, bList);
-    }
+    List<Reference> bList = references.computeIfAbsent(a, k -> new ArrayList<>());
     return bList.add(b);
   }
 

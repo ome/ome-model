@@ -51,21 +51,22 @@ import java.math.BigInteger;
  */
 public final class UNITS
 {
+  @SuppressWarnings("SameReturnValue")
   public String getName()
   {
     return "OME-combined";
   }
 
   // Definitions of units that others are calculated from
-  public static final ome.units.unit.Unit<Angle>             RADIAN  = ome.units.unit.Unit.<Angle>CreateBaseUnit("SI.RADIAN", "rad");
-  public static final ome.units.unit.Unit<ElectricPotential> VOLT    = ome.units.unit.Unit.<ElectricPotential>CreateBaseUnit("SI.VOLT", "V");
-  public static final ome.units.unit.Unit<Frequency>         HERTZ   = ome.units.unit.Unit.<Frequency>CreateBaseUnit("SI.HERTZ", "Hz");
-  public static final ome.units.unit.Unit<Length>            METRE   = ome.units.unit.Unit.<Length>CreateBaseUnit("SI.METRE", "m");
+  public static final ome.units.unit.Unit<Angle>             RADIAN  = ome.units.unit.Unit.CreateBaseUnit("SI.RADIAN", "rad");
+  public static final ome.units.unit.Unit<ElectricPotential> VOLT    = ome.units.unit.Unit.CreateBaseUnit("SI.VOLT", "V");
+  public static final ome.units.unit.Unit<Frequency>         HERTZ   = ome.units.unit.Unit.CreateBaseUnit("SI.HERTZ", "Hz");
+  public static final ome.units.unit.Unit<Length>            METRE   = ome.units.unit.Unit.CreateBaseUnit("SI.METRE", "m");
   public static final ome.units.unit.Unit<Length>            INCH    = METRE.multiply(0.0254).setSymbol("in");
-  public static final ome.units.unit.Unit<Power>             WATT    = ome.units.unit.Unit.<Power>CreateBaseUnit("SI.WATT", "W");
-  public static final ome.units.unit.Unit<Pressure>          PASCAL  = ome.units.unit.Unit.<Pressure>CreateBaseUnit("SI.PASCAL", "Pa");
-  public static final ome.units.unit.Unit<Temperature>       KELVIN  = ome.units.unit.Unit.<Temperature>CreateBaseUnit("SI.KELVIN", "K");
-  public static final ome.units.unit.Unit<Time>              SECOND  = ome.units.unit.Unit.<Time>CreateBaseUnit("SI.SECOND", "s");
+  public static final ome.units.unit.Unit<Power>             WATT    = ome.units.unit.Unit.CreateBaseUnit("SI.WATT", "W");
+  public static final ome.units.unit.Unit<Pressure>          PASCAL  = ome.units.unit.Unit.CreateBaseUnit("SI.PASCAL", "Pa");
+  public static final ome.units.unit.Unit<Temperature>       KELVIN  = ome.units.unit.Unit.CreateBaseUnit("SI.KELVIN", "K");
+  public static final ome.units.unit.Unit<Time>              SECOND  = ome.units.unit.Unit.CreateBaseUnit("SI.SECOND", "s");
 
   // functions to provide standard SI scaling
   public static <T extends Quantity> ome.units.unit.Unit<T> YOTTA(ome.units.unit.Unit<T> inUnit){return inUnit.prefixSymbol( "Y").multiply(BigInteger.TEN.pow(24).doubleValue());}
@@ -276,8 +277,8 @@ public final class UNITS
   public static final ome.units.unit.Unit<Length> LIGHTYEAR =        PETA(METRE.multiply(9.4607304725808)).setSymbol("ly");
   public static final ome.units.unit.Unit<Length> PARSEC =           GIGA(METRE.multiply(30856776)).setSymbol("pc"); // APPROXIMATE 3.0856776×10^16 m, exact would be UA.divide(tan(DEGREE.divide(3600)))
   public static final ome.units.unit.Unit<Length> POINT =            INCH.divide(72).setSymbol("pt");
-  public static final ome.units.unit.Unit<Length> PIXEL =            ome.units.unit.Unit.<Length>CreateBaseUnit("Pixel", "pixel");
-  public static final ome.units.unit.Unit<Length> REFERENCEFRAME =   ome.units.unit.Unit.<Length>CreateBaseUnit("ReferenceFrame", "reference frame");
+  public static final ome.units.unit.Unit<Length> PIXEL =            ome.units.unit.Unit.CreateBaseUnit("Pixel", "pixel");
+  public static final ome.units.unit.Unit<Length> REFERENCEFRAME =   ome.units.unit.Unit.CreateBaseUnit("ReferenceFrame", "reference frame");
 
   // Deprecated old names
   /**

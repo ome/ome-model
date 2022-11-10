@@ -40,5 +40,5 @@ package ome.xml.model.primitives;
  * @author callan
  */
 public interface PrimitiveNumber{
-  public Number getNumberValue();
+  Number getNumberValue();
 }

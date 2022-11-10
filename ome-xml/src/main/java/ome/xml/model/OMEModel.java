@@ -43,6 +43,7 @@ import java.util.Map;
  */
 public interface OMEModel {
 
+  @SuppressWarnings("UnusedReturnValue")
   OMEModelObject addModelObject(String id, OMEModelObject object);
 
   OMEModelObject removeModelObject(String id);
@@ -51,6 +52,7 @@ public interface OMEModel {
 
   Map<String, OMEModelObject> getModelObjects();
 
+  @SuppressWarnings("UnusedReturnValue")
   boolean addReference(OMEModelObject a, Reference b);
 
   Map<OMEModelObject, List<Reference>> getReferences();

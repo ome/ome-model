@@ -158,16 +158,14 @@ public class Length extends Quantity implements Comparable<Length>
   @Override
   public String toString()
   {
-    StringBuilder result = new StringBuilder();
-    result.append(this.getClass().getName());
-    result.append(": ");
-    result.append("value[");
-    result.append(value);
-    result.append("], unit[");
-    result.append(unit.getSymbol());
-    result.append("] stored as ");
-    result.append(value.getClass().getName());
-    return result.toString();
+    return this.getClass().getName() +
+            ": " +
+            "value[" +
+            value +
+            "], unit[" +
+            unit.getSymbol() +
+            "] stored as " +
+            value.getClass().getName();
   }
 
   @Override

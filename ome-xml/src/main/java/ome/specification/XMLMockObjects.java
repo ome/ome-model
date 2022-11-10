@@ -290,7 +290,7 @@ public class XMLMockObjects
   public static final Double CUT_OUT = 300.0;
 
   /** Root of the file. */
-  protected OME ome;
+  protected final OME ome;
 
   /** The instrument used for the metadata. */
   protected Instrument instrument;
@@ -739,8 +739,8 @@ public class XMLMockObjects
       Mask m = new Mask();
       m.setX(0.0);
       m.setY(0.0);
-      m.setWidth(new Double(SIZE_X));
-      m.setHeight(new Double(SIZE_Y));
+      m.setWidth((double) SIZE_X);
+      m.setHeight((double) SIZE_Y);
       m.setBinData(createBinData(SIZE_X,SIZE_Y,BYTES_PER_PIXEL));
       shape = m;
     }
@@ -989,8 +989,8 @@ public class XMLMockObjects
     plate.setWellOriginX(new Length(0.0, UNITS.MICROMETER));
     plate.setWellOriginY(new Length(1.0, UNITS.MICROMETER));
     plate.setStatus("Plate status");
-    PlateAcquisition pa = null;
-    List<PlateAcquisition> pas = new ArrayList<PlateAcquisition>();
+    PlateAcquisition pa;
+    List<PlateAcquisition> pas = new ArrayList<>();
     int v;
     if (numberOfPlateAcquisition > 0) {
       for (int i = 0; i < numberOfPlateAcquisition; i++) {
@@ -1012,7 +1012,7 @@ public class XMLMockObjects
     Image image;
     int i = totalPlateIndex*rows*columns*fields*numberOfPlateAcquisition;
     Iterator<PlateAcquisition> k;
-    int kk = 0;
+    int kk;
     for (int row = 0; row < rows; row++) {
       for (int column = 0; column < columns; column++) {
         well = new Well();
@@ -1474,31 +1474,27 @@ public class XMLMockObjects
     }
     List<Dichroic> dichroics = instrument.copyDichroicList();
     index = 0;
-    Iterator<Dichroic> j = dichroics.iterator();
-    while (j.hasNext()) {
-        j.next().setLinkedAnnotation(index, new LongAnnotation());
-        index++;
+    for (Dichroic dichroic : dichroics) {
+      dichroic.setLinkedAnnotation(index, new LongAnnotation());
+      index++;
     }
     List<Filter> filters = instrument.copyFilterList();
     index = 0;
-    Iterator<Filter> k = filters.iterator();
-    while (k.hasNext()) {
-        k.next().setLinkedAnnotation(index, new TermAnnotation());
-        index++;
+    for (Filter filter : filters) {
+      filter.setLinkedAnnotation(index, new TermAnnotation());
+      index++;
     }
     List<LightSource> lights = instrument.copyLightSourceList();
     index = 0;
-    Iterator<LightSource> l = lights.iterator();
-    while (l.hasNext()) {
-        l.next().setLinkedAnnotation(index, new DoubleAnnotation());
-        index++;
+    for (LightSource light : lights) {
+      light.setLinkedAnnotation(index, new DoubleAnnotation());
+      index++;
     }
     List<Objective> objectives = instrument.copyObjectiveList();
     index = 0;
-    Iterator<Objective> m = objectives.iterator();
-    while (m.hasNext()) {
-        m.next().setLinkedAnnotation(index,new MapAnnotation());
-        index++;
+    for (Objective objective : objectives) {
+      objective.setLinkedAnnotation(index, new MapAnnotation());
+      index++;
     }
     Image image = createImage(0, true);
     ObjectiveSettings settings = createObjectiveSettings(0);

@@ -134,8 +134,7 @@ public class Unit<Q extends Quantity>
         inUnit.measurementSystem +
         "]");
     }
-    Double theResult = (((inValue.doubleValue()*scaleFactor)+offset)-inUnit.offset)/inUnit.scaleFactor;
-    return theResult;
+    return (((inValue.doubleValue()*scaleFactor)+offset)-inUnit.offset)/inUnit.scaleFactor;
   }
 
   // Begin "protected" functions
@@ -153,7 +152,7 @@ public class Unit<Q extends Quantity>
   {
     Double newScaleFactor = scaleFactor * scalar;
     Double newOffset = offset * scalar;
-    return new Unit<Q>(measurementSystem, symbol, newScaleFactor, newOffset);
+    return new Unit<>(measurementSystem, symbol, newScaleFactor, newOffset);
   }
   /**
    * Multiply the scaling conversion factor in this unit by a scalar.
@@ -165,7 +164,7 @@ public class Unit<Q extends Quantity>
   {
     Double newScaleFactor = scaleFactor * scalar;
     Double newOffset = offset * scalar;
-    return new Unit<Q>(measurementSystem, symbol, newScaleFactor, newOffset);
+    return new Unit<>(measurementSystem, symbol, newScaleFactor, newOffset);
   }
   /**
    * Divide the scaling conversion factor in this unit by a scalar.
@@ -177,7 +176,7 @@ public class Unit<Q extends Quantity>
   {
     Double newScaleFactor = scaleFactor / scalar;
     Double newOffset = offset / scalar;
-    return new Unit<Q>(measurementSystem, symbol, newScaleFactor, newOffset);
+    return new Unit<>(measurementSystem, symbol, newScaleFactor, newOffset);
   }
   /**
    * Divide the scaling conversion factor in this unit by a scalar.
@@ -189,7 +188,7 @@ public class Unit<Q extends Quantity>
   {
     Double newScaleFactor = scaleFactor / scalar;
     Double newOffset = offset / scalar;
-    return new Unit<Q>(measurementSystem, symbol, newScaleFactor, newOffset);
+    return new Unit<>(measurementSystem, symbol, newScaleFactor, newOffset);
   }
   /**
    * Increase the scaling offset in this unit by a scalar.
@@ -200,7 +199,7 @@ public class Unit<Q extends Quantity>
   public Unit<Q> add(Integer scalar)
   {
     Double newOffset = offset + scalar;
-    return new Unit<Q>(measurementSystem, symbol, scaleFactor, newOffset);
+    return new Unit<>(measurementSystem, symbol, scaleFactor, newOffset);
   }
   /**
    * Increase the scaling offset in this unit by a scalar.
@@ -211,7 +210,7 @@ public class Unit<Q extends Quantity>
   public Unit<Q> add(Double scalar)
   {
     Double newOffset = offset + scalar;
-    return new Unit<Q>(measurementSystem, symbol, scaleFactor, newOffset);
+    return new Unit<>(measurementSystem, symbol, scaleFactor, newOffset);
   }
   /**
    * Change the unit symbol in this unit.
@@ -221,7 +220,7 @@ public class Unit<Q extends Quantity>
    */
   public Unit<Q> setSymbol(String inSymbol)
   {
-    return new Unit<Q>(measurementSystem, inSymbol, scaleFactor, offset);
+    return new Unit<>(measurementSystem, inSymbol, scaleFactor, offset);
   }
 
   /**
@@ -233,7 +232,7 @@ public class Unit<Q extends Quantity>
   public Unit<Q> prefixSymbol(String prefix)
   {
     String newSymbol = prefix + symbol;
-    return new Unit<Q>(measurementSystem, newSymbol, scaleFactor, offset);
+    return new Unit<>(measurementSystem, newSymbol, scaleFactor, offset);
   }
 
   /**
@@ -249,7 +248,7 @@ public class Unit<Q extends Quantity>
    */
   public static <Q extends Quantity> Unit<Q> CreateBaseUnit(String inMeasurementSystem, String inSymbol)
   {
-    return new Unit<Q>(inMeasurementSystem, inSymbol, 1.0, 0.0);
+    return new Unit<>(inMeasurementSystem, inSymbol, 1.0, 0.0);
   }
   // End "protected" functions
 

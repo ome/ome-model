@@ -54,22 +54,22 @@ public class SchemaResolver implements LSResourceResolver
     private DOMImplementationLS theDOMImplementationLS;
 
     // the static string to strip when mapping schema locations
-    private static String GIT_MASTER_PATH  = "http://git.openmicroscopy.org/src/master/components/specification";
-    private static String GIT_DEVELOP_PATH = "http://git.openmicroscopy.org/src/develop/components/specification";
-    private static String MAIN_PATH = "http://www.openmicroscopy.org/Schemas/";
-    private static String MAIN_SEARCH_PATH = "/released-schema/";
-    private static String LEGACY_AC_PATH = "http://www.openmicroscopy.org/XMLschemas/AnalysisChain/RC1/";
-    private static String LEGACY_AM_PATH = "http://www.openmicroscopy.org/XMLschemas/AnalysisModule/RC1/";
-    private static String LEGACY_BF_PATH = "http://www.openmicroscopy.org/XMLschemas/BinaryFile/RC1/";
-    private static String LEGACY_CA_PATH = "http://www.openmicroscopy.org/XMLschemas/CA/RC1/";
-    private static String LEGACY_CL_PATH = "http://www.openmicroscopy.org/XMLschemas/CLI/RC1/";
-    private static String LEGACY_DH_PATH = "http://www.openmicroscopy.org/XMLschemas/DataHistory/IR3/";
-    private static String LEGACY_ML_PATH = "http://www.openmicroscopy.org/XMLschemas/MLI/IR2/";
-    private static String LEGACY_OM_PATH = "http://www.openmicroscopy.org/XMLschemas/OME/FC/";
-    private static String LEGACY_ST_PATH = "http://www.openmicroscopy.org/XMLschemas/STD/RC2/";
-    private static String LEGACY_SEARCH_PATH = "/released-schema/2003-FC/";
+    private static final String GIT_MASTER_PATH  = "http://git.openmicroscopy.org/src/master/components/specification";
+    private static final String GIT_DEVELOP_PATH = "http://git.openmicroscopy.org/src/develop/components/specification";
+    private static final String MAIN_PATH = "http://www.openmicroscopy.org/Schemas/";
+    private static final String MAIN_SEARCH_PATH = "/released-schema/";
+    private static final String LEGACY_AC_PATH = "http://www.openmicroscopy.org/XMLschemas/AnalysisChain/RC1/";
+    private static final String LEGACY_AM_PATH = "http://www.openmicroscopy.org/XMLschemas/AnalysisModule/RC1/";
+    private static final String LEGACY_BF_PATH = "http://www.openmicroscopy.org/XMLschemas/BinaryFile/RC1/";
+    private static final String LEGACY_CA_PATH = "http://www.openmicroscopy.org/XMLschemas/CA/RC1/";
+    private static final String LEGACY_CL_PATH = "http://www.openmicroscopy.org/XMLschemas/CLI/RC1/";
+    private static final String LEGACY_DH_PATH = "http://www.openmicroscopy.org/XMLschemas/DataHistory/IR3/";
+    private static final String LEGACY_ML_PATH = "http://www.openmicroscopy.org/XMLschemas/MLI/IR2/";
+    private static final String LEGACY_OM_PATH = "http://www.openmicroscopy.org/XMLschemas/OME/FC/";
+    private static final String LEGACY_ST_PATH = "http://www.openmicroscopy.org/XMLschemas/STD/RC2/";
+    private static final String LEGACY_SEARCH_PATH = "/released-schema/2003-FC/";
 
-    public SchemaResolver() throws ClassNotFoundException, InstantiationException, IllegalAccessException
+    public SchemaResolver() throws InstantiationException
     {
         // Create the objects necessary to make the correct LSInput return types
         theDOMImplementationLS = null;
@@ -131,7 +131,7 @@ public class SchemaResolver implements LSResourceResolver
         String type, String namespaceURI, String publicId,
         String systemId, String baseURI)
     {
-        LSInput theResult = null;
+        LSInput theResult;
 
         // Match the requested schema locations and create the appropriate LSInput object
         if (systemId.equals("http://www.w3.org/2001/xml.xsd"))
@@ -198,13 +198,13 @@ public class SchemaResolver implements LSResourceResolver
      * Creates the LSInput object from the resource path
      *
      * @param theResourcePath Path to the schema in the Specification jar.
-     * @param systemId
+     * @param systemId the system identifier
      * @return The requested LSInput object.
      */
     private LSInput makeSubstutionStream(
         String theResourcePath, String systemId)
     {
-        LSInput theResult = null;
+        LSInput theResult;
         theResult = theDOMImplementationLS.createLSInput();
         InputStream theResourcesStream = getClass().getResourceAsStream(theResourcePath);
         theResult.setByteStream(theResourcesStream);

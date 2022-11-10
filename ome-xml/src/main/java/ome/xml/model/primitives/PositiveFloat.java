@@ -44,7 +44,7 @@ public class PositiveFloat extends NonNegativeFloat {
 
   public PositiveFloat(Double value) {
     super(value);
-    if (value == null || value.doubleValue() <= 0) {
+    if (value == null || value <= 0) {
       throw new IllegalArgumentException(
           value + " must be non-null and strictly positive.");
     }
