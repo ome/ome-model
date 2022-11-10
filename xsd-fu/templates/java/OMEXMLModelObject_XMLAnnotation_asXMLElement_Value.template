@@ -1,4 +1,4 @@
-      Document Value_document = null;
+      Document Value_document;
       try
       {
         javax.xml.parsers.DocumentBuilderFactory factory =

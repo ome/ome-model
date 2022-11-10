@@ -170,9 +170,9 @@ public class FilterMetadata implements MetadataStore
   // -- Fields --
 
   /** The wrapped metadata store. */
-  private MetadataStore store;
+  private final MetadataStore store;
   /** Is filtering enabled? */
-  private boolean filter;
+  private final boolean filter;
 
   // -- Constructor --
 

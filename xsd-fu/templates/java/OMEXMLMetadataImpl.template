@@ -415,10 +415,10 @@ public class OMEXMLMetadataImpl extends AbstractOMEXMLMetadata
 {% for k, v in indexes[abstractClass].items() %}\
   public String get${abstractClass}Type(${indexes_string(v)})
   {
-    ${abstractClass} o = (${abstractClass}) root.${".".join(basic_accessor(abstractClass))};
+    ${abstractClass} o = root.${".".join(basic_accessor(abstractClass))};
     String className = o.getClass().getName();
     return className.substring(
-      className.lastIndexOf('.') + 1, className.length());
+      className.lastIndexOf('.') + 1);
   }
 {% end %}\
 {% end %}\

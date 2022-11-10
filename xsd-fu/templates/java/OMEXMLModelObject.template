@@ -69,19 +69,11 @@ import org.w3c.dom.NodeList;
 import java.util.Base64;
 
 {% end %}\
-import ${lang.units_package}.quantity.Angle;
-import ${lang.units_package}.quantity.ElectricPotential;
-import ${lang.units_package}.quantity.Frequency;
-import ${lang.units_package}.quantity.Length;
-import ${lang.units_package}.quantity.Power;
-import ${lang.units_package}.quantity.Pressure;
-import ${lang.units_package}.quantity.Temperature;
-import ${lang.units_package}.quantity.${lang.typeToUnitsType("UnitsTime")};
-import ${lang.units_package}.unit.Unit;
-
 import ${lang.omexml_model_enums_package}.*;
 import ${lang.omexml_model_enums_package}.handlers.*;
 import ${lang.omexml_model_package}.primitives.*;
+import ${lang.units_package}.quantity.*;
+import ${lang.units_package}.unit.Unit;
 
 {% choose %}\
 {% when klass.isAbstract %}\
@@ -227,10 +219,14 @@ ${customContent}\
     // Element's text data
     String value_textContent = element.getTextContent();
     if (value_textContent.trim().length() > 0) {
+{% if klass.langBaseType != 'String' %}\
       value = ${klass.langBaseType}.valueOf(value_textContent);
+{% end if klass.langBaseType != 'String' %}\
+{% if klass.langBaseType == 'String' %}\
+      value = value_textContent;
+{% end if klass.langBaseType == 'String' %}\
     }
 {% end %}\
-    String tagName = element.getTagName();
 {% for prop in klass.properties.values() %}\
 {% choose %}\
 {% when prop.name in customUpdatePropertyContent %}\
@@ -275,8 +271,8 @@ ${customUpdatePropertyContent[prop.name]}
     if (!element.hasAttribute("ID") && getID() == null)
     {
       // TODO: Should be its own exception
-      throw new RuntimeException(String.format(
-        "${klass.name} missing required ID property."));
+      throw new RuntimeException(
+        "${klass.name} missing required ID property.");
     }
     if (element.hasAttribute("ID"))
     {
@@ -323,10 +319,7 @@ ${customUpdatePropertyContent[prop.name]}
         ${prop.unitsCompanion.langType}.fromString(unitSymbol);
       ${prop.langType} baseValue = ${prop.langType}.valueOf(
         element.getAttribute("${prop.name}"));
-      if (baseValue != null)
-      {
-        set${prop.methodName}(${prop.unitsCompanion.langType}EnumHandler.getQuantity(baseValue, modelUnit));
-      }
+      set${prop.methodName}(${prop.unitsCompanion.langType}EnumHandler.getQuantity(baseValue, modelUnit));
     }
 {% end %}\
 {% when not prop.isEnumeration %}\
@@ -364,11 +357,10 @@ ${customUpdatePropertyContent[prop.name]}
       // Element property ${prop.name} which is complex (has
       // sub-elements)
 {% if prop.langTypeNS != 'List<MapPair>' %}\
-      set${prop.methodName}(new ${prop.langType}(
-        (Element) ${prop.name}_nodeList.get(0), model));
+      set${prop.methodName}(new ${prop.langType}(${prop.name}_nodeList.get(0), model));
 {% end %}\
 {% if prop.langTypeNS == 'List<MapPair>' %}\
-      List<MapPair> p = new java.util.ArrayList<MapPair>();
+      List<MapPair> p = new java.util.ArrayList<>();
       NodeList children = ${prop.name}_nodeList.get(0).getChildNodes();
 
       for (int i=0; i<children.getLength(); i++) {
@@ -474,7 +466,9 @@ ${customUpdatePropertyContent[prop.name]}
 {% if prop.isReference %}\
     if (reference instanceof ${prop.name})
     {
+{% if prop.maxOccurs != 1 or not fu.link_overridden(prop.name, klass.name) %}\
       ${prop.langType} o_casted = (${prop.langType}) o;
+{% end %}\
 {% if not fu.link_overridden(prop.name, klass.name) %}\
 {% if not fu.backReference_overridden(prop.name, klass.name) %}\
       o_casted.link${klass.type}(this);
@@ -486,8 +480,11 @@ ${customUpdatePropertyContent[prop.name]}
 {% if prop.maxOccurs > 1 %}\
       ${prop.instanceVariableName}.add(o_casted);
 {% end %}\
-{% if prop.maxOccurs == 1 %}\
+{% if prop.maxOccurs == 1 and not fu.link_overridden(prop.name, klass.name) %}\
       ${prop.instanceVariableName} = o_casted;
+{% end %}\
+{% if prop.maxOccurs == 1 and fu.link_overridden(prop.name, klass.name) %}\
+      ${prop.instanceVariableName} = (${prop.langType}) o;
 {% end %}\
       return true;
     }
@@ -521,7 +518,7 @@ ${customUpdatePropertyContent[prop.name]}
 
   public List<${prop.langType}> copyLinked${prop.methodName}List()
   {
-    return new ArrayList<${prop.langType}>(${prop.instanceVariableName});
+    return new ArrayList<>(${prop.instanceVariableName});
   }
 
   public ${prop.langType} getLinked${prop.methodName}(int index)
@@ -534,6 +531,7 @@ ${customUpdatePropertyContent[prop.name]}
     return ${prop.instanceVariableName}.set(index, o);
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   public boolean link${prop.methodName}(${prop.langType} o)
   {
 {% if not prop.isBackReference and not fu.link_overridden(prop.name, klass.name) %}\
@@ -548,6 +546,7 @@ ${customUpdatePropertyContent[prop.name]}
     return ${prop.instanceVariableName}.add(o);
   }
 
+  @SuppressWarnings("UnusedReturnValue")
   public boolean unlink${prop.methodName}(${prop.langType} o)
   {
 {% if not prop.isBackReference and not fu.link_overridden(prop.name, klass.name) %}\
@@ -600,6 +599,7 @@ ${customUpdatePropertyContent[prop.name]}
   // Attribute property which is Units enumeration ${prop.name}
 {% end debug %}\
   // Property ${prop.name} is a unit companion
+  @SuppressWarnings("SameReturnValue")
   public static String get${prop.methodName}XsdDefault()
   {
     return "${prop.defaultXsdValue}";
@@ -626,7 +626,7 @@ ${customUpdatePropertyContent[prop.name]}
 
   public List<${prop.langType}> copy${prop.methodName}List()
   {
-    return new ArrayList<${prop.langType}>(${prop.instanceVariableName});
+    return new ArrayList<>(${prop.instanceVariableName});
   }
 
   public ${prop.langType} get${prop.methodName}(int index)
@@ -680,7 +680,12 @@ ${customUpdatePropertyContent[prop.name]}
 {% if klass.langBaseType != 'Object' %}\
     // Element's text data
     if (this.value != null) {
+{% if klass.langBaseType != 'String' %}\
       ${klass.name}_element.setTextContent(this.value.toString());
+{% end if %}\
+{% if klass.langBaseType == 'String' %}\
+      ${klass.name}_element.setTextContent(this.value);
+{% end if %}\
     }
 
 {% end if NOT Object %}\
@@ -688,7 +693,7 @@ ${customUpdatePropertyContent[prop.name]}
     super.asXMLElement(document, ${klass.name}_element);
 
 {% for prop in klass.properties.values() %}\
-{% if not prop.isUnitsEnumeration %}\
+{% if not prop.isUnitsEnumeration and not prop.isBackReference %}\
     if (${prop.instanceVariableName} != null)
     {
 {% choose %}\
@@ -704,7 +709,12 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% when prop.hasBaseAttribute %}\
       // Element's text data
 {% if not prop.type == 'base64Binary' %}\
+{% if prop.instanceVariableType != 'String' %}\
       ${klass.name}_element.setTextContent(${prop.instanceVariableName}.toString());
+{% end if %}\
+{% if prop.instanceVariableType == 'String' %}\
+      ${klass.name}_element.setTextContent(${prop.instanceVariableName});
+{% end if %}\
 {% end if not prop.type %}\
 {% if prop.type == 'base64Binary' %}\
       String encodedString = Base64.getEncoder().encodeToString(${prop.instanceVariableName});
@@ -744,9 +754,6 @@ ${customAsXMLElementPropertyContent[prop.name]}
       o.asXMLElement(document, child);
       ${klass.name}_element.appendChild(child);
 {% end when %}\
-{% when prop.isBackReference %}\
-      // *** IGNORING *** Skipped back reference ${prop.name}
-{% end when %}\
 {% when prop.hasUnitsCompanion and prop.maxOccurs == 1 and prop.isAttribute %}\
 {% if debug %}\
       // MARKER [QQQ]
@@ -778,7 +785,12 @@ ${customAsXMLElementPropertyContent[prop.name]}
       // MARKER [III]
 {% end debug %}\
       // Attribute property ${prop.name}
+{% if prop.instanceVariableType != 'String' %}\
       ${klass.name}_element.setAttribute("${prop.name}", ${prop.instanceVariableName}.toString());
+{% end if %}\
+{% if prop.instanceVariableType == 'String' %}\
+      ${klass.name}_element.setAttribute("${prop.name}", ${prop.instanceVariableName});
+{% end if %}\
 {% end when %}\
 {% when prop.maxOccurs == 1 and prop.isComplex() %}\
       // Element property ${prop.name} which is complex (has
@@ -813,7 +825,12 @@ ${customAsXMLElementPropertyContent[prop.name]}
     // sub-elements)
     Element ${prop.instanceVariableName}_element =
       document.createElementNS(NAMESPACE, "${prop.name}");
+{% if prop.instanceVariableType != 'String' %}\
       ${prop.instanceVariableName}_element.setTextContent(${prop.instanceVariableName}.toString());
+{% end if %}\
+{% if prop.instanceVariableType == 'String' %}\
+      ${prop.instanceVariableName}_element.setTextContent(${prop.instanceVariableName});
+{% end if %}\
       ${klass.name}_element.appendChild(${prop.instanceVariableName}_element);
 {% end when %}\
 {% when prop.maxOccurs > 1 and prop.isComplex() %}\
@@ -851,7 +868,10 @@ ${customAsXMLElementPropertyContent[prop.name]}
 {% end otherwise %}\
 {% end choose %}\
     }
-{% end if %}\
+{% end if not prop.isUnitsEnumeration and not prop.isBackReference %}\
+{% if prop.isBackReference %}\
+    // *** IGNORING *** Skipped back reference ${prop.name}
+{% end if prop.isBackReference %}\
 {% end for %}\
 
     return ${klass.name}_element;

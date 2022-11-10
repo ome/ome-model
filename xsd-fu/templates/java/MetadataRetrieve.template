@@ -377,7 +377,6 @@ public interface MetadataRetrieve extends BaseMetadata {
    *
    * @return the UUID.
    */
-  /** Gets the UUID associated with this collection of metadata. */
   String getUUID();
 
   /**
