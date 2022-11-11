@@ -138,10 +138,11 @@ public enum ${klass.langType} implements Enumeration
     {
       theQuantity = ${klass.langType}EnumHandler.getQuantity(newValue, newUnit);
     }
-    finally
+    catch (EnumerationException ignored)
     {
-      return theQuantity;
     }
+
+    return theQuantity;
   }
 
   public static <T extends Number> ${lang.typeToUnitsType(klass.langType)} create(T newValue, ${klass.langType} newUnit)
@@ -152,10 +153,11 @@ public enum ${klass.langType} implements Enumeration
     {
       theQuantity = ${klass.langType}EnumHandler.getQuantity(newValue, newUnit);
     }
-    finally
+    catch (EnumerationException ignored)
     {
-      return theQuantity;
     }
+
+    return theQuantity;
   }
 
 {% end %}\
