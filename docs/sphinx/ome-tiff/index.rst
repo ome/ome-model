@@ -35,6 +35,7 @@ OME-TIFF is supported by:
 * `Cytiva <https://www.cytivalifesciences.com/>`_ (formerly GE Healthcare, Applied Precision)
 * `Definiens <http://www.definiens.com>`_
 * `DRVision Technologies LLC <https://www.drvtechnologies.com>`_
+* `Image-Pro by Media Cybernetics, Inc. <http://www.mediacy.com/>`_
 * `iMagic <https://www.imagic.ch/en>`_
 * `Intelligent Imaging Innovations, Inc. <https://www.intelligent-imaging.com>`_
 * `Leica Inc. <https://www.leica-microsystems.com/>`_
