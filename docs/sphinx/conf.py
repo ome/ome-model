@@ -361,4 +361,5 @@ linkcheck_ignore = [
     "http://www.perkinelmer.com/", # 500 Error
     "http://mayachitra.com/", # SSL certificate expired
     "https://www.cytivalifesciences.com/",
+    "https://www.mediacy.com/", # https://www.digicert.com/ does not trust the issuer, but link is valid
 ]
