@@ -362,4 +362,6 @@ linkcheck_ignore = [
     "http://mayachitra.com/", # SSL certificate expired
     "https://www.cytivalifesciences.com/",
     "https://www.mediacy.com/", # https://www.digicert.com/ does not trust the issuer, but link is valid
+    "http://www.bitplane.com", # SSL certificate expired
+    "https://imaris.oxinst.com/.*", # SSL certificate expired
 ]
