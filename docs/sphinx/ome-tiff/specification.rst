@@ -366,7 +366,7 @@ example the identifiers could be distributed as follows:
             </UUID>
           </TiffData>
     ...
-          <TiffData FirstC="0" FirstT="1" FirstZ="0" IFD="1" PlaneCount="1">
+          <TiffData FirstC="0" FirstT="1" FirstZ="0" IFD="0" PlaneCount="1">
             <UUID FileName="tubhiswt_C0_TP1.ome.tif">
               urn:uuid:743275b7-6726-46bd-b7bb-aca3085f429a
             </UUID>
