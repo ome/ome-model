@@ -20,6 +20,7 @@ More information
 ----------------
 
 For more information, see the [OME Model documentation](https://docs.openmicroscopy.org/latest/ome-model/).
+To contribute to the OME Model documentation, go to the [documentation repositiory](https://github.com/ome/ome-model-documentation).
 
 Pull request testing
 --------------------
