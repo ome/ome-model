@@ -123,7 +123,7 @@ Report bugs to OME Devel <ome-devel@lists.openmicroscopy.org.uk>""" % \
      cmd, java.modelNamespace, java.omexml_model_package))
     sys.exit(2)
 
-def main(model, opts):
+def main(model, opts, template_name="CLASS"):
     """
     Default main() that parses command line options and generates
     classes in the output directory.
@@ -135,9 +135,9 @@ def main(model, opts):
     aggregate_content = ""
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_package)
-    template = NewTextTemplate(codecs.open(opts.lang.templatepath('CLASS'), encoding='utf-8').read(), encoding='utf-8')
-    used_files.add(os.path.realpath(opts.lang.templatepath('CLASS')))
-    base, filename = os.path.split(opts.lang.templatepath('CLASS'))
+    template = NewTextTemplate(codecs.open(opts.lang.templatepath(template_name), encoding='utf-8').read(), encoding='utf-8')
+    used_files.add(os.path.realpath(opts.lang.templatepath(template_name)))
+    base, filename = os.path.split(opts.lang.templatepath(template_name))
     name, extension = os.path.splitext(filename)
     for obj in model.objects.values():
         if obj.name in list(opts.lang.model_type_map.keys()):
@@ -557,19 +557,6 @@ def omeXmlMetadataMain(model, opts):
                             model, opts)
 
 
-def linkml(model, opts):
-    """
-    Default main() that parses command line options and generates
-    LinkML models.
-    """
-
-    relpath = os.path.join(*opts.lang.omexml_metadata_package.split(opts.lang.package_separator))
-
-    processMetadataTemplate('LINKML',
-                            os.path.join(relpath, os.path.basename(os.path.splitext(opts.lang.getTemplate('LINKML'))[0])),
-                            model, opts)
-
-
 def metadataMain(model, opts):
     """
     Default main() that parses command line options and generates a
@@ -849,7 +836,7 @@ if __name__ == '__main__':
         metadataMain(model, opts)
         omeXmlMetadataMain(model, opts)
     elif opts.command == "linkml":
-        linkml(model, opts)
+        main(model, opts, template_name="LINKML")
     elif opts.command == "omexml_model":
         main(model, opts)
     elif opts.command == "omexml_metadata":

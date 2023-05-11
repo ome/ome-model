@@ -339,6 +339,12 @@ class Java(Language):
 
         return sig
 
+class Yaml(Java):
+    def __init__(self, namespace, templatepath):
+        super(Yaml, self).__init__(namespace, templatepath)
+        self.template_dir = "templates/yaml"
+        self.source_suffix = ".yaml"
+
 
 def create(language, namespace, templatepath):
     """
@@ -349,6 +355,8 @@ def create(language, namespace, templatepath):
 
     if language == "Java":
         lang = Java(namespace, templatepath)
+    elif language == "Yaml":
+        lang = Yaml(namespace, templatepath)
     else:
         raise ModelProcessingError(
             "Invalid language: %s" % language)

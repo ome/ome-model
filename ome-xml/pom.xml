@@ -83,6 +83,7 @@
     <xsdfu.script>../xsd-fu/xsd-fu</xsdfu.script>
     <xsdfu.modelpath>${basedir}/target/generated-sources/xsd-fu</xsdfu.modelpath>
     <xsdfu.metadatapath>${basedir}/target/generated-sources/xsd-fu</xsdfu.metadatapath>
+    <xsdfu.linkmlpath>${basedir}/target/generated-sources/linkml</xsdfu.linkmlpath>
   </properties>
 
   <build>
@@ -157,7 +158,8 @@
               <arguments>
                 <argument>${xsdfu.script}</argument>
                 <argument>linkml</argument>
-                <argument>--output-directory=${xsdfu.metadatapath}/</argument>
+                <argument>--language=Yaml</argument>
+                <argument>--output-directory=${xsdfu.linkmlpath}/</argument>
                 <argument>--print-generated</argument>
                 <argument>${project.rootdir}/${ome.model.omeschema}</argument>
               </arguments>
