@@ -141,8 +141,32 @@
               </arguments>
             </configuration>
           </execution>
+
+          <!-- Generate linkml model files -->
+          <execution>
+            <id>xsd-fu-linkml</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <environmentVariables>
+                <PYTHONPATH>${basedir}/../xsd-fu/python</PYTHONPATH>
+              </environmentVariables>
+              <executable>${python}</executable>
+              <arguments>
+                <argument>${xsdfu.script}</argument>
+                <argument>linkml</argument>
+                <argument>--output-directory=${xsdfu.metadatapath}/</argument>
+                <argument>--print-generated</argument>
+                <argument>${project.rootdir}/${ome.model.omeschema}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>

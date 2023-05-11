@@ -556,6 +556,20 @@ def omeXmlMetadataMain(model, opts):
                             os.path.join(relpath, os.path.basename(os.path.splitext(opts.lang.getTemplate('OMEXML_METADATA'))[0])),
                             model, opts)
 
+
+def linkml(model, opts):
+    """
+    Default main() that parses command line options and generates
+    LinkML models.
+    """
+
+    relpath = os.path.join(*opts.lang.omexml_metadata_package.split(opts.lang.package_separator))
+
+    processMetadataTemplate('LINKML',
+                            os.path.join(relpath, os.path.basename(os.path.splitext(opts.lang.getTemplate('LINKML'))[0])),
+                            model, opts)
+
+
 def metadataMain(model, opts):
     """
     Default main() that parses command line options and generates a
@@ -834,6 +848,8 @@ if __name__ == '__main__':
     elif opts.command == "omexml_metadata_all":
         metadataMain(model, opts)
         omeXmlMetadataMain(model, opts)
+    elif opts.command == "linkml":
+        linkml(model, opts)
     elif opts.command == "omexml_model":
         main(model, opts)
     elif opts.command == "omexml_metadata":

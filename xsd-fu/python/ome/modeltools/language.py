@@ -74,7 +74,8 @@ class Language(object):
             'METADATA_AGGREGATE': 'AggregateMetadata.template',
             'OMEXML_METADATA': 'OMEXMLMetadataImpl.template',
             'DUMMY_METADATA': 'DummyMetadata.template',
-            'FILTER_METADATA': 'FilterMetadata.template'
+            'FILTER_METADATA': 'FilterMetadata.template',
+            'LINKML': 'LinkML.template',
             }
 
         # A global type mapping from XSD Schema types to language
@@ -91,11 +92,11 @@ class Language(object):
             'Text': 'Text',
             namespace + 'dateTime':   'Timestamp'
             }
-            
+
         # A global type mapping from XSD Schema substitution groups to language abstract classes
         self.abstract_type_map = dict()
         # A global type mapping from XSD Schema abstract classes to their equivalent substitution group
-        self.substitutionGroup_map = dict()    
+        self.substitutionGroup_map = dict()
 
         # A global type mapping from XSD Schema elements to language model
         # object classes.  This will cause source code generation to be
@@ -109,8 +110,8 @@ class Language(object):
             'UniversallyUniqueIdentifier': self.getDefaultModelBaseClass(),
             'base64Binary': self.getDefaultModelBaseClass()
             }
-        
-        # A global set XSD Schema types use as base classes which are primitive  
+
+        # A global set XSD Schema types use as base classes which are primitive
         self.primitive_base_types = set([
             "base64Binary"])
 
@@ -150,10 +151,10 @@ class Language(object):
 
     def getConverterDir(self):
         return self.converter_dir
-        
+
     def getConverterName(self):
         return self.converter_name
-        
+
     def generatedFilename(self, name, type):
         gen_name = None
         if type == TYPE_SOURCE and self.source_suffix is not None:
@@ -191,7 +192,7 @@ class Language(object):
             return self.primitive_type_map[type]
         except KeyError:
             return None
-            
+
     def hasAbstractType(self, type):
         if (type in self.abstract_type_map):
             return True
@@ -202,7 +203,7 @@ class Language(object):
             return self.abstract_type_map[type]
         except KeyError:
             return None
-            
+
     def hasSubstitutionGroup(self, type):
         if (type in self.substitutionGroup_map):
             return True
@@ -213,10 +214,10 @@ class Language(object):
             return self.substitutionGroup_map[type]
         except KeyError:
             return None
-            
+
     def getSubstitutionTypes(self):
         return list(self.substitutionGroup_map.keys())
-            
+
     def isPrimitiveBase(self, type):
         if type in self.primitive_base_types:
             return True
