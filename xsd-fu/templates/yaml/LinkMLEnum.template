@@ -1,14 +1,5 @@
-{% python
-  def getConcreteClasses(abstractClass):
-    returnList = []
-    if model.opts.lang.hasSubstitutionGroup(abstractClass):
-      for o in sorted(model.objects.values(), key=lambda x: x.name):
-          if o.parentName == abstractClass:
-            returnList.append(o.name)
-    return returnList
-%}\
 # #%L
-# OME-XML Java library for working with OME-XML metadata structures.
+# OME-LinkML Enum Definitions
 # %%
 # Copyright (C) 2023 Open Microscopy Environment:
 #   - Massachusetts Institute of Technology
@@ -43,12 +34,13 @@
 # those of the authors and should not be interpreted as representing official
 # policies, either expressed or implied, of any organization.
 # #L%
+#
 
-#-----------------------------------------------------------------------------
-#
-# THIS IS AUTOMATICALLY GENERATED CODE.  DO NOT MODIFY.
-#
-#-----------------------------------------------------------------------------
+## -----------------------------------------------------------------------------
+##
+## THIS IS AUTOMATICALLY GENERATED CODE.  DO NOT MODIFY.
+##
+##-----------------------------------------------------------------------------
 
 id: https://www.openmicroscopy.org/linkml/${klass.name}
 name: ${klass.name}
@@ -74,36 +66,12 @@ prefixes:
 default_prefix: ${klass.name}
 default_range: string
 
-classes:
-
-    # Base: ${klass.base} -- Name: ${klass.name} -- Type: ${klass.type} -- modelBaseType: ${klass.modelBaseType} -- langBaseType: ${klass.langBaseType}
-
-    ${klass.name}:
-        is_a: ${klass.parentName}
-{% if klass.isAbstract %}\
-        abstract: true
-{% end %}\
-
-        attributes:
-{% for prop in klass.instanceVariables %}\
-
-            ${prop[1]}:
-                range: ${prop[0]}
-
-{% if not prop[4] %}\
-
-{% if prop[3] is not None %}\
-            # ${prop[3]}
-{% end %}\
-{% if prop[0] is not None %}\
-{% if prop[2] is not None %}\
-            # FIXME for lists ${prop[0]} ${prop[1]} = new ${prop[2]}();
-{% end %}\
-{% if prop[2] is None %}\
-            # ${prop[0]} ${prop[1]};
-{% end %}\
-{% end %}\
-{% end %}\
-{% end %}\
-
-
+enums:
+  ${klass.langType}:
+    permissible_values:
+{% for value in klass.possibleValues %}\
+      ${value.upper()}:
+{% if klass.enumProperties is not None and value in klass.enumProperties and klass.enumProperties[value].get('enum', None) is not None %}\
+        description: ${klass.enumDocumentation[value]}
+{% end %}
+{% end %}

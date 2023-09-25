@@ -75,7 +75,8 @@ class Language(object):
             'OMEXML_METADATA': 'OMEXMLMetadataImpl.template',
             'DUMMY_METADATA': 'DummyMetadata.template',
             'FILTER_METADATA': 'FilterMetadata.template',
-            'LINKML': 'LinkML.template',
+            'LINKML': 'LinkMLObject.template',
+            'LINKML_ENUM': 'LinkMLEnum.template',
             }
 
         # A global type mapping from XSD Schema types to language
@@ -155,7 +156,7 @@ class Language(object):
     def getConverterName(self):
         return self.converter_name
 
-    def generatedFilename(self, name, type):
+    def generatedFilename(self, name, type, components=None):
         gen_name = None
         if type == TYPE_SOURCE and self.source_suffix is not None:
             gen_name = name + self.source_suffix
@@ -164,7 +165,10 @@ class Language(object):
                 "Invalid language/filetype combination: %s/%s"
                 % (self.name, type))
 
-        return os.path.join("ome", "xml", "model", gen_name)
+        if components is None:
+            components = []
+        parts = ["ome", "xml", "model"] + list(components) + [gen_name]
+        return os.path.join(*parts)
 
     def hasBaseType(self, type):
         if type in self.base_type_map:
@@ -346,7 +350,7 @@ class Yaml(Java):
         self.template_dir = "templates/yaml"
         self.source_suffix = ".yaml"
 
-    def generatedFilename(self, name, type):
+    def generatedFilename(self, name, type, components=None):
         # TODO: could use a variable for full path or not
         gen_name = None
         if type == TYPE_SOURCE and self.source_suffix is not None:
@@ -356,6 +360,7 @@ class Yaml(Java):
                 "Invalid language/filetype combination: %s/%s"
                 % (self.name, type))
 
+        # Components ignored.
         return gen_name
 
 def create(language, namespace, templatepath):

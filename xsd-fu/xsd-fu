@@ -259,7 +259,7 @@ def enum_value_name(value, isUnitsEnum):
 
     return value.upper()
 
-def enumTypesMain(model, opts):
+def enumTypesMain(model, opts, template_name="ENUM"):
     """
     Default main() that parses command line options and generates Java
     classes for enumeration types in an output directory.
@@ -274,8 +274,8 @@ def enumTypesMain(model, opts):
     enums = dict()
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_enums_package)
-    template = NewTextTemplate(codecs.open(opts.lang.templatepath('ENUM'), encoding='utf-8').read(), encoding='utf-8')
-    used_files.add(os.path.realpath(opts.lang.templatepath('ENUM')))
+    template = NewTextTemplate(codecs.open(opts.lang.templatepath(template_name), encoding='utf-8').read(), encoding='utf-8')
+    used_files.add(os.path.realpath(opts.lang.templatepath(template_name)))
     for obj in model.objects.values():
         for prop in obj.properties.values():
             if not prop.isEnumeration:
@@ -285,9 +285,10 @@ def enumTypesMain(model, opts):
 
     for propname in sorted(enums.keys()):
         prop = enums[propname]
+
+
         try:
-            fullname = opts.lang.generatedFilename(prop.langType, opts.filetype)
-            fullname = os.path.join("ome", "xml", "model", "enums", fullname)
+            fullname = opts.lang.generatedFilename(prop.langType, opts.filetype, ("enums",))
         except ModelProcessingError:
             continue
 
@@ -335,8 +336,7 @@ def enumHandlersMain(model, opts):
                 continue
 
             try:
-                fullname = opts.lang.generatedFilename(prop.langType + "EnumHandler", opts.filetype)
-                fullname = os.path.join("ome", "xml", "model", "enums", "handlers", fullname)
+                fullname = opts.lang.generatedFilename(prop.langType + "EnumHandler", opts.filetype, ("enums", "handlers"))
             except ModelProcessingError:
                 continue
 
@@ -385,8 +385,7 @@ def quantityTypesMain(model, opts):
             try:
                 quantityUnit = re.sub("^Units", "", prop.langType)
                 quantityType = quantityUnit + "Quantity"
-                fullname = opts.lang.generatedFilename(quantityType, opts.filetype)
-                fullname = os.path.join("ome", "xml", "model", "primitives", fullname)
+                fullname = opts.lang.generatedFilename(quantityType, opts.filetype, "primitives")
             except ModelProcessingError:
                 continue
 
@@ -836,6 +835,7 @@ if __name__ == '__main__':
         omeXmlMetadataMain(model, opts)
     elif opts.command == "linkml":
         main(model, opts, template_name="LINKML")
+        enumTypesMain(model, opts, template_name="LINKML_ENUM")
     elif opts.command == "omexml_model":
         main(model, opts)
     elif opts.command == "omexml_metadata":
