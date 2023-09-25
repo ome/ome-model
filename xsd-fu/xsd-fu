@@ -189,7 +189,6 @@ def main(model, opts, template_name="CLASS"):
 
         try:
             fullname = opts.lang.generatedFilename(obj.name, opts.filetype)
-            fullname = os.path.join("ome", "xml", "model", fullname)
         except ModelProcessingError:
             continue
 

@@ -84,19 +84,23 @@ classes:
         abstract: true
 {% end %}\
 
-    slots:
+        attributes:
 {% for prop in klass.instanceVariables %}\
+
+            ${prop[1]}:
+                range: ${prop[0]}
+
 {% if not prop[4] %}\
 
 {% if prop[3] is not None %}\
-        # ${prop[3]}
+            # ${prop[3]}
 {% end %}\
 {% if prop[0] is not None %}\
 {% if prop[2] is not None %}\
-        ${prop[0]} ${prop[1]} = new ${prop[2]}();
+            # FIXME for lists ${prop[0]} ${prop[1]} = new ${prop[2]}();
 {% end %}\
 {% if prop[2] is None %}\
-        ${prop[0]} ${prop[1]};
+            # ${prop[0]} ${prop[1]};
 {% end %}\
 {% end %}\
 {% end %}\

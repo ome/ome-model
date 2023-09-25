@@ -163,7 +163,8 @@ class Language(object):
             raise ModelProcessingError(
                 "Invalid language/filetype combination: %s/%s"
                 % (self.name, type))
-        return gen_name
+
+        return os.path.join("ome", "xml", "model", gen_name)
 
     def hasBaseType(self, type):
         if type in self.base_type_map:
@@ -345,6 +346,17 @@ class Yaml(Java):
         self.template_dir = "templates/yaml"
         self.source_suffix = ".yaml"
 
+    def generatedFilename(self, name, type):
+        # TODO: could use a variable for full path or not
+        gen_name = None
+        if type == TYPE_SOURCE and self.source_suffix is not None:
+            gen_name = name + self.source_suffix
+        else:
+            raise ModelProcessingError(
+                "Invalid language/filetype combination: %s/%s"
+                % (self.name, type))
+
+        return gen_name
 
 def create(language, namespace, templatepath):
     """
