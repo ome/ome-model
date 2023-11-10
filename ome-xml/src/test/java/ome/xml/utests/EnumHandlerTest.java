@@ -1,6 +1,6 @@
 /*
  * #%L
- * OME-XML Java library for working with OME-XML metadata structures.
+ * OME XML library
  * %%
  * Copyright (C) 2006 - 2016 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
