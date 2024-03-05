@@ -13,15 +13,32 @@ jobs:
       matrix:
         java: [8, 11, 17, 21]
         os: [ubuntu-latest, windows-latest, macos-latest]
-        include:
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+        exclude:
           - java: 8
-            python-version: '3.8'
-          - java: 11
-            python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+            python-version: '3.9'
+          - java: 8
+            python-version: '3.10'
+          - java: 8
+            python-version: '3.11'
+          - java: 8
+            python-version: '3.12'
           - java: 17
-            python-version: '3.8'
+            python-version: '3.9'
+          - java: 17
+            python-version: '3.10'
+          - java: 17
+            python-version: '3.11'
+          - java: 17
+            python-version: '3.12'
           - java: 21
-            python-version: '3.8'
+            python-version: '3.9'
+          - java: 21
+            python-version: '3.10'
+          - java: 21
+            python-version: '3.11'
+          - java: 21
+            python-version: '3.12'
     runs-on: ${{ matrix.os }}
     env:
       maven_commands: install
