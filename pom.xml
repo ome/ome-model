@@ -407,5 +407,23 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>jdk8-only</id>
+      <activation>
+        <jdk>(,11)</jdk>
+      </activation>
+      <properties>
+        <testng.version>7.5</testng.version>
+      </properties>
+    </profile>
+    <profile>
+      <id>jdk11+</id>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <properties>
+        <testng.version>7.9.0</testng.version>
+      </properties>
+    </profile>
   </profiles>
 </project>
