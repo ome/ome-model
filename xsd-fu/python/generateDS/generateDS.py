@@ -94,7 +94,7 @@ import os.path
 import time
 import getopt
 import urllib.request, urllib.error, urllib.parse
-import imp
+import importlib
 from xml.sax import handler, make_parser
 import xml.sax.xmlreader
 import logging
@@ -4221,8 +4221,9 @@ def parseAndGenerate(outfileName, subclassFilename, prefix,
         path_list = UserMethodsPath.split('.')
         mod_name = path_list[-1]
         mod_path = os.sep.join(path_list[:-1])
-        module_spec = imp.find_module(mod_name, [mod_path, ])
-        UserMethodsModule = imp.load_module(mod_name, *module_spec)
+        module_spec = importlib.util.find_spec(mod_name, [mod_path, ])
+        UserMethodsModule = importlib.util.module_from_spec(module_spec)
+        module_spec.loader.exec_module(UserMethodsMdule)
 ##    parser = saxexts.make_parser("xml.sax.drivers2.drv_pyexpat")
     parser = make_parser()
     dh = XschemaHandler()
