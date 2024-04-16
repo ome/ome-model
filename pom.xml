@@ -7,7 +7,7 @@
 
   <groupId>org.openmicroscopy</groupId>
   <artifactId>ome-model</artifactId>
-  <version>6.3.6-SNAPSHOT</version>
+  <version>6.3.6</version>
   <packaging>pom</packaging>
 
   <name>OME Model</name>
