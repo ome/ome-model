@@ -46,6 +46,7 @@ OME-TIFF is supported by:
 * `Scientifica <http://www.scientifica.uk.com>`_
 * `Scientific Volume Imaging B.V. <https://svi.nl/HomePage>`_
 * `Strand Life Sciences <https://strandls.com>`_
+* `Telight <https://telight.eu>`
 * `TILL Photonics GmbH, now FEI Munich <https://www.fei.com/home/>`_
 
 Public image repositories allowing image downloads as OME-TIFF
