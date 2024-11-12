@@ -623,6 +623,11 @@ ${customUpdatePropertyContent[prop.name]}
     return new ArrayList<>(${prop.instanceVariableName});
   }
 
+  public void clear${prop.methodName}List()
+  {
+    ${prop.instanceVariableName}.clear();
+  }
+
   public ${prop.langType} get${prop.methodName}(int index)
   {
     return ${prop.instanceVariableName}.get(index);

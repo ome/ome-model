@@ -1,8 +1,8 @@
 /*
  * #%L
- * OME-XML Java library for working with OME-XML metadata structures.
+ * OME XML library
  * %%
- * Copyright (C) 2006 - 2016 Open Microscopy Environment:
+ * Copyright (C) 2006 - 2023 Open Microscopy Environment:
  *   - Massachusetts Institute of Technology
  *   - National Institutes of Health
  *   - University of Dundee
@@ -111,7 +111,7 @@ public final class MetadataConverter {
    * to the specified channel in the destination MetadataStore.  The specified
    * destination Image must exist (e.g. via calling
    * <code>setImageID(..., destImage)</code>), but the destination Channel only
-   * needs to exist if the copyID flag is <code>false<code>
+   * needs to exist if the copyID flag is <code>false</code>
    * LightSource references are assumed to be correct and are not checked for validity.
    *
    * @param src the source {@link MetadataRetrieve}
@@ -134,7 +134,7 @@ public final class MetadataConverter {
    * to the specified channel in the destination MetadataStore.  The specified
    * destination Image must exist (e.g. via calling
    * <code>setImageID(..., destImage)</code>), but the destination Channel only
-   * needs to exist if the copyID flag is <code>false<code>
+   * needs to exist if the copyID flag is <code>false</code>
    *
    * @param src the source {@link MetadataRetrieve}
    * @param srcImage the index of the Channel's parent Image in src
