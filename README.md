@@ -31,7 +31,7 @@ following before submitting a pull request:
  * verify that the branch compiles using Maven
  * verify that the branch does not use syntax or API specific to Java 1.8+
  * internal developers only: [run the data
-   tests](https://docs.openmicroscopy.org/latest/bio-formats/developers/commit-testing.html)
+   tests](https://bio-formats.readthedocs.io/en/stable/developers/commit-testing.html)
    against directories corresponding to the affected format(s)
  * make sure that your commits contain the correct authorship information and,
    if necessary, a signed-off-by line
