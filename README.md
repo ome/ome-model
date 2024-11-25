@@ -11,15 +11,14 @@ OME data model specification, code generator and implementation.
 Links
 -----
 
-- [Documentation](https://docs.openmicroscopy.org/latest/ome-model/)
+- [Documentation](https://ome-model.readthedocs.io/en/stable/)
 - [Java API reference](http://javadoc.io/doc/org.openmicroscopy/ome-xml/)
 - [OME-TIFF sample images](https://downloads.openmicroscopy.org/images/OME-TIFF/)
 - [OME-XML sample images](https://downloads.openmicroscopy.org/images/OME-XML/)
 
-More information
-----------------
+Contribute
+----------
 
-For more information, see the [OME Model documentation](https://docs.openmicroscopy.org/latest/ome-model/).
 To contribute to the OME Model documentation, go to the [documentation repository](https://github.com/ome/ome-model-documentation).
 
 Pull request testing
