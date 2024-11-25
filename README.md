@@ -11,15 +11,15 @@ OME data model specification, code generator and implementation.
 Links
 -----
 
-- [Documentation](https://docs.openmicroscopy.org/latest/ome-model/)
+- [Documentation](https://ome-model.readthedocs.io/en/stable/)
 - [Java API reference](http://javadoc.io/doc/org.openmicroscopy/ome-xml/)
 - [OME-TIFF sample images](https://downloads.openmicroscopy.org/images/OME-TIFF/)
 - [OME-XML sample images](https://downloads.openmicroscopy.org/images/OME-XML/)
 
-More information
-----------------
+Contribute
+----------
 
-For more information, see the [OME Model documentation](https://docs.openmicroscopy.org/latest/ome-model/).
+To contribute to the OME Model documentation, go to the [documentation repository](https://github.com/ome/ome-model-documentation).
 
 Pull request testing
 --------------------
@@ -31,7 +31,7 @@ following before submitting a pull request:
  * verify that the branch compiles using Maven
  * verify that the branch does not use syntax or API specific to Java 1.8+
  * internal developers only: [run the data
-   tests](https://docs.openmicroscopy.org/latest/bio-formats/developers/commit-testing.html)
+   tests](https://bio-formats.readthedocs.io/en/stable/developers/commit-testing.html)
    against directories corresponding to the affected format(s)
  * make sure that your commits contain the correct authorship information and,
    if necessary, a signed-off-by line
