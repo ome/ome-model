@@ -785,7 +785,7 @@
     <xsd:annotation>
       <xsd:appinfo><xsdfu xmlns=""><plural>MetadataOnlyMarkers</plural></xsdfu></xsd:appinfo>
       <xsd:documentation>
-        This place holder means there is on pixel data in this file.
+        This place holder means there is no pixel data in this file.
       </xsd:documentation>
     </xsd:annotation>
   </xsd:element>
@@ -793,7 +793,7 @@
     <xsd:annotation>
       <xsd:appinfo><xsdfu xmlns=""><plural>TiffDataBlocks</plural></xsdfu></xsd:appinfo>
       <xsd:documentation>
-        This described the location of the pixel data in a tiff file.
+        This describes the location of the pixel data in a tiff file.
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
