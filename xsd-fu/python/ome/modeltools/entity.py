@@ -28,7 +28,6 @@
 import logging
 
 from ome.modeltools import config
-from ome.modeltools import language
 from ome.modeltools.exceptions import ModelProcessingError
 
 

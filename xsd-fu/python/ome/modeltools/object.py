@@ -27,7 +27,6 @@
 
 from collections import OrderedDict
 import logging
-import re
 
 from xml.etree import ElementTree
 
