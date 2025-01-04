@@ -137,10 +137,7 @@ class OMEModelObject(OMEModelEntity):
         doc="""Whether or not the model object is a reference.""")
 
     def _get_isAnnotated(self):
-        for v in self.properties.values():
-            if v.name == "AnnotationRef":
-                return True
-        return False
+        return any(v.name == 'AnnotationRef' for v in self.properties.values())
     isAnnotated = property(
         _get_isAnnotated,
         doc="""Whether or not the model object is annotated.""")
@@ -155,10 +152,7 @@ class OMEModelObject(OMEModelEntity):
         doc="""Whether or not the model object is named.""")
 
     def _get_isDescribed(self):
-        for v in self.properties.values():
-            if v.name == "Description":
-                return True
-        return False
+        return any(v.name == 'Description' for v in self.properties.values())
     isDescribed = property(
         _get_isDescribed,
         doc="""Whether or not the model object is described.""")
