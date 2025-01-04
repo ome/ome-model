@@ -27,6 +27,8 @@ import re
 import textwrap
 import time
 
+from pytz import UTC
+
 
 missing = object()
 
@@ -235,8 +237,6 @@ class FixedOffsetTimezone(tzinfo):
     def dst(self, dt):
         return ZERO
 
-
-from pytz import UTC
 
 STDOFFSET = timedelta(seconds=-time.timezone)
 if time.daylight:
