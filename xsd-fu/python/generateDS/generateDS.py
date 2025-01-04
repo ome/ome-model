@@ -303,7 +303,7 @@ def dbgprint(level, msg):
 
 def pplist(lst):
     for count, item in enumerate(lst):
-        print(('%d. %s' % (count, item)))
+        print('%d. %s' % (count, item))
 
 
 
@@ -2451,11 +2451,11 @@ def generateBuildStandard_1(outfile, prefix, child, headChild,
         (base and base in SimpleTypeDict))
     # fix_simpletype
     if (attrCount == 0 and
-        ((childType in StringType or
+        (childType in StringType or
             childType == TokenType or
             childType == DateTimeType or
             childType == DateType
-        )) #or is_simple_type)
+        ) #or is_simple_type)
         ):
         s1 = '        %s child_.nodeType == Node.ELEMENT_NODE and \\\n' % \
              keyword
@@ -4248,10 +4248,10 @@ def parseAndGenerate(outfileName, subclassFilename, prefix,
 
 def debug_show_elements(root):
     #print 'ElementDict:', ElementDict
-    print(('=' * 50))
+    print('=' * 50)
     for name, obj in ElementDict.iteritems:
         print(('element:', name, obj.getName(), obj.type))
-    print(('=' * 50))
+    print('=' * 50)
     #ipshell('debug')
 ##     root.show(sys.stdout, 0)
 ##     print '=' * 50
@@ -4359,7 +4359,7 @@ def main():
             if MemberSpecs not in ('list', 'dict', ):
                 raise RuntimeError('Option --member-specs must be "list" or "dict".')
     if showVersion:
-        print(('generateDS.py version %s' % VERSION))
+        print('generateDS.py version %s' % VERSION)
         sys.exit(0)
     XsdNameSpace = nameSpace
     Namespacedef = namespacedef
