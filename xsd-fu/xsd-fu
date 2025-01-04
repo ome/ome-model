@@ -279,7 +279,7 @@ def enumTypesMain(model, opts):
         for prop in obj.properties.values():
             if not prop.isEnumeration:
                 continue
-            if not prop.langType in enums.keys():
+            if not prop.langType in enums:
                 enums[prop.langType] = prop
 
     for propname in sorted(enums.keys()):
