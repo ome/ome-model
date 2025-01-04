@@ -143,7 +143,7 @@ def main(model, opts):
 
         parents = model.resolve_parents(obj.name)
 
-        fu.SOURCE_TYPE = opts.filetype;
+        fu.SOURCE_TYPE = opts.filetype
 
         CUSTOM_CLASS_TEMPLATE = os.path.join(
             base, '%s_%s%s' % (name, obj.name, extension))
@@ -292,7 +292,7 @@ def enumTypesMain(model, opts):
 
         fu.GUARD = guard(fullname)
         fu.CLASS_PREFIX = class_prefix(fullname)
-        fu.SOURCE_TYPE = opts.filetype;
+        fu.SOURCE_TYPE = opts.filetype
 
         fullname = os.path.join(opts.outdir, fullname)
 
@@ -340,7 +340,7 @@ def enumHandlersMain(model, opts):
                 continue
 
             fu.GUARD = guard(fullname)
-            fu.SOURCE_TYPE = opts.filetype;
+            fu.SOURCE_TYPE = opts.filetype
 
             fullname = os.path.join(opts.outdir, fullname)
 
@@ -390,7 +390,7 @@ def quantityTypesMain(model, opts):
                 continue
 
             fu.GUARD = guard(fullname)
-            fu.SOURCE_TYPE = opts.filetype;
+            fu.SOURCE_TYPE = opts.filetype
 
             fullname = os.path.join(opts.outdir, fullname)
 
@@ -503,7 +503,7 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     from glob import glob
     customContent = dict()
     for customTemplate in glob(os.path.join(base, '%s_*' % (name))):
-        filename = os.path.split(customTemplate)[1];
+        filename = os.path.split(customTemplate)[1]
         filename = os.path.splitext(filename)[0]
         base, objectName, propertyName = filename.split("_")
         used_files.add(os.path.realpath(customTemplate))
@@ -518,7 +518,7 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     fullname = opts.lang.generatedFilename(outputFilename, opts.filetype)
 
     fu.GUARD = guard(fullname)
-    fu.SOURCE_TYPE = opts.filetype;
+    fu.SOURCE_TYPE = opts.filetype
 
     fullname = os.path.join(opts.outdir, fullname)
 
