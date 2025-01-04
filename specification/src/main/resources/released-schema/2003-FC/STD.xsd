@@ -82,7 +82,7 @@ to RC4 to reflect these changes.
 			<documentation>
 				Defines a semantic type.
 				Notes:
-				Granularity of SemanticType is infered from the granularity of the record it derives from. In a record, this granularity is specified by the AppliesTo attribute.
+				Granularity of SemanticType is inferred from the granularity of the record it derives from. In a record, this granularity is specified by the AppliesTo attribute.
 			</documentation>
 		</annotation>
 		<complexType>

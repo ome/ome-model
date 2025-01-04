@@ -381,7 +381,7 @@
 				The OTF element contains an optical transfer function.
 				The same OTF can be used for all wavelengths, or there may be one per wavelength.
 				There may be multiple light sources, cameras and filters on a microscope.
-				Each of these has their own ID attribute, which can be refered to from WavelengthInfo.
+				Each of these has their own ID attribute, which can be referred to from WavelengthInfo.
 				It is understood that the light path configuration can be different for each wavelength,
 				but cannot be different for each timepoint or each plane of an XYZ stack.
 			</xs:documentation>
@@ -402,7 +402,7 @@
 		<xs:annotation>
 			<xs:documentation>
 				The StageLabel is simply a string to describe a particular stage position.
-				This is usefull for experiments involving visiting several points on a slide over a timecourse.
+				This is useful for experiments involving visiting several points on a slide over a timecourse.
 			</xs:documentation>
 		</xs:annotation>
 	</xs:element>
@@ -463,7 +463,7 @@
 				The Screen element may contain an ExternalRef attribute that refers to an external database.
 				A description of the screen may be specified in the Description element.
 				Screens may contain overlapping sets of Plates i.e.  Screens and Plates have a many-to-many relationship.
-				Plates contain one or more ScreenRef elemnts to specify what screens they belong to.
+				Plates contain one or more ScreenRef elements to specify what screens they belong to.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
@@ -892,7 +892,7 @@
 		<xs:annotation>
 			<xs:documentation>
 				An element type specifying a filter specification.
-				Unlike the ManufactSpec, filters are refered to by lot number rather than serial number.
+				Unlike the ManufactSpec, filters are referred to by lot number rather than serial number.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:attribute name = "Manufacturer" use = "required" type = "xs:string"/>
@@ -905,7 +905,7 @@
 				The lightsource for the instrument.  An instrument may have several light sources.
 				The type of lightsource is specified by the Type attribute, which is currently unrestricted.
 				If several lightsources are specified for an instrument, the LightSourceID must be specified for each,
-				and the individual lightsources can be refered to through their LightSourceIDs.
+				and the individual lightsources can be referred to through their LightSourceIDs.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
@@ -922,7 +922,7 @@
 			<xs:documentation>
 				The optical transfer function.  FilterID refers to the set of filters used in computing the OTF.
 				BitsPerPixel is an integer '1', '8', '16'.
-				The OpticalAxisAvg is a boolean specifying wether or not optical axis averaging was done.
+				The OpticalAxisAvg is a boolean specifying whether or not optical axis averaging was done.
 				SizeX, SizeY specify the width and height of the OTF.
 				This element must contain either an External element or a BinData element.
 				Both of these work the same way as they do for the Data element within Image.
@@ -957,7 +957,7 @@
 				Images can belong to more than one Dataset, and a Dataset may contain more than one Image.
 				Images contain one or more DatasetRef elements to specify what datasets they belong to.
 				Once a Dataset has been processed in any way, its collection of images cannot be altered.
-				Wether or not the list of Images in this dataset can be altered is specified by the Locked attribute.
+				Whether or not the list of Images in this dataset can be altered is specified by the Locked attribute.
 				The ExperimenterRef and GroupRef elements specify the person and group this Dataset belongs to.
 				Projects may contain one or more Datasets, and Datasets may belong to one or more Projects.
 				This relationship is specified by listing ProjectRef elements within the Dataset element.
@@ -1010,7 +1010,7 @@
 	</xs:element>
 	<xs:element name = "DocumentRef">
 		<xs:annotation>
-			<xs:documentation>The DocumentRef element referes to an external OME XML document using the href and SHA1 attributes.</xs:documentation>
+			<xs:documentation>The DocumentRef element refers to an external OME XML document using the href and SHA1 attributes.</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:attribute name = "href" use = "required" type = "xs:anyURI"/>
@@ -1032,7 +1032,7 @@
 			<xs:documentation>
 				Defines a semantic type.
 				Notes:
-				Granularity of SemanticType is infered from granularity of record derives from.
+				Granularity of SemanticType is inferred from granularity of record derives from.
 			</xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
@@ -1158,7 +1158,7 @@
 	</xs:element>
 	<xs:element name = "CustomAttributes">
 		<xs:annotation>
-			<xs:documentation>Any custom image attributes belong here. Data definitions for these attributes belong in DataDefinitions. Custom Attributes are stored in a record based format where one element corrosponds to one record. Attributes of an element corrospond to fields of the record.</xs:documentation>
+			<xs:documentation>Any custom image attributes belong here. Data definitions for these attributes belong in DataDefinitions. Custom Attributes are stored in a record based format where one element corresponds to one record. Attributes of an element correspond to fields of the record.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 </xs:schema>

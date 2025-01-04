@@ -39,7 +39,7 @@
 	<element name = "External">
 		<annotation>
 			<documentation>Describes a file location.  Can optionally specify a portion of a file using Offset and a ReadLength.
-If Offset and ReadLength are specified in conjuction with Compression, then they point into the uncompressed file.
+If Offset and ReadLength are specified in conjunction with Compression, then they point into the uncompressed file.
 			</documentation>
 		</annotation>
 		<complexType>

@@ -664,7 +664,7 @@
   <!-- Image and Pixels -->
 
   <!--
-      Convert the attibutes of  all the elements except element HashSHA1 into attributes of Plane.
+      Convert the attributes of all the elements except element HashSHA1 into attributes of Plane.
   -->
   <xsl:template match="OME:Plane">
     <xsl:element name="Plane" namespace="{$newOMENS}">
@@ -1385,7 +1385,7 @@
     </xsl:element>
   </xsl:template>
 
-  <!-- template to transform the possibile data source related to Pixels -->
+  <!-- template to transform the possible data source related to Pixels -->
   <xsl:template name="convertPixelsData">
     <xsl:param name="bg"/>
     <xsl:param name="node"/>

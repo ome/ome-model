@@ -229,8 +229,8 @@ Currently, only native image pixels are supported.
 			<attribute name = "Format">
 				<annotation>
 					<documentation>Specifies the expected format of the plane.
-RAW corrosponds to OME repository format of pixel dump.
-TIFF corrosponds to TIFF files.
+RAW corresponds to OME repository format of pixel dump.
+TIFF corresponds to TIFF files.
 Currently only TIFF is supported.
 					</documentation>
 				</annotation>
@@ -308,14 +308,14 @@ e.g. /OME/repository/1-tinyTest.ori
 			<attribute name = "RepeatCount" type = "positiveInteger">
 				<annotation>
 					<documentation>RepeatCount specifies how many times to read a record. If it is not specified, reading will continue until it reaches the end of the output stream.
-If used in conjuction with TerminateAt, reading will stop after RepeatCount or TerminateAt, whichever comes first.
+If used in conjunction with TerminateAt, reading will stop after RepeatCount or TerminateAt, whichever comes first.
 					</documentation>
 				</annotation>
 			</attribute>
 			<attribute name = "TerminateAt" type = "string">
 				<annotation>
 					<documentation>TerminateAt specifies a regular expression. When a match to this is found, reading will stop.
-If used in conjuction with RepeatCount, reading will stop after RepeatCount or TerminateAt, whichever comes first.
+If used in conjunction with RepeatCount, reading will stop after RepeatCount or TerminateAt, whichever comes first.
 					</documentation>
 				</annotation>
 			</attribute>
@@ -422,7 +422,7 @@ This means a stack statistics record that specifies theC as an index before theT
 	</element>
 	<element name = "DelimitedRecord">
 		<annotation>
-			<documentation>Use this to construct a Delimited Record. (i.e. tab delimitted, comma delimitted, etc). At some point this will be expanded to include XYPlanes and RawImageFilePath.</documentation>
+			<documentation>Use this to construct a Delimited Record. (i.e. tab delimited, comma delimited, etc). At some point this will be expanded to include XYPlanes and RawImageFilePath.</documentation>
 		</annotation>
 		<complexType>
 			<sequence>
@@ -435,7 +435,7 @@ This means a stack statistics record that specifies theC as an index before theT
 			</attribute>
 			<attribute name = "RecordDelimiter" default = "\n" type = "string">
 				<annotation>
-					<documentation>This will be used to separate Records. Defaults to a newline (a newline as interpretted by perl).</documentation>
+					<documentation>This will be used to separate Records. Defaults to a newline (a newline as interpreted by perl).</documentation>
 				</annotation>
 			</attribute>
 		</complexType>
@@ -484,7 +484,7 @@ This means a stack statistics record that specifies theC as an index before theT
 		<annotation>
 			<documentation>Allows SemanticTypes Pixels and PixelsPlane to be outputs. The subelements specify locations for the population of data.
 This data population is useful for a Plane projection algorithm that has the same X and Y dimensions as the Pixels it is operating on.
-Alternately, these fields may be filled by ouput from STDOUT.
+Alternately, these fields may be filled by output from STDOUT.
 The FileSHA1 subelement is automatically calculated for the pixel dump file.
 			</documentation>
 		</annotation>

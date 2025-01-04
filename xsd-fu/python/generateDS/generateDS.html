@@ -268,7 +268,7 @@ to process the contents of an XML document.</td>
 </ul>
 </li>
 <li><a class="reference internal" href="#common-problems" id="id16">5&nbsp;&nbsp;&nbsp;Common problems</a><ul class="auto-toc">
-<li><a class="reference internal" href="#namespace-prefix-mis-match" id="id17">5.1&nbsp;&nbsp;&nbsp;Namespace prefix mis-match</a></li>
+<li><a class="reference internal" href="#namespace-prefix-mismatch" id="id17">5.1&nbsp;&nbsp;&nbsp;Namespace prefix mismatch</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#supported-features-of-xml-schema" id="id18">6&nbsp;&nbsp;&nbsp;Supported features of XML Schema</a><ul class="auto-toc">
@@ -466,7 +466,7 @@ Options:
     -h, --help               Display this help information.
     -o &lt;outfilename&gt;         Output file name for data representation classes
     -s &lt;subclassfilename&gt;    Output file name for subclasses
-    -p &lt;prefix&gt;              Prefix string to be pre-pended to the class names
+    -p &lt;prefix&gt;              Prefix string to be prepended to the class names
     -f                       Force creation of output files.  Do not ask.
     -a &lt;namespaceabbrev&gt;     Namespace abbreviation, e.g. &quot;xsd:&quot;.
                              Default = 'xs:'.
@@ -674,8 +674,8 @@ to its name.</p>
 </div>
 <div class="section" id="common-problems">
 <h1><a class="toc-backref" href="#id16">5&nbsp;&nbsp;&nbsp;Common problems</a></h1>
-<div class="section" id="namespace-prefix-mis-match">
-<h2><a class="toc-backref" href="#id17">5.1&nbsp;&nbsp;&nbsp;Namespace prefix mis-match</a></h2>
+<div class="section" id="namespace-prefix-mismatch">
+<h2><a class="toc-backref" href="#id17">5.1&nbsp;&nbsp;&nbsp;Namespace prefix mismatch</a></h2>
 <p><tt class="docutils literal"><span class="pre">generateDS.py</span></tt> is not very intelligent about detecting what
 prefix is used in the schema file for the XML Schema namespace.
 When this problem occurs, you may see the following when running
@@ -1036,7 +1036,7 @@ XML Schema snippet:</p>
 </pre>
 </li>
 <li><p class="first">To specify a data member for a generated Python class that will
-be propogated from an attribute in an element in an XML file,
+be propagated from an attribute in an element in an XML file,
 use the XML Schema xs:attribute. For attributes, generateDS
 recognizes the following types: &quot;xs:string&quot;, &quot;xs:integer&quot;, and
 &quot;xs:float&quot;. For example, the following adds member data items
@@ -1977,9 +1977,9 @@ to extract information for other purposes.</li>
 of the generated subclasses, you can put them in a new class and
 add that class to the superclass list for each of your subclasses.</p>
 <p>Although you can add your own methods to the generated
-superclasses, I'm recommeding that you add methods to the
+superclasses, I'm recommending that you add methods to the
 generated subclasses in the subclass module generated with the
-<tt class="docutils literal"><span class="pre">-s</span></tt> command line flage, and then edit the subclass module in
+<tt class="docutils literal"><span class="pre">-s</span></tt> command line flag, and then edit the subclass module in
 order to build your application. Why?</p>
 <ul class="simple">
 <li>The superclasses are cluttered with other code. Using the

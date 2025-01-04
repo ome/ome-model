@@ -69,7 +69,7 @@ class OMEModelEntity(object):
             else:
                 simpleTypeName = simpleType.getBase()
             # TODO: The above logic looks wrong.  simpleTypeName is
-            # asigned but not used and then nothing is returned.
+            # assigned but not used and then nothing is returned.
 
     def lowerCasePrefix(self, v):
         if v is None:

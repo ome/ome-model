@@ -96,7 +96,7 @@ public class SchemaResolver implements LSResourceResolver
           }
         }
 
-        // if verson 4 & 5 ?
+        // if version 4 & 5 ?
         if (theDOMImplementationLS == null) {
           try {
             System.setProperty(

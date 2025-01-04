@@ -256,7 +256,7 @@
   <!-- Remove as converted to PlateAcquisition -->
 
   <!--
-      Althought FilterSet has changed the old content is compatible with the
+      Although FilterSet has changed the old content is compatible with the
       new structure so no processing needed.
   -->
 

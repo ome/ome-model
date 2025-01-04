@@ -21,7 +21,7 @@
   <Experimenter ID="Experimenter:17"/>
 
   <ExperimenterGroup Name="MyGroup" ID="ExperimenterGroup:1">
-    <Description>A description for my group. Complete with basic formating, like new
+    <Description>A description for my group. Complete with basic formatting, like new
       lines.</Description>
     <ExperimenterRef ID="Experimenter:3"/>
     <Leader ID="Experimenter:1"/>

@@ -4,7 +4,7 @@
   OME Data Model transforms
   %%
   Copyright (C) 2003 - 2016 Open Microscopy Environment:
-    - Massachusetts Institue of Technology,
+    - Massachusetts Institute of Technology,
     - National Institutes of Health,
     - University of Dundee
   %%
@@ -686,7 +686,7 @@
 			<xsl:apply-templates select = "." mode = "MakeParentRef"/>
 		</xsl:element>
 	</xsl:template>
-	<!-- Instrument - Dectector -->
+	<!-- Instrument - Detector -->
 	<xsl:template match = "OME:Instrument/OME:Detector">
 		<xsl:element name = "Detector">
 			<xsl:attribute name = "ID">

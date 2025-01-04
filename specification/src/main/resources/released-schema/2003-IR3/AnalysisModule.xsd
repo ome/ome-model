@@ -39,7 +39,7 @@ These are given by &lt;RawImageFilePath>, &lt;sizeX>, &lt;sizeY>, &lt;sizeZ>, &l
 	</xsd:element>
 	<xsd:element name = "FormalInput">
 		<xsd:annotation>
-			<xsd:documentation>Specifies an input requirement for a module. Image dimensions and image file locations (repository or other format) should not be specified with this. Image dimensions are intrisic to an image. They do not represent a special requirement. Image file locations and contents are specified by other elements. Specifically, RawImageFile, RawImageFilePath, XYPlaneFile, and XYPlaneFilePath.
+			<xsd:documentation>Specifies an input requirement for a module. Image dimensions and image file locations (repository or other format) should not be specified with this. Image dimensions are intrinsic to an image. They do not represent a special requirement. Image file locations and contents are specified by other elements. Specifically, RawImageFile, RawImageFilePath, XYPlaneFile, and XYPlaneFilePath.
 
 			</xsd:documentation>
 		</xsd:annotation>
@@ -233,7 +233,7 @@ Pretend you have a program that calculates simple statistics on the pixels of an
 Typing
 ./stats -mean -sigma image1
 
-will ouput
+will output
 Image | mean | sigma
 image1 12.4 1
 
@@ -245,7 +245,7 @@ Image | geomean | mean
 image1 12.2 12.4
 
 The outputs are completely different. You need to specify an interface for each of these behaviors.
-Or pretend you have a powerful program that can do 10 unrelated tasks, each of which outputs an image. While the outputs are the same type and format, they represent 10 completely different things. In this case, it might make sense to define 10 corrosponding AnalysisModule to represent the 10 logical functions.
+Or pretend you have a powerful program that can do 10 unrelated tasks, each of which outputs an image. While the outputs are the same type and format, they represent 10 completely different things. In this case, it might make sense to define 10 corresponding AnalysisModule to represent the 10 logical functions.
 
 In any case, use AnalysisModule to define an interface and Program to store installation software for a program.
 
@@ -336,7 +336,7 @@ Tied to DB. Table PROGRAMS Column MODULE_TYPE
 			</xsd:attribute>
 			<xsd:attribute name = "ProgramID" use = "required" type = "xsd:string">
 				<xsd:annotation>
-					<xsd:documentation>Used to reference a Program Element. It should corrospond to a ProgramID specified in a Program Element.
+					<xsd:documentation>Used to reference a Program Element. It should correspond to a ProgramID specified in a Program Element.
 Referential integrity is not enforced by this schema. That is, verification against the schema will not detect an error here if you make a typo.
 
 					</xsd:documentation>
@@ -466,7 +466,7 @@ Unclear how this would be used. DB location PROGRAMS.PROGRAM_NAME is populated b
 	</xsd:simpleType>
 	<xsd:element name = "InstallationScript">
 		<xsd:annotation>
-			<xsd:documentation>The script should interface with the OME API to find all information it needs. (i.e. installation path) It also needs to set the location of the program after the program is installed. The location should be set through the API, but it will propogate to the LOCATION column of the PROGRAMS table.</xsd:documentation>
+			<xsd:documentation>The script should interface with the OME API to find all information it needs. (i.e. installation path) It also needs to set the location of the program after the program is installed. The location should be set through the API, but it will propagate to the LOCATION column of the PROGRAMS table.</xsd:documentation>
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
@@ -553,7 +553,7 @@ Restrictions:
 Every SemanticElement must be in the same table.
 
 Notes:
-Granularity is infered from granularity of table.
+Granularity is inferred from granularity of table.
 			</xsd:documentation>
 		</xsd:annotation>
 		<xsd:complexType>

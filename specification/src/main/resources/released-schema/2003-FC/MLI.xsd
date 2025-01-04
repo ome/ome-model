@@ -82,7 +82,7 @@
 				<element name = "PixelsArray">
 					<annotation>
 						<documentation>Will pass a numeric matrix into the function.
-Translates a module input of Semantic Type Pixels (or any psuedo subclass of Pixels) to a numeric matrix. Limits specified by PixelsSlice or its subclasses will be honored.
+Translates a module input of Semantic Type Pixels (or any pseudo subclass of Pixels) to a numeric matrix. Limits specified by PixelsSlice or its subclasses will be honored.
 						</documentation>
 					</annotation>
 					<complexType>
@@ -126,7 +126,7 @@ In the future, can be used to establish references.
 					<complexType>
 						<attribute name = "InputLocation" use = "required" type = "string">
 							<annotation>
-								<documentation>Refers to a semantic element of a formal input. Syntax is formal input name, a period, and the semantic elment name. i.e. "Texture Direction.Direction_Value"</documentation>
+								<documentation>Refers to a semantic element of a formal input. Syntax is formal input name, a period, and the semantic element name. i.e. "Texture Direction.Direction_Value"</documentation>
 							</annotation>
 						</attribute>
 					</complexType>
@@ -139,7 +139,7 @@ In the future, can be used to establish references.
 			<choice>
 				<element name = "PixelsArray">
 					<annotation>
-						<documentation>Will translate a numeric array to a Formal Output of Semantic Type Pixels (or any psuedo subclass of Pixels). If PixelsSlice appears in the pseudo inheritance chain, the extents will be set to the extents of the Pixels.</documentation>
+						<documentation>Will translate a numeric array to a Formal Output of Semantic Type Pixels (or any pseudo subclass of Pixels). If PixelsSlice appears in the pseudo inheritance chain, the extents will be set to the extents of the Pixels.</documentation>
 					</annotation>
 					<complexType>
 						<attribute name = "FormalOutput" use = "required" type = "string">
@@ -157,7 +157,7 @@ In the future, can be used to stitch together data from different function outpu
 						<attribute name = "ConvertToDatatype">
 							<annotation>
 								<documentation>Useful when a function outputs a Pixels type that is unsupported by OME. The permitted list is the matlab types supported by OME.
-Note to perl developers: This list should stay syncronized with the Matlab Class to OME Type mapping hash $self->{ _matlab_class_to_pixel_type } that is defined in OME::Analysis::Handlers::MatlabHandler->new()
+Note to perl developers: This list should stay synchronized with the Matlab Class to OME Type mapping hash $self->{ _matlab_class_to_pixel_type } that is defined in OME::Analysis::Handlers::MatlabHandler->new()
 								</documentation>
 							</annotation>
 							<simpleType>
@@ -183,7 +183,7 @@ Note to perl developers: This list should stay syncronized with the Matlab Class
 						</attribute>
 						<attribute name = "OutputLocation" use = "required" type = "string">
 							<annotation>
-								<documentation>Refers to a semantic element of a formal output. Syntax is formal output name, a period, and the semantic elment name. i.e. "Angular Second Moment.ASM"</documentation>
+								<documentation>Refers to a semantic element of a formal output. Syntax is formal output name, a period, and the semantic element name. i.e. "Angular Second Moment.ASM"</documentation>
 							</annotation>
 						</attribute>
 					</complexType>
@@ -237,12 +237,12 @@ The contents of this element should follow CustomAttribute syntax and convention
 			<sequence>
 				<element name = "Element">
 					<annotation>
-						<documentation>Maps a location on the Vector to an output data location. Can be used in conjuction with Templates.</documentation>
+						<documentation>Maps a location on the Vector to an output data location. Can be used in conjunction with Templates.</documentation>
 					</annotation>
 					<complexType>
 						<attribute name = "OutputLocation" use = "required" type = "string">
 							<annotation>
-								<documentation>Refers to a semantic element of a formal output. Syntax is formal output name, a period, and the semantic elment name. i.e. "Angular Second Moment.ASM"</documentation>
+								<documentation>Refers to a semantic element of a formal output. Syntax is formal output name, a period, and the semantic element name. i.e. "Angular Second Moment.ASM"</documentation>
 							</annotation>
 						</attribute>
 						<attribute name = "Index" use = "required" type = "string">

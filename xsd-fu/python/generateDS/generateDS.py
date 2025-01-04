@@ -11,7 +11,7 @@ Options:
     -h, --help               Display this help information.
     -o <outfilename>         Output file name for data representation classes
     -s <subclassfilename>    Output file name for subclasses
-    -p <prefix>              Prefix string to be pre-pended to the class names
+    -p <prefix>              Prefix string to be prepended to the class names
     -f                       Force creation of output files.  Do not ask.
     -a <namespaceabbrev>     Namespace abbreviation, e.g. "xsd:".
                              Default = 'xs:'.
@@ -331,7 +331,7 @@ class SimpleTypeElement(XschemaElementBase):
         self.collapseWhiteSpace = 0
         # Attribute definitions for the current attributeGroup, if there is one.
         self.attributeGroup = None
-        # Attribute definitions for the currect element.
+        # Attribute definitions for the current element.
         self.attributeDefs = OrderedDict()
         self.complexType = 0
         # Enumeration values for the current element.
@@ -418,12 +418,12 @@ class XschemaElement(XschemaElementBase):
         self.base = None
         self.mixedExtensionError = 0
         self.collapseWhiteSpace = 0
-        # Attribute definitions for the currect element.
+        # Attribute definitions for the current element.
         self.attributeDefs = OrderedDict()
         # Attribute definitions for the current attributeGroup, if there is one.
         self.attributeGroup = None
         # List of names of attributes for this element.
-        # We will add the attribute defintions in each of these groups
+        # We will add the attribute definitions in each of these groups
         #   to this element in annotate().
         self.attributeGroupNameList = []
         self.topLevel = 0
@@ -648,7 +648,7 @@ class XschemaElement(XschemaElementBase):
                         break
                     # If the type name is the same as the previous type name
                     # then we know we've fully resolved the Element hierarchy
-                    # and the Element is well and truely "complex". There is
+                    # and the Element is well and truly "complex". There is
                     # also a need to handle cases where the Element name and
                     # its type name are the same (ie. this is our first time
                     # through the loop). For example:
@@ -3989,7 +3989,7 @@ def generateSubclasses(root, subclassFilename, behaviorFilename,
         baseUrl = None
         if behaviorFilename:
             try:
-                # Add the currect working directory to the path so that
+                # Add the current working directory to the path so that
                 #   we use the user/developers local copy.
                 sys.path.insert(0, '.')
                 import xmlbehavior_sub as xmlbehavior
