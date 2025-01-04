@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 Generate code to process OME-XML from an OME-XML schema.
 """
