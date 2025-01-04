@@ -126,9 +126,7 @@ def main(model, opts):
     Default main() that parses command line options and generates
     classes in the output directory.
     """
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
+    used_files = {os.path.realpath(file) for file in opts.args}
 
     aggregate_content = ""
 
@@ -264,9 +262,7 @@ def enumTypesMain(model, opts):
     classes for enumeration types in an output directory.
     """
 
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
+    used_files = {os.path.realpath(file) for file in opts.args}
 
     aggregate_content = ""
 
@@ -321,9 +317,7 @@ def enumHandlersMain(model, opts):
     classes for enumeration handlers in an output directory.
     """
 
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
+    used_files = {os.path.realpath(file) for file in opts.args}
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_omexml_model_enum_handlers_package)
     template = NewTextTemplate(codecs.open(opts.lang.templatepath('ENUM_HANDLER'), encoding='utf-8').read(), encoding='utf-8')
@@ -369,9 +363,7 @@ def quantityTypesMain(model, opts):
     classes for quantity types in an output directory.
     """
 
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
+    used_files = {os.path.realpath(file) for file in opts.args}
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_enums_package)
     template = NewTextTemplate(codecs.open(opts.lang.templatepath('QUANTITY'), encoding='utf-8').read(), encoding='utf-8')
@@ -471,9 +463,7 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     args = opts.args
     template = opts.lang.templatepath(template)
 
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
+    used_files = {os.path.realpath(file) for file in opts.args}
 
     indexes = dict()
     parents = dict()
