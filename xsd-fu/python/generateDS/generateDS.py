@@ -629,7 +629,7 @@ class XschemaElement(XschemaElementBase):
                 while True:
                     element = ElementDict[type_val1]
                     logging.debug(
-                        "%s type resolution iteration %d type_val:%s " \
+                        "%s type resolution iteration %d type_val:%s "
                         "type_val1: %s" % (element, i, type_val, type_val1))
                     # Resolve our potential values if present
                     self.values = element.values
