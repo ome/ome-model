@@ -177,7 +177,7 @@ class Language(object):
         return type in self.fundamental_types
 
     def hasPrimitiveType(self, type):
-        return bool(type in list(self.primitive_type_map.values()) or type in self.primitive_types)
+        return type in list(self.primitive_type_map.values()) or type in self.primitive_types
 
     def primitiveType(self, type):
         try:

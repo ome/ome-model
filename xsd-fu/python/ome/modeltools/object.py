@@ -131,7 +131,7 @@ class OMEModelObject(OMEModelEntity):
         if self.base == "Reference":
             return True
         typeObject = self.model.getObjectByName(self.type)
-        return bool(typeObject is not None and typeObject.name != self.name and typeObject.isReference)
+        return typeObject is not None and typeObject.name != self.name and typeObject.isReference
     isReference = property(
         _get_isReference,
         doc="""Whether or not the model object is a reference.""")
