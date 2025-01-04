@@ -635,7 +635,6 @@ def parentlist(model, name, pre):
             for prop in obj.properties.values():
                 if prop.name[-14:] == "_BackReference":
                     print("-\t-\t" + prop.name + "\t" + prop.type + "\tback\t" + pre + prop.name)
-                    pass
                 else:
                     if prop.name == name:
                         print("%s\t%s" % (prop.minOccurs, prop.maxOccurs ) + "\t" + prop.name + "\t" + prop.type + "\trecursion\t" + pre + prop.name + " - recursion")

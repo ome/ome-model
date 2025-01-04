@@ -319,7 +319,6 @@ def showLevel(outfile, level):
 class XschemaElementBase:
     def __init__(self):
         self.namespace = Targetnamespace
-        pass
 
 
 class SimpleTypeElement(XschemaElementBase):
