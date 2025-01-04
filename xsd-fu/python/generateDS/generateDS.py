@@ -872,7 +872,7 @@ class XschemaElement(XschemaElementBase):
     def coerce_attr_types(self):
         replacements = []
         attrDefs = self.getAttributeDefs()
-        for idx, name in enumerate(attrDefs):
+        for name in attrDefs:
             attr = attrDefs[name]
             attrType = attr.getData_type()
             if attrType == IDType or \
