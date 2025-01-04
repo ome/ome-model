@@ -498,7 +498,7 @@ class XschemaElement(XschemaElementBase):
     def getSimpleType(self): return self.simpleType
     def setDefault(self, default): self.default = default
     def getDefault(self): return self.default
-    
+
     def getValues(self):
         """
         Returns not only the element's values but its aggregated list of
@@ -516,7 +516,7 @@ class XschemaElement(XschemaElementBase):
         outfile.write('  - Attrs: %s\n' % self.attrs)
         showLevel(outfile, level)
         outfile.write('  - AttributeDefs: %s\n' % self.attributeDefs)
-        
+
         for attr in self.getAttributeDefs():
             key = attr['name']
             try:
@@ -744,7 +744,7 @@ class XschemaElement(XschemaElementBase):
         self.unmappedCleanName = cleanupName(self.name)
         self.cleanName = mapName(self.unmappedCleanName)
         self.replace_attributeGroup_names()
-        
+
         # Resolve "maxOccurs" attribute
         if 'maxOccurs' in list(self.attrs.keys()):
             maxOccurs = self.attrs['maxOccurs']
@@ -752,7 +752,7 @@ class XschemaElement(XschemaElementBase):
             maxOccurs = self.choice.attrs['maxOccurs']
         else:
             maxOccurs = 1
-            
+
         # Resolve "minOccurs" attribute
         if 'minOccurs' in list(self.attrs.keys()):
             minOccurs = self.attrs['minOccurs']
@@ -760,7 +760,7 @@ class XschemaElement(XschemaElementBase):
             minOccurs = self.choice.attrs['minOccurs']
         else:
             minOccurs = 1
-            
+
         # Cleanup "minOccurs" and "maxOccurs" attributes
         try:
             minOccurs = int(minOccurs)
@@ -780,7 +780,7 @@ class XschemaElement(XschemaElementBase):
             sys.exit(1)
         self.minOccurs = minOccurs
         self.maxOccurs = maxOccurs
-        
+
         # If it does not have a type, then make the type the same as the name.
         if self.type == 'NoneType' and self.name:
             self.type = self.name
@@ -923,7 +923,7 @@ class XschemaAttribute:
         self.values = list()
         # The other simple types this is a union of.
         self.unionOf = list()
-        
+
     def resolveValues(self, simpleType):
         """Resolves values from a SimpleType recursively."""
         values = list()
@@ -3064,8 +3064,8 @@ def generateGettersAndSetters(outfile, element):
         # If this child is defined in a simpleType, then generate
         #   a validator method.
         typeName = None
-        
-        
+
+
         # below inserted by kerim mansour
         name = cleanupName(child.getName())
         mappedName = mapName(name)
@@ -3077,8 +3077,8 @@ def generateGettersAndSetters(outfile, element):
         elif mappedName in ElementDict:
           childType = ElementDict[mappedName].getType()
         # above inserted by kerim mansour
-        
-        
+
+
         if child.getSimpleType():
             #typeName = child.getSimpleType()
             typeName = cleanupName(child.getName())
@@ -3242,7 +3242,7 @@ def generateHascontentMethod(outfile, element):
     wrt('            return True\n')
     wrt('        else:\n')
     wrt('            return False\n')
-        
+
 
 
 def generateClasses(outfile, prefix, element, delayed):

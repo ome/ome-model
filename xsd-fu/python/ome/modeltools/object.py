@@ -96,7 +96,7 @@ class OMEModelObject(OMEModelEntity):
         prop.isBackReference = False
         prop.isAttribute = True
         self.properties[delegate.name] = prop
-                
+
     def addAttribute(self, attribute):
         """
         Adds an OME XML Schema attribute to the object's data model.

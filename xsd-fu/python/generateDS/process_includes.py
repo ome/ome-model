@@ -12,7 +12,7 @@ Options:
     -h, --help      Display this help message.
     -f, --force     Force.  If outfile exists, overwrite without asking.
     -s, --search    Search path for schemas.  Colon separated list of directories where schemas may be found.
-    
+
 Examples:
     python process_includes.py infile.xsd
     python process_includes.py infile.xsd outfile.xsd
@@ -106,7 +106,7 @@ def process_path(root, idx, path):
 
 def process_include_tree(root):
     global DIRPATH
-    
+
     idx = 0
     children = root.getchildren()
     while idx < len(children):
