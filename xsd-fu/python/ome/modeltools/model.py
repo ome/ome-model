@@ -68,7 +68,7 @@ class ReferenceDelegate(object):
 
     def getType(self):
         return self.dataType
-        
+
     def getData_type(self):
         return self.dataType
 
