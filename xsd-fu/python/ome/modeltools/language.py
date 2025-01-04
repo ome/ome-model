@@ -33,7 +33,7 @@ from ome.modeltools.exceptions import ModelProcessingError
 TYPE_SOURCE = "source"
 
 
-class Language(object):
+class Language:
     """
     Base class for output language.
     Updates the type maps with the model namespace.
