@@ -134,7 +134,7 @@ def process_include_tree(root):
         elif tag == 'import' and 'schemaLocation' in child.attrib:
             root.remove(child)
             locn = child.attrib['schemaLocation']
-            if locn.startswith('ftp:') or locn.startswith('http:'):
+            if locn.startswith(('ftp:', 'http:')):
                 try:
                     path, msg = urllib.request.urlretrieve(locn)
                     idx = process_path(root, idx, path)
