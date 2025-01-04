@@ -32,7 +32,7 @@ warnings.warn(
     "OME-XML.", DeprecationWarning)
 
 
-class Channel(object):
+class Channel:
 
     ID = 0
 
@@ -53,7 +53,7 @@ class Channel(object):
         Channel.ID += 1
 
 
-class Plane(object):
+class Plane:
 
     ALLOWED_KEYS = (
         'DeltaT', 'DeltaTUnit', 'ExposureTime', 'ExposureTimeUnit',
@@ -72,7 +72,7 @@ class Plane(object):
                     self.data[key] = value
 
 
-class UUID(object):
+class UUID:
     def __init__(self,
                  filename=None
                  ):
@@ -80,7 +80,7 @@ class UUID(object):
         self.value = "urn:uuid:%s" % str(uuid.uuid4())
 
 
-class TiffData(object):
+class TiffData:
     def __init__(self,
                  firstC=0,
                  firstT=0,
@@ -101,7 +101,7 @@ class TiffData(object):
             self.data["PlaneCount"] = str(planeCount)
 
 
-class Image(object):
+class Image:
 
     ID = 0
 
@@ -183,7 +183,7 @@ class Image(object):
         return self.data
 
 
-class Plate(object):
+class Plate:
 
     ID = 0
 
@@ -204,7 +204,7 @@ class Plate(object):
         return well
 
 
-class Well(object):
+class Well:
 
     ID = 0
 
@@ -225,7 +225,7 @@ class Well(object):
         return wellsample
 
 
-class WellSample(object):
+class WellSample:
 
     ID = 0
 

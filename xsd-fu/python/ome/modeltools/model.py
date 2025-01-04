@@ -40,7 +40,7 @@ from ome.modeltools.exceptions import ModelProcessingError
 from ome.modeltools import config
 
 
-class ReferenceDelegate(object):
+class ReferenceDelegate:
     """
     A "virtual" property delegate to be used with "reference"
     OMEModelProperty instances. This delegate conforms loosely to the same
@@ -79,7 +79,7 @@ class ReferenceDelegate(object):
         return True
 
 
-class OMEModel(object):
+class OMEModel:
     def __init__(self, opts):
         self.opts = opts
         self.elementNameObjectMap = dict()

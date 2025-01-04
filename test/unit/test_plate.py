@@ -31,7 +31,7 @@ NS = {'OME': 'http://www.openmicroscopy.org/Schemas/OME/2016-06'}
 ElementTree.register_namespace('OME', NS['OME'])
 
 
-class TestPlate(object):
+class TestPlate:
 
     @pytest.mark.parametrize('rc', [True, False])
     def test_minimal_plate(self, tmpdir, rc):

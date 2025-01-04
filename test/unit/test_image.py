@@ -33,7 +33,7 @@ NS = {'OME': 'http://www.openmicroscopy.org/Schemas/OME/2016-06'}
 ElementTree.register_namespace('OME', NS['OME'])
 
 
-class TestOME(object):
+class TestOME:
 
     def test_ome(self, tmpdir):
         f = str(tmpdir.join('root.companion.ome'))
@@ -45,7 +45,7 @@ class TestOME(object):
         assert root.attrib['Creator'] == 'ome_model %s' % __version__
 
 
-class TestImage(object):
+class TestImage:
 
     def test_minimal_image(self, tmpdir):
         f = str(tmpdir.join('image.companion.ome'))
@@ -153,7 +153,7 @@ class TestImage(object):
                 assert pixels.attrib['PhysicalSizeZUnit'] == pixel_size_z_unit
 
 
-class TestChannel(object):
+class TestChannel:
 
     @pytest.mark.parametrize('name', [None, '', 'channel-test'])
     @pytest.mark.parametrize('color', [None, '-1', '65535'])
@@ -242,7 +242,7 @@ class TestChannel(object):
             create_companion(images=[i], out=f)
 
 
-class TestPlane(object):
+class TestPlane:
 
     def test_planes(self, tmpdir):
         f = str(tmpdir.join('planes.companion.ome'))

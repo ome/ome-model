@@ -31,7 +31,7 @@ from ome.modeltools import config
 from ome.modeltools.exceptions import ModelProcessingError
 
 
-class OMEModelEntity(object):
+class OMEModelEntity:
     """
     An abstract root class for properties and model objects containing
     common type resolution and text processing functionality.
