@@ -27,7 +27,6 @@ import re
 import textwrap
 import time
 
-from operator import itemgetter
 
 missing = object()
 

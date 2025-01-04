@@ -32,7 +32,6 @@ Generate code to process OME-XML from an OME-XML schema.
 # POSSIBILITY OF SUCH DAMAGE.
 
 import itertools
-import logging
 import sys
 import os
 import re
@@ -48,7 +47,6 @@ from genshi.template import NewTextTemplate
 
 from getopt import gnu_getopt, GetoptError
 from glob import glob
-from xml import sax
 
 def macroname(filename):
     filename = "_".join(filename.split(os.path.sep))

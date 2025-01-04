@@ -96,7 +96,6 @@ import getopt
 import urllib.request, urllib.error, urllib.parse
 import importlib
 from xml.sax import handler, make_parser
-import xml.sax.xmlreader
 import logging
 import keyword
 from io import StringIO
