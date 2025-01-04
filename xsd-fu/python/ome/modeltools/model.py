@@ -323,13 +323,13 @@ class OMEModel(object):
         Creates a mapping between substitution group elements and their type elements
         """
         length = len(elements)
-        for i, element in enumerate(elements):
+        for element in elements:
             if 'substitutionGroup' in element.getAttrs():
                 substitutionGroup = element.getAttrs()['substitutionGroup']
                 base = element.getBase()
                 self.opts.lang.abstract_type_map[substitutionGroup] = base
                 self.opts.lang.substitutionGroup_map[base] = substitutionGroup
-        for i, element in enumerate(elements):
+        for element in elements:
             if self.opts.lang.hasSubstitutionGroup(element.getName()):
                 substitutionGroupName = self.opts.lang.substitutionGroup(element.getName())
                 self.substitutionElement_map[substitutionGroupName] = element
