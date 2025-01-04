@@ -3296,10 +3296,7 @@ def generateClasses(outfile, prefix, element, delayed):
     wrt('    factory = staticmethod(factory)\n')
     generateGettersAndSetters(outfile, element)
     #generateHascontentMethod(outfile, element)
-    if Targetnamespace in NamespacesDict:
-        namespace = NamespacesDict[Targetnamespace]
-    else:
-        namespace = ''
+    namespace = NamespacesDict.get(Targetnamespace, '')
     generateExportFn(outfile, prefix, element, namespace)
     generateExportLiteralFn(outfile, prefix, element)
     generateBuildFn(outfile, prefix, element, delayed)
@@ -3765,10 +3762,7 @@ def generateSubclass(outfile, element, prefix, xmlbehavior,  behaviors, baseUrl)
         wrt('    #\n')
         # Get a list of behaviors for this class/subclass.
         classDictionary = behaviors.get_class_dictionary()
-        if name in classDictionary:
-            classBehaviors = classDictionary[name]
-        else:
-            classBehaviors = None
+        classBehaviors = classDictionary.get(name)
         if classBehaviors:
             generateClassBehaviors(wrt, classBehaviors, baseUrl)
     wrt('supermod.%s.subclass = %s%s\n' % (name, name, SubclassSuffix))
