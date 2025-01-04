@@ -41,7 +41,7 @@ Options:
     --namespacedef='xmlns:abc="http://www.abc.com"
                              Namespace definition to be passed in as the
                              value for the namespacedef_ parameter of
-                             the export() method by the generated 
+                             the export() method by the generated
                              parse() and parseString() functions.
                              Default=''.
     --external-encoding=<encoding>
@@ -55,7 +55,7 @@ Options:
                              _MemberSpec containing member name, type,
                              and array or not.  Allowed values are
                              "list" or "dict".  Default: do not generate.
-    --version                Print version and exit.        
+    --version                Print version and exit.
 
 """
 
@@ -102,7 +102,7 @@ from io import StringIO
 from collections import OrderedDict
 
 # Default logger configuration
-## logging.basicConfig(level=logging.DEBUG, 
+## logging.basicConfig(level=logging.DEBUG,
 ##                     format='%(asctime)s %(levelname)s %(message)s')
 
 ## import warnings
@@ -372,7 +372,7 @@ class XschemaElement(XschemaElementBase):
         if 'name' in self.attrs:
             name_val = strip_namespace(self.attrs['name'])
         if 'type' in self.attrs:
-            if (len(XsdNameSpace) > 0 and 
+            if (len(XsdNameSpace) > 0 and
                 self.attrs['type'].startswith(XsdNameSpace)):
                 type_val = self.attrs['type']
             else:
@@ -616,11 +616,11 @@ class XschemaElement(XschemaElementBase):
         if type_val:
             if type_val in ElementDict:
                 type_val1 = type_val
-                # The following loop handles the case where an Element's 
+                # The following loop handles the case where an Element's
                 # reference element has no sub-elements and whose type is
                 # another simpleType (potentially of the same name). Its
-                # fundamental function is to avoid the incorrect 
-                # categorization of "complex" to Elements which are not and 
+                # fundamental function is to avoid the incorrect
+                # categorization of "complex" to Elements which are not and
                 # correctly resolve the Element's type as well as its
                 # potential values. It also handles cases where the Element's
                 # "simpleType" is so-called "top level" and is only available
@@ -1029,7 +1029,7 @@ class XschemaHandler(handler.ContentHandler):
                 if len(self.stack) == 1:
                     element.setTopLevel(1)
                 self.stack.append(element)
-        elif (name == ElementType or 
+        elif (name == ElementType or
             ((name == ComplexTypeType) and (len(self.stack) == 1))
             ):
             self.inElement = 1
@@ -1238,8 +1238,8 @@ class XschemaHandler(handler.ContentHandler):
             if self.inAttribute or self.inUnionType:
                 pass
             else:
-                # If the simpleType is directly off the root, it may be used to 
-                # qualify the type of many elements and/or attributes so we 
+                # If the simpleType is directly off the root, it may be used to
+                # qualify the type of many elements and/or attributes so we
                 # don't want to loose it entirely.
                 simpleType = self.stack.pop()
                 # fixlist
@@ -1359,7 +1359,7 @@ def generateExportFn_1(outfile, child, name, namespace, fill):
         s1 = '%s            showIndent(outfile, level)\n' % fill
         wrt(s1)
         # fixlist
-        if (child.getSimpleType() in SimpleTypeDict and 
+        if (child.getSimpleType() in SimpleTypeDict and
             SimpleTypeDict[child.getSimpleType()].isListType()):
             s1 = "%s            outfile.write('<%%s%s>%%s</%%s%s>\\n' %% (namespace_, self.format_string(quote_xml(' '.join(self.%s)).encode(ExternalEncoding), input_name='%s'), namespace_))\n" % \
                 (fill, name, name, mappedName, name, )
@@ -1495,7 +1495,7 @@ def generateExportFn_3(outfile, child, name, namespace, fill):
         s1 = '%s            showIndent(outfile, level)\n' % fill
         wrt(s1)
         # fixlist
-        if (child.getSimpleType() in SimpleTypeDict and 
+        if (child.getSimpleType() in SimpleTypeDict and
             SimpleTypeDict[child.getSimpleType()].isListType()):
             s1 = "%s            outfile.write('<%%s%s>%%s</%%s%s>\\n' %% (namespace_, self.format_string(quote_xml(' '.join(self.%s)).encode(ExternalEncoding), input_name='%s'), namespace_))\n" % \
                 (fill, name, name, mappedName, name, )
@@ -1626,7 +1626,7 @@ def generateExportChildren(outfile, element, hasChildren, namespace):
                 if type_element and type_element.isAbstract():
                     abstract_child = True
                 if abstract_child and child.getMaxOccurs() > 1:
-                    s1 = "%sfor %s_ in self.get%s():\n" % (fill, 
+                    s1 = "%sfor %s_ in self.get%s():\n" % (fill,
                         name, make_gs_name(name),)
                     wrt(s1)
                     s1 = "%s    %s_.export(outfile, level, namespace_, name_='%s')\n" % (
@@ -1794,7 +1794,7 @@ def generateExportLiteralFn_1(outfile, child, name, fill):
         s1 = '%s        showIndent(outfile, level)\n' % fill
         wrt(s1)
         # fixlist
-        if (child.getSimpleType() in SimpleTypeDict and 
+        if (child.getSimpleType() in SimpleTypeDict and
             SimpleTypeDict[child.getSimpleType()].isListType()):
             s1 = "%s        if self.%s:\n" % (fill, mappedName, )
             wrt(s1)
@@ -2126,7 +2126,7 @@ def generateBuildAttributes(outfile, element, hasAttributes):
             outfile.write(s1)
             if atype == PositiveIntegerType:
                 s1 = '            if self.%s <= 0:\n' % mappedName
-                outfile.write(s1) 
+                outfile.write(s1)
                 s1 = "                raise ValueError('Invalid PositiveInteger (%s)')\n" % name
                 outfile.write(s1)
             elif atype == NonPositiveIntegerType:
@@ -2193,7 +2193,7 @@ def generateBuildAttributes(outfile, element, hasAttributes):
             outfile.write(s1)
         if atype in SimpleTypeDict:
             s1 = "            self.validate_%s(self.%s)    # validate type %s\n" % (
-                atype, mappedName, atype, )            
+                atype, mappedName, atype, )
             outfile.write(s1)
     if element.getAnyAttribute():
         hasAttributes += 1
@@ -2656,18 +2656,18 @@ def generateBuildStandard_1(outfile, prefix, child, headChild,
     if child.getSimpleType():
         #typeName = child.getSimpleType()
         typeName = cleanupName(child.getName())
-    elif (childType in ElementDict and 
+    elif (childType in ElementDict and
         ElementDict[childType].getSimpleType()):
         typeName = ElementDict[childType].getType()
     # fixlist
-    if (child.getSimpleType() in SimpleTypeDict and 
+    if (child.getSimpleType() in SimpleTypeDict and
         SimpleTypeDict[child.getSimpleType()].isListType()):
         s1 = "            self.%s = self.%s.split()\n" % (
-            mappedName, mappedName, )            
+            mappedName, mappedName, )
         wrt(s1)
     if typeName:
         s1 = "            self.validate_%s(self.%s)    # validate type %s\n" % (
-            typeName, mappedName, typeName, )            
+            typeName, mappedName, typeName, )
         wrt(s1)
 
 
@@ -3083,7 +3083,7 @@ def generateGettersAndSetters(outfile, element):
             #typeName = child.getSimpleType()
             typeName = cleanupName(child.getName())
 
-        elif (childType in ElementDict and 
+        elif (childType in ElementDict and
             ElementDict[childType].getSimpleType()):
             typeName = ElementDict[childType].getType()
         if typeName and typeName not in generatedSimpleTypes:
@@ -3129,7 +3129,7 @@ def generateGettersAndSetters(outfile, element):
                 (mappedName, capName, capName)
             outfile.write(s1)
         typeName = attrDef.getType()
-        if (typeName and 
+        if (typeName and
             typeName in SimpleTypeDict and
             typeName not in generatedSimpleTypes):
             generatedSimpleTypes.append(typeName)
@@ -3527,7 +3527,7 @@ def parse(inFileName):
     # Enable Python to collect the space used by the DOM.
     doc = None
 #silence#    sys.stdout.write('<?xml version="1.0" ?>\\n')
-#silence#    rootObj.export(sys.stdout, 0, name_="%(name)s", 
+#silence#    rootObj.export(sys.stdout, 0, name_="%(name)s",
 #silence#        namespacedef_='%(namespacedef)s')
     return rootObj
 
@@ -4096,7 +4096,7 @@ def generate(outfileName, subclassFilename, behaviorFilename,
         if base and base in ElementDict:
             parent = ElementDict[base]
             parentName = parent.getName()
-            if (parentName in AlreadyGenerated or 
+            if (parentName in AlreadyGenerated or
                 parentName in list(SimpleTypeDict.keys())):
                 generateClasses(outfile, prefix, element, 1)
             else:
@@ -4250,7 +4250,7 @@ def parseAndGenerate(outfileName, subclassFilename, prefix,
     root = dh.getRoot()
     root.annotate()
     #debug_show_elements(root)
-    generate(outfileName, subclassFilename, behaviorFilename, 
+    generate(outfileName, subclassFilename, behaviorFilename,
         prefix, root, superModule)
 
 def debug_show_elements(root):
@@ -4381,7 +4381,7 @@ def main():
     TEMPLATE_MAIN = fixSilence(TEMPLATE_MAIN, silent)
     TEMPLATE_SUBCLASS_FOOTER = fixSilence(TEMPLATE_SUBCLASS_FOOTER, silent)
     parseAndGenerate(outFilename, subclassFilename, prefix,
-        xschemaFileName, behaviorFilename, 
+        xschemaFileName, behaviorFilename,
         processIncludes, superModule=superModule)
 
 

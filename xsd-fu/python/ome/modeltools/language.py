@@ -95,7 +95,7 @@ class Language(object):
         # A global type mapping from XSD Schema substitution groups to language abstract classes
         self.abstract_type_map = dict()
         # A global type mapping from XSD Schema abstract classes to their equivalent substitution group
-        self.substitutionGroup_map = dict()    
+        self.substitutionGroup_map = dict()
 
         # A global type mapping from XSD Schema elements to language model
         # object classes.  This will cause source code generation to be
@@ -110,7 +110,7 @@ class Language(object):
             'base64Binary': self.getDefaultModelBaseClass()
             }
         
-        # A global set XSD Schema types use as base classes which are primitive  
+        # A global set XSD Schema types use as base classes which are primitive
         self.primitive_base_types = set([
             "base64Binary"])
 

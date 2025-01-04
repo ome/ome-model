@@ -203,7 +203,7 @@ class OMEModel(object):
                 if parent is not None:
                     element = self.substitutionElement_map[element.getName()]
                 if parent is None:
-                    continue   
+                    continue
             logging.info("Processing element: %s %d/%d"
                          % (element, i + 1, length))
             self.processLeaf(element, parent)
