@@ -272,34 +272,26 @@ class OMEModelProperty(OMEModelEntity):
         doc="""Whether or not the property is an Annotation.""")
 
     def _get_isPrimitive(self):
-        if self.model.opts.lang.hasPrimitiveType(self.langType):
-            return True
-        return False
+        return bool(self.model.opts.lang.hasPrimitiveType(self.langType))
     isPrimitive = property(
         _get_isPrimitive,
         doc="""Whether or not the property's language type is a primitive.""")
 
     def _get_isEnumeration(self):
         v = self.delegate.getValues()
-        if v is not None and len(v) > 0:
-            return True
-        return False
+        return bool(v is not None and len(v) > 0)
     isEnumeration = property(
         _get_isEnumeration,
         doc="""Whether or not the property is an enumeration.""")
 
     def _get_isUnitsEnumeration(self):
-        if self.langType.startswith("Units"):
-            return True
-        return False
+        return bool(self.langType.startswith('Units'))
     isUnitsEnumeration = property(
         _get_isUnitsEnumeration,
         doc="""Whether or not the property is a units enumeration.""")
 
     def _get_hasUnitsCompanion(self):
-        if self.name+"Unit" in self.parent.properties:
-            return True
-        return False
+        return self.name + 'Unit' in self.parent.properties
     hasUnitsCompanion = property(
         _get_hasUnitsCompanion,
         doc="""Whether or not the property has a units companion.""")
