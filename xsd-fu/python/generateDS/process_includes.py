@@ -130,7 +130,7 @@ def process_include_tree(root):
                         break
                 else:
                     msg = "Can't find include file %s.  Aborting." % (path, )
-                    raise IOError(msg)
+                    raise OSError(msg)
         elif tag == 'import' and 'schemaLocation' in child.attrib:
             root.remove(child)
             locn = child.attrib['schemaLocation']
@@ -140,7 +140,7 @@ def process_include_tree(root):
                     idx = process_path(root, idx, path)
                 except:
                     msg = "Can't retrieve import file %s.  Aborting." % (locn, )
-                    raise IOError(msg)
+                    raise OSError(msg)
             else:
                 if os.path.exists(locn):
                     idx = process_path(root, idx, locn)
@@ -152,7 +152,7 @@ def process_include_tree(root):
                             break
                     else:
                         msg = "Can't find import file %s.  Aborting." % (locn, )
-                        raise IOError(msg)
+                        raise OSError(msg)
         else:
             process_include_tree(child)
             idx += 1
