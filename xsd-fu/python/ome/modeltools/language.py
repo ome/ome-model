@@ -242,7 +242,7 @@ class Language:
 
 class Java(Language):
     def __init__(self, namespace, templatepath):
-        super(Java, self).__init__(namespace, templatepath)
+        super().__init__(namespace, templatepath)
 
         self.package_separator = '.'
 
@@ -317,7 +317,7 @@ class Java(Language):
     def index_signature(self, name, max_occurs, level, dummy=False):
         """Makes a Java method signature dictionary from an index name."""
 
-        sig = super(Java, self).index_signature(name, max_occurs, level, dummy)
+        sig = super().index_signature(name, max_occurs, level, dummy)
         sig['argtype'] = 'int'
 
         return sig
