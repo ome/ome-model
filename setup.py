@@ -51,7 +51,7 @@ setup(
     "into OME-XML."
     ),
     classifiers=[
-          'Development Status :: 4 - Beta',
+          'Development Status :: 7 - Inactive',
           'Intended Audience :: Developers',
           'License :: OSI Approved :: BSD License',
           'Natural Language :: English',
