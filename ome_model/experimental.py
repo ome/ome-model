@@ -4,6 +4,7 @@
 import re
 import sys
 import uuid
+import warnings
 import xml.etree.ElementTree as ET
 from . import __version__
 
@@ -24,6 +25,11 @@ TIFF_PARSER += "[Zz]_?(?P<slice>[^-_]+)"  # Z-slices
 TIFF_PARSER += ")+"  # As many of those three as needed
 TIFF_PARSER += ".*?[.].*?"  # Ignore the rest, but don't slurp the file ending
 TIFF_PARSER = re.compile(TIFF_PARSER)
+
+warnings.warn(
+    "This module is deprecated as of ome-model 6.3.7. "
+    "Use other libraries such as ome-types to generate and validate "
+    "OME-XML.", DeprecationWarning)
 
 
 class Channel(object):
