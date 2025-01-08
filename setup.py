@@ -42,10 +42,16 @@ setup(
     version=get_version(),
     packages=["ome_model"],
     name='ome-model',
-    description="Core OME model library (EXPERIMENTAL)",
-    long_description="TBD",
+    description="Core OME model library (deprecated)",
+    long_description=(
+    "This project has been deprecated. To create companion "
+    "OME files using Python, you can use other libraries such "
+    "as https://pypi.org/project/ome-types/ "
+    "to create and validate OME model objects and convert them "
+    "into OME-XML."
+    ),
     classifiers=[
-          'Development Status :: 4 - Beta',
+          'Development Status :: 7 - Inactive',
           'Intended Audience :: Developers',
           'License :: OSI Approved :: BSD License',
           'Natural Language :: English',
