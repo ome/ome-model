@@ -58,8 +58,6 @@ class OMEModelObject(OMEModelEntity):
         self.isUnique = False
         self.isImmutable = False
         self._isGlobal = False
-        self.base in ('Annotation', 'BasicAnnotation') \
-            or self.name == 'Annotation'
         self.plural = None
         self.manyToMany = False
         self.isAbstractSubstitution = self.model.opts.lang.hasSubstitutionGroup(self.name)
