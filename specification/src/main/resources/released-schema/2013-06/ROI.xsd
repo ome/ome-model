@@ -470,7 +470,7 @@
 			<xsd:attribute name="Points" use="required" type="xsd:string">
 				<xsd:annotation>
 					<xsd:documentation> The points of the polyline are defined as a list of comma
-						separated x,y coordinates seperated by spaces like "x1,y1 x2,y2 x3,y3" e.g.
+						separated x,y coordinates separated by spaces like "x1,y1 x2,y2 x3,y3" e.g.
 						"0,0 1,2 3,5" </xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
@@ -492,7 +492,7 @@
 			<xsd:attribute name="Points" use="required" type="xsd:string">
 				<xsd:annotation>
 					<xsd:documentation> The points of the Polygon are defined as a list of comma
-						separated x,y coordinates seperated by spaces like "x1,y1 x2,y2 x3,y3" e.g.
+						separated x,y coordinates separated by spaces like "x1,y1 x2,y2 x3,y3" e.g.
 						"0,0 1,2 3,5" </xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>

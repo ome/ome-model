@@ -3289,7 +3289,7 @@
     <xsd:annotation>
       <xsd:appinfo><xsdfu xmlns=""><plural>Externals</plural></xsdfu></xsd:appinfo>
       <xsd:documentation>Describes a file location.  Can optionally specify a portion of a file using Offset and a ReadLength.
-      If Offset and ReadLength are specified in conjuction with Compression, then they point into the uncompressed file.
+      If Offset and ReadLength are specified in conjunction with Compression, then they point into the uncompressed file.
       </xsd:documentation>
     </xsd:annotation>
     <xsd:complexType>
@@ -4181,7 +4181,7 @@ PlaneInfo (as Plane)
           <xsd:attribute name="Points" use="required" type="xsd:string">
             <xsd:annotation>
               <xsd:documentation> The points of the polyline are defined as a list of comma
-              separated x,y coordinates seperated by spaces like "x1,y1 x2,y2 x3,y3" e.g.
+              separated x,y coordinates separated by spaces like "x1,y1 x2,y2 x3,y3" e.g.
               "0,0 1,2 3,5" </xsd:documentation>
             </xsd:annotation>
           </xsd:attribute>
@@ -4207,7 +4207,7 @@ PlaneInfo (as Plane)
           <xsd:attribute name="Points" use="required" type="xsd:string">
             <xsd:annotation>
               <xsd:documentation> The points of the Polygon are defined as a list of comma
-              separated x,y coordinates seperated by spaces like "x1,y1 x2,y2 x3,y3" e.g.
+              separated x,y coordinates separated by spaces like "x1,y1 x2,y2 x3,y3" e.g.
               "0,0 1,2 3,5" </xsd:documentation>
             </xsd:annotation>
           </xsd:attribute>

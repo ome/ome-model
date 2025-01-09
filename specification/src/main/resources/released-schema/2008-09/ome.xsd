@@ -369,7 +369,7 @@
 				This element describes the type of experiment.  The required Type attribute must contain one or more entries from the following list:
 				FP FRET Time-lapse 4-D+ Screen Immunocytochemistry FISH Electrophysiology  Ion-Imaging Colocalization PGI/Documentation
 				FRAP Photoablation Optical-Trapping Photoactivation Fluorescence-Lifetime Spectral-Imaging Other
-				FP refers to fluorescent proteins, PGI/Docuemntation is not a 'data' image.
+				FP refers to fluorescent proteins, PGI/Documentation is not a 'data' image.
 				The optional Description element may contain free text to further describe the experiment.
 				Added Type Photobleaching - ajp
 			</xsd:documentation>
@@ -595,7 +595,7 @@
 	<xsd:element name="DisplayOptions"> <!-- top level definition -->
 		<xsd:annotation>
 			<xsd:documentation>
-				There is optionally one of these per Image. They provide support for the Origional OME Perl server.
+				There is optionally one of these per Image. They provide support for the Original OME Perl server.
 				This specifies mapping of image channel components to RGB or greyscale colorspace with one byte per pixel per RGB channel.
 				RedChannel, GreenChannel, BlueChannel, and GreyChannel specify the scaling of pixel values to 8-bit colorspace values.
 				Display indicates to display the image as Greyscale or RGB.

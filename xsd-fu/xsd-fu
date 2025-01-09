@@ -418,7 +418,7 @@ def quantityTypesMain(model, opts):
 
 def max_occurs_under_parent(model, parent, name):
     """
-    Returns the maximum occurrances of a given object under its current
+    Returns the maximum occurrences of a given object under its current
     parent.
     """
     parent = model.getObjectByName(parent)
@@ -615,7 +615,7 @@ def docGenMain(model, opts):
 def tabGenMain(model, opts):
     """
     Documentation main() that does not parse the command line and puts
-    tab sperated format to STDOUT.
+    tab separated format to STDOUT.
     Added by Andrew Patterson (October 2008) to generate content for arity spreadsheet
     """
 

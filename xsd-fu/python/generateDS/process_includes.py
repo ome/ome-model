@@ -2,7 +2,7 @@
 # -*- mode: pymode; coding: latin1; -*-
 """
 Synopsis:
-    Recusively process the include elements in an XML Schema file.
+    Recursively process the include elements in an XML Schema file.
     Produce a single file that contains all included content.
     Input is read either from a file or from stdin.
     Output is written either to a file or to stdout.
@@ -11,7 +11,7 @@ Usage:
 Options:
     -h, --help      Display this help message.
     -f, --force     Force.  If outfile exists, overwrite without asking.
-    -s, --search    Search path for schemas.  Colon separated list of directorys where schemas may be found.
+    -s, --search    Search path for schemas.  Colon separated list of directories where schemas may be found.
     
 Examples:
     python process_includes.py infile.xsd

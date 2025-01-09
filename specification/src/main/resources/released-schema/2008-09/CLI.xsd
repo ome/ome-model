@@ -305,7 +305,7 @@ If used in conjunction with TerminateAt, reading will stop after RepeatCount or 
 			<xsd:attribute name = "TerminateAt" use="optional" type = "xsd:string">
 				<xsd:annotation>
 					<xsd:documentation>TerminateAt specifies a regular expression. When a match to this is found, reading will stop.
-If used in conjuction with RepeatCount, reading will stop after RepeatCount or TerminateAt, whichever comes first.
+If used in conjunction with RepeatCount, reading will stop after RepeatCount or TerminateAt, whichever comes first.
 					</xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
@@ -412,7 +412,7 @@ This means a stack statistics record that specifies theC as an index before theT
 	</xsd:element>
 	<xsd:element name = "DelimitedRecord"> <!-- top level definition -->
 		<xsd:annotation>
-			<xsd:documentation>Use this to construct a Delimited Record. (i.e. tab delimitted, comma delimitted, etc). At some point this will be expanded to include XYPlanes and RawImageFilePath.</xsd:documentation>
+			<xsd:documentation>Use this to construct a Delimited Record. (i.e. tab delimited, comma delimited, etc). At some point this will be expanded to include XYPlanes and RawImageFilePath.</xsd:documentation>
 		</xsd:annotation>
 		<xsd:complexType>
 			<xsd:sequence>
@@ -425,7 +425,7 @@ This means a stack statistics record that specifies theC as an index before theT
 			</xsd:attribute>
 			<xsd:attribute name = "RecordDelimiter" default = "\n" use="optional" type = "xsd:string">
 				<xsd:annotation>
-					<xsd:documentation>This will be used to separate Records. Defaults to a newline (a newline as interpretted by perl).</xsd:documentation>
+					<xsd:documentation>This will be used to separate Records. Defaults to a newline (a newline as interpreted by perl).</xsd:documentation>
 				</xsd:annotation>
 			</xsd:attribute>
 		</xsd:complexType>
@@ -474,7 +474,7 @@ This means a stack statistics record that specifies theC as an index before theT
 		<xsd:annotation>
 			<xsd:documentation>Allows SemanticTypes Pixels and PixelsPlane to be outputs. The subelements specify locations for the population of data.
 This data population is useful for a Plane projection algorithm that has the same X and Y dimensions as the Pixels it is operating on.
-Alternately, these fields may be filled by ouput from STDOUT.
+Alternately, these fields may be filled by output from STDOUT.
 The FileSHA1 subelement is automatically calculated for the pixel dump file.
 			</xsd:documentation>
 		</xsd:annotation>

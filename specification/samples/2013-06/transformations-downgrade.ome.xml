@@ -26,7 +26,7 @@
 
   <OME:ExperimenterGroup Name="MyGroup" ID="ExperimenterGroup:1">
     <OME:Description>A description for my group.
-      Complete with basic formating, like new lines.</OME:Description>
+      Complete with basic formatting, like new lines.</OME:Description>
     <OME:ExperimenterRef ID="Experimenter:3"/>
     <OME:Leader ID="Experimenter:1"/>
     <OME:Leader ID="Experimenter:2"/>

@@ -283,7 +283,7 @@ This is also not correctly specified in the schema (FIXME?)
 This specifies mapping of pixels to RGB or greyscale colorspace with one byte per pixel per channel.
 Elements of type WaveScaleType specify the scaling of pixel values to colorspace values.
 These elements are empty, and have 3-4 attributes:  WaveNumber, Threshold, Clip and optional Scale.
-The WaveNumber specifies the wavenumber of the color chanel.  Pixel values between Threshold and Clip will be assigned values 0-255, respectively.
+The WaveNumber specifies the wavenumber of the color channel.  Pixel values between Threshold and Clip will be assigned values 0-255, respectively.
 Values below Threshold or above Clip will be assigned 0 and 255 respectively.
 Either the GreyWave or one or more of RedWave, GreenWave, BlueWave must be specified.
 The Projection element specifies that the display is a maximum intensity projection.
@@ -384,7 +384,7 @@ The Filters element is composed either of separate excitation and emission filte
 	<xs:element name = "StageLabel" type = "xs:string">
 		<xs:annotation>
 			<xs:documentation>The StageLabel is simply a string to describe a particular stage position.
-This is usefull for experiments involving visiting several points on a slide over a timecourse.
+This is useful for experiments involving visiting several points on a slide over a timecourse.
 
 
 			</xs:documentation>
@@ -518,7 +518,7 @@ a filter set specified by FilterSet.  All elements are ManufactSpec type, so the
 	</xs:element>
 	<xs:element name = "LensNA" type = "xs:float">
 		<xs:annotation>
-			<xs:documentation>The numerical apperture of the lens.</xs:documentation>
+			<xs:documentation>The numerical aperture of the lens.</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 	<xs:element name = "ExFilter" type = "ManufactSpec">

@@ -399,7 +399,7 @@ Version 1.9a (01/30/2007, again)
     <xs:element>.
 
 Version 1.9a (12/04/2006, again)
-  * Fixed errors (occuring on import of superclass module) when 
+  * Fixed errors (occurring on import of superclass module) when 
     an element is defined as an extension of an element that is
     defined as a simpleType restriction on an xs:string.
 
@@ -409,7 +409,7 @@ Version 1.9a (11/27/2006, again)
 
 Version 1.9a (10/22/2006, again)
   * Fix to capture text content of nodes defined with attributes
-    but with no nested elements into member varialbe valueOf_.
+    but with no nested elements into member variable valueOf_.
 
 Version 1.9a (10/10/2006)
   * Added minimal support for simpleType.
@@ -511,7 +511,7 @@ Version 1.7a (10/28/04)
   Thanks very much to Lloyd Kvam for help with these fixes and
   improvements.  His ideas, suggestions, and work have been
   extremely valuable.
-  * Implementd partial support for <xsd:extension base="">.
+  * Implemented partial support for <xsd:extension base="">.
     Limitation: extension elements cannot override members
     defined in a base.
   * Refactored generated methods export and build, so that they
@@ -693,7 +693,7 @@ The following enhancements and fixes remain to be done:
 - Nested (and sometimes anonymous) types -- In some cases, instead
   of defining a type at top level (with a type name) and then
   referencing that type inside another type definition, the
-  definition itself can be nested inside another type defintion.
+  definition itself can be nested inside another type definition.
   generateDS.py does not handle this.  In effect, generateDS.py
   requires that you declare all type definitions at top level and
   that you name them (give them a "name" attribute.  A future

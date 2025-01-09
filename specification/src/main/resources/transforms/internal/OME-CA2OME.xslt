@@ -4,7 +4,7 @@
   OME Data Model transforms
   %%
   Copyright (C) 2003 - 2016 Open Microscopy Environment:
-    - Massachusetts Institue of Technology,
+    - Massachusetts Institute of Technology,
     - National Institutes of Health,
     - University of Dundee
   %%

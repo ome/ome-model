@@ -502,7 +502,7 @@
 					Currently allowed values are:
 					"templateLocked"	- This means that experimental variables can still be edited.
 					"allAttributesLocked"	- This means that no editing is allowed.
-					The presence or absence of this attribute idicates whether a field is locked.
+					The presence or absence of this attribute indicates whether a field is locked.
 				</xsd:documentation>
 			</xsd:annotation>
 		</xsd:attribute>
@@ -511,7 +511,7 @@
 		<xsd:attribute name="requiredField" type="xsd:boolean">
 			<xsd:annotation>
 				<xsd:documentation>
-					This boolean idicates whether it is mandatory to fill out the field.
+					This boolean indicates whether it is mandatory to fill out the field.
 					If true, the field should not be left blank.
 				</xsd:documentation>
 			</xsd:annotation>
