@@ -40,7 +40,7 @@ from ome.modeltools.exceptions import ModelProcessingError
 from ome.modeltools import config
 
 
-class ReferenceDelegate(object):
+class ReferenceDelegate:
     """
     A "virtual" property delegate to be used with "reference"
     OMEModelProperty instances. This delegate conforms loosely to the same
@@ -68,7 +68,7 @@ class ReferenceDelegate(object):
 
     def getType(self):
         return self.dataType
-        
+
     def getData_type(self):
         return self.dataType
 
@@ -79,7 +79,7 @@ class ReferenceDelegate(object):
         return True
 
 
-class OMEModel(object):
+class OMEModel:
     def __init__(self, opts):
         self.opts = opts
         self.elementNameObjectMap = dict()
@@ -203,7 +203,7 @@ class OMEModel(object):
                 if parent is not None:
                     element = self.substitutionElement_map[element.getName()]
                 if parent is None:
-                    continue   
+                    continue
             logging.info("Processing element: %s %d/%d"
                          % (element, i + 1, length))
             self.processLeaf(element, parent)
@@ -323,13 +323,13 @@ class OMEModel(object):
         Creates a mapping between substitution group elements and their type elements
         """
         length = len(elements)
-        for i, element in enumerate(elements):
+        for element in elements:
             if 'substitutionGroup' in element.getAttrs():
                 substitutionGroup = element.getAttrs()['substitutionGroup']
                 base = element.getBase()
                 self.opts.lang.abstract_type_map[substitutionGroup] = base
                 self.opts.lang.substitutionGroup_map[base] = substitutionGroup
-        for i, element in enumerate(elements):
+        for element in elements:
             if self.opts.lang.hasSubstitutionGroup(element.getName()):
                 substitutionGroupName = self.opts.lang.substitutionGroup(element.getName())
                 self.substitutionElement_map[substitutionGroupName] = element

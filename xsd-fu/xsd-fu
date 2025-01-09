@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# encoding: utf-8
 """
 Generate code to process OME-XML from an OME-XML schema.
 """
@@ -32,7 +31,6 @@ Generate code to process OME-XML from an OME-XML schema.
 # POSSIBILITY OF SUCH DAMAGE.
 
 import itertools
-import logging
 import sys
 import os
 import re
@@ -48,7 +46,6 @@ from genshi.template import NewTextTemplate
 
 from getopt import gnu_getopt, GetoptError
 from glob import glob
-from xml import sax
 
 def macroname(filename):
     filename = "_".join(filename.split(os.path.sep))
@@ -128,9 +125,7 @@ def main(model, opts):
     Default main() that parses command line options and generates
     classes in the output directory.
     """
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
+    used_files = {os.path.realpath(file) for file in opts.args}
 
     aggregate_content = ""
 
@@ -145,7 +140,7 @@ def main(model, opts):
 
         parents = model.resolve_parents(obj.name)
 
-        fu.SOURCE_TYPE = opts.filetype;
+        fu.SOURCE_TYPE = opts.filetype
 
         CUSTOM_CLASS_TEMPLATE = os.path.join(
             base, '%s_%s%s' % (name, obj.name, extension))
@@ -266,9 +261,7 @@ def enumTypesMain(model, opts):
     classes for enumeration types in an output directory.
     """
 
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
+    used_files = {os.path.realpath(file) for file in opts.args}
 
     aggregate_content = ""
 
@@ -281,7 +274,7 @@ def enumTypesMain(model, opts):
         for prop in obj.properties.values():
             if not prop.isEnumeration:
                 continue
-            if not prop.langType in enums.keys():
+            if not prop.langType in enums:
                 enums[prop.langType] = prop
 
     for propname in sorted(enums.keys()):
@@ -294,7 +287,7 @@ def enumTypesMain(model, opts):
 
         fu.GUARD = guard(fullname)
         fu.CLASS_PREFIX = class_prefix(fullname)
-        fu.SOURCE_TYPE = opts.filetype;
+        fu.SOURCE_TYPE = opts.filetype
 
         fullname = os.path.join(opts.outdir, fullname)
 
@@ -323,9 +316,7 @@ def enumHandlersMain(model, opts):
     classes for enumeration handlers in an output directory.
     """
 
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
+    used_files = {os.path.realpath(file) for file in opts.args}
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_omexml_model_enum_handlers_package)
     template = NewTextTemplate(codecs.open(opts.lang.templatepath('ENUM_HANDLER'), encoding='utf-8').read(), encoding='utf-8')
@@ -342,7 +333,7 @@ def enumHandlersMain(model, opts):
                 continue
 
             fu.GUARD = guard(fullname)
-            fu.SOURCE_TYPE = opts.filetype;
+            fu.SOURCE_TYPE = opts.filetype
 
             fullname = os.path.join(opts.outdir, fullname)
 
@@ -371,9 +362,7 @@ def quantityTypesMain(model, opts):
     classes for quantity types in an output directory.
     """
 
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
+    used_files = {os.path.realpath(file) for file in opts.args}
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_enums_package)
     template = NewTextTemplate(codecs.open(opts.lang.templatepath('QUANTITY'), encoding='utf-8').read(), encoding='utf-8')
@@ -392,7 +381,7 @@ def quantityTypesMain(model, opts):
                 continue
 
             fu.GUARD = guard(fullname)
-            fu.SOURCE_TYPE = opts.filetype;
+            fu.SOURCE_TYPE = opts.filetype
 
             fullname = os.path.join(opts.outdir, fullname)
 
@@ -473,9 +462,7 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     args = opts.args
     template = opts.lang.templatepath(template)
 
-    used_files = set()
-    for file in opts.args:
-        used_files.add(os.path.realpath(file))
+    used_files = {os.path.realpath(file) for file in opts.args}
 
     indexes = dict()
     parents = dict()
@@ -505,7 +492,7 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     from glob import glob
     customContent = dict()
     for customTemplate in glob(os.path.join(base, '%s_*' % (name))):
-        filename = os.path.split(customTemplate)[1];
+        filename = os.path.split(customTemplate)[1]
         filename = os.path.splitext(filename)[0]
         base, objectName, propertyName = filename.split("_")
         used_files.add(os.path.realpath(customTemplate))
@@ -520,7 +507,7 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     fullname = opts.lang.generatedFilename(outputFilename, opts.filetype)
 
     fu.GUARD = guard(fullname)
-    fu.SOURCE_TYPE = opts.filetype;
+    fu.SOURCE_TYPE = opts.filetype
 
     fullname = os.path.join(opts.outdir, fullname)
 
@@ -637,7 +624,6 @@ def parentlist(model, name, pre):
             for prop in obj.properties.values():
                 if prop.name[-14:] == "_BackReference":
                     print("-\t-\t" + prop.name + "\t" + prop.type + "\tback\t" + pre + prop.name)
-                    pass
                 else:
                     if prop.name == name:
                         print("%s\t%s" % (prop.minOccurs, prop.maxOccurs ) + "\t" + prop.name + "\t" + prop.type + "\trecursion\t" + pre + prop.name + " - recursion")

@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-# -*- coding: utf-8 -*-
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are met:
@@ -31,7 +30,7 @@ NS = {'OME': 'http://www.openmicroscopy.org/Schemas/OME/2016-06'}
 ElementTree.register_namespace('OME', NS['OME'])
 
 
-class TestPlate(object):
+class TestPlate:
 
     @pytest.mark.parametrize('rc', [True, False])
     def test_minimal_plate(self, tmpdir, rc):

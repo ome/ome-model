@@ -35,4 +35,3 @@ class ModelProcessingError(Exception):
     """
     Raised when there is an error during model processing.
     """
-    pass
