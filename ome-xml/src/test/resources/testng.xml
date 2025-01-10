@@ -32,6 +32,7 @@
   #L%
   -->
 
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.1.dtd" >
 <suite name="OMEXMLTests">
     <test name="2010-04SchemaPrimitives">
         <groups>
