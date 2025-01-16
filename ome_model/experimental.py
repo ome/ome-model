@@ -27,7 +27,7 @@ TIFF_PARSER += ".*?[.].*?"  # Ignore the rest, but don't slurp the file ending
 TIFF_PARSER = re.compile(TIFF_PARSER)
 
 warnings.warn(
-    "This module is deprecated as of ome-model 6.3.7. "
+    "This module is deprecated as of ome-model 6.4.0. "
     "Use other libraries such as ome-types to generate and validate "
     "OME-XML.", DeprecationWarning)
 
