@@ -29,7 +29,9 @@ import sys
 import os
 import getopt
 import re
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 
 #
 # Try to import lxml first, and if that fails try ElementTree.
