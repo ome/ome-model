@@ -25,9 +25,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from collections import OrderedDict
 import logging
-import re
 
 from xml.etree import ElementTree
 
@@ -274,34 +272,26 @@ class OMEModelProperty(OMEModelEntity):
         doc="""Whether or not the property is an Annotation.""")
 
     def _get_isPrimitive(self):
-        if self.model.opts.lang.hasPrimitiveType(self.langType):
-            return True
-        return False
+        return self.model.opts.lang.hasPrimitiveType(self.langType)
     isPrimitive = property(
         _get_isPrimitive,
         doc="""Whether or not the property's language type is a primitive.""")
 
     def _get_isEnumeration(self):
         v = self.delegate.getValues()
-        if v is not None and len(v) > 0:
-            return True
-        return False
+        return v is not None and len(v) > 0
     isEnumeration = property(
         _get_isEnumeration,
         doc="""Whether or not the property is an enumeration.""")
 
     def _get_isUnitsEnumeration(self):
-        if self.langType.startswith("Units"):
-            return True
-        return False
+        return self.langType.startswith('Units')
     isUnitsEnumeration = property(
         _get_isUnitsEnumeration,
         doc="""Whether or not the property is a units enumeration.""")
 
     def _get_hasUnitsCompanion(self):
-        if self.name+"Unit" in self.parent.properties:
-            return True
-        return False
+        return self.name + 'Unit' in self.parent.properties
     hasUnitsCompanion = property(
         _get_hasUnitsCompanion,
         doc="""Whether or not the property has a units companion.""")
@@ -395,7 +385,7 @@ class OMEModelProperty(OMEModelEntity):
     def _get_concreteClasses(self):
         returnList = []
         if self.model.opts.lang.hasSubstitutionGroup(self.name):
-            for o in sorted(list(self.model.objects.values()), key=lambda x: x.name):
+            for o in sorted(self.model.objects.values(), key=lambda x: x.name):
                 if o.parentName == self.name:
                     returnList.append(o.name)
         return returnList
@@ -586,7 +576,7 @@ class OMEModelProperty(OMEModelEntity):
     isAbstract = property(
         _get_isAbstract,
         doc="""Is the property abstract.""")
-        
+
     def _get_isAbstractSubstitution(self):
         return self.model.opts.lang.hasSubstitutionGroup(self.name)
     isAbstractSubstitution = property(

@@ -39,7 +39,7 @@ except ImportError:
         return datetime.now()
 
 
-class TemplateInfo(object):
+class TemplateInfo:
     """
     Basic status information to pass to the template engine.
     """

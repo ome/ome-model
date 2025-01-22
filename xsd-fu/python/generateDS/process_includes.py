@@ -12,7 +12,7 @@ Options:
     -h, --help      Display this help message.
     -f, --force     Force.  If outfile exists, overwrite without asking.
     -s, --search    Search path for schemas.  Colon separated list of directories where schemas may be found.
-    
+
 Examples:
     python process_includes.py infile.xsd
     python process_includes.py infile.xsd outfile.xsd
@@ -106,13 +106,13 @@ def process_path(root, idx, path):
 
 def process_include_tree(root):
     global DIRPATH
-    
+
     idx = 0
     children = root.getchildren()
     while idx < len(children):
         child = children[idx]
         tag = child.tag
-        if type(tag) == type(""):
+        if type(tag) == str:
             tag = NAMESPACE_PAT.sub("", tag)
         else:
             tag = None
@@ -130,17 +130,17 @@ def process_include_tree(root):
                         break
                 else:
                     msg = "Can't find include file %s.  Aborting." % (path, )
-                    raise IOError(msg)
+                    raise OSError(msg)
         elif tag == 'import' and 'schemaLocation' in child.attrib:
             root.remove(child)
             locn = child.attrib['schemaLocation']
-            if locn.startswith('ftp:') or locn.startswith('http:'):
+            if locn.startswith(('ftp:', 'http:')):
                 try:
                     path, msg = urllib.request.urlretrieve(locn)
                     idx = process_path(root, idx, path)
                 except:
                     msg = "Can't retrieve import file %s.  Aborting." % (locn, )
-                    raise IOError(msg)
+                    raise OSError(msg)
             else:
                 if os.path.exists(locn):
                     idx = process_path(root, idx, locn)
@@ -152,7 +152,7 @@ def process_include_tree(root):
                             break
                     else:
                         msg = "Can't find import file %s.  Aborting." % (locn, )
-                        raise IOError(msg)
+                        raise OSError(msg)
         else:
             process_include_tree(child)
             idx += 1
@@ -211,5 +211,3 @@ def main():
 if __name__ == '__main__':
     #import pdb; pdb.set_trace()
     main()
-
-

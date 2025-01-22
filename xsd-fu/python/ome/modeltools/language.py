@@ -33,7 +33,7 @@ from ome.modeltools.exceptions import ModelProcessingError
 TYPE_SOURCE = "source"
 
 
-class Language(object):
+class Language:
     """
     Base class for output language.
     Updates the type maps with the model namespace.
@@ -91,11 +91,11 @@ class Language(object):
             'Text': 'Text',
             namespace + 'dateTime':   'Timestamp'
             }
-            
+
         # A global type mapping from XSD Schema substitution groups to language abstract classes
         self.abstract_type_map = dict()
         # A global type mapping from XSD Schema abstract classes to their equivalent substitution group
-        self.substitutionGroup_map = dict()    
+        self.substitutionGroup_map = dict()
 
         # A global type mapping from XSD Schema elements to language model
         # object classes.  This will cause source code generation to be
@@ -109,8 +109,8 @@ class Language(object):
             'UniversallyUniqueIdentifier': self.getDefaultModelBaseClass(),
             'base64Binary': self.getDefaultModelBaseClass()
             }
-        
-        # A global set XSD Schema types use as base classes which are primitive  
+
+        # A global set XSD Schema types use as base classes which are primitive
         self.primitive_base_types = set([
             "base64Binary"])
 
@@ -150,10 +150,10 @@ class Language(object):
 
     def getConverterDir(self):
         return self.converter_dir
-        
+
     def getConverterName(self):
         return self.converter_name
-        
+
     def generatedFilename(self, name, type):
         gen_name = None
         if type == TYPE_SOURCE and self.source_suffix is not None:
@@ -165,9 +165,7 @@ class Language(object):
         return gen_name
 
     def hasBaseType(self, type):
-        if type in self.base_type_map:
-            return True
-        return False
+        return type in self.base_type_map
 
     def baseType(self, type):
         try:
@@ -176,57 +174,43 @@ class Language(object):
             return None
 
     def hasFundamentalType(self, type):
-        if type in self.fundamental_types:
-            return True
-        return False
+        return type in self.fundamental_types
 
     def hasPrimitiveType(self, type):
-        if (type in list(self.primitive_type_map.values()) or
-                type in self.primitive_types):
-            return True
-        return False
+        return type in list(self.primitive_type_map.values()) or type in self.primitive_types
 
     def primitiveType(self, type):
         try:
             return self.primitive_type_map[type]
         except KeyError:
             return None
-            
+
     def hasAbstractType(self, type):
-        if (type in self.abstract_type_map):
-            return True
-        return False
+        return type in self.abstract_type_map
 
     def abstractType(self, type):
         try:
             return self.abstract_type_map[type]
         except KeyError:
             return None
-            
+
     def hasSubstitutionGroup(self, type):
-        if (type in self.substitutionGroup_map):
-            return True
-        return False
+        return type in self.substitutionGroup_map
 
     def substitutionGroup(self, type):
         try:
             return self.substitutionGroup_map[type]
         except KeyError:
             return None
-            
+
     def getSubstitutionTypes(self):
         return list(self.substitutionGroup_map.keys())
-            
+
     def isPrimitiveBase(self, type):
-        if type in self.primitive_base_types:
-            return True
-        else:
-            return False
+        return type in self.primitive_base_types
 
     def hasType(self, type):
-        if type in self.type_map:
-            return True
-        return False
+        return type in self.type_map
 
     def type(self, type):
         try:
@@ -258,7 +242,7 @@ class Language(object):
 
 class Java(Language):
     def __init__(self, namespace, templatepath):
-        super(Java, self).__init__(namespace, templatepath)
+        super().__init__(namespace, templatepath)
 
         self.package_separator = '.'
 
@@ -333,7 +317,7 @@ class Java(Language):
     def index_signature(self, name, max_occurs, level, dummy=False):
         """Makes a Java method signature dictionary from an index name."""
 
-        sig = super(Java, self).index_signature(name, max_occurs, level, dummy)
+        sig = super().index_signature(name, max_occurs, level, dummy)
         sig['argtype'] = 'int'
 
         return sig

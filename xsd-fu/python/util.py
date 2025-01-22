@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright (C) 2007 Edgewall Software
 # All rights reserved.
@@ -27,7 +26,8 @@ import re
 import textwrap
 import time
 
-from operator import itemgetter
+from pytz import UTC
+
 
 missing = object()
 
@@ -236,8 +236,6 @@ class FixedOffsetTimezone(tzinfo):
     def dst(self, dt):
         return ZERO
 
-
-from pytz import UTC
 
 STDOFFSET = timedelta(seconds=-time.timezone)
 if time.daylight:
