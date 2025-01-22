@@ -39,7 +39,7 @@ WhichElementTree = ''
 try:
     from lxml import etree
     WhichElementTree = 'lxml'
-except ImportError as e:
+except ImportError:
     from xml.etree import ElementTree as etree
     WhichElementTree = 'elementtree'
 if WhichElementTree != 'lxml' or etree.LXML_VERSION[0] < 2:
@@ -186,7 +186,6 @@ def main():
         opts, args = getopt.getopt(args, 'hfs:', ['help', 'force', 'search=',])
     except:
         usage()
-    name = 'nobody'
     for opt, val in opts:
         if opt in ('-h', '--help'):
             usage()
