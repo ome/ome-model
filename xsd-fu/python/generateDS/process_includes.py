@@ -114,7 +114,7 @@ def process_include_tree(root):
     while idx < len(children):
         child = children[idx]
         tag = child.tag
-        if type(tag) == str:
+        if tag is str:
             tag = NAMESPACE_PAT.sub("", tag)
         else:
             tag = None
