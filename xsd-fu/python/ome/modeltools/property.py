@@ -70,7 +70,7 @@ class OMEModelProperty(OMEModelEntity):
             root = None
             try:
                 root = ElementTree.fromstring(delegate.appinfo)
-            except:
+            except Exception:
                 # Can occur if there's an error, or we're processing
                 # garbage, which occurs when generateds mangles the
                 # input for enums with appinfo per enum.
