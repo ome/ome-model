@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- mode: pymode; coding: latin1; -*-
+# -*- mode: pymode; coding: utf-8; -*-
 """
 Synopsis:
     Recursively process the include elements in an XML Schema file.
