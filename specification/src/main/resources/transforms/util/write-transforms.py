@@ -30,9 +30,9 @@
 
 # author: m.t.b.carroll@dundee.ac.uk
 
+import os
+import re
 from collections import defaultdict
-from os import listdir
-from re import compile
 
 
 # note the schemas (in reverse order) and the transforms among them
@@ -82,7 +82,7 @@ def shortest_path(from_schema, to_schema, min_quality):
 
 # the style of transform file names
 
-name_pattern = compile(r'^(.+)\-to\-(.+)\.xsl$')
+name_pattern = re.compile(r'^(.+)\-to\-(.+)\.xsl$')
 
 
 # scan the current directory to determine the schemas and transforms
@@ -92,7 +92,7 @@ def load_transforms():
     global schemas
     seen = set()
 
-    for name in listdir('.'):
+    for name in os.listdir('.'):
         match = name_pattern.match(name)
         if match:
             from_schema = match.group(1)
