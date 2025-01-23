@@ -2147,13 +2147,6 @@ memory problem to some extent when the minidom parser is used.</p>
 script scans your XML Schema document and, recursively, documents
 that are included looking for <tt class="docutils literal"><span class="pre">include</span></tt> elements; it inserts all
 content into a single document, which it writes out.</p>
-<p>Since <tt class="docutils literal"><span class="pre">process_includes.py</span></tt> uses the ElementTree API, in order
-to use <tt class="docutils literal"><span class="pre">process_includes.py</span></tt> you will need one of the following:</p>
-<ul class="simple">
-<li>Python 2.5 -- ElementTree is in the Python-2.5 distribution.  Or,</li>
-<li><a class="reference external" href="http://effbot.org/zone/element-index.htm">ElementTree</a>.  Or,</li>
-<li><a class="reference external" href="http://codespeak.net/lxml/">lxml</a> -- another implementation of the ElementTree API.</li>
-</ul>
 <p>Here are samples of how you might use <tt class="docutils literal"><span class="pre">process_includes.py</span></tt>, if
 your schema contains <tt class="docutils literal"><span class="pre">include</span></tt> elements.</p>
 <p>Example 1:</p>
