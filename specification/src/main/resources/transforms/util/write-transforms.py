@@ -82,7 +82,7 @@ def shortest_path(from_schema, to_schema, min_quality):
 
 # the style of transform file names
 
-name_pattern = compile('^(.+)\-to\-(.+)\.xsl$')
+name_pattern = compile(r'^(.+)\-to\-(.+)\.xsl$')
 
 
 # scan the current directory to determine the schemas and transforms
@@ -137,18 +137,18 @@ qualities = ['poor', 'fair', 'good', 'excellent']
 
 def print_path(to_schema):
     (path, min_quality) = best_paths[(from_schema, to_schema)]
-    print '\t\t\t<target schema="' + to_schema + \
-        '" quality="' + qualities[min_quality - 1] + '">'
+    print('\t\t\t<target schema="' + to_schema + \
+        '" quality="' + qualities[min_quality - 1] + '">')
     while len(path) > 1:
-        print '\t\t\t\t<transform file="' + \
-            path[0] + '-to-' + path[1] + '.xsl"/>'
+        print('\t\t\t\t<transform file="' + \
+            path[0] + '-to-' + path[1] + '.xsl"/>')
         path = path[1:]
-    print '\t\t\t</target>'
+    print('\t\t\t</target>')
 
 
 # print in XML all the transforms among the schemas
 
-print """<?xml version = "1.0" encoding = "UTF-8"?>
+print("""<?xml version = "1.0" encoding = "UTF-8"?>
 <!--
   #%L
   OME Data Model transforms
@@ -181,13 +181,13 @@ print """<?xml version = "1.0" encoding = "UTF-8"?>
   POSSIBILITY OF SUCH DAMAGE.
   #L%
   -->
-"""
+""")
 
-print '<ome-transforms current="' + schemas[0] + '">'
+print('<ome-transforms current="' + schemas[0] + '">')
 
 for from_schema in schemas:
-    print '\t<source schema="' + from_schema + '">'
-    print '\t\t<upgrades>'
+    print('\t<source schema="' + from_schema + '">')
+    print('\t\t<upgrades>')
     upgrades = True
     for to_schema in schemas:
         if from_schema < to_schema:
@@ -195,13 +195,13 @@ for from_schema in schemas:
         elif to_schema < from_schema:
             if upgrades:
                 upgrades = False
-                print '\t\t</upgrades>'
-                print '\t\t<downgrades>'
+                print('\t\t</upgrades>')
+                print('\t\t<downgrades>')
             print_path(to_schema)
     if upgrades:
-        print '\t\t</upgrades>'
-        print '\t\t<downgrades>'
-    print '\t\t</downgrades>'
-    print '\t</source>'
+        print('\t\t</upgrades>')
+        print('\t\t<downgrades>')
+    print('\t\t</downgrades>')
+    print('\t</source>')
 
-print '</ome-transforms>'
+print('</ome-transforms>')
