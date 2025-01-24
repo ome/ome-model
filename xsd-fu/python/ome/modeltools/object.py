@@ -302,7 +302,7 @@ class OMEModelObject(OMEModelEntity):
         parent = None
 
         if parents is not None:
-            parent = self.model.getObjectByName(list(parents.keys())[0])
+            parent = self.model.getObjectByName(next(iter(parents.keys())))
 
         return parent
 
