@@ -343,14 +343,12 @@ class SimpleTypeElement(XschemaElementBase):
     def setListType(self, listType): self.listType = listType
     def isListType(self): return self.listType
     def __str__(self):
-        s1 = '<"%s" SimpleTypeElement instance at 0x%x>' % \
+        return '<"%s" SimpleTypeElement instance at 0x%x>' % \
             (self.getName(), id(self))
-        return s1
 
     def __repr__(self):
-        s1 = '<"%s" SimpleTypeElement instance at 0x%x>' % \
+        return '<"%s" SimpleTypeElement instance at 0x%x>' % \
             (self.getName(), id(self))
-        return s1
 
 
 class XschemaElement(XschemaElementBase):
@@ -817,14 +815,12 @@ class XschemaElement(XschemaElementBase):
                     groupName, ))
 
     def __str__(self):
-        s1 = '<"%s" XschemaElement instance at 0x%x>' % \
+        return '<"%s" XschemaElement instance at 0x%x>' % \
             (self.getName(), id(self))
-        return s1
 
     def __repr__(self):
-        s1 = '<"%s" XschemaElement instance at 0x%x>' % \
+        return '<"%s" XschemaElement instance at 0x%x>' % \
             (self.getName(), id(self))
-        return s1
 
     def fix_dup_names(self):
         # Patch-up names that are used for both a child element and an attribute.
@@ -2747,8 +2743,7 @@ def buildCtorArgs_multilevel(element):
     if element.isMixed():
         add(', mixedclass_=None')
         add(', content_=None')
-    s1 = ''.join(content)
-    return s1
+    return ''.join(content)
 
 
 def buildCtorArgs_multilevel_aux(addedArgs, add, element):
@@ -3578,8 +3573,7 @@ def buildCtorParams(element):
         add(', content_')
     else:
         buildCtorParams_aux(add, element)
-    s1 = ''.join(content)
-    return s1
+    return ''.join(content)
 
 
 def buildCtorParams_aux(add, element):
@@ -3598,13 +3592,10 @@ def buildCtorParams_aux(add, element):
 
 
 def get_class_behavior_args(classBehavior):
-    argList = []
     args = classBehavior.getArgs()
     args = args.getArg()
-    for arg in args:
-        argList.append(arg.getName())
-    argString = ', '.join(argList)
-    return argString
+    argList = [arg.getName() for arg in args]
+    return ', '.join(argList)
 
 
 #
@@ -4123,10 +4114,8 @@ def strip_namespace(val):
 
 
 def escape_string(instring):
-    s1 = instring
-    s1 = s1.replace('\\', '\\\\')
-    s1 = s1.replace("'", "\\'")
-    return s1
+    s1 = instring.replace('\\', '\\\\')
+    return s1.replace("'", "\\'")
 
 
 ##def process_include(inpath, outpath):
