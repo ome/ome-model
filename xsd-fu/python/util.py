@@ -147,7 +147,7 @@ def pathmatch(pattern, filename):
         '**':  '(?:.+/)*?[^/]+',
     }
     buf = []
-    for idx, part in enumerate(re.split('([?*]+/?)', pattern)):
+    for idx, part in enumerate(re.split(r'([?*]+/?)', pattern)):
         if idx % 2:
             buf.append(symbols[part])
         elif part:
