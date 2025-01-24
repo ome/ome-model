@@ -2984,10 +2984,11 @@ def getValidatorBody(stName):
             infile = open(path, 'r')
             lines = infile.readlines()
             infile.close()
-            lines1 = []
-            for line in lines:
-                if not line.startswith('##'):
-                    lines1.append(line)
+            lines1 = [
+                line
+                for line in lines
+                if not line.startswith('##')
+            ]
             s1 = ''.join(lines1)
             retrieved = 1
     if not retrieved:
