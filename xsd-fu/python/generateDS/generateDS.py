@@ -512,10 +512,7 @@ class XschemaElement(XschemaElementBase):
 
         for attr in self.getAttributeDefs():
             key = attr['name']
-            try:
-                value = attr['value']
-            except:
-                value = '<empty>'
+            value = attr.get('value', '<empty>')
             showLevel(outfile, level + 1)
             outfile.write('key: %s  value: %s\n' % \
                 (key, value))

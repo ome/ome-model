@@ -140,7 +140,7 @@ def process_include_tree(root):
                 try:
                     path, msg = urllib.request.urlretrieve(locn)
                     idx = process_path(root, idx, path)
-                except:
+                except Exception:
                     msg = "Can't retrieve import file %s.  Aborting." % (locn, )
                     raise OSError(msg)
             else:
@@ -186,7 +186,7 @@ def main():
     args = sys.argv[1:]
     try:
         opts, args = getopt.getopt(args, 'hfs:', ['help', 'force', 'search=',])
-    except:
+    except getopt.GetoptError:
         usage()
     for opt, val in opts:
         if opt in ('-h', '--help'):
