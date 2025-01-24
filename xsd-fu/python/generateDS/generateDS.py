@@ -1027,7 +1027,7 @@ class XschemaHandler(handler.ContentHandler):
             self.inElement = 1
             self.inNonanonymousComplexType = 1
             element = XschemaElement(attrs)
-            if not 'type' in list(attrs.keys()) and not 'ref' in list(attrs.keys()):
+            if 'type' not in list(attrs.keys()) and 'ref' not in list(attrs.keys()):
                 element.setExplicitDefine(1)
             if len(self.stack) == 1:
                 element.setTopLevel(1)
@@ -2362,7 +2362,7 @@ def generateBuildMixed_1(outfile, prefix, child, headChild, keyword, delayed):
     else:
         # Perhaps it's a complexType that is defined right here.
         # Generate (later) a class for the nested types.
-        if not delayed and not child in DelayedElements:
+        if not delayed and child not in DelayedElements:
             DelayedElements.append(child)
             DelayedElements_subclass.append(child)
         s1 = "        %s child_.nodeType == Node.ELEMENT_NODE and \\\n" % \
@@ -2581,7 +2581,7 @@ def generateBuildStandard_1(outfile, prefix, child, headChild,
         if element_base and element_base in ElementDict:
             derived_child = True
             #print element.getName(), element_base
-        if not delayed and not child in DelayedElements:
+        if not delayed and child not in DelayedElements:
             DelayedElements.append(child)
             DelayedElements_subclass.append(child)
         s1 = "        %s child_.nodeType == Node.ELEMENT_NODE and \\\n" % \
