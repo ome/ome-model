@@ -111,8 +111,7 @@ class Language:
             }
 
         # A global set XSD Schema types use as base classes which are primitive
-        self.primitive_base_types = set([
-            "base64Binary"])
+        self.primitive_base_types = {"base64Binary"}
 
         self.model_unit_map = {}
         self.model_unit_default = {}
