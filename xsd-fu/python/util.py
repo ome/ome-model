@@ -30,8 +30,7 @@ from pytz import UTC
 
 missing = object()
 
-__all__ = ['distinct', 'pathmatch', 'relpath', 'wraptext', 'UTC',
-           'LOCALTZ']
+__all__ = ['LOCALTZ', 'UTC', 'distinct', 'pathmatch', 'relpath', 'wraptext']
 __docformat__ = 'restructuredtext en'
 
 
