@@ -29,7 +29,9 @@ import sys
 import os
 import getopt
 import re
-import urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.parse
+import urllib.error
 
 #
 # Try to import lxml first, and if that fails try ElementTree.
@@ -39,7 +41,7 @@ WhichElementTree = ''
 try:
     from lxml import etree
     WhichElementTree = 'lxml'
-except ImportError as e:
+except ImportError:
     from xml.etree import ElementTree as etree
     WhichElementTree = 'elementtree'
 if WhichElementTree != 'lxml' or etree.LXML_VERSION[0] < 2:
@@ -112,7 +114,7 @@ def process_include_tree(root):
     while idx < len(children):
         child = children[idx]
         tag = child.tag
-        if type(tag) == str:
+        if tag is str:
             tag = NAMESPACE_PAT.sub("", tag)
         else:
             tag = None
@@ -186,7 +188,6 @@ def main():
         opts, args = getopt.getopt(args, 'hfs:', ['help', 'force', 'search=',])
     except:
         usage()
-    name = 'nobody'
     for opt, val in opts:
         if opt in ('-h', '--help'):
             usage()

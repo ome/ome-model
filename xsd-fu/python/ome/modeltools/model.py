@@ -322,7 +322,6 @@ class OMEModel:
         """
         Creates a mapping between substitution group elements and their type elements
         """
-        length = len(elements)
         for element in elements:
             if 'substitutionGroup' in element.getAttrs():
                 substitutionGroup = element.getAttrs()['substitutionGroup']

@@ -4215,7 +4215,7 @@ def parseAndGenerate(outfileName, subclassFilename, prefix,
         mod_path = os.sep.join(path_list[:-1])
         module_spec = importlib.util.find_spec(mod_name, [mod_path, ])
         UserMethodsModule = importlib.util.module_from_spec(module_spec)
-        module_spec.loader.exec_module(UserMethodsMdule)
+        module_spec.loader.exec_module(UserMethodsModule)
 ##    parser = saxexts.make_parser("xml.sax.drivers2.drv_pyexpat")
     parser = make_parser()
     dh = XschemaHandler()

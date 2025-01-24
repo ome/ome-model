@@ -70,7 +70,7 @@ class OMEModelProperty(OMEModelEntity):
             root = None
             try:
                 root = ElementTree.fromstring(delegate.appinfo)
-            except:
+            except Exception:
                 # Can occur if there's an error, or we're processing
                 # garbage, which occurs when generateds mangles the
                 # input for enums with appinfo per enum.
@@ -518,7 +518,7 @@ class OMEModelProperty(OMEModelEntity):
 
     def _get_header(self):
         header = None
-        if self.name in list(self.model.opts.lang.model_type_map.keys()) and not self.name in list(self.model.opts.lang.primitive_type_map.keys()):
+        if self.name in list(self.model.opts.lang.model_type_map.keys()) and self.name not in list(self.model.opts.lang.primitive_type_map.keys()):
             pass
         elif self.langType is None:
             pass
