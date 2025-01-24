@@ -143,18 +143,17 @@ def process_include_tree(root):
                 except Exception:
                     msg = "Can't retrieve import file %s.  Aborting." % (locn, )
                     raise OSError(msg)
+            elif os.path.exists(locn):
+                idx = process_path(root, idx, locn)
             else:
-                if os.path.exists(locn):
-                    idx = process_path(root, idx, locn)
+                for d in DIRPATH:
+                    path = os.path.join(d,locn)
+                    if os.path.exists(path):
+                        idx = process_path(root, idx, path)
+                        break
                 else:
-                    for d in DIRPATH:
-                        path = os.path.join(d,locn)
-                        if os.path.exists(path):
-                            idx = process_path(root, idx, path)
-                            break
-                    else:
-                        msg = "Can't find import file %s.  Aborting." % (locn, )
-                        raise OSError(msg)
+                    msg = "Can't find import file %s.  Aborting." % (locn, )
+                    raise OSError(msg)
         else:
             process_include_tree(child)
             idx += 1

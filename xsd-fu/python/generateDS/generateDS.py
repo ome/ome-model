@@ -667,23 +667,22 @@ class XschemaElement(XschemaElementBase):
                     type_val = type_val1
                 else:
                     self.complex = 1
+            elif type_val in StringType or \
+                type_val == TokenType or \
+                type_val == DateTimeType or \
+                type_val == DateType or \
+                type_val in IntegerType or \
+                type_val == DecimalType or \
+                type_val == PositiveIntegerType or \
+                type_val == NonPositiveIntegerType or \
+                type_val == NegativeIntegerType or \
+                type_val == NonNegativeIntegerType or \
+                type_val == BooleanType or \
+                type_val == FloatType or \
+                type_val == DoubleType:
+                pass
             else:
-                if type_val in StringType or \
-                    type_val == TokenType or \
-                    type_val == DateTimeType or \
-                    type_val == DateType or \
-                    type_val in IntegerType or \
-                    type_val == DecimalType or \
-                    type_val == PositiveIntegerType or \
-                    type_val == NonPositiveIntegerType or \
-                    type_val == NegativeIntegerType or \
-                    type_val == NonNegativeIntegerType or \
-                    type_val == BooleanType or \
-                    type_val == FloatType or \
-                    type_val == DoubleType:
-                    pass
-                else:
-                    type_val = StringType[0]
+                type_val = StringType[0]
         else:
             type_val = StringType[0]
         logging.debug("%s type resolution, resulting type: %s" % \
@@ -1150,11 +1149,10 @@ class XschemaHandler(handler.ContentHandler):
             if self.inAttribute:
                 if 'base' in attrs:
                     self.lastAttribute.setData_type(attrs['base'])
-            else:
-                # If we are in a simpleType, capture the name of
-                #   the restriction base.
-                if self.inSimpleType and 'base' in list(attrs.keys()):
-                    self.stack[-1].setBase(attrs['base'])
+            # If we are in a simpleType, capture the name of
+            #   the restriction base.
+            elif self.inSimpleType and 'base' in list(attrs.keys()):
+                self.stack[-1].setBase(attrs['base'])
             self.inRestrictionType = 1
         elif name == EnumerationType:
             if self.inAttribute and 'value' in attrs:
@@ -1621,11 +1619,10 @@ def generateExportChildren(outfile, element, hasChildren, namespace):
                     wrt(s1)
                 elif child.getMaxOccurs() > 1:
                     generateExportFn_2(outfile, child, name, namespace, '    ')
+                elif (child.getOptional()):
+                    generateExportFn_3(outfile, child, name, namespace, '')
                 else:
-                    if (child.getOptional()):
-                        generateExportFn_3(outfile, child, name, namespace, '')
-                    else:
-                        generateExportFn_1(outfile, child, name, namespace, '')
+                    generateExportFn_1(outfile, child, name, namespace, '')
 ##    base = element.getBase()
 ##    if base and base in ElementDict:
 ##        parent = ElementDict[base]
@@ -2806,21 +2803,19 @@ def buildCtorArgs_aux(addedArgs, add, element):
         elif atype == BooleanType:
             if default is None:
                 add(', %s=None' % mappedName)
+            elif default in ('false', '0'):
+                add(', %s=%s' % (mappedName, "False"))
             else:
-                if default in ('false', '0'):
-                    add(', %s=%s' % (mappedName, "False"))
-                else:
-                    add(', %s=%s' % (mappedName, "True"))
+                add(', %s=%s' % (mappedName, "True"))
         elif atype == FloatType or atype == DoubleType or atype == DecimalType:
             if default is None:
                 add(', %s=None' % mappedName)
             else:
                 add(', %s=%s' % (mappedName, default))
+        elif default is None:
+            add(', %s=None' % mappedName)
         else:
-            if default is None:
-                add(', %s=None' % mappedName)
-            else:
-                add(", %s='%s'" % (mappedName, default, ))
+            add(", %s='%s'" % (mappedName, default, ))
     for child in element.getChildren():
         cleanName = child.getCleanName()
         if cleanName in addedArgs:
@@ -2879,11 +2874,10 @@ def buildCtorArgs_aux(addedArgs, add, element):
             elif childType == BooleanType:
                 if default is None:
                     add(', %s=None' % cleanName)
+                elif default in ('false', '0'):
+                    add(', %s=%s' % (cleanName, "False", ))
                 else:
-                    if default in ('false', '0'):
-                        add(', %s=%s' % (cleanName, "False", ))
-                    else:
-                        add(', %s=%s' % (cleanName, "True", ))
+                    add(', %s=%s' % (cleanName, "True", ))
             elif childType == FloatType or \
                 childType == DoubleType or \
                 childType == DecimalType:
@@ -2891,11 +2885,10 @@ def buildCtorArgs_aux(addedArgs, add, element):
                     add(', %s=None' % cleanName)
                 else:
                     add(', %s=%s' % (cleanName, default, ))
+            elif default is None:
+                add(', %s=None' % cleanName)
             else:
-                if default is None:
-                    add(', %s=None' % cleanName)
-                else:
-                    add(", '%s=%s'" % (cleanName, default, ))
+                add(", '%s=%s'" % (cleanName, default, ))
 # end buildCtorArgs_aux
 
 
