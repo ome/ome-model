@@ -901,7 +901,7 @@ class XschemaAttributeGroup:
     def add(self, name, attr):
         self.group[name] = attr
     def delete(self, name):
-        if has_key(self.group, name):
+        if name in self.group:
             del self.group[name]
             return 1
         else:
