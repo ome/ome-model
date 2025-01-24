@@ -23,17 +23,18 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import os
-import sys
 import keyword
 import logging
+import os
+import sys
+from xml import sax
+from xml.etree import ElementTree
 
 # The generateDS package and our generateds module
 # collide on case-insensitive file systems.
 import generateDS.generateDS
+
 from ome.modeltools.exceptions import ModelProcessingError
-from xml import sax
-from xml.etree import ElementTree
 from ome.modeltools.model import OMEModel
 
 XschemaHandler = generateDS.generateDS.XschemaHandler

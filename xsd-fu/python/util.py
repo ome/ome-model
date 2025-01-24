@@ -20,14 +20,13 @@
 
 
 import codecs
-from datetime import timedelta, tzinfo
 import os
 import re
 import textwrap
 import time
+from datetime import timedelta, tzinfo
 
 from pytz import UTC
-
 
 missing = object()
 

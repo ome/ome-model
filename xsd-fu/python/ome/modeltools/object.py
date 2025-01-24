@@ -25,16 +25,13 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from collections import OrderedDict
 import logging
-
+from collections import OrderedDict
 from xml.etree import ElementTree
 
+from ome.modeltools import config, language
 from ome.modeltools.entity import OMEModelEntity
 from ome.modeltools.property import OMEModelProperty
-
-from ome.modeltools import config
-from ome.modeltools import language
 
 
 class OMEModelObject(OMEModelEntity):

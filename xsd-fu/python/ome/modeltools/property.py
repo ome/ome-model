@@ -26,12 +26,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import logging
-
 from xml.etree import ElementTree
 
+from ome.modeltools import config, language
 from ome.modeltools.entity import OMEModelEntity
-from ome.modeltools import config
-from ome.modeltools import language
 from ome.modeltools.exceptions import ModelProcessingError
 
 

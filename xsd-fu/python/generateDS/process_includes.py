@@ -25,13 +25,13 @@ Examples:
 
 
 
-import sys
-import os
 import getopt
+import os
 import re
-import urllib.request
-import urllib.parse
+import sys
 import urllib.error
+import urllib.parse
+import urllib.request
 
 #
 # Try to import lxml first, and if that fails try ElementTree.

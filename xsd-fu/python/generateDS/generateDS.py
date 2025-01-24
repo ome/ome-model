@@ -85,17 +85,17 @@ Options:
 
 
 
-import sys
-import os.path
-import time
 import getopt
-import urllib
 import importlib
-from xml.sax import handler, make_parser
-import logging
 import keyword
-from io import StringIO
+import logging
+import os.path
+import sys
+import time
+import urllib
 from collections import OrderedDict
+from io import StringIO
+from xml.sax import handler, make_parser
 
 # Default logger configuration
 ## logging.basicConfig(level=logging.DEBUG,

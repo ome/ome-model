@@ -34,7 +34,6 @@ import os
 import re
 from collections import defaultdict
 
-
 # note the schemas (in reverse order) and the transforms among them
 
 schemas = []
