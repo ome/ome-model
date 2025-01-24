@@ -207,8 +207,6 @@ def set_type_constants(nameSpace):
         nameSpace + 'int',
         nameSpace + 'short',
         )
-    #ShortType = nameSpace + 'short'
-    #LongType = nameSpace + 'long'
     DecimalType = nameSpace + 'decimal'
     PositiveIntegerType = nameSpace + 'positiveInteger'
     NegativeIntegerType = nameSpace + 'negativeInteger'
@@ -866,7 +864,6 @@ class XschemaElement(XschemaElementBase):
             parent.collectElementNames(elementNames)
 
     def coerce_attr_types(self):
-        replacements = []
         attrDefs = self.getAttributeDefs()
         for name in attrDefs:
             attr = attrDefs[name]
@@ -1556,7 +1553,6 @@ def generateExportAttributes(outfile, element, hasAttributes):
             attrDef = attrDefs[key]
             name = attrDef.getName()
             cleanName = mapName(cleanupName(name))
-            capName = make_gs_name(cleanName)
             if attrDef.getUse() == 'optional':
                 s1 = "        if self.%s is not None:\n" % (cleanName, )
                 outfile.write(s1)
@@ -1942,9 +1938,7 @@ def generateExportLiteralFn(outfile, prefix, element):
         count += 1
         name = attrDef.getName()
         cleanName = cleanupName(name)
-        capName = make_gs_name(cleanName)
         mappedName = mapName(cleanName)
-        data_type = attrDef.getData_type()
         attrType = attrDef.getType()
         split_type = attrType.split(':')
         if len(split_type) == 2:
@@ -2033,9 +2027,6 @@ def generateExportLiteralFn(outfile, prefix, element):
     for child in element.getChildren():
         name = child.getName()
         name = cleanupName(name)
-        #unmappedName = child.getUnmappedCleanName()
-        #cleanName = cleanupName(name)
-        #mappedName = mapName(cleanName)
         if element.isMixed():
             s1 = "        showIndent(outfile, level)\n"
             wrt(s1)
@@ -2218,10 +2209,8 @@ def generateBuildAttributes(outfile, element, hasAttributes):
 
 def generateBuildMixed_1(outfile, prefix, child, headChild, keyword, delayed):
     global DelayedElements, DelayedElements_subclass
-    nestedElements = 1
     origName = child.getName()
     name = child.getCleanName()
-    headName = cleanupName(headChild.getName())
     childType = child.getType()
     #below by kerim
      # name_type_problem
@@ -2441,11 +2430,10 @@ def generateBuildStandard_1(outfile, prefix, child, headChild,
 ##     elif mappedName in ElementDict:
 ##         childType = ElementDict[mappedName].getType()
     childType = child.getType()
-    # fix_simpletype
     base = child.getBase()
     is_simple_type = (child.getSimpleType() or
         (base and base in SimpleTypeDict))
-    # fix_simpletype
+
     if (attrCount == 0 and
         (childType in StringType or
             childType == TokenType or
@@ -2601,11 +2589,7 @@ def generateBuildStandard_1(outfile, prefix, child, headChild,
         wrt(s1)
         s1 = "            nodeName_ == '%s':\n" % origName
         wrt(s1)
-        # Is this a simple type?
-        base = child.getBase()
-        if (child.getSimpleType() or
-            (base and base in SimpleTypeDict)
-            ):
+        if (is_simple_type):
             s1 = "            obj_ = None\n"
             wrt(s1)
         else:
@@ -2846,14 +2830,13 @@ def buildCtorArgs_aux(addedArgs, add, element):
                 add(', %s=None' % mappedName)
             else:
                 add(", %s='%s'" % (mappedName, default, ))
-    nestedElements = 0
     for child in element.getChildren():
         cleanName = child.getCleanName()
         if cleanName in addedArgs:
             continue
         addedArgs[cleanName] = 1
         default = child.getDefault()
-        nestedElements = 1
+        #nestedElements = 1
         if child.getMaxOccurs() > 1:
             add(', %s=None' % cleanName)
         else:
@@ -2962,7 +2945,7 @@ def generateCtor(outfile, element):
         member = 1
     # Generate member initializers in ctor.
     member = 0
-    nestedElements = 0
+    #nestedElements = 0
     for child in element.getChildren():
         name = cleanupName(child.getCleanName())
         logging.debug("Constructor child: %s" % name)
@@ -2982,7 +2965,7 @@ def generateCtor(outfile, element):
                 (name, name)
             outfile.write(s1)
         member = 1
-        nestedElements = 1
+        #nestedElements = 1
     if childCount == 0 or element.isMixed():
         s1 = '        self.valueOf_ = valueOf_\n'
         outfile.write(s1)
@@ -3044,7 +3027,7 @@ def generateGettersAndSetters(outfile, element):
         s1 = '    def set%s(self, %s): self.%s = %s\n' % \
             (capName, name, name, name)
         outfile.write(s1)
-        if child.getMaxOccurs() > 1:
+        if getMaxOccurs > 1:
             s1 = '    def add%s(self, value): self.%s.append(value)\n' % \
                 (capName, name)
             outfile.write(s1)
@@ -4294,7 +4277,7 @@ def main():
             'member-specs=',
             'version',
             ])
-    except getopt.GetoptError as exp:
+    except getopt.GetoptError:
         usage()
     prefix = ''
     outFilename = None
