@@ -89,7 +89,7 @@ import sys
 import os.path
 import time
 import getopt
-import urllib.request, urllib.error, urllib.parse
+import urllib
 import importlib
 from xml.sax import handler, make_parser
 import logging
