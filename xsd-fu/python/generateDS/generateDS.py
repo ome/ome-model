@@ -306,8 +306,7 @@ def pplist(lst):
 #
 
 def showLevel(outfile, level):
-    for idx in range(level):
-        outfile.write('    ')
+    outfile.write('    ' * level)
 
 
 class XschemaElementBase:
