@@ -30,14 +30,13 @@ an OME XML (http://www.ome-xml.org) XSD document.
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from collections import OrderedDict
 import logging
-
-from ome.modeltools.object import OMEModelObject
-from ome.modeltools.property import OMEModelProperty
-from ome.modeltools.exceptions import ModelProcessingError
+from collections import OrderedDict
 
 from ome.modeltools import config
+from ome.modeltools.exceptions import ModelProcessingError
+from ome.modeltools.object import OMEModelObject
+from ome.modeltools.property import OMEModelProperty
 
 
 class ReferenceDelegate:

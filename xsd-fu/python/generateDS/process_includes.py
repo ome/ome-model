@@ -25,13 +25,13 @@ Examples:
 
 
 
-import sys
-import os
 import getopt
+import os
 import re
-import urllib.request
-import urllib.parse
+import sys
 import urllib.error
+import urllib.parse
+import urllib.request
 
 #
 # Try to import lxml first, and if that fails try ElementTree.
@@ -140,21 +140,20 @@ def process_include_tree(root):
                 try:
                     path, msg = urllib.request.urlretrieve(locn)
                     idx = process_path(root, idx, path)
-                except:
+                except Exception:
                     msg = "Can't retrieve import file %s.  Aborting." % (locn, )
                     raise OSError(msg)
+            elif os.path.exists(locn):
+                idx = process_path(root, idx, locn)
             else:
-                if os.path.exists(locn):
-                    idx = process_path(root, idx, locn)
+                for d in DIRPATH:
+                    path = os.path.join(d,locn)
+                    if os.path.exists(path):
+                        idx = process_path(root, idx, path)
+                        break
                 else:
-                    for d in DIRPATH:
-                        path = os.path.join(d,locn)
-                        if os.path.exists(path):
-                            idx = process_path(root, idx, path)
-                            break
-                    else:
-                        msg = "Can't find import file %s.  Aborting." % (locn, )
-                        raise OSError(msg)
+                    msg = "Can't find import file %s.  Aborting." % (locn, )
+                    raise OSError(msg)
         else:
             process_include_tree(child)
             idx += 1
@@ -186,7 +185,7 @@ def main():
     args = sys.argv[1:]
     try:
         opts, args = getopt.getopt(args, 'hfs:', ['help', 'force', 'search=',])
-    except:
+    except getopt.GetoptError:
         usage()
     for opt, val in opts:
         if opt in ('-h', '--help'):

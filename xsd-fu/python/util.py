@@ -20,19 +20,17 @@
 
 
 import codecs
-from datetime import timedelta, tzinfo
 import os
 import re
 import textwrap
 import time
+from datetime import timedelta, tzinfo
 
 from pytz import UTC
 
-
 missing = object()
 
-__all__ = ['distinct', 'pathmatch', 'relpath', 'wraptext', 'UTC',
-           'LOCALTZ']
+__all__ = ['LOCALTZ', 'UTC', 'distinct', 'pathmatch', 'relpath', 'wraptext']
 __docformat__ = 'restructuredtext en'
 
 
@@ -149,7 +147,7 @@ def pathmatch(pattern, filename):
         '**':  '(?:.+/)*?[^/]+',
     }
     buf = []
-    for idx, part in enumerate(re.split('([?*]+/?)', pattern)):
+    for idx, part in enumerate(re.split(r'([?*]+/?)', pattern)):
         if idx % 2:
             buf.append(symbols[part])
         elif part:

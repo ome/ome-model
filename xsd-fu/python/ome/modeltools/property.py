@@ -26,12 +26,10 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import logging
-
 from xml.etree import ElementTree
 
+from ome.modeltools import config, language
 from ome.modeltools.entity import OMEModelEntity
-from ome.modeltools import config
-from ome.modeltools import language
 from ome.modeltools.exceptions import ModelProcessingError
 
 
@@ -383,12 +381,14 @@ class OMEModelProperty(OMEModelEntity):
         doc="""Whether or not the property is a reference.""")
 
     def _get_concreteClasses(self):
-        returnList = []
         if self.model.opts.lang.hasSubstitutionGroup(self.name):
-            for o in sorted(self.model.objects.values(), key=lambda x: x.name):
-                if o.parentName == self.name:
-                    returnList.append(o.name)
-        return returnList
+            return [
+                o.name
+                for o in sorted(self.model.objects.values(), key=lambda x: x.name)
+                if o.parentName == self.name
+            ]
+        else:
+            return []
     concreteClasses = property(
         _get_concreteClasses,
         doc="""Concrete instance types for an abstract type.""")

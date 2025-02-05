@@ -85,17 +85,17 @@ Options:
 
 
 
-import sys
-import os.path
-import time
 import getopt
-import urllib.request, urllib.error, urllib.parse
 import importlib
-from xml.sax import handler, make_parser
-import logging
 import keyword
-from io import StringIO
+import logging
+import os.path
+import sys
+import time
+import urllib
 from collections import OrderedDict
+from io import StringIO
+from xml.sax import handler, make_parser
 
 # Default logger configuration
 ## logging.basicConfig(level=logging.DEBUG,
@@ -207,8 +207,6 @@ def set_type_constants(nameSpace):
         nameSpace + 'int',
         nameSpace + 'short',
         )
-    #ShortType = nameSpace + 'short'
-    #LongType = nameSpace + 'long'
     DecimalType = nameSpace + 'decimal'
     PositiveIntegerType = nameSpace + 'positiveInteger'
     NegativeIntegerType = nameSpace + 'negativeInteger'
@@ -308,8 +306,7 @@ def pplist(lst):
 #
 
 def showLevel(outfile, level):
-    for idx in range(level):
-        outfile.write('    ')
+    outfile.write('    ' * level)
 
 
 class XschemaElementBase:
@@ -346,14 +343,12 @@ class SimpleTypeElement(XschemaElementBase):
     def setListType(self, listType): self.listType = listType
     def isListType(self): return self.listType
     def __str__(self):
-        s1 = '<"%s" SimpleTypeElement instance at 0x%x>' % \
+        return '<"%s" SimpleTypeElement instance at 0x%x>' % \
             (self.getName(), id(self))
-        return s1
 
     def __repr__(self):
-        s1 = '<"%s" SimpleTypeElement instance at 0x%x>' % \
+        return '<"%s" SimpleTypeElement instance at 0x%x>' % \
             (self.getName(), id(self))
-        return s1
 
 
 class XschemaElement(XschemaElementBase):
@@ -514,10 +509,7 @@ class XschemaElement(XschemaElementBase):
 
         for attr in self.getAttributeDefs():
             key = attr['name']
-            try:
-                value = attr['value']
-            except:
-                value = '<empty>'
+            value = attr.get('value', '<empty>')
             showLevel(outfile, level + 1)
             outfile.write('key: %s  value: %s\n' % \
                 (key, value))
@@ -675,23 +667,22 @@ class XschemaElement(XschemaElementBase):
                     type_val = type_val1
                 else:
                     self.complex = 1
+            elif type_val in StringType or \
+                type_val == TokenType or \
+                type_val == DateTimeType or \
+                type_val == DateType or \
+                type_val in IntegerType or \
+                type_val == DecimalType or \
+                type_val == PositiveIntegerType or \
+                type_val == NonPositiveIntegerType or \
+                type_val == NegativeIntegerType or \
+                type_val == NonNegativeIntegerType or \
+                type_val == BooleanType or \
+                type_val == FloatType or \
+                type_val == DoubleType:
+                pass
             else:
-                if type_val in StringType or \
-                    type_val == TokenType or \
-                    type_val == DateTimeType or \
-                    type_val == DateType or \
-                    type_val in IntegerType or \
-                    type_val == DecimalType or \
-                    type_val == PositiveIntegerType or \
-                    type_val == NonPositiveIntegerType or \
-                    type_val == NegativeIntegerType or \
-                    type_val == NonNegativeIntegerType or \
-                    type_val == BooleanType or \
-                    type_val == FloatType or \
-                    type_val == DoubleType:
-                    pass
-                else:
-                    type_val = StringType[0]
+                type_val = StringType[0]
         else:
             type_val = StringType[0]
         logging.debug("%s type resolution, resulting type: %s" % \
@@ -823,14 +814,12 @@ class XschemaElement(XschemaElementBase):
                     groupName, ))
 
     def __str__(self):
-        s1 = '<"%s" XschemaElement instance at 0x%x>' % \
+        return '<"%s" XschemaElement instance at 0x%x>' % \
             (self.getName(), id(self))
-        return s1
 
     def __repr__(self):
-        s1 = '<"%s" XschemaElement instance at 0x%x>' % \
+        return '<"%s" XschemaElement instance at 0x%x>' % \
             (self.getName(), id(self))
-        return s1
 
     def fix_dup_names(self):
         # Patch-up names that are used for both a child element and an attribute.
@@ -866,7 +855,6 @@ class XschemaElement(XschemaElementBase):
             parent.collectElementNames(elementNames)
 
     def coerce_attr_types(self):
-        replacements = []
         attrDefs = self.getAttributeDefs()
         for name in attrDefs:
             attr = attrDefs[name]
@@ -1030,7 +1018,7 @@ class XschemaHandler(handler.ContentHandler):
             self.inElement = 1
             self.inNonanonymousComplexType = 1
             element = XschemaElement(attrs)
-            if not 'type' in list(attrs.keys()) and not 'ref' in list(attrs.keys()):
+            if 'type' not in list(attrs.keys()) and 'ref' not in list(attrs.keys()):
                 element.setExplicitDefine(1)
             if len(self.stack) == 1:
                 element.setTopLevel(1)
@@ -1161,11 +1149,10 @@ class XschemaHandler(handler.ContentHandler):
             if self.inAttribute:
                 if 'base' in attrs:
                     self.lastAttribute.setData_type(attrs['base'])
-            else:
-                # If we are in a simpleType, capture the name of
-                #   the restriction base.
-                if self.inSimpleType and 'base' in list(attrs.keys()):
-                    self.stack[-1].setBase(attrs['base'])
+            # If we are in a simpleType, capture the name of
+            #   the restriction base.
+            elif self.inSimpleType and 'base' in list(attrs.keys()):
+                self.stack[-1].setBase(attrs['base'])
             self.inRestrictionType = 1
         elif name == EnumerationType:
             if self.inAttribute and 'value' in attrs:
@@ -1556,7 +1543,6 @@ def generateExportAttributes(outfile, element, hasAttributes):
             attrDef = attrDefs[key]
             name = attrDef.getName()
             cleanName = mapName(cleanupName(name))
-            capName = make_gs_name(cleanName)
             if attrDef.getUse() == 'optional':
                 s1 = "        if self.%s is not None:\n" % (cleanName, )
                 outfile.write(s1)
@@ -1633,11 +1619,10 @@ def generateExportChildren(outfile, element, hasChildren, namespace):
                     wrt(s1)
                 elif child.getMaxOccurs() > 1:
                     generateExportFn_2(outfile, child, name, namespace, '    ')
+                elif (child.getOptional()):
+                    generateExportFn_3(outfile, child, name, namespace, '')
                 else:
-                    if (child.getOptional()):
-                        generateExportFn_3(outfile, child, name, namespace, '')
-                    else:
-                        generateExportFn_1(outfile, child, name, namespace, '')
+                    generateExportFn_1(outfile, child, name, namespace, '')
 ##    base = element.getBase()
 ##    if base and base in ElementDict:
 ##        parent = ElementDict[base]
@@ -1942,9 +1927,7 @@ def generateExportLiteralFn(outfile, prefix, element):
         count += 1
         name = attrDef.getName()
         cleanName = cleanupName(name)
-        capName = make_gs_name(cleanName)
         mappedName = mapName(cleanName)
-        data_type = attrDef.getData_type()
         attrType = attrDef.getType()
         split_type = attrType.split(':')
         if len(split_type) == 2:
@@ -2033,9 +2016,6 @@ def generateExportLiteralFn(outfile, prefix, element):
     for child in element.getChildren():
         name = child.getName()
         name = cleanupName(name)
-        #unmappedName = child.getUnmappedCleanName()
-        #cleanName = cleanupName(name)
-        #mappedName = mapName(cleanName)
         if element.isMixed():
             s1 = "        showIndent(outfile, level)\n"
             wrt(s1)
@@ -2218,10 +2198,8 @@ def generateBuildAttributes(outfile, element, hasAttributes):
 
 def generateBuildMixed_1(outfile, prefix, child, headChild, keyword, delayed):
     global DelayedElements, DelayedElements_subclass
-    nestedElements = 1
     origName = child.getName()
     name = child.getCleanName()
-    headName = cleanupName(headChild.getName())
     childType = child.getType()
     #below by kerim
      # name_type_problem
@@ -2373,7 +2351,7 @@ def generateBuildMixed_1(outfile, prefix, child, headChild, keyword, delayed):
     else:
         # Perhaps it's a complexType that is defined right here.
         # Generate (later) a class for the nested types.
-        if not delayed and not child in DelayedElements:
+        if not delayed and child not in DelayedElements:
             DelayedElements.append(child)
             DelayedElements_subclass.append(child)
         s1 = "        %s child_.nodeType == Node.ELEMENT_NODE and \\\n" % \
@@ -2441,11 +2419,10 @@ def generateBuildStandard_1(outfile, prefix, child, headChild,
 ##     elif mappedName in ElementDict:
 ##         childType = ElementDict[mappedName].getType()
     childType = child.getType()
-    # fix_simpletype
     base = child.getBase()
     is_simple_type = (child.getSimpleType() or
         (base and base in SimpleTypeDict))
-    # fix_simpletype
+
     if (attrCount == 0 and
         (childType in StringType or
             childType == TokenType or
@@ -2593,7 +2570,7 @@ def generateBuildStandard_1(outfile, prefix, child, headChild,
         if element_base and element_base in ElementDict:
             derived_child = True
             #print element.getName(), element_base
-        if not delayed and not child in DelayedElements:
+        if not delayed and child not in DelayedElements:
             DelayedElements.append(child)
             DelayedElements_subclass.append(child)
         s1 = "        %s child_.nodeType == Node.ELEMENT_NODE and \\\n" % \
@@ -2601,11 +2578,7 @@ def generateBuildStandard_1(outfile, prefix, child, headChild,
         wrt(s1)
         s1 = "            nodeName_ == '%s':\n" % origName
         wrt(s1)
-        # Is this a simple type?
-        base = child.getBase()
-        if (child.getSimpleType() or
-            (base and base in SimpleTypeDict)
-            ):
+        if (is_simple_type):
             s1 = "            obj_ = None\n"
             wrt(s1)
         else:
@@ -2767,8 +2740,7 @@ def buildCtorArgs_multilevel(element):
     if element.isMixed():
         add(', mixedclass_=None')
         add(', content_=None')
-    s1 = ''.join(content)
-    return s1
+    return ''.join(content)
 
 
 def buildCtorArgs_multilevel_aux(addedArgs, add, element):
@@ -2831,29 +2803,26 @@ def buildCtorArgs_aux(addedArgs, add, element):
         elif atype == BooleanType:
             if default is None:
                 add(', %s=None' % mappedName)
+            elif default in ('false', '0'):
+                add(', %s=%s' % (mappedName, "False"))
             else:
-                if default in ('false', '0'):
-                    add(', %s=%s' % (mappedName, "False"))
-                else:
-                    add(', %s=%s' % (mappedName, "True"))
+                add(', %s=%s' % (mappedName, "True"))
         elif atype == FloatType or atype == DoubleType or atype == DecimalType:
             if default is None:
                 add(', %s=None' % mappedName)
             else:
                 add(', %s=%s' % (mappedName, default))
+        elif default is None:
+            add(', %s=None' % mappedName)
         else:
-            if default is None:
-                add(', %s=None' % mappedName)
-            else:
-                add(", %s='%s'" % (mappedName, default, ))
-    nestedElements = 0
+            add(", %s='%s'" % (mappedName, default, ))
     for child in element.getChildren():
         cleanName = child.getCleanName()
         if cleanName in addedArgs:
             continue
         addedArgs[cleanName] = 1
         default = child.getDefault()
-        nestedElements = 1
+        #nestedElements = 1
         if child.getMaxOccurs() > 1:
             add(', %s=None' % cleanName)
         else:
@@ -2905,11 +2874,10 @@ def buildCtorArgs_aux(addedArgs, add, element):
             elif childType == BooleanType:
                 if default is None:
                     add(', %s=None' % cleanName)
+                elif default in ('false', '0'):
+                    add(', %s=%s' % (cleanName, "False", ))
                 else:
-                    if default in ('false', '0'):
-                        add(', %s=%s' % (cleanName, "False", ))
-                    else:
-                        add(', %s=%s' % (cleanName, "True", ))
+                    add(', %s=%s' % (cleanName, "True", ))
             elif childType == FloatType or \
                 childType == DoubleType or \
                 childType == DecimalType:
@@ -2917,11 +2885,10 @@ def buildCtorArgs_aux(addedArgs, add, element):
                     add(', %s=None' % cleanName)
                 else:
                     add(', %s=%s' % (cleanName, default, ))
+            elif default is None:
+                add(', %s=None' % cleanName)
             else:
-                if default is None:
-                    add(', %s=None' % cleanName)
-                else:
-                    add(", '%s=%s'" % (cleanName, default, ))
+                add(", '%s=%s'" % (cleanName, default, ))
 # end buildCtorArgs_aux
 
 
@@ -2962,7 +2929,7 @@ def generateCtor(outfile, element):
         member = 1
     # Generate member initializers in ctor.
     member = 0
-    nestedElements = 0
+    #nestedElements = 0
     for child in element.getChildren():
         name = cleanupName(child.getCleanName())
         logging.debug("Constructor child: %s" % name)
@@ -2982,7 +2949,7 @@ def generateCtor(outfile, element):
                 (name, name)
             outfile.write(s1)
         member = 1
-        nestedElements = 1
+        #nestedElements = 1
     if childCount == 0 or element.isMixed():
         s1 = '        self.valueOf_ = valueOf_\n'
         outfile.write(s1)
@@ -3017,10 +2984,11 @@ def getValidatorBody(stName):
             infile = open(path, 'r')
             lines = infile.readlines()
             infile.close()
-            lines1 = []
-            for line in lines:
-                if not line.startswith('##'):
-                    lines1.append(line)
+            lines1 = [
+                line
+                for line in lines
+                if not line.startswith('##')
+            ]
             s1 = ''.join(lines1)
             retrieved = 1
     if not retrieved:
@@ -3044,7 +3012,7 @@ def generateGettersAndSetters(outfile, element):
         s1 = '    def set%s(self, %s): self.%s = %s\n' % \
             (capName, name, name, name)
         outfile.write(s1)
-        if child.getMaxOccurs() > 1:
+        if getMaxOccurs > 1:
             s1 = '    def add%s(self, value): self.%s.append(value)\n' % \
                 (capName, name)
             outfile.write(s1)
@@ -3599,8 +3567,7 @@ def buildCtorParams(element):
         add(', content_')
     else:
         buildCtorParams_aux(add, element)
-    s1 = ''.join(content)
-    return s1
+    return ''.join(content)
 
 
 def buildCtorParams_aux(add, element):
@@ -3619,13 +3586,10 @@ def buildCtorParams_aux(add, element):
 
 
 def get_class_behavior_args(classBehavior):
-    argList = []
     args = classBehavior.getArgs()
     args = args.getArg()
-    for arg in args:
-        argList.append(arg.getName())
-    argString = ', '.join(argList)
-    return argString
+    argList = [arg.getName() for arg in args]
+    return ', '.join(argList)
 
 
 #
@@ -4144,10 +4108,8 @@ def strip_namespace(val):
 
 
 def escape_string(instring):
-    s1 = instring
-    s1 = s1.replace('\\', '\\\\')
-    s1 = s1.replace("'", "\\'")
-    return s1
+    s1 = instring.replace('\\', '\\\\')
+    return s1.replace("'", "\\'")
 
 
 ##def process_include(inpath, outpath):
@@ -4294,7 +4256,7 @@ def main():
             'member-specs=',
             'version',
             ])
-    except getopt.GetoptError as exp:
+    except getopt.GetoptError:
         usage()
     prefix = ''
     outFilename = None

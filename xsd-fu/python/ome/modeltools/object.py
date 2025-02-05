@@ -25,16 +25,13 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from collections import OrderedDict
 import logging
-
+from collections import OrderedDict
 from xml.etree import ElementTree
 
+from ome.modeltools import config, language
 from ome.modeltools.entity import OMEModelEntity
 from ome.modeltools.property import OMEModelProperty
-
-from ome.modeltools import config
-from ome.modeltools import language
 
 
 class OMEModelObject(OMEModelEntity):
@@ -252,12 +249,15 @@ class OMEModelObject(OMEModelEntity):
             props.append([
                 self.langBaseType, "value", None, "Element's text data",
                 False])
-        for prop in self.properties.values():
-            if not prop.isUnitsEnumeration:
-                props.append([
-                    prop.instanceVariableType, prop.instanceVariableName,
-                    prop.instanceVariableDefault, prop.instanceVariableComment,
-                    prop.isUnitsEnumeration])
+        props.extend(
+            [
+                prop.instanceVariableType, prop.instanceVariableName,
+                prop.instanceVariableDefault, prop.instanceVariableComment,
+                prop.isUnitsEnumeration
+            ]
+            for prop in self.properties.values()
+            if not prop.isUnitsEnumeration
+        )
         return props
     instanceVariables = property(
         _get_instanceVariables,
@@ -302,7 +302,7 @@ class OMEModelObject(OMEModelEntity):
         parent = None
 
         if parents is not None:
-            parent = self.model.getObjectByName(list(parents.keys())[0])
+            parent = self.model.getObjectByName(next(iter(parents.keys())))
 
         return parent
 

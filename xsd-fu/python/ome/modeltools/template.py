@@ -28,7 +28,7 @@
 from ome.modeltools import config
 
 try:
-    import mx.DateTime as DateTime
+    from mx import DateTime
 
     def now():
         return DateTime.ISO.str(DateTime.now())
