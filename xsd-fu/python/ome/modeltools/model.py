@@ -46,8 +46,9 @@ class ReferenceDelegate:
     interface as a delegate coming from generateDS (ie. an "attribute" or
     an "element").
     """
+
     def __init__(self, name, dataType, plural):
-        self.name = name + "_BackReference"
+        self.name = name + '_BackReference'
         self.dataType = dataType
         self.plural = plural
         # Ensures property code which is looking for elements or attributes
@@ -90,16 +91,18 @@ class OMEModel:
     def addObject(self, element, obj):
         elementName = element.getName()
         if element in self.objects:
-            raise ModelProcessingError(
-                "Element %s has been processed!" % element)
+            raise ModelProcessingError('Element %s has been processed!' % element)
         if elementName in self.elementNameObjectMap:
-            if (elementName == "EmissionFilterRef" or
-                    elementName == "ExcitationFilterRef"):
+            if (
+                elementName == 'EmissionFilterRef'
+                or elementName == 'ExcitationFilterRef'
+            ):
                 pass
             else:
                 logging.warn(
-                    "Element %s has duplicate object with same name,"
-                    " skipping!" % element)
+                    'Element %s has duplicate object with same name,'
+                    ' skipping!' % element
+                )
             return
         self.elementNameObjectMap[element.getName()] = obj
         self.objects[element] = obj
@@ -134,18 +137,16 @@ class OMEModel:
         obj = self.getObject(element)
         length = len(attributes)
         for i, key in enumerate(attributes):
-            logging.debug("Processing attribute: %s %d/%d"
-                          % (key, i + 1, length))
+            logging.debug('Processing attribute: %s %d/%d' % (key, i + 1, length))
             attribute = attributes[key]
-            logging.debug("Dump: %s" % attribute.__dict__)
+            logging.debug('Dump: %s' % attribute.__dict__)
             obj.addAttribute(attribute)
 
         children = element.getChildren()
         length = len(children)
         for i, child in enumerate(children):
-            logging.debug("Processing child: %s %d/%d"
-                          % (child, i + 1, length))
-            logging.debug("Dump: %s" % child.__dict__)
+            logging.debug('Processing child: %s %d/%d' % (child, i + 1, length))
+            logging.debug('Dump: %s' % child.__dict__)
             obj.addElement(child)
 
     def processLeaf(self, element, parent):
@@ -153,30 +154,33 @@ class OMEModel:
         Process an element (a leaf).
         """
         e = element
-        logging.debug("Processing leaf (topLevel? %s): (%s) --> (%s)"
-                      % (e.topLevel, parent, e))
+        logging.debug(
+            'Processing leaf (topLevel? %s): (%s) --> (%s)' % (e.topLevel, parent, e)
+        )
         e_name = e.getName()
         e_type = e.getType()
         if parent is not None:
             if e_name not in self.parents:
                 self.parents[e_name] = list()
             self.parents[e_name].append(parent.getName())
-        if (not e.isExplicitDefine() and
-                (e_name not in config.EXPLICIT_DEFINE_OVERRIDE and
-                 not e.topLevel)):
+        if not e.isExplicitDefine() and (
+            e_name not in config.EXPLICIT_DEFINE_OVERRIDE and not e.topLevel
+        ):
             logging.info(
-                "Element %s.%s not an explicit define, skipping."
-                % (parent, e))
+                'Element %s.%s not an explicit define, skipping.' % (parent, e)
+            )
             return
         if e.getMixedExtensionError():
             logging.error(
-                "Element %s.%s extension chain contains mixed and non-mixed"
-                " content, skipping." % (parent, e))
+                'Element %s.%s extension chain contains mixed and non-mixed'
+                ' content, skipping.' % (parent, e)
+            )
             return
         if e_type != e_name and e_name not in config.EXPLICIT_DEFINE_OVERRIDE:
             logging.info(
-                "Element %s.%s is not a concrete type (%s != %s), skipping."
-                % (parent, e, e_type, e_name))
+                'Element %s.%s is not a concrete type (%s != %s), skipping.'
+                % (parent, e, e_type, e_name)
+            )
             return
         obj = OMEModelObject(e, parent, self)
         if self.opts.lang.isPrimitiveBase(obj.base):
@@ -198,13 +202,12 @@ class OMEModel:
         for i, element in enumerate(elements):
             if self.opts.lang.hasSubstitutionGroup(element.getName()):
                 continue
-            if (element.getName() in list(self.substitutionElement_map.keys())):
+            if element.getName() in list(self.substitutionElement_map.keys()):
                 if parent is not None:
                     element = self.substitutionElement_map[element.getName()]
                 if parent is None:
                     continue
-            logging.info("Processing element: %s %d/%d"
-                         % (element, i + 1, length))
+            logging.info('Processing element: %s %d/%d' % (element, i + 1, length))
             self.processLeaf(element, parent)
             children = element.getChildren()
             if children:
@@ -249,8 +252,11 @@ class OMEModel:
                     prop.delegate.unmappedCleanName = abstractName
                     prop.delegate.cleanName = abstractName
                 if not prop.isReference and (
-                        prop.isAttribute or prop.maxOccurs == 1 or
-                        o.name == 'OME' or o.isAbstract):
+                    prop.isAttribute
+                    or prop.maxOccurs == 1
+                    or o.name == 'OME'
+                    or o.isAbstract
+                ):
                     continue
                 shortName = config.REF_REGEX.sub('', prop.type)
                 try:
@@ -260,16 +266,19 @@ class OMEModel:
                     pass
                 if shortName not in references:
                     references[shortName] = list()
-                v = {'data_type': o.name, 'property_name': prop.methodName,
-                     'plural': prop.plural,
-                     'maxOccurs': self.calculateMaxOccurs(o, prop),
-                     'minOccurs': self.calculateMinOccurs(o, prop),
-                     'isOrdered': prop.isOrdered,
-                     'isChildOrdered': prop.isChildOrdered,
-                     'isParentOrdered': prop.isParentOrdered,
-                     'isInjected': prop.isInjected}
+                v = {
+                    'data_type': o.name,
+                    'property_name': prop.methodName,
+                    'plural': prop.plural,
+                    'maxOccurs': self.calculateMaxOccurs(o, prop),
+                    'minOccurs': self.calculateMinOccurs(o, prop),
+                    'isOrdered': prop.isOrdered,
+                    'isChildOrdered': prop.isChildOrdered,
+                    'isParentOrdered': prop.isParentOrdered,
+                    'isInjected': prop.isInjected,
+                }
                 references[shortName].append(v)
-        logging.debug("Model references: %s" % references)
+        logging.debug('Model references: %s' % references)
 
         for o in self.objects.values():
             if o.name not in references:
@@ -277,7 +286,8 @@ class OMEModel:
             for ref in references[o.name]:
                 key = '%s.%s' % (ref['data_type'], ref['property_name'])
                 delegate = ReferenceDelegate(
-                    ref['data_type'], ref['data_type'], ref['plural'])
+                    ref['data_type'], ref['data_type'], ref['plural']
+                )
                 delegate.minOccurs = ref['minOccurs']
                 delegate.maxOccurs = ref['maxOccurs']
                 prop = OMEModelProperty.fromReference(delegate, o, self)
@@ -302,6 +312,7 @@ class OMEModel:
         model.processTree(elements)
         model.postProcessReferences()
         return model
+
     process = classmethod(process)
 
     def resolve_parents(self, element_name):
@@ -329,7 +340,9 @@ class OMEModel:
                 self.opts.lang.substitutionGroup_map[base] = substitutionGroup
         for element in elements:
             if self.opts.lang.hasSubstitutionGroup(element.getName()):
-                substitutionGroupName = self.opts.lang.substitutionGroup(element.getName())
+                substitutionGroupName = self.opts.lang.substitutionGroup(
+                    element.getName()
+                )
                 self.substitutionElement_map[substitutionGroupName] = element
                 continue
         if len(self.opts.lang.getSubstitutionTypes()) > 0:

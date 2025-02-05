@@ -30,7 +30,7 @@ import os
 
 from ome.modeltools.exceptions import ModelProcessingError
 
-TYPE_SOURCE = "source"
+TYPE_SOURCE = 'source'
 
 
 class Language:
@@ -38,6 +38,7 @@ class Language:
     Base class for output language.
     Updates the type maps with the model namespace.
     """
+
     def __init__(self, namespace, templatepath):
         self.modelNamespace = namespace
         self._templatepath = templatepath
@@ -74,8 +75,8 @@ class Language:
             'METADATA_AGGREGATE': 'AggregateMetadata.template',
             'OMEXML_METADATA': 'OMEXMLMetadataImpl.template',
             'DUMMY_METADATA': 'DummyMetadata.template',
-            'FILTER_METADATA': 'FilterMetadata.template'
-            }
+            'FILTER_METADATA': 'FilterMetadata.template',
+        }
 
         # A global type mapping from XSD Schema types to language
         # primitive base classes.
@@ -89,8 +90,8 @@ class Language:
             'PercentFraction': 'PercentFraction',
             'Color': 'Color',
             'Text': 'Text',
-            namespace + 'dateTime':   'Timestamp'
-            }
+            namespace + 'dateTime': 'Timestamp',
+        }
 
         # A global type mapping from XSD Schema substitution groups to language abstract classes
         self.abstract_type_map = dict()
@@ -107,11 +108,11 @@ class Language:
         # wish subclassing to take place.
         self.base_type_map = {
             'UniversallyUniqueIdentifier': self.getDefaultModelBaseClass(),
-            'base64Binary': self.getDefaultModelBaseClass()
-            }
+            'base64Binary': self.getDefaultModelBaseClass(),
+        }
 
         # A global set XSD Schema types use as base classes which are primitive
-        self.primitive_base_types = {"base64Binary"}
+        self.primitive_base_types = {'base64Binary'}
 
         self.model_unit_map = {}
         self.model_unit_default = {}
@@ -144,8 +145,9 @@ class Language:
         return self.template_dir
 
     def templatepath(self, template):
-        return os.path.join(self._templatepath, self.getTemplateDirectory(),
-                            self.getTemplate(template))
+        return os.path.join(
+            self._templatepath, self.getTemplateDirectory(), self.getTemplate(template)
+        )
 
     def getConverterDir(self):
         return self.converter_dir
@@ -159,8 +161,8 @@ class Language:
             gen_name = name + self.source_suffix
         else:
             raise ModelProcessingError(
-                "Invalid language/filetype combination: %s/%s"
-                % (self.name, type))
+                'Invalid language/filetype combination: %s/%s' % (self.name, type)
+            )
         return gen_name
 
     def hasBaseType(self, type):
@@ -176,7 +178,10 @@ class Language:
         return type in self.fundamental_types
 
     def hasPrimitiveType(self, type):
-        return type in list(self.primitive_type_map.values()) or type in self.primitive_types
+        return (
+            type in list(self.primitive_type_map.values())
+            or type in self.primitive_types
+        )
 
     def primitiveType(self, type):
         try:
@@ -220,20 +225,20 @@ class Language:
     def index_signature(self, name, max_occurs, level, dummy=False):
         sig = {
             'type': name,
-            }
+        }
 
         if name[:2].isupper():
-            sig['argname'] = "%sIndex" % name
+            sig['argname'] = '%sIndex' % name
         else:
-            sig['argname'] = "%s%sIndex" % (name[:1].lower(), name[1:])
+            sig['argname'] = '%s%sIndex' % (name[:1].lower(), name[1:])
 
         return sig
 
     def index_string(self, signature, dummy=False):
         if dummy is False:
-            return "%s %s" % (signature['argtype'], signature['argname'])
+            return '%s %s' % (signature['argtype'], signature['argname'])
         else:
-            return "%s /* %s */" % (signature['argtype'], signature['argname'])
+            return '%s /* %s */' % (signature['argtype'], signature['argname'])
 
     def index_argname(self, signature, dummy=False):
         return signature['argname']
@@ -245,7 +250,7 @@ class Java(Language):
 
         self.package_separator = '.'
 
-        self.base_class = "Object"
+        self.base_class = 'Object'
 
         self.primitive_type_map[namespace + 'boolean'] = 'Boolean'
         self.primitive_type_map[namespace + 'string'] = 'String'
@@ -285,27 +290,29 @@ class Java(Language):
         self._initTypeMap()
         self.type_map['MIMEtype'] = 'String'
 
-        self.name = "Java"
-        self.template_dir = "templates/java"
-        self.source_suffix = ".java"
-        self.converter_name = "MetadataConverter"
-        self.converter_dir = "ome-xml/src/main/java/ome/xml/meta"
+        self.name = 'Java'
+        self.template_dir = 'templates/java'
+        self.source_suffix = '.java'
+        self.converter_name = 'MetadataConverter'
+        self.converter_dir = 'ome-xml/src/main/java/ome/xml/meta'
 
-        self.omexml_model_package = "ome.xml.model"
-        self.omexml_model_enums_package = "ome.xml.model.enums"
-        self.omexml_model_omexml_model_enum_handlers_package = \
-            "ome.xml.model.enums.handlers"
-        self.metadata_package = "ome.xml.meta"
-        self.omexml_metadata_package = "ome.xml.meta"
+        self.omexml_model_package = 'ome.xml.model'
+        self.omexml_model_enums_package = 'ome.xml.model.enums'
+        self.omexml_model_omexml_model_enum_handlers_package = (
+            'ome.xml.model.enums.handlers'
+        )
+        self.metadata_package = 'ome.xml.meta'
+        self.omexml_metadata_package = 'ome.xml.meta'
 
-        self.units_implementation_is = "ome"
-        self.units_package = "ome.units"
-        self.units_implementation_imports = \
-            "import ome.units.quantity.*;\nimport ome.units.*;"
+        self.units_implementation_is = 'ome'
+        self.units_package = 'ome.units'
+        self.units_implementation_imports = (
+            'import ome.units.quantity.*;\nimport ome.units.*;'
+        )
         self.model_unit_map['UnitsTime'] = 'Time'
 
     def getDefaultModelBaseClass(self):
-        return "AbstractOMEModelObject"
+        return 'AbstractOMEModelObject'
 
     def typeToUnitsType(self, unitType):
         return self.model_unit_map[unitType]
@@ -329,10 +336,9 @@ def create(language, namespace, templatepath):
 
     lang = None
 
-    if language == "Java":
+    if language == 'Java':
         lang = Java(namespace, templatepath)
     else:
-        raise ModelProcessingError(
-            "Invalid language: %s" % language)
+        raise ModelProcessingError('Invalid language: %s' % language)
 
     return lang

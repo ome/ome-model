@@ -83,18 +83,19 @@ BACK_REFERENCE_CLASS_NAME_OVERRIDE = {
 
 # Properties within abstract proprietary types that should be code generated
 # for.
-COMPLEX_OVERRIDE = ('Transform')
+COMPLEX_OVERRIDE = 'Transform'
 ANNOTATION_OVERRIDE = ('AnnotationRef',)
 
 # The list of properties not to process.
 DO_NOT_PROCESS = []  # ["ID"]
 
 # Default root XML Schema namespace
-DEFAULT_NAMESPACE = "xsd:"
+DEFAULT_NAMESPACE = 'xsd:'
 
 # The package regular expression for OME namespaces.
 PACKAGE_NAMESPACE_RE = re.compile(
-    r'http://www.openmicroscopy.org/Schemas/(\w+)/\d+-\w+')
+    r'http://www.openmicroscopy.org/Schemas/(\w+)/\d+-\w+'
+)
 
 REF_REGEX = re.compile(r'Ref$|RefNode$')
 
@@ -107,7 +108,7 @@ ENUM_HANDLERS = {
     'AcquisitionMode': [
         ('.*Widefield.*', 'WideField'),
         ('^Laser Scan Confocal$', 'LaserScanningConfocalMicroscopy'),
-        ('^Swept Field Confocal$', 'SweptFieldConfocal')
+        ('^Swept Field Confocal$', 'SweptFieldConfocal'),
     ],
     'Correction': [
         ('.*Pl.*Apo.*', 'PlanApo'),
@@ -118,12 +119,12 @@ ENUM_HANDLERS = {
         ('.*Flu.*tar.*', 'Fluotar'),
         ('.*Fluo.*', 'Fluor'),
         ('.*Flua.*', 'Fluar'),
-        ('^\\s*Apo.*', 'Apo')
+        ('^\\s*Apo.*', 'Apo'),
     ],
     'DetectorType': [
         ('.*EM.*CCD.*', 'EM-CCD'),
         ('.*CCD.*', 'CCD'),
-        ('.*CMOS.*', 'CMOS')
+        ('.*CMOS.*', 'CMOS'),
     ],
     'Immersion': [
         ('^\\s*Dry\\s*', 'Air'),
@@ -133,6 +134,6 @@ ENUM_HANDLERS = {
         ('.*Wasser.*', 'Water'),
         ('.*Gly.*', 'Glycerol'),
         ('^\\s*Wl\\s*', 'Water'),
-        ('^\\s*W\\s*', 'Water')
-    ]
+        ('^\\s*W\\s*', 'Water'),
+    ],
 }

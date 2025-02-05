@@ -42,6 +42,7 @@ transforms = defaultdict(list)
 
 # report the quality of a single transform
 
+
 def quality(from_schema, to_schema):
     if from_schema < to_schema:
         return 4
@@ -54,6 +55,7 @@ def quality(from_schema, to_schema):
 
 
 # find the shortest sequence of transforms of sufficient quality
+
 
 def shortest_path(from_schema, to_schema, min_quality):
     paths = [[from_schema]]
@@ -68,8 +70,10 @@ def shortest_path(from_schema, to_schema, min_quality):
         for path in paths:
             curr_step = path[-1]
             for next_step in transforms[curr_step]:
-                if quality(curr_step, next_step) >= min_quality and \
-                        next_step not in path:
+                if (
+                    quality(curr_step, next_step) >= min_quality
+                    and next_step not in path
+                ):
                     next_path = list(path)
                     next_path.append(next_step)
                     next_paths.append(next_path)
@@ -85,6 +89,7 @@ name_pattern = re.compile(r'^(.+)\-to\-(.+)\.xsl$')
 
 
 # scan the current directory to determine the schemas and transforms
+
 
 def load_transforms():
     global transforms
@@ -123,8 +128,7 @@ for from_schema in schemas:
                     best_paths[(from_schema, to_schema)] = (path, min_quality)
                     break
             if not best_paths[(from_schema, to_schema)]:
-                raise Exception(
-                    'no path from ' + from_schema + ' to ' + to_schema)
+                raise Exception('no path from ' + from_schema + ' to ' + to_schema)
 
 
 # name the quality levels of transforms
@@ -134,13 +138,18 @@ qualities = ['poor', 'fair', 'good', 'excellent']
 
 # print in XML a sequence of transforms to the given schema
 
+
 def print_path(to_schema):
     (path, min_quality) = best_paths[(from_schema, to_schema)]
-    print('\t\t\t<target schema="' + to_schema + \
-        '" quality="' + qualities[min_quality - 1] + '">')
+    print(
+        '\t\t\t<target schema="'
+        + to_schema
+        + '" quality="'
+        + qualities[min_quality - 1]
+        + '">'
+    )
     while len(path) > 1:
-        print('\t\t\t\t<transform file="' + \
-            path[0] + '-to-' + path[1] + '.xsl"/>')
+        print('\t\t\t\t<transform file="' + path[0] + '-to-' + path[1] + '.xsl"/>')
         path = path[1:]
     print('\t\t\t</target>')
 

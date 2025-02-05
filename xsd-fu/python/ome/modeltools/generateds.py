@@ -52,10 +52,10 @@ def parse(opts):
 
     schemas = dict()
 
-    logging.debug("Namespace: %s" % namespace)
+    logging.debug('Namespace: %s' % namespace)
     set_type_constants(namespace)
     generateDS.generateDS.XsdNameSpace = namespace
-    logging.debug("Type map: %s" % opts.lang.type_map)
+    logging.debug('Type map: %s' % opts.lang.type_map)
 
     parser = sax.make_parser()
     ch = XschemaHandler()
@@ -71,7 +71,8 @@ def parse(opts):
     root = ch.getRoot()
     if root is None:
         raise ModelProcessingError(
-            "No model objects found, have you set the correct namespace?")
+            'No model objects found, have you set the correct namespace?'
+        )
     root.annotate()
     return OMEModel.process(ch, schemas, opts)
 
@@ -97,7 +98,7 @@ def reset():
     generateDS.generateDS.ExternalEncoding = sys.getdefaultencoding()
 
     generateDS.generateDS.NamespacesDict = {}
-    generateDS.generateDS.Targetnamespace = ""
+    generateDS.generateDS.Targetnamespace = ''
 
     generateDS.generateDS.NameTable = {
         'type': 'type_',

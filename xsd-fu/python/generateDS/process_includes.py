@@ -23,8 +23,6 @@ Examples:
 #
 # Imports
 
-
-
 import getopt
 import os
 import re
@@ -40,19 +38,23 @@ import urllib.request
 WhichElementTree = ''
 try:
     from lxml import etree
+
     WhichElementTree = 'lxml'
 except ImportError:
     from xml.etree import ElementTree as etree
+
     WhichElementTree = 'elementtree'
 if WhichElementTree != 'lxml' or etree.LXML_VERSION[0] < 2:
     print('***')
     print('*** Error: Must install lxml (v. >= 2.0) or use "--no-process-includes".')
     print('***     Override this error by modifying the above test.')
     print('***     But, see the docs before doing so:')
-    print('***       http://www.rexx.com/~dkuhlman/generateDS.html#include-file-processing')
+    print(
+        '***       http://www.rexx.com/~dkuhlman/generateDS.html#include-file-processing'
+    )
     print('***')
     raise RuntimeError('Must install lxml (v. >= 2.0) or use "--no-process-includes".')
-#print WhichElementTree, etree
+# print WhichElementTree, etree
 
 
 #
@@ -65,7 +67,6 @@ DIRPATH = []
 
 #
 # Classes
-
 
 
 #
@@ -106,6 +107,7 @@ def process_path(root, idx, path):
         count += 1
     return count
 
+
 def process_include_tree(root):
     global DIRPATH
 
@@ -115,7 +117,7 @@ def process_include_tree(root):
         child = children[idx]
         tag = child.tag
         if tag is str:
-            tag = NAMESPACE_PAT.sub("", tag)
+            tag = NAMESPACE_PAT.sub('', tag)
         else:
             tag = None
         if tag == 'include' and 'schemaLocation' in child.attrib:
@@ -126,12 +128,12 @@ def process_include_tree(root):
                 idx = process_path(root, idx, path)
             else:
                 for d in DIRPATH:
-                    path = os.path.join(d,locn)
+                    path = os.path.join(d, locn)
                     if os.path.exists(path):
                         idx = process_path(root, idx, path)
                         break
                 else:
-                    msg = "Can't find include file %s.  Aborting." % (path, )
+                    msg = "Can't find include file %s.  Aborting." % (path,)
                     raise OSError(msg)
         elif tag == 'import' and 'schemaLocation' in child.attrib:
             root.remove(child)
@@ -141,18 +143,18 @@ def process_include_tree(root):
                     path, msg = urllib.request.urlretrieve(locn)
                     idx = process_path(root, idx, path)
                 except Exception:
-                    msg = "Can't retrieve import file %s.  Aborting." % (locn, )
+                    msg = "Can't retrieve import file %s.  Aborting." % (locn,)
                     raise OSError(msg)
             elif os.path.exists(locn):
                 idx = process_path(root, idx, locn)
             else:
                 for d in DIRPATH:
-                    path = os.path.join(d,locn)
+                    path = os.path.join(d, locn)
                     if os.path.exists(path):
                         idx = process_path(root, idx, path)
                         break
                 else:
-                    msg = "Can't find import file %s.  Aborting." % (locn, )
+                    msg = "Can't find import file %s.  Aborting." % (locn,)
                     raise OSError(msg)
         else:
             process_include_tree(child)
@@ -174,6 +176,7 @@ def make_file(outFileName):
 
 USAGE_TEXT = __doc__
 
+
 def usage():
     print(USAGE_TEXT)
     sys.exit(1)
@@ -184,7 +187,15 @@ def main():
     global DIRPATH
     args = sys.argv[1:]
     try:
-        opts, args = getopt.getopt(args, 'hfs:', ['help', 'force', 'search=',])
+        opts, args = getopt.getopt(
+            args,
+            'hfs:',
+            [
+                'help',
+                'force',
+                'search=',
+            ],
+        )
     except getopt.GetoptError:
         usage()
     for opt, val in opts:
@@ -209,5 +220,5 @@ def main():
 
 
 if __name__ == '__main__':
-    #import pdb; pdb.set_trace()
+    # import pdb; pdb.set_trace()
     main()

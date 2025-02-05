@@ -18,7 +18,6 @@
 
 """Various utility classes and functions."""
 
-
 import codecs
 import os
 import re
@@ -55,9 +54,11 @@ def distinct(iterable):
             yield item
             seen.add(item)
 
+
 # Regexp to match python magic encoding line
 PYTHON_MAGIC_COMMENT_re = re.compile(
-    r'[ \t\f]* \# .* coding[=:][ \t]*([-\w.]+)', re.VERBOSE)
+    r'[ \t\f]* \# .* coding[=:][ \t]*([-\w.]+)', re.VERBOSE
+)
 
 
 def parse_encoding(fp):
@@ -77,12 +78,13 @@ def parse_encoding(fp):
         line1 = fp.readline()
         has_bom = line1.startswith(codecs.BOM_UTF8)
         if has_bom:
-            line1 = line1[len(codecs.BOM_UTF8):]
+            line1 = line1[len(codecs.BOM_UTF8) :]
 
         m = PYTHON_MAGIC_COMMENT_re.match(line1)
         if not m:
             try:
                 import parser
+
                 parser.suite(line1)
             except (ImportError, SyntaxError):
                 # Either it's a real syntax error, in which case the source is
@@ -97,8 +99,9 @@ def parse_encoding(fp):
         if has_bom:
             if m:
                 raise SyntaxError(
-                    "python refuses to compile code with both a UTF8 "
-                    "byte-order-mark and a magic encoding comment")
+                    'python refuses to compile code with both a UTF8 '
+                    'byte-order-mark and a magic encoding comment'
+                )
             return 'utf_8'
         elif m:
             return m.group(1)
@@ -139,12 +142,12 @@ def pathmatch(pattern, filename):
     :rtype: `bool`
     """
     symbols = {
-        '?':   '[^/]',
-        '?/':  '[^/]/',
-        '*':   '[^/]+',
-        '*/':  '[^/]+/',
+        '?': '[^/]',
+        '?/': '[^/]/',
+        '*': '[^/]+',
+        '*/': '[^/]+/',
         '**/': '(?:.+/)*?',
-        '**':  '(?:.+/)*?[^/]+',
+        '**': '(?:.+/)*?[^/]+',
     }
     buf = []
     for idx, part in enumerate(re.split(r'([?*]+/?)', pattern)):
@@ -158,8 +161,8 @@ def pathmatch(pattern, filename):
 
 class TextWrapper(textwrap.TextWrapper):
     wordsep_re = re.compile(
-        r'(\s+|'                                  # any whitespace
-        r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))'    # em-dash
+        r'(\s+|'  # any whitespace
+        r'(?<=[\w\!\"\'\&\.\,\?])-{2,}(?=\w))'  # em-dash
     )
 
 
@@ -176,15 +179,19 @@ def wraptext(text, width=70, initial_indent='', subsequent_indent=''):
     :return: a list of lines
     :rtype: `list`
     """
-    wrapper = TextWrapper(width=width, initial_indent=initial_indent,
-                          subsequent_indent=subsequent_indent,
-                          break_long_words=False)
+    wrapper = TextWrapper(
+        width=width,
+        initial_indent=initial_indent,
+        subsequent_indent=subsequent_indent,
+        break_long_words=False,
+    )
     return wrapper.wrap(text)
 
 
 try:
     relpath = os.path.relpath
 except AttributeError:
+
     def relpath(path, start='.'):
         """Compute the relative path to one path from another.
 
@@ -206,6 +213,7 @@ except AttributeError:
 
         rel_list = [os.path.pardir] * (len(start_list) - i) + path_list[i:]
         return os.path.join(*rel_list)
+
 
 ZERO = timedelta(0)
 
@@ -245,7 +253,6 @@ DSTDIFF = DSTOFFSET - STDOFFSET
 
 
 class LocalTimezone(tzinfo):
-
     def utcoffset(self, dt):
         if self._isdst(dt):
             return DSTOFFSET
@@ -262,9 +269,17 @@ class LocalTimezone(tzinfo):
         return time.tzname[self._isdst(dt)]
 
     def _isdst(self, dt):
-        tt = (dt.year, dt.month, dt.day,
-              dt.hour, dt.minute, dt.second,
-              dt.weekday(), 0, -1)
+        tt = (
+            dt.year,
+            dt.month,
+            dt.day,
+            dt.hour,
+            dt.minute,
+            dt.second,
+            dt.weekday(),
+            0,
+            -1,
+        )
         stamp = time.mktime(tt)
         tt = time.localtime(stamp)
         return tt.tm_isdst > 0
