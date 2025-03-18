@@ -69,8 +69,8 @@
     <url>http://github.com/ome/ome-model</url>
   </scm>
   <issueManagement>
-    <system>Trac</system>
-    <url>https://trac.openmicroscopy.org/ome</url>
+    <system>GitHub</system>
+    <url>https://github.com/ome/ome-model/issues</url>
   </issueManagement>
   <ciManagement>
     <system>Jenkins</system>
