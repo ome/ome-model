@@ -137,11 +137,12 @@
         <plugin>
 	  <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.7.0</version>
+          <version>3.14.0</version>
           <!-- Require the Java 8 platform. -->
           <configuration>
-            <source>1.8</source>
-            <target>1.8</target>
+            <source>8</source>
+            <target>8</target>
+            <release>8</release>
           </configuration>
         </plugin>
 
