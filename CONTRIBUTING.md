@@ -20,9 +20,9 @@ please ensure you read these.
 * Make sure you include details of the problem you are fixing and how to test
   your changes.
 * We may need you to submit some test data
-  [via our QA system](http://qa.openmicroscopy.org.uk/qa/upload/). If the
+  [via Zenodo](https://zenodo.org/communities/bio-formats/). If the
   files are particularly large (> ~2 GB), contact the
-  [mailing list](https://www.openmicroscopy.org/support/)
+  [image.sc forum](https://forum.image.sc/)
   and we will get back to you with secure upload details.
 
 ## External Contributors
@@ -56,6 +56,6 @@ style guidance from the
 [OME Documentation Repository README](https://github.com/openmicroscopy/ome-documentation/blob/develop/README.rst#conventions-used).
 
 Documentation for new supported formats is auto-generated so it is best to
-contact the [mailing list](https://www.openmicroscopy.org/support/)
+contact the [image.sc forum](https://forum.image.sc/)
 before embarking on such a change, or submit your new reader code and let one
 of the main OME team deal with the documentation for you.
