@@ -16,11 +16,11 @@
 
   <name>OME XML library</name>
   <description>A library for working with OME-XML metadata structures.</description>
-  <url>http://www.openmicroscopy.org/site/support/ome-model/ome-xml/java-library.html</url>
+  <url>https://ome-model.readthedocs.io/en/stable/ome-xml/java-library.html</url>
   <inceptionYear>2006</inceptionYear>
   <organization>
     <name>Open Microscopy Environment</name>
-    <url>http://www.openmicroscopy.org/</url>
+    <url>https://www.openmicroscopy.org/</url>
   </organization>
   <licenses>
     <license>

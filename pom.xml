@@ -12,11 +12,11 @@
 
   <name>OME Model</name>
   <description>Contains the OME imaging metadata model specification, code generator and implementation</description>
-  <url>http://www.openmicroscopy.org/site/products/bio-formats</url>
+  <url>https://www.openmicroscopy.org/ome-file-formats/</url>
   <inceptionYear>2005</inceptionYear>
   <organization>
     <name>Open Microscopy Environment</name>
-    <url>http://www.openmicroscopy.org/</url>
+    <url>https://www.openmicroscopy.org/</url>
   </organization>
   <licenses>
     <license>
@@ -66,15 +66,15 @@
     <connection>scm:git:https://github.com/ome/ome-model</connection>
     <developerConnection>scm:git:git@github.com:ome/ome-model</developerConnection>
     <tag>HEAD</tag>
-    <url>http://github.com/ome/ome-model</url>
+    <url>https://github.com/ome/ome-model</url>
   </scm>
   <issueManagement>
     <system>GitHub</system>
     <url>https://github.com/ome/ome-model/issues</url>
   </issueManagement>
   <ciManagement>
-    <system>Jenkins</system>
-    <url>https://ci.openmicroscopy.org/</url>
+    <system>GitHub actions</system>
+    <url>https://github.com/ome/ome-model/actions</url>
   </ciManagement>
 
   <properties>
