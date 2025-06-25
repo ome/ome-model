@@ -16,11 +16,11 @@
 
   <name>Metadata model specification</name>
   <description>The OME Data Model specification</description>
-  <url>http://www.openmicroscopy.org/site/support/ome-model/</url>
+  <url>https://ome-model.readthedocs.io/en/stable/</url>
   <inceptionYear>2003</inceptionYear>
   <organization>
     <name>Open Microscopy Environment</name>
-    <url>http://www.openmicroscopy.org/</url>
+    <url>https://www.openmicroscopy.org/</url>
   </organization>
   <licenses>
     <license>
@@ -30,7 +30,7 @@
     </license>
     <license>
       <name>Creative Commons Attribution 3.0 Unported License</name>
-      <url>http://creativecommons.org/licenses/by/3.0/</url>
+      <url>https://creativecommons.org/licenses/by/3.0/</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
