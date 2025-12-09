@@ -147,10 +147,13 @@
       // Extend list by one element if needed (only allows sequential growth)
       if (concreteObject.sizeOfLinked${prop.methodName}List() == ${index_name_string(prop.name)})
       {
-        concreteObject.link${prop.methodName}(null);
+        concreteObject.link${prop.methodName}(typedRef);
       }
-      // Set at specific index
-      concreteObject.setLinked${prop.methodName}(${index_name_string(prop.name)}, typedRef);
+      else
+      {
+        // Set at specific index
+        concreteObject.setLinked${prop.methodName}(${index_name_string(prop.name)}, typedRef);
+      }
     }
     else
     {
