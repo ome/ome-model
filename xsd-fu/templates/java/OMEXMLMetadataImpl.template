@@ -137,9 +137,37 @@
     // ${prop.name} is reference and occurs more than once
     ${prop.name} ${prop.instanceVariableName}_reference = new ${prop.name}();
     ${prop.instanceVariableName}_reference.setID(${prop.argumentName});
+{% if prop.maxOccurs > 1 %}\
+    // Try to resolve reference immediately if the referenced object exists
+    OMEModelObject referencedObj = model.getModelObject(${prop.argumentName});
+    if (referencedObj != null && referencedObj instanceof ${prop.langType})
+    {
+      ${prop.langType} typedRef = (${prop.langType}) referencedObj;
+      ${obj.langType} concreteObject = ${join_accessors(obj.name, parent, prop)};
+      // Extend list by one element if needed (only allows sequential growth)
+      if (concreteObject.sizeOfLinked${prop.methodName}List() == ${index_name_string(prop.name)})
+      {
+        concreteObject.link${prop.methodName}(typedRef);
+      }
+      else
+      {
+        // Set at specific index
+        concreteObject.setLinked${prop.methodName}(${index_name_string(prop.name)}, typedRef);
+      }
+    }
+    else
+    {
+      // Deferred resolution: reference will be resolved later
+      model.addReference(
+        ${join_accessors(obj.name, parent, prop)},
+        ${prop.instanceVariableName}_reference);
+    }
+{% end %}\
+{% if prop.maxOccurs == 1 %}\
     model.addReference(
       ${join_accessors(obj.name, parent, prop)},
       ${prop.instanceVariableName}_reference);
+{% end %}\
 {% end %}\
 {% otherwise %}\
     // ${prop.name} is not a reference
