@@ -292,17 +292,17 @@ public class ReferenceIndexingTest {
   }
 
   /**
-   * Test adding ROI references non sequentially
+   * Test adding ROI references in reverse order
    */
   @Test
-  public void testAppendImageROIRefNonSequential() {
+  public void testAppendImageROIRefReverseOrder() {
     meta.setImageID("Image:0", 0);
     meta.setROIID("ROI:0", 0);
     meta.setROIID("ROI:1", 1);
     meta.setROIID("ROI:2", 2);
     meta.setROIID("ROI:3", 3);
 
-    // Append first three in non-sequential order
+    // Append first three in reverse order
     meta.setImageROIRef("ROI:2", 0, 2);
     meta.setImageROIRef("ROI:1", 0, 1);
     meta.setImageROIRef("ROI:0", 0, 0);
@@ -323,6 +323,40 @@ public class ReferenceIndexingTest {
     assertEquals("ROI:3", meta.getImageROIRef(0, 0));
     assertEquals("ROI:2", meta.getImageROIRef(0, 1));
     assertEquals("ROI:1", meta.getImageROIRef(0, 2));
+  }
+
+  /**
+   * Test adding ROI references in non-sequential order
+   */
+  @Test
+  public void testAppendImageROIRefNonSequentialOrder() {
+    meta.setImageID("Image:0", 0);
+    meta.setROIID("ROI:0", 0);
+    meta.setROIID("ROI:1", 1);
+    meta.setROIID("ROI:2", 2);
+    meta.setROIID("ROI:3", 3);
+
+    // Append first three in non-sequential order
+    meta.setImageROIRef("ROI:1", 0, 1);
+    meta.setImageROIRef("ROI:0", 0, 0);
+    meta.setImageROIRef("ROI:2", 0, 2);
+    assertEquals(1, meta.getImageROIRefCount(0));
+    assertEquals("ROI:0", meta.getImageROIRef(0, 0));
+    // Resolve the deferred references
+    meta.resolveReferences();
+    assertEquals(3, meta.getImageROIRefCount(0));
+    assertEquals("ROI:0", meta.getImageROIRef(0, 0));
+    assertEquals("ROI:1", meta.getImageROIRef(0, 1));
+    assertEquals("ROI:2", meta.getImageROIRef(0, 2));
+
+    // Replace first
+    meta.setImageROIRef("ROI:3", 0, 0);
+    assertEquals(3, meta.getImageROIRefCount(0));
+
+    // Verify final state
+    assertEquals("ROI:3", meta.getImageROIRef(0, 0));
+    assertEquals("ROI:1", meta.getImageROIRef(0, 1));
+    assertEquals("ROI:2", meta.getImageROIRef(0, 2));
   }
 
   @Test
