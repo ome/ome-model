@@ -149,10 +149,16 @@
       {
         concreteObject.link${prop.methodName}(typedRef);
       }
-      else
+      else if (concreteObject.sizeOfLinked${prop.methodName}List() > ${index_name_string(prop.name)})
       {
         // Set at specific index
         concreteObject.setLinked${prop.methodName}(${index_name_string(prop.name)}, typedRef);
+      } else
+      {
+        // Deferred resolution: reference will be resolved later
+        model.addReference(
+          ${join_accessors(obj.name, parent, prop)},
+          ${prop.instanceVariableName}_reference);
       }
     }
     else

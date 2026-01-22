@@ -14,13 +14,17 @@
   // MARKER [A-GET]
 {% end debug %}\
   /**
-   * Set the ${prop.name} property of ${o.name}.
+   * Set the ${prop.name} reference of ${o.name}.
+   *
+   * Replace the existing ${prop.name} reference if ${lang.index_signature(prop.name, 0, 0)['argname']}
+   * is smaller than the number of ${prop.name} references. Otherwise, the index is
+   * ignored and ${prop.name} is added to the list of ${prop.name} references.
    *
    * @param ${prop.argumentName} ${prop.name} to set.
 {% for param in indexes %}\
    * @param ${param['argname']} the ${param['type']} index.
 {% end for %}\
-   * @param ${lang.index_signature(prop.name, 0, 0)['argname']} ${prop.name} index (unused).
+   * @param ${lang.index_signature(prop.name, 0, 0)['argname']} ${prop.name} index.
    */
   void set{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.hasBaseAttribute %}${prop.name}{% end %}(${prop.metadataStoreArgType} ${prop.argumentName}, ${indexes_string(indexes)}, ${index_string(prop.name)});\
 {% end %}\

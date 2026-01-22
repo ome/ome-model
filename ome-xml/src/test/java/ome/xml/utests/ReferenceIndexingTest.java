@@ -256,4 +256,157 @@ public class ReferenceIndexingTest {
     assertEquals("ROI:1", meta.getImageROIRef(0, 1));
     assertEquals("ROI:3", meta.getImageROIRef(0, 2));
   }
+
+  /**
+   * Test adding ROI references starting with a positive offset
+   */
+  @Test
+  public void testAppendImageROIRefOffset() {
+    meta.setImageID("Image:0", 0);
+    meta.setROIID("ROI:0", 0);
+    meta.setROIID("ROI:1", 1);
+    meta.setROIID("ROI:2", 2);
+    meta.setROIID("ROI:3", 3);
+
+    // Append first three starting with non-zero reference index
+    meta.setImageROIRef("ROI:0", 0, 2);
+    meta.setImageROIRef("ROI:1", 0, 3);
+    meta.setImageROIRef("ROI:2", 0, 4);
+    assertEquals(0, meta.getImageROIRefCount(0));
+
+    // Resolve the deferred references
+    meta.resolveReferences();
+    assertEquals(3, meta.getImageROIRefCount(0));
+    assertEquals("ROI:0", meta.getImageROIRef(0, 0));
+    assertEquals("ROI:1", meta.getImageROIRef(0, 1));
+    assertEquals("ROI:2", meta.getImageROIRef(0, 2));
+
+    // Replace first
+    meta.setImageROIRef("ROI:3", 0, 0);
+    assertEquals(3, meta.getImageROIRefCount(0));
+
+    // Verify final state
+    assertEquals("ROI:3", meta.getImageROIRef(0, 0));
+    assertEquals("ROI:1", meta.getImageROIRef(0, 1));
+    assertEquals("ROI:2", meta.getImageROIRef(0, 2));
+  }
+
+  /**
+   * Test adding ROI references in reverse order
+   */
+  @Test
+  public void testAppendImageROIRefReverseOrder() {
+    meta.setImageID("Image:0", 0);
+    meta.setROIID("ROI:0", 0);
+    meta.setROIID("ROI:1", 1);
+    meta.setROIID("ROI:2", 2);
+    meta.setROIID("ROI:3", 3);
+
+    // Append first three in reverse order
+    meta.setImageROIRef("ROI:2", 0, 2);
+    meta.setImageROIRef("ROI:1", 0, 1);
+    meta.setImageROIRef("ROI:0", 0, 0);
+    assertEquals(1, meta.getImageROIRefCount(0));
+    assertEquals("ROI:0", meta.getImageROIRef(0, 0));
+    // Resolve the deferred references
+    meta.resolveReferences();
+    assertEquals(3, meta.getImageROIRefCount(0));
+    assertEquals("ROI:0", meta.getImageROIRef(0, 0));
+    assertEquals("ROI:2", meta.getImageROIRef(0, 1));
+    assertEquals("ROI:1", meta.getImageROIRef(0, 2));
+
+    // Replace first
+    meta.setImageROIRef("ROI:3", 0, 0);
+    assertEquals(3, meta.getImageROIRefCount(0));
+
+    // Verify final state
+    assertEquals("ROI:3", meta.getImageROIRef(0, 0));
+    assertEquals("ROI:2", meta.getImageROIRef(0, 1));
+    assertEquals("ROI:1", meta.getImageROIRef(0, 2));
+  }
+
+  /**
+   * Test adding ROI references in non-sequential order
+   */
+  @Test
+  public void testAppendImageROIRefNonSequentialOrder() {
+    meta.setImageID("Image:0", 0);
+    meta.setROIID("ROI:0", 0);
+    meta.setROIID("ROI:1", 1);
+    meta.setROIID("ROI:2", 2);
+    meta.setROIID("ROI:3", 3);
+
+    // Append first three in non-sequential order
+    meta.setImageROIRef("ROI:1", 0, 1);
+    meta.setImageROIRef("ROI:0", 0, 0);
+    meta.setImageROIRef("ROI:2", 0, 2);
+    assertEquals(1, meta.getImageROIRefCount(0));
+    assertEquals("ROI:0", meta.getImageROIRef(0, 0));
+    // Resolve the deferred references
+    meta.resolveReferences();
+    assertEquals(3, meta.getImageROIRefCount(0));
+    assertEquals("ROI:0", meta.getImageROIRef(0, 0));
+    assertEquals("ROI:1", meta.getImageROIRef(0, 1));
+    assertEquals("ROI:2", meta.getImageROIRef(0, 2));
+
+    // Replace first
+    meta.setImageROIRef("ROI:3", 0, 0);
+    assertEquals(3, meta.getImageROIRefCount(0));
+
+    // Verify final state
+    assertEquals("ROI:3", meta.getImageROIRef(0, 0));
+    assertEquals("ROI:1", meta.getImageROIRef(0, 1));
+    assertEquals("ROI:2", meta.getImageROIRef(0, 2));
+  }
+
+  @Test
+  public void testAppendFolderFolderRef() {
+    meta.setFolderID("Folder:0", 0);
+    meta.setFolderID("Folder:1", 1);
+    meta.setFolderID("Folder:2", 2);
+    meta.setFolderFolderRef("Folder:0", 2, 0);
+    meta.setFolderFolderRef("Folder:1", 2, 1);
+
+    assertEquals(0, meta.getFolderRefCount(0));
+    assertEquals(0, meta.getFolderRefCount(1));
+    assertEquals(2, meta.getFolderRefCount(2));
+    assertEquals("Folder:0", meta.getFolderFolderRef(2, 0));
+    assertEquals("Folder:1", meta.getFolderFolderRef(2, 1));
+
+    // Replace first folder reference
+    meta.setFolderID("Folder:3", 3);
+    meta.setFolderFolderRef("Folder:3", 2, 0);
+    assertEquals("Folder:3", meta.getFolderFolderRef(2, 0));
+    assertEquals("Folder:1", meta.getFolderFolderRef(2, 1));
+  }
+
+  /**
+   * Test adding ROI references non sequentially
+   */
+  @Test
+  public void testAppendFolderFolderRefDeferred() {
+    meta.setFolderID("Folder:1", 0);
+    meta.setFolderID("Folder:2", 1);
+    meta.setFolderFolderRef("Folder:0", 1, 0);
+    meta.setFolderFolderRef("Folder:1", 1, 1);
+    meta.setFolderID("Folder:0", 2);
+
+    // Folder:0 was undefined when calling setFolderFolderRef
+    // so the reference settings should be deferred
+    assertEquals(0, meta.getFolderRefCount(0));
+    assertEquals(0, meta.getFolderRefCount(1));
+    assertEquals(0, meta.getFolderRefCount(2));
+
+    // Resolve the deferred references
+    meta.resolveReferences();
+    assertEquals(2, meta.getFolderRefCount(1));
+    assertEquals("Folder:0", meta.getFolderFolderRef(1, 0));
+    assertEquals("Folder:1", meta.getFolderFolderRef(1, 1));
+
+    // Replace first folder reference
+    meta.setFolderID("Folder:3", 3);
+    meta.setFolderFolderRef("Folder:3", 1, 0);
+    assertEquals("Folder:3", meta.getFolderFolderRef(1, 0));
+    assertEquals("Folder:1", meta.getFolderFolderRef(1, 1));
+  }
 }
