@@ -27,7 +27,7 @@ following before submitting a pull request:
 
  * verify that the branch merges cleanly into ```master```
  * verify that the branch compiles using Maven
- * verify that the branch does not use syntax or API specific to Java 1.8+
+ * verify that the branch does not use syntax or API specific to Java > 11
  * internal developers only: [run the data
    tests](https://bio-formats.readthedocs.io/en/stable/developers/commit-testing.html)
    against directories corresponding to the affected format(s)
