@@ -24,9 +24,7 @@ import os
 import re
 import textwrap
 import time
-from datetime import timedelta, tzinfo
-
-from pytz import UTC
+from datetime import UTC, timedelta, tzinfo
 
 missing = object()
 
