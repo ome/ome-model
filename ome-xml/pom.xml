@@ -73,8 +73,8 @@
 
   <properties>
     <project.rootdir>${basedir}/..</project.rootdir>
-    <python>python</python>
-    <xsdfu.script>../xsd-fu/xsd-fu</xsdfu.script>
+    <uv>uv</uv>
+    <xsdfu.script>${project.rootdir}/xsd-fu/xsd-fu</xsdfu.script>
     <xsdfu.modelpath>${basedir}/target/generated-sources/xsd-fu</xsdfu.modelpath>
     <xsdfu.metadatapath>${basedir}/target/generated-sources/xsd-fu</xsdfu.metadatapath>
   </properties>
@@ -103,8 +103,13 @@
               <environmentVariables>
                 <PYTHONPATH>${basedir}/../xsd-fu/python</PYTHONPATH>
               </environmentVariables>
-              <executable>${python}</executable>
+              <executable>${uv}</executable>
               <arguments>
+                <argument>run</argument>
+                <argument>--locked</argument>
+                <argument>--project</argument>
+                <argument>${project.rootdir}</argument>
+                <argument>python</argument>
                 <argument>${xsdfu.script}</argument>
                 <argument>omexml_model_all</argument>
                 <argument>--output-directory=${xsdfu.modelpath}/</argument>
@@ -125,8 +130,13 @@
               <environmentVariables>
                 <PYTHONPATH>${basedir}/../xsd-fu/python</PYTHONPATH>
               </environmentVariables>
-              <executable>${python}</executable>
+              <executable>${uv}</executable>
               <arguments>
+                <argument>run</argument>
+                <argument>--locked</argument>
+                <argument>--project</argument>
+                <argument>${project.rootdir}</argument>
+                <argument>python</argument>
                 <argument>${xsdfu.script}</argument>
                 <argument>omexml_metadata_all</argument>
                 <argument>--output-directory=${xsdfu.metadatapath}/</argument>

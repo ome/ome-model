@@ -29,13 +29,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - name: Set up uv
-        uses: astral-sh/setup-uv@v9.0.0
+        uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
-          version: 0.12.1
           python-version: ${{ matrix.python-version }}
           enable-cache: true
       - name: Sync Python environment
-        run: uv sync --locked --dev
+        run: uv sync --locked
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v5
         with:
