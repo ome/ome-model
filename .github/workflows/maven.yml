@@ -48,7 +48,7 @@ jobs:
           distribution: 'zulu'
           cache: 'maven'
       - name: Build
-        run: uv run --locked mvn ${{ env.maven_commands }}
+        run: mvn ${{ env.maven_commands }}
   release:
     permissions:
       contents: write
