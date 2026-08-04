@@ -24,14 +24,10 @@ dev = [
     "ty==0.0.66",
 ]
 
-[tool.uv]
-required-version = "==0.12.1"
-
 [tool.uv.build-backend]
 module-root = "xsd-fu/src"
 
 [tool.ruff]
-required-version = "==0.16.1"
 target-version = "py313"
 line-length = 100
 src = ["xsd-fu/src"]
