@@ -1,0 +1,878 @@
+{% python
+  def getConcreteClasses(abstractClass):
+    returnList = []
+    if model.opts.java.has_substitution_group(abstractClass):
+      for o in sorted(model.objects.values(), key=lambda x: x.name):
+          if o.parent_name == abstractClass:
+            returnList.append(o.name)
+    return returnList
+%}\
+/*
+ * #%L
+ * OME-XML Java library for working with OME-XML metadata structures.
+ * %%
+ * Copyright (C) 2006 - 2016 Open Microscopy Environment:
+ *   - Massachusetts Institute of Technology
+ *   - National Institutes of Health
+ *   - University of Dundee
+ *   - Board of Regents of the University of Wisconsin-Madison
+ *   - Glencoe Software, Inc.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The views and conclusions contained in the software and documentation are
+ * those of the authors and should not be interpreted as representing official
+ * policies, either expressed or implied, of any organization.
+ * #L%
+ */
+
+/*-----------------------------------------------------------------------------
+ *
+ * THIS IS AUTOMATICALLY GENERATED CODE.  DO NOT MODIFY.
+ *
+ *-----------------------------------------------------------------------------
+ */
+
+package ${lang.model_package};
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+{% if klass.has_primitive_base %}\
+
+import java.util.Base64;
+
+{% end %}\
+import ${lang.enum_package}.*;
+import ${lang.enum_package}.handlers.*;
+import ${lang.model_package}.primitives.*;
+import ${lang.units_package}.quantity.*;
+import ${lang.units_package}.unit.Unit;
+
+{% choose %}\
+{% when klass.is_abstract %}\
+public abstract class ${klass.name} extends ${klass.parent_name}
+{% end %}\
+{% when not klass.is_abstract %}\
+public class ${klass.name} extends ${klass.parent_name}
+{% end %}\
+{% end %}\
+{
+  // Base: ${klass.base} -- Name: ${klass.name} -- Type: ${klass.data_type} -- modelBaseType: ${klass.model_base_type} -- langBaseType: ${klass.lang_base_type}
+
+  // -- Constants --
+
+  public static final String NAMESPACE = "${klass.namespace}";
+
+  /** Logger for this class. */
+  private static final Logger LOGGER =
+    LoggerFactory.getLogger(${klass.name}.class);
+
+  // -- Instance variables --
+{% for prop in klass.instance_variables %}\
+{% if not prop[4] %}\
+
+{% if prop[3] is not None %}\
+  // ${prop[3]}
+{% end %}\
+{% if prop[0] is not None %}\
+{% if prop[2] is not None %}\
+  private ${prop[0]} ${prop[1]} = new ${prop[2]}();
+{% end %}\
+{% if prop[2] is None %}\
+  private ${prop[0]} ${prop[1]};
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+
+  // -- Constructors --
+
+  /** Default constructor. */
+  public ${klass.name}()
+  {
+{% if klass.parent_name is not None and klass.parent_name != 'AbstractOMEModelObject' %}\
+    super();
+{% end %}\
+{% if klass.name == "AffineTransform" %}\
+    // Set to identity
+    setA00(1.0);
+    setA01(0.0);
+    setA02(0.0);
+    setA10(0.0);
+    setA11(1.0);
+    setA12(0.0);
+{% end class is AffineTransform %}\
+  }
+
+{% if klass.name == "AffineTransform" %}\
+  /**
+   * Construct an AffineTransform corresponding to
+   * the given angle.
+   * @param theta the angle of rotation in radians
+   */
+  public static AffineTransform createRotationTransform(double theta) {
+    AffineTransform transform = new AffineTransform();
+    transform.setA02(0.0);
+    transform.setA12(0.0);
+    transform.setA00(Math.cos(theta));
+    transform.setA11(Math.cos(theta));
+    transform.setA01(Math.sin(theta));
+    transform.setA10(-1 * Math.sin(theta));
+    return transform;
+  }
+{% end class is AffineTransform %}\
+
+
+  /**
+   * Constructs ${klass.name} recursively from an XML DOM tree.
+   * @param element Root of the XML DOM tree to construct a model object
+   * graph from.
+   * @param model Handler for the OME model which keeps track of instances
+   * and references seen during object population.
+   * @throws EnumerationException If there is an error instantiating an
+   * enumeration during model object creation.
+   */
+  public ${klass.name}(Element element, OMEModel model)
+    throws EnumerationException
+  {
+    update(element, model);
+  }
+
+  /** Copy constructor. */
+  public ${klass.name}(${klass.name} orig)
+  {
+{% if klass.parent_name is not None and klass.parent_name != 'AbstractOMEModelObject' %}\
+    super(orig);
+{% end %}\
+{% for prop in klass.instance_variables %}\
+{% choose %}\
+{% when prop[0] is not None and prop[4] %}\
+{% if debug %}\
+    // Unit property ${prop[1]}, copied with it's value property
+{% end debug %}\
+{% end %}\
+{% when prop[0] is not None %}\
+    ${prop[1]} = orig.${prop[1]};
+{% end %}\
+{% when prop[0] is None %}\
+{% if debug %}\
+    // *** WARNING *** Unhandled or skipped property ${prop[1]}
+{% end debug %}\
+{% end %}\
+{% otherwise %}\
+{% if debug %}\
+    // *** WARNING *** Unhandled or skipped non-unit property ${prop[1]}
+{% end debug %}\
+{% end %}\
+{% end %}\
+{% end %}\
+  }
+
+  // -- Custom content from ${klass.name} specific template --
+
+${custom_content}\
+
+  // -- OMEModelObject API methods --
+
+  /**
+   * Updates ${klass.name} recursively from an XML DOM tree. <b>NOTE:</b> No
+   * properties are removed, only added or updated.
+   * @param element Root of the XML DOM tree to construct a model object
+   * graph from.
+   * @param model Handler for the OME model which keeps track of instances
+   * and references seen during object population.
+   * @throws EnumerationException If there is an error instantiating an
+   * enumeration during model object creation.
+   */
+  public void update(Element element, OMEModel model)
+    throws EnumerationException
+  {
+    super.update(element, model);
+{% if klass.lang_base_type != 'Object' %}\
+    // Element's text data
+    String value_textContent = element.getTextContent();
+    if (value_textContent.trim().length() > 0) {
+{% if klass.lang_base_type != 'String' %}\
+      value = ${klass.lang_base_type}.valueOf(value_textContent);
+{% end if klass.lang_base_type != 'String' %}\
+{% if klass.lang_base_type == 'String' %}\
+      value = value_textContent;
+{% end if klass.lang_base_type == 'String' %}\
+    }
+{% end %}\
+{% for prop in klass.properties.values() %}\
+{% choose %}\
+{% when prop.name in custom_update_property_content %}\
+{% if debug %}\
+    // -- BEGIN custom content from ${prop.name} property template --
+{% end debug %}\
+${custom_update_property_content[prop.name]}
+{% if debug %}\
+    // -- END custom content from ${prop.name} property template --
+{% end debug %}\
+{% end %}\
+{% when prop.has_base_attribute %}\
+    // Element's text data
+    String value_textContent = element.getTextContent();
+    if (value_textContent.trim().length() > 0) {
+{% if prop.data_type == 'base64Binary' %}\
+      byte[] rawBytes = Base64.getDecoder().decode(value_textContent);
+      set${prop.method_name}(rawBytes);
+{% end if prop.data_type %}\
+{% if not prop.data_type == 'base64Binary' %}\
+      set${prop.method_name}(${prop.data_type}.valueOf(value_textContent));
+{% end if not prop.data_type %}\
+    }
+{% end when %}\
+{% when prop.is_reference %}\
+    // Element reference ${prop.name}
+    List<Element> ${prop.name}_nodeList =
+      getChildrenByTagName(element, "${prop.name}");
+    for (Element ${prop.name}_element : ${prop.name}_nodeList)
+    {
+      ${prop.name} ${prop.instance_variable_name}_reference = new ${prop.name}();
+      ${prop.instance_variable_name}_reference.setID(${prop.name}_element.getAttribute("ID"));
+      model.addReference(this, ${prop.instance_variable_name}_reference);
+    }
+{% end %}\
+{% when prop.is_back_reference %}\
+{% if debug %}\
+    // *** IGNORING *** Skipped back reference ${prop.name}
+{% end debug %}\
+{% end %}\
+{% when prop.is_attribute and prop.name == "ID" %}\
+    if (!element.hasAttribute("ID") && getID() == null)
+    {
+      // TODO: Should be its own exception
+      throw new RuntimeException(
+        "${klass.name} missing required ID property.");
+    }
+    if (element.hasAttribute("ID"))
+    {
+      // ID property
+      set${prop.method_name}(${prop.lang_type}.valueOf(
+        element.getAttribute("${prop.name}")));
+      // Adding this model object to the model handler
+      model.addModelObject(getID(), this);
+    }
+{% end %}\
+{% when prop.is_attribute %}\
+{% choose %}\
+{% when prop.is_units_enumeration %}\
+{% if debug %}\
+    // MARKER [JJJ]
+    // Attribute property which is Units enumeration ${prop.name}
+{% end debug %}\
+{% end %}\
+{% when prop.is_enumeration and not prop.is_units_enumeration%}\
+{% if debug %}\
+    // MARKER [KKK]
+{% end debug %}\
+    if (element.hasAttribute("${prop.name}"))
+    {
+      // Attribute property which is an enumeration ${prop.name}
+      set${prop.method_name}(${prop.lang_type}.fromString(
+        element.getAttribute("${prop.name}")));
+    }
+{% end %}\
+{% when prop.has_units_companion %}\
+{% if debug %}\
+    // MARKER [UUU]
+{% end debug %}\
+    if (element.hasAttribute("${prop.name}"))
+    {
+      // Attribute property ${prop.name} with unit companion ${prop.units_companion.name}
+      String unitSymbol = element.getAttribute("${prop.units_companion.name}");
+      if ((unitSymbol == null) || (unitSymbol.isEmpty()))
+      {
+        // Use default value specified in the xsd model
+        unitSymbol = get${prop.units_companion.name}XsdDefault();
+      }
+      ${prop.units_companion.lang_type} modelUnit =
+        ${prop.units_companion.lang_type}.fromString(unitSymbol);
+      ${prop.lang_type} baseValue = ${prop.lang_type}.valueOf(
+        element.getAttribute("${prop.name}"));
+      set${prop.method_name}(${prop.units_companion.lang_type}EnumHandler.getQuantity(baseValue, modelUnit));
+    }
+{% end %}\
+{% when not prop.is_enumeration %}\
+{% if debug %}\
+    // MARKER [LLL]
+{% end debug %}\
+    if (element.hasAttribute("${prop.name}"))
+    {
+      // Attribute property ${prop.name}
+      set${prop.method_name}(${prop.lang_type}.valueOf(
+        element.getAttribute("${prop.name}")));
+    }
+{% end %}\
+{% otherwise %}\
+{% if debug %}\
+    // MARKER [MMM]
+    // *** WARNING *** Unhandled or skipped attribute ${prop.name}
+{% end debug %}\
+{% end %}\
+{% end %}\
+{% end %}\
+{% when prop.max_occurs == 1 and (not klass.is_abstract or not prop.is_attribute) %}\
+    List<Element> ${prop.name}_nodeList =
+      getChildrenByTagName(element, "${prop.name}");
+    if (${prop.name}_nodeList.size() > 1)
+    {
+      // TODO: Should be its own Exception
+      throw new RuntimeException(String.format(
+        "${prop.name} node list size %d != 1",
+        ${prop.name}_nodeList.size()));
+    }
+    else if (${prop.name}_nodeList.size() != 0)
+    {
+{% if prop.is_complex() %}\
+      // Element property ${prop.name} which is complex (has
+      // sub-elements)
+{% if prop.lang_type_ns != 'List<MapPair>' %}\
+      set${prop.method_name}(new ${prop.lang_type}(${prop.name}_nodeList.get(0), model));
+{% end %}\
+{% if prop.lang_type_ns == 'List<MapPair>' %}\
+      List<MapPair> p = new java.util.ArrayList<>();
+      NodeList children = ${prop.name}_nodeList.get(0).getChildNodes();
+
+      for (int i=0; i<children.getLength(); i++) {
+        Node child = children.item(i);
+        if (child.getNodeType() == Node.ELEMENT_NODE) {
+          p.add(new MapPair(((Element) child).getAttribute("K"), child.getTextContent()));
+        }
+      }
+      set${prop.method_name}(p);
+{% end %}\
+{% end %}\
+{% if not prop.is_complex() %}\
+      // Element property ${prop.name} which is not complex (has no
+      // sub-elements)
+      set${prop.method_name}(
+        ${prop.lang_type}.valueOf(${prop.name}_nodeList.get(0).getTextContent()));
+{% end %}\
+    }
+{% end %}\
+{% when prop.max_occurs > 1 and prop.is_complex() and not klass.is_abstract %}\
+{% if prop.is_abstract %}\
+{% if prop.is_abstract_substitution %}\
+    // Element property ${prop.name} which is complex (has
+    // sub-elements) and occurs more than once. The element's model
+    // object type is also abstract so we need to have a handler for
+    // each "subclass".
+{% for subClass in getConcreteClasses(prop.name) %}\
+    List<Element> ${subClass}_nodeList =
+      getChildrenByTagName(element, "${subClass}");
+    for (Element ${subClass}_element : ${subClass}_nodeList)
+    {
+      add${prop.method_name}(
+      new ${subClass}(${subClass}_element, model));
+    }
+{% end %}\
+{% end %}\
+{% if not prop.is_abstract_substitution %}\
+    // Element property ${prop.name} which is complex (has
+    // sub-elements) and occurs more than once. The element's model
+    // object type is also abstract so we need to have a handler for
+    // each "subclass".
+    List<Element> ${prop.name}_nodeList =
+        getChildrenByTagName(element, "${prop.name}");
+    for (Element ${prop.name}_element : ${prop.name}_nodeList)
+    {
+{% for inner_prop in model.get_object_by_name(prop.name).properties.values() %}\
+{% if not inner_prop.is_attribute and inner_prop.is_complex() and not inner_prop.is_reference and inner_prop.is_choice %}\
+      List<Element> ${inner_prop.name}_nodeList =
+        getChildrenByTagName(${prop.name}_element, "${inner_prop.name}");
+      for (Element ${inner_prop.name}_element : ${inner_prop.name}_nodeList)
+      {
+        ${inner_prop.lang_type} o = new ${inner_prop.lang_type}(${prop.name}_element, model);
+        o.update(${inner_prop.name}_element, model);
+        add${prop.method_name}(o);
+      }
+{% end %}\
+{% end %}\
+    }
+{% end %}\
+{% end %}\
+{% if not prop.is_abstract %}\
+    // Element property ${prop.name} which is complex (has
+    // sub-elements) and occurs more than once
+    List<Element> ${prop.name}_nodeList =
+      getChildrenByTagName(element, "${prop.name}");
+    for (Element ${prop.name}_element : ${prop.name}_nodeList)
+    {
+      add${prop.method_name}(
+        new ${prop.lang_type}(${prop.name}_element, model));
+    }
+{% end %}\
+{% end %}\
+{% when prop.max_occurs > 1 %}\
+    // Element property ${prop.name} which is not complex (has no
+    // sub-elements) which occurs more than once
+    List<Element> ${prop.name}_nodeList =
+      getChildrenByTagName("${prop.name}");
+    for (Element ${prop.name}_element : ${prop.name}_nodeList)
+    {
+      add${prop.method_name}(new ${prop.lang_type}(
+        ${prop.name}_element.getTextContent(), model));
+    }
+{% end %}\
+{% otherwise %}\
+{% if debug %}\
+    // *** WARNING *** Unhandled or skipped property ${prop.name}
+{% end debug %}\
+{% end %}\
+{% end %}\
+{% end %}\
+  }
+
+  // -- ${klass.name} API methods --
+
+  public boolean link(Reference reference, OMEModelObject o)
+  {
+{% for prop in klass.properties.values() %}\
+{% if prop.is_reference %}\
+    if (reference instanceof ${prop.name})
+    {
+{% if prop.max_occurs != 1 or not fu.link_overridden(prop.name, klass.name) %}\
+      ${prop.lang_type} o_casted = (${prop.lang_type}) o;
+{% end %}\
+{% if not fu.link_overridden(prop.name, klass.name) %}\
+{% if not fu.back_reference_overridden(prop.name, klass.name) %}\
+      o_casted.link${klass.data_type}(this);
+{% end %}\
+{% if fu.back_reference_overridden(prop.name, klass.name) %}\
+      o_casted.link${klass.name}${prop.method_name}(this);
+{% end %}\
+{% end %}\
+{% if prop.max_occurs > 1 %}\
+      ${prop.instance_variable_name}.add(o_casted);
+{% end %}\
+{% if prop.max_occurs == 1 and not fu.link_overridden(prop.name, klass.name) %}\
+      ${prop.instance_variable_name} = o_casted;
+{% end %}\
+{% if prop.max_occurs == 1 and fu.link_overridden(prop.name, klass.name) %}\
+      ${prop.instance_variable_name} = (${prop.lang_type}) o;
+{% end %}\
+      return true;
+    }
+{% end %}\
+{% end %}\
+    return super.link(reference, o);
+  }
+{% if klass.lang_base_type != 'Object' %}\
+  // Element's text data getter
+  public ${klass.lang_base_type} getValue()
+  {
+    return this.value;
+  }
+
+  // Element's text data setter
+  public void setValue(${klass.lang_base_type} value)
+  {
+    this.value = value;
+  }
+{% end %}\
+\
+{% for prop in klass.properties.values() %}\
+{% choose %}\
+{% when (prop.is_reference or prop.is_back_reference) and prop.max_occurs > 1 %}
+  // Reference which occurs more than once
+  public int sizeOfLinked${prop.method_name}List()
+  {
+    return ${prop.instance_variable_name}.size();
+  }
+
+  public List<${prop.lang_type}> copyLinked${prop.method_name}List()
+  {
+    return new ArrayList<>(${prop.instance_variable_name});
+  }
+
+  public ${prop.lang_type} getLinked${prop.method_name}(int index)
+  {
+    return ${prop.instance_variable_name}.get(index);
+  }
+
+  public ${prop.lang_type} setLinked${prop.method_name}(int index, ${prop.lang_type} o)
+  {
+    return ${prop.instance_variable_name}.set(index, o);
+  }
+
+  @SuppressWarnings("UnusedReturnValue")
+  public boolean link${prop.method_name}(${prop.lang_type} o)
+  {
+{% if not prop.is_back_reference and not fu.link_overridden(prop.name, klass.name) %}\
+
+{% if not fu.back_reference_overridden(prop.name, klass.name) %}\
+    o.link${klass.data_type}(this);
+{% end %}\
+{% if fu.back_reference_overridden(prop.name, klass.name) %}\
+    o.link${klass.name}${prop.method_name}(this);
+{% end %}\
+{% end %}\
+    return ${prop.instance_variable_name}.add(o);
+  }
+
+  @SuppressWarnings("UnusedReturnValue")
+  public boolean unlink${prop.method_name}(${prop.lang_type} o)
+  {
+{% if not prop.is_back_reference and not fu.link_overridden(prop.name, klass.name) %}\
+
+{% if not fu.back_reference_overridden(prop.name, klass.name) %}\
+    o.unlink${klass.data_type}(this);
+{% end %}\
+{% if fu.back_reference_overridden(prop.name, klass.name) %}\
+    o.unlink${klass.name}${prop.method_name}(this);
+{% end %}\
+{% end %}\
+    return ${prop.instance_variable_name}.remove(o);
+  }
+{% end %}\
+{% when prop.is_reference %}
+  // Reference
+  public ${prop.lang_type} getLinked${prop.method_name}()
+  {
+    return ${prop.instance_variable_name};
+  }
+
+  public void link${prop.method_name}(${prop.lang_type} o)
+  {
+    ${prop.instance_variable_name} = o;
+  }
+
+  public void unlink${prop.method_name}(${prop.lang_type} o)
+  {
+    if (${prop.instance_variable_name} == o)
+    {
+      ${prop.instance_variable_name} = null;
+    }
+  }
+{% end %}\
+{% when prop.has_units_companion and prop.max_occurs == 1 and (not klass.is_abstract or prop.is_attribute or not prop.is_complex() or not prop.is_choice) %}
+  // Property ${prop.name} with unit companion ${prop.units_companion.name}
+  public ${prop.instance_variable_type} get${prop.method_name}()
+  {
+    return ${prop.instance_variable_name};
+  }
+
+  public void set${prop.method_name}(${prop.instance_variable_type} ${prop.argument_name})
+  {
+    this.${prop.instance_variable_name} = ${prop.argument_name};
+  }
+{% end %}\
+{% when prop.is_units_enumeration %}
+{% if debug %}\
+  // MARKER [RRR]
+  // Attribute property which is Units enumeration ${prop.name}
+{% end debug %}\
+  // Property ${prop.name} is a unit companion
+  @SuppressWarnings("SameReturnValue")
+  public static String get${prop.method_name}XsdDefault()
+  {
+    return "${prop.default_xsd_value}";
+  }
+{% end %}\
+{% when prop.max_occurs == 1 and (not klass.is_abstract or prop.is_attribute or not prop.is_complex() or not prop.is_choice) %}
+  // Property ${prop.name}
+  public ${prop.instance_variable_type} get${prop.method_name}()
+  {
+    return ${prop.instance_variable_name};
+  }
+
+  public void set${prop.method_name}(${prop.instance_variable_type} ${prop.argument_name})
+  {
+    this.${prop.instance_variable_name} = ${prop.argument_name};
+  }
+{% end %}\
+{% when prop.max_occurs > 1 and not klass.is_abstract %}
+  // Property which occurs more than once
+  public int sizeOf${prop.method_name}List()
+  {
+    return ${prop.instance_variable_name}.size();
+  }
+
+  public List<${prop.lang_type}> copy${prop.method_name}List()
+  {
+    return new ArrayList<>(${prop.instance_variable_name});
+  }
+
+  public void clear${prop.method_name}List()
+  {
+    ${prop.instance_variable_name}.clear();
+  }
+
+  public ${prop.lang_type} get${prop.method_name}(int index)
+  {
+    return ${prop.instance_variable_name}.get(index);
+  }
+
+  public ${prop.lang_type} set${prop.method_name}(int index, ${prop.lang_type} ${prop.argument_name})
+  {
+{% if klass.data_type != 'OME' %}\
+    ${prop.argument_name}.set${klass.data_type}(this);
+{% end %}\
+    return ${prop.instance_variable_name}.set(index, ${prop.argument_name});
+  }
+
+  public void add${prop.method_name}(${prop.lang_type} ${prop.argument_name})
+  {
+{% if klass.data_type != 'OME' %}\
+    ${prop.argument_name}.set${klass.data_type}(this);
+{% end %}\
+    ${prop.instance_variable_name}.add(${prop.argument_name});
+  }
+
+  public void remove${prop.method_name}(${prop.lang_type} ${prop.argument_name})
+  {
+    ${prop.instance_variable_name}.remove(${prop.argument_name});
+  }
+{% end %}\
+{% otherwise %}
+{% if debug %}\
+  // *** WARNING *** Unhandled or skipped property ${prop.name}
+{% end debug %}\
+{% end %}\
+{% end %}\
+{% end %}\
+
+  public Element asXMLElement(Document document)
+  {
+    return asXMLElement(document, null);
+  }
+
+  public Element asXMLElement(Document document, Element ${klass.name}_element)
+  {
+    // Creating XML block for ${klass.name}
+    if (${klass.name}_element == null)
+    {
+      ${klass.name}_element =
+        document.createElementNS(NAMESPACE, "${klass.name}");
+    }
+
+{% if klass.lang_base_type != 'Object' %}\
+    // Element's text data
+    if (this.value != null) {
+{% if klass.lang_base_type != 'String' %}\
+      ${klass.name}_element.setTextContent(this.value.toString());
+{% end if %}\
+{% if klass.lang_base_type == 'String' %}\
+      ${klass.name}_element.setTextContent(this.value);
+{% end if %}\
+    }
+
+{% end if NOT Object %}\
+    // Ensure any base annotations add their Elements first
+    super.asXMLElement(document, ${klass.name}_element);
+
+{% for prop in klass.properties.values() %}\
+{% if not prop.is_units_enumeration and not prop.is_back_reference %}\
+    if (${prop.instance_variable_name} != null)
+    {
+{% choose %}\
+{% when prop.name in custom_as_xml_element_property_content %}\
+{% if debug %}\
+      // -- BEGIN custom content from ${prop.name} property template --
+{% end debug %}\
+${custom_as_xml_element_property_content[prop.name]}
+{% if debug %}\
+      // -- END custom content from ${prop.name} property template --
+{% end debug %}\
+{% end when %}\
+{% when prop.has_base_attribute %}\
+      // Element's text data
+{% if not prop.data_type == 'base64Binary' %}\
+{% if prop.instance_variable_type != 'String' %}\
+      ${klass.name}_element.setTextContent(${prop.instance_variable_name}.toString());
+{% end if %}\
+{% if prop.instance_variable_type == 'String' %}\
+      ${klass.name}_element.setTextContent(${prop.instance_variable_name});
+{% end if %}\
+{% end if not prop.data_type %}\
+{% if prop.data_type == 'base64Binary' %}\
+      String encodedString = Base64.getEncoder().encodeToString(${prop.instance_variable_name});
+      ${klass.name}_element.setTextContent(encodedString);
+{% end if prop.data_type %}\
+{% end when %}\
+{% when prop.is_reference and prop.max_occurs > 1 %}\
+      // Reference property ${prop.name} which occurs more than once
+      for (${prop.lang_type} ${prop.instance_variable_name}_value : ${prop.instance_variable_name})
+      {
+        ${prop.name} o = new ${prop.name}();
+        o.setID(${prop.instance_variable_name}_value.getID());
+{% if prop.is_abstract_substitution %}\
+        Element child =
+          document.createElementNS(NAMESPACE, o.getClass().getSimpleName());
+{% end if %}\
+{% if not prop.is_abstract_substitution %}\
+        Element child =
+          document.createElementNS(NAMESPACE, "${prop.name}");
+{% end if %}\
+        o.asXMLElement(document, child);
+        ${klass.name}_element.appendChild(child);
+      }
+{% end when %}\
+{% when prop.is_reference %}\
+      // Reference property ${prop.name}
+      ${prop.name} o = new ${prop.name}();
+      o.setID(${prop.instance_variable_name}.getID());
+{% if prop.is_abstract_substitution %}\
+      Element child =
+        document.createElementNS(NAMESPACE, o.getClass().getSimpleName());
+{% end if %}\
+{% if not prop.is_abstract_substitution %}\
+      Element child =
+        document.createElementNS(NAMESPACE, "${prop.name}");
+{% end if %}\
+      o.asXMLElement(document, child);
+      ${klass.name}_element.appendChild(child);
+{% end when %}\
+{% when prop.has_units_companion and prop.max_occurs == 1 and prop.is_attribute %}\
+{% if debug %}\
+      // MARKER [QQQ]
+{% end debug %}\
+      // Attribute property ${prop.name} with units companion prop.unitsCompanion.name
+      if (${prop.instance_variable_name}.value() != null)
+      {
+{% if prop.data_type.endswith('Int') %}
+        ${klass.name}_element.setAttribute("${prop.name}", Long.toString(${prop.instance_variable_name}.value().longValue()));
+{% end if prop.data_type %}
+{% if not prop.data_type.endswith('Int') %}
+        ${klass.name}_element.setAttribute("${prop.name}", ${prop.instance_variable_name}.value().toString());
+{% end if not prop.data_type %}
+      }
+      if (${prop.instance_variable_name}.unit() != null)
+      {
+        try
+        {
+          ${prop.units_companion.lang_type} enumUnits = ${prop.units_companion.lang_type}.fromString(${prop.instance_variable_name}.unit().getSymbol());
+          ${klass.name}_element.setAttribute("${prop.units_companion.name}", enumUnits.toString());
+        } catch (EnumerationException e)
+        {
+          LOGGER.debug("Unable to create xml for ${klass.name}:${prop.units_companion.name}: {}", e.toString());
+        }
+      }
+{% end when %}\
+{% when prop.max_occurs == 1 and prop.is_attribute %}\
+{% if debug %}\
+      // MARKER [III]
+{% end debug %}\
+      // Attribute property ${prop.name}
+{% if prop.instance_variable_type != 'String' %}\
+      ${klass.name}_element.setAttribute("${prop.name}", ${prop.instance_variable_name}.toString());
+{% end if %}\
+{% if prop.instance_variable_type == 'String' %}\
+      ${klass.name}_element.setAttribute("${prop.name}", ${prop.instance_variable_name});
+{% end if %}\
+{% end when %}\
+{% when prop.max_occurs == 1 and prop.is_complex() %}\
+      // Element property ${prop.name} which is complex (has
+      // sub-elements)
+{% if prop.lang_type_ns != 'List<MapPair>' %}\
+{% if prop.is_abstract_substitution %}\
+      Element child =
+        document.createElementNS(NAMESPACE, ${prop.instance_variable_name}.getClass().getSimpleName());
+{% end if %}\
+{% if not prop.is_abstract_substitution %}\
+      Element child =
+        document.createElementNS(NAMESPACE, "${prop.name}");
+{% end if %}\
+      ${prop.instance_variable_name}.asXMLElement(document, child);
+      ${klass.name}_element.appendChild(child);
+{% end %}\
+{% if prop.lang_type_ns == 'List<MapPair>' %}\
+      Element ${prop.instance_variable_name}_child =
+      document.createElementNS(NAMESPACE, "${prop.name}");
+      for (MapPair entry: ${prop.instance_variable_name}) {
+        Element pair = document.createElementNS(NAMESPACE, "M");
+        pair.setAttribute("K", entry.getName());
+        pair.setTextContent(entry.getValue());
+        ${prop.instance_variable_name}_child.appendChild(pair);
+      }
+
+    ${klass.name}_element.appendChild(${prop.instance_variable_name}_child);
+{% end %}\
+{% end when %}\
+{% when prop.max_occurs == 1 %}\
+    // Element property ${prop.name} which is not complex (has no
+    // sub-elements)
+    Element ${prop.instance_variable_name}_element =
+      document.createElementNS(NAMESPACE, "${prop.name}");
+{% if prop.instance_variable_type != 'String' %}\
+      ${prop.instance_variable_name}_element.setTextContent(${prop.instance_variable_name}.toString());
+{% end if %}\
+{% if prop.instance_variable_type == 'String' %}\
+      ${prop.instance_variable_name}_element.setTextContent(${prop.instance_variable_name});
+{% end if %}\
+      ${klass.name}_element.appendChild(${prop.instance_variable_name}_element);
+{% end when %}\
+{% when prop.max_occurs > 1 and prop.is_complex() %}\
+      // Element property ${prop.name} which is complex (has
+      // sub-elements) and occurs more than once
+      for (${prop.lang_type} ${prop.instance_variable_name}_value : ${prop.instance_variable_name})
+      {
+{% if prop.is_abstract_substitution %}\
+        Element child =
+          document.createElementNS(NAMESPACE, ${prop.instance_variable_name}_value.getClass().getSimpleName());
+{% end if %}\
+{% if not prop.is_abstract_substitution %}\
+        Element child =
+          document.createElementNS(NAMESPACE, "${prop.name}");
+{% end if %}\
+        ${prop.instance_variable_name}_value.asXMLElement(document, child);
+        ${klass.name}_element.appendChild(child);
+      }
+{% end when %}\
+{% when prop.max_occurs > 1 %}\
+      // Element property ${prop.name} which is not complex (has no
+      // sub-elements) which occurs more than once
+      for (${prop.lang_type} ${prop.instance_variable_name}_value : ${prop.instance_variable_name})
+      {
+        Element ${prop.instance_variable_name}_element =
+        document.createElementNS(NAMESPACE, "${prop.name}");
+        ${prop.instance_variable_name}_element.setTextContent(${prop.instance_variable_name}_value.toString());
+        ${klass.name}_element.appendChild(${prop.instance_variable_name}_element);
+      }
+{% end when %}\
+{% otherwise %}\
+{% if debug %}\
+      // *** WARNING *** Unhandled or skipped property ${prop.name}
+{% end debug %}\
+{% end otherwise %}\
+{% end choose %}\
+    }
+{% end if not prop.is_units_enumeration and not prop.is_back_reference %}\
+{% if prop.is_back_reference %}\
+    // *** IGNORING *** Skipped back reference ${prop.name}
+{% end if prop.is_back_reference %}\
+{% end for %}\
+
+    return ${klass.name}_element;
+  }
+}

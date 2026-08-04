@@ -1,0 +1,350 @@
+{% def indexes_string(indexes) %}${", ".join(map(lambda x: lang.index_string(x),indexes))}{% end %}\
+\
+{% def index_string(name) %}\
+{% choose %}\
+{% when name[:2].isupper()%}int ${name}Index{% end %}\
+{% otherwise %}int ${name[:1].lower()}${name[1:]}Index{% end %}\
+{% end %}\
+{% end %}\
+\
+{% def setter(parent, obj, prop, indexes) %}\
+{% choose %}\
+{% when len(indexes) > 0 and prop.max_occurs > 1 %}\
+{% if debug %}\
+  // MARKER [A-GET]
+{% end debug %}\
+  /**
+   * Set the ${prop.name} reference of ${o.name}.
+   *
+   * Replace the existing ${prop.name} reference if ${lang.index_signature(prop.name, 0, 0)['argname']}
+   * is smaller than the number of ${prop.name} references. Otherwise, the index is
+   * ignored and ${prop.name} is added to the list of ${prop.name} references.
+   *
+   * @param ${prop.argument_name} ${prop.name} to set.
+{% for param in indexes %}\
+   * @param ${param['argname']} the ${param['type']} index.
+{% end for %}\
+   * @param ${lang.index_signature(prop.name, 0, 0)['argname']} ${prop.name} index.
+   */
+  void set{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.has_base_attribute %}${prop.name}{% end %}(${prop.metadata_store_arg_type} ${prop.argument_name}, ${indexes_string(indexes)}, ${index_string(prop.name)});\
+{% end %}\
+{% when len(indexes) > 0 %}\
+{% if debug %}\
+  // MARKER [B-GET]
+{% end debug %}\
+  /**
+   * Set the ${prop.name} property of ${o.name}.
+   *
+   * @param ${prop.argument_name} ${prop.name} to set.
+{% for param in indexes %}\
+   * @param ${param['argname']} the ${param['type']} index.
+{% end for %}\
+   */
+  void set{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.has_base_attribute %}${prop.name}{% end %}(${prop.metadata_store_arg_type} ${prop.argument_name}, ${indexes_string(indexes)});\
+{% end %}\
+{% otherwise %}\
+{% if debug %}\
+  // MARKER [C-GET]
+{% end debug %}\
+  /**
+   * Set the ${prop.name} property of ${o.name}.
+   *
+   * @param ${prop.argument_name} ${prop.name} to set.
+   */
+  void set{% if is_multi_path[o.name] %}${parent}{% end %}${obj.name}{% if not prop.has_base_attribute %}${prop.name}{% end %}(${prop.metadata_store_arg_type} ${prop.argument_name});\
+{% end %}\
+{% end %}\
+{% end %}\
+\
+{% python
+  def is_abstract(name):
+          o = model.get_object_by_name(name)
+          if o is not None and \
+                   (o.is_abstract):
+                  return True
+          return False
+
+  def sorted_properties(o):
+    return sorted(list(o.properties.values()) + o.base_object_properties, key=lambda x: x.name)
+%}\
+\
+\
+/*
+ * #%L
+ * OME-XML Java library for working with OME-XML metadata structures.
+ * %%
+ * Copyright (C) 2006 - 2016 Open Microscopy Environment:
+ *   - Massachusetts Institute of Technology
+ *   - National Institutes of Health
+ *   - University of Dundee
+ *   - Board of Regents of the University of Wisconsin-Madison
+ *   - Glencoe Software, Inc.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The views and conclusions contained in the software and documentation are
+ * those of the authors and should not be interpreted as representing official
+ * policies, either expressed or implied, of any organization.
+ * #L%
+ */
+
+/*-----------------------------------------------------------------------------
+ *
+ * THIS IS AUTOMATICALLY GENERATED CODE.  DO NOT MODIFY.
+ *
+ *-----------------------------------------------------------------------------
+ */
+
+package ${lang.metadata_package};
+
+import java.util.List;
+
+import ${lang.model_package}.*;
+import ${lang.enum_package}.*;
+import ${lang.model_package}.primitives.*;
+
+import ${lang.units_package}.quantity.Angle;
+import ${lang.units_package}.quantity.ElectricPotential;
+import ${lang.units_package}.quantity.Frequency;
+import ${lang.units_package}.quantity.Length;
+import ${lang.units_package}.quantity.Power;
+import ${lang.units_package}.quantity.Pressure;
+import ${lang.units_package}.quantity.Temperature;
+import ${lang.units_package}.quantity.${lang.unit_type("UnitsTime")};
+import ${lang.units_package}.unit.Unit;
+
+/**
+ * A proxy whose responsibility it is to marshal biological image data into a
+ * particular storage medium.
+ *
+ * <p>The <code>MetadataStore</code> interface encompasses the metadata that
+ * any specific storage medium (file, relational database, etc.) should be
+ * expected to store into its backing data model.
+ *
+ * <p>The <code>MetadataStore</code> interface goes hand in hand with the
+ * <code>MetadataRetrieve</code> interface. Essentially,
+ * <code>MetadataRetrieve</code> provides the "getter" methods for a storage
+ * medium, and <code>MetadataStore</code> provides the "setter" methods.
+ *
+ * <p>Since it often makes sense for a storage medium to implement both
+ * interfaces, there is also an {@link IMetadata} interface encompassing
+ * both <code>MetadataStore</code> and <code>MetadataRetrieve</code>, which
+ * reduces the need to cast between object types.
+ *
+ * <p>See {@link ${lang.metadata_implementation_package}.OMEXMLMetadata} for an example
+ * implementation.
+ *
+ * <p><b>Important note:</b> It is strongly recommended that applications
+ * (e.g., file format readers) using <code>MetadataStore</code> populate
+ * information in a linear order. Specifically, iterating over entities
+ * from "leftmost" index to "rightmost" index is required for certain
+ * <code>MetadataStore</code> implementations such as OMERO's
+ * <code>OMEROMetadataStore</code>. For example, when populating Image, Pixels
+ * and Plane information, an outer loop should iterate across
+ * <code>imageIndex</code>, an inner loop should iterate across
+ * <code>pixelsIndex</code>, and an innermost loop should handle
+ * <code>planeIndex</code>. For an illustration of the ideal traversal order,
+ * see {@link ome.xml.meta.MetadataConverter#convertMetadata}.</p>
+ *
+ * @author Chris Allan callan at blackcat.ca
+ * @author Curtis Rueden ctrueden at wisc.edu
+ */
+public interface MetadataStore extends BaseMetadata
+{
+  /**
+   * Create root node.  The action taken here is specific to the
+   * concrete metadata implementation.
+   */
+  void createRoot();
+
+  /**
+   * Get the root node of the metadata.  Note that the root node
+   * type will be specific to the concrete metadata
+   * implementation.
+   *
+   * @return the root node.
+   */
+  MetadataRoot getRoot();
+
+  /**
+   * Set the root node of the metadata.  Note that the root node
+   * type will be specific to the concrete metadata
+   * implementation.  An exception will be thrown if the root
+   * node is of an incompatible type.
+   *
+   * @param root the root node.
+   */
+  void setRoot(MetadataRoot root);
+
+  // -- Entity storage (manual definitions) --
+
+  /**
+   * Set the values of a MapAnnotation.
+   *
+   * @param value the MapAnnotation values to set.
+   * @param mapAnnotationIndex the MapAnnotation index.
+   */
+  void setMapAnnotationValue(List<MapPair> value, int mapAnnotationIndex);
+
+  /**
+   * Set the MapAnnotation values of a GenericExcitationSource.
+   *
+   * @param map the MapAnnotation values to set.
+   * @param instrumentIndex the Instrument index.
+   */
+  void setGenericExcitationSourceMap(List<MapPair> map, int instrumentIndex, int lightSourceIndex);
+
+  /**
+   * Set the MapAnnotation values of an ImagingEnvironment.
+   *
+   * @param map the MapAnnotation values to set.
+   * @param imageIndex the Image index.
+   */
+  void setImagingEnvironmentMap(List<MapPair> map, int imageIndex);
+
+  // -- Entity storage (code generated definitions) --
+
+  /**
+   * Set the UUID associated with this collection of metadata.
+   *
+   * @param uuid the UUID to set.
+   */
+  void setUUID(String uuid);
+
+  /**
+   * Set the Creator associated with this collection of metadata.
+   *
+   * @param creator the Creator to set.
+   */
+  default void setCreator(String creator)
+  {
+  }
+
+{% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\
+{% if o.name not in fu.metadata_object_ignore %}\
+{% if o.lang_base_type != 'Object' %}\
+{% if debug %}\
+  // Element's text data
+  // ${repr(indexes[o.name])}
+{% end debug %}\
+  /**
+   * Set the text value of ${o.name}.
+   *
+   * @param value text value.
+{% for param in list(indexes[o.name].values())[0] %}\
+   * @param ${param['argname']} the ${param['type']} index.
+{% end for %}\
+   */
+  void set${o.name}Value(${o.lang_base_type} value, ${indexes_string(list(indexes[o.name].values())[0])});
+
+{% end %}\
+{% if (parents[o.name] is not None and not o.is_abstract) or o.is_concrete_substitution %}\
+{% if debug %}\
+  // MARKER [EEE]
+  //
+  // ${o.name} property storage
+  //
+  // ${repr(parents[o.name])}
+  // Is multi path? ${is_multi_path[o.name]}
+{% end debug %}\
+
+{% choose %}\
+{% when o.is_reference %}\
+{% for prop in sorted(list(o.properties.values()) + o.base_object_properties, key=lambda x: x.name) %}\
+{% if debug %}\
+  // ${prop.min_occurs}:${prop.max_occurs}
+  // Is multi path? ${is_multi_path[o.name]}
+  // Ignoring ${prop.name} property of reference ${o.name}
+
+{% end debug %}\
+{% end %}\
+{% end %}\
+{% otherwise %}\
+\
+{% for k, v in indexes[o.top_level_name].items() %}\
+{% if is_abstract(k) %}\
+{% for prop in sorted_properties(model.get_object_by_name(k)) %}\
+{% choose %}\
+{% when not prop.is_primitive and prop.is_choice %}\
+{% if debug %}\
+  // MARKER [CCC]
+{% end debug %}\
+{% if debug %}\
+  // Ignoring ${prop.name} of parent abstract type
+{% end debug %}\
+{% end %}\
+{% otherwise %}\
+{% for parent_k, parent_v in indexes[k].items() %}\
+{% if debug %}\
+  // MARKER [DDD]
+{% end debug %}\
+{% if not prop.is_back_reference and not prop.is_units_enumeration %}\
+{% if debug %}\
+  // MARKER [AAA] - is_units_enumeration ${prop.is_units_enumeration}
+{% end debug %}\
+  // ${prop.name} accessor from parent ${k}
+${setter(k, o, prop, v)}
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+\
+{% for prop in sorted(list(o.properties.values()) + o.base_object_properties, key=lambda x: x.name) %}\
+{% choose %}\
+{% when prop.is_back_reference %}\
+{% if debug %}\
+  // Ignoring ${prop.name} back reference
+{% end debug %}\
+{% end %}\
+{% when not prop.is_reference and not prop.is_attribute and prop.is_complex() and (not prop.name in fu.complex_override)%}\
+{% if debug %}\
+  // Ignoring ${prop.name} element, complex property
+{% end debug %}\
+{% end %}\
+{% when prop.is_units_enumeration %}\
+{% if debug %}\
+  // MARKER [FFF]
+{% end debug %}\
+{% if debug %}\
+  // Ignoring ${prop.name} element, unit enumeration property
+{% end debug %}\
+{% end %}\
+{% otherwise %}\
+{% for k, v in indexes[o.top_level_name].items() %}\
+{% if debug %}\
+  // MARKER [BBB]
+{% end debug %}\
+${setter(k, o, prop, v)}
+
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+{% end %}\
+}

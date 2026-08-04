@@ -3,10 +3,36 @@
 target
 .idea
 
-# Python files
-*.pyc
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyre/
+.pytype/
+.ty_cache/
+.hypothesis/
+
+# Python coverage output
+.cov
+*.cov
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Python environments and build output
 .venv/
-build
-dist
-ome_model.egg-info
+venv/
+env/
+.tox/
+.nox/
+build/
+dist/
+.eggs/
+*.egg-info/
+
+# Generated compatibility package
 ome_model/__init__.py

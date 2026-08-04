@@ -1,0 +1,165 @@
+/*
+ * #%L
+ * OME-XML Java library for working with OME-XML metadata structures.
+ * %%
+ * Copyright (C) 2006 - 2016 Open Microscopy Environment:
+ *   - Massachusetts Institute of Technology
+ *   - National Institutes of Health
+ *   - University of Dundee
+ *   - Board of Regents of the University of Wisconsin-Madison
+ *   - Glencoe Software, Inc.
+ * %%
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The views and conclusions contained in the software and documentation are
+ * those of the authors and should not be interpreted as representing official
+ * policies, either expressed or implied, of any organization.
+ * #L%
+ */
+
+/*-----------------------------------------------------------------------------
+ *
+ * THIS IS AUTOMATICALLY GENERATED CODE.  DO NOT MODIFY.
+ *
+ *-----------------------------------------------------------------------------
+ */
+
+package ${lang.enum_package};
+
+{% if klass.is_units_enumeration %}\
+import ${lang.enum_handler_package}.${klass.lang_type}EnumHandler;
+import ome.xml.model.primitives.*;
+import ome.units.quantity.${klass.model.opts.java.unit_type(klass.lang_type)};
+import ome.units.unit.Unit;
+import ome.units.UNITS;
+{% end if klass.is_units_enumeration %}\
+
+@SuppressWarnings("SpellCheckingInspection")
+public enum ${klass.lang_type} implements Enumeration
+{
+{% for value in klass.possible_values %}\
+{% if klass.enum_properties is not None and value in klass.enum_properties and klass.enum_properties[value].get('enum', None) is not None %}\
+  /** ${klass.enum_documentation[value]} */
+{% if value == klass.possible_values[-1] %}\
+  ${klass.enum_properties[value].enum}("${value}");
+{% end %}\
+{% if value != klass.possible_values[-1] %}\
+  ${klass.enum_properties[value].enum}("${value}"),
+{% end %}\
+{% end %}\
+{% if klass.enum_properties is None or not value in klass.enum_properties or klass.enum_properties[value].get('enum', None) is None %}\
+{% if value == klass.possible_values[-1] %}\
+  ${value.upper()}("${value}");
+{% end %}\
+{% if value != klass.possible_values[-1] %}\
+  ${value.upper()}("${value}"),
+{% end %}\
+{% end %}\
+{% end %}\
+{% for value in klass.possible_values %}\
+{% if klass.enum_properties is not None and value in klass.enum_properties and klass.enum_properties[value].get('cppenum', None) is not None %}\
+  /** C++ compatibility name for ${klass.enum_properties[value].enum}. */
+  public static final ${klass.lang_type} ${klass.enum_properties[value].cppenum} = ${klass.enum_properties[value].enum};
+{% end %}\
+{% end %}\
+
+{% if len(klass.possible_values) == 1 %}\
+  @SuppressWarnings("SameParameterValue")
+{% end %}\
+  ${klass.lang_type}(String value)
+  {
+    this.value = value;
+  }
+
+{% if len(klass.possible_values) == 1 %}\
+  @SuppressWarnings({"SameParameterValue", "SameReturnValue"})
+{% end %}\
+  public static ${klass.lang_type} fromString(String value)
+    throws EnumerationException
+  {
+{% for value in klass.possible_values %}\
+{% if klass.enum_properties is not None and value in klass.enum_properties and klass.enum_properties[value].get('enum', None) is not None %}\
+    if ("${value}".equals(value))
+    {
+      return ${klass.enum_properties[value].enum};
+    }
+{% end %}\
+{% if klass.enum_properties is None or not value in klass.enum_properties or klass.enum_properties[value].get('enum', None) is None %}\
+    if ("${value}".equals(value))
+    {
+      return ${enum_value_name(value, klass.is_units_enumeration).upper()};
+    }
+{% end %}\
+{% end %}\
+
+    String s = String.format("'%s' not a supported value of '%s'",
+                             value, ${klass.lang_type}.class);
+    throw new EnumerationException(s);
+  }
+
+  @SuppressWarnings("unused")
+  public String getValue()
+  {
+    return value;
+  }
+
+  @Override
+  public String toString()
+  {
+    return value;
+  }
+
+{% end %}\
+{% if klass.is_units_enumeration %}\
+  public static <T extends PrimitiveNumber> ${lang.unit_type(klass.lang_type)} create(T newValue, ${klass.lang_type} newUnit)
+  {
+    ${lang.unit_type(klass.lang_type)} theQuantity = null;
+
+    try
+    {
+      theQuantity = ${klass.lang_type}EnumHandler.getQuantity(newValue, newUnit);
+    }
+    catch (EnumerationException ignored)
+    {
+    }
+
+    return theQuantity;
+  }
+
+  public static <T extends Number> ${lang.unit_type(klass.lang_type)} create(T newValue, ${klass.lang_type} newUnit)
+  {
+    ${lang.unit_type(klass.lang_type)} theQuantity = null;
+
+    try
+    {
+      theQuantity = ${klass.lang_type}EnumHandler.getQuantity(newValue, newUnit);
+    }
+    catch (EnumerationException ignored)
+    {
+    }
+
+    return theQuantity;
+  }
+
+{% end %}\
+  private final String value;
+}

@@ -1,29 +1,50 @@
 [project]
-name = "ome-model-tooling"
+name = "xsd-fu"
 version = "0.0.0"
-requires-python = ">=3.12"
+description = "OME XML Schema Java source generation tools"
+readme = "xsd-fu/README.md"
+requires-python = ">=3.13,<3.14"
 dependencies = [
     "Genshi>=0.7.11,<0.8",
+    "xmlschema>=4.3.2,<5",
 ]
+
+[project.scripts]
+xsd-fu = "xsd_fu.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
     "ruff==0.16.1",
+    "ty==0.0.66",
 ]
 
 [tool.uv]
-package = false
 required-version = "==0.12.1"
+
+[tool.uv.build-backend]
+module-root = "xsd-fu/src"
 
 [tool.ruff]
 required-version = "==0.16.1"
-target-version = "py312"
-extend-include = [
-    "xsd-fu/xsd-fu",
+target-version = "py313"
+line-length = 100
+src = ["xsd-fu/src"]
+include = [
+    "xsd-fu/src/**/*.py",
+    "xsd-fu/tests/**/*.py",
 ]
-extend-exclude = [
-    "xsd-fu/python/generateDS/**",
-]
+fix = true
+
+[tool.ruff.format]
+indent-style = "space"
+quote-style = "double"
+line-ending = "lf"
 
 [tool.ruff.lint]
 extend-select = [
@@ -40,19 +61,28 @@ extend-select = [
     "FURB",  # refurb
     "RUF",
 ]
-ignore = [
-    "UP015",    # Unnecessary open mode parameters
-    "UP031",    # Use format specifiers instead of percent format
-    "B903",
-    "B904",
-    "C408",     # Unnecessary `list()`/`dict()` call (rewrite as a literal)
-    "G002",     # Logging statement uses `%`
-    "G010",     # Logging statement uses `warn` instead of `warning`
-    "EXE001",   # Shebang is present but file is not executable
-    "EXE002",   # File is executable but no shebang is present
-    "EXE003",   # Shebang should contain python, pytest, or uv run
-    "EXE004",   # Avoid whitespace before shebang
-    "EXE005",   # Shebang should be at the beginning of the file
-    "FURB154",  # Use of repeated consecutive `global`
-    "RUF031",   # Avoid parentheses for tuples in subscripts
+[tool.ty.environment]
+python-version = "3.13"
+root = ["xsd-fu/src"]
+
+[tool.ty.src]
+include = ["xsd-fu/src/xsd_fu", "xsd-fu/tests"]
+
+[tool.pytest.ini_options]
+addopts = [
+    "--strict-config",
+    "--strict-markers",
+    "--cov=xsd_fu",
+    "--cov-branch",
+    "--cov-report=term-missing",
+    "--cov-fail-under=90",
+]
+testpaths = ["xsd-fu/tests"]
+filterwarnings = [
+    "ignore:.*__init__ missing .*:DeprecationWarning:genshi\\.template\\.(astutil|eval)", # Genshi upstream depreciation notice, not relevant to our usage, only becomes relevant in Python 3.15
+]
+markers = [
+    "unit: focused tests that do not cross component boundaries",
+    "integration: multi-component integration tests",
+    "benchmark: performance and scaling tests",
 ]

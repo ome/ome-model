@@ -74,9 +74,7 @@
   <properties>
     <project.rootdir>${basedir}/..</project.rootdir>
     <uv>uv</uv>
-    <xsdfu.script>${project.rootdir}/xsd-fu/xsd-fu</xsdfu.script>
-    <xsdfu.modelpath>${basedir}/target/generated-sources/xsd-fu</xsdfu.modelpath>
-    <xsdfu.metadatapath>${basedir}/target/generated-sources/xsd-fu</xsdfu.metadatapath>
+    <xsdfu.outputpath>${basedir}/target/generated-sources/xsd-fu</xsdfu.outputpath>
   </properties>
 
   <build>
@@ -92,56 +90,28 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.6.0</version>
         <executions>
-          <!-- Generate the OME model object classes -->
+          <!-- Generate the OME model objects and metadata APIs in one validated pass. -->
           <execution>
-            <id>xsd-fu-java-classes</id>
+            <id>xsd-fu-java-sources</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>exec</goal>
             </goals>
             <configuration>
-              <environmentVariables>
-                <PYTHONPATH>${basedir}/../xsd-fu/python</PYTHONPATH>
-              </environmentVariables>
               <executable>${uv}</executable>
               <arguments>
                 <argument>run</argument>
                 <argument>--locked</argument>
                 <argument>--project</argument>
                 <argument>${project.rootdir}</argument>
-                <argument>python</argument>
-                <argument>${xsdfu.script}</argument>
-                <argument>omexml_model_all</argument>
-                <argument>--output-directory=${xsdfu.modelpath}/</argument>
-                <argument>--print-generated</argument>
+                <argument>xsd-fu</argument>
+                <argument>generate</argument>
                 <argument>${project.rootdir}/${ome.model.omeschema}</argument>
-              </arguments>
-            </configuration>
-          </execution>
-
-          <!-- Generate the metadata interfaces -->
-          <execution>
-            <id>xsd-fu-metadata-store</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <environmentVariables>
-                <PYTHONPATH>${basedir}/../xsd-fu/python</PYTHONPATH>
-              </environmentVariables>
-              <executable>${uv}</executable>
-              <arguments>
-                <argument>run</argument>
-                <argument>--locked</argument>
-                <argument>--project</argument>
-                <argument>${project.rootdir}</argument>
-                <argument>python</argument>
-                <argument>${xsdfu.script}</argument>
-                <argument>omexml_metadata_all</argument>
-                <argument>--output-directory=${xsdfu.metadatapath}/</argument>
-                <argument>--print-generated</argument>
-                <argument>${project.rootdir}/${ome.model.omeschema}</argument>
+                <argument>--output-dir</argument>
+                <argument>${xsdfu.outputpath}</argument>
+                <argument>--target</argument>
+                <argument>all</argument>
+                <argument>--list-generated</argument>
               </arguments>
             </configuration>
           </execution>
@@ -187,9 +157,9 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
       </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>license-maven-plugin</artifactId>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>license-maven-plugin</artifactId>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
