@@ -37,6 +37,8 @@ import generateDS.generateDS
 from ome.modeltools.exceptions import ModelProcessingError
 from ome.modeltools.model import OMEModel
 
+logger = logging.getLogger(__name__)
+
 XschemaHandler = generateDS.generateDS.XschemaHandler
 set_type_constants = generateDS.generateDS.set_type_constants
 
@@ -52,10 +54,10 @@ def parse(opts):
 
     schemas = dict()
 
-    logging.debug("Namespace: %s" % namespace)
+    logger.debug("Namespace: %s" % namespace)
     set_type_constants(namespace)
     generateDS.generateDS.XsdNameSpace = namespace
-    logging.debug("Type map: %s" % opts.lang.type_map)
+    logger.debug("Type map: %s" % opts.lang.type_map)
 
     parser = sax.make_parser()
     ch = XschemaHandler()

@@ -38,6 +38,8 @@ from ome.modeltools.exceptions import ModelProcessingError
 from ome.modeltools.object import OMEModelObject
 from ome.modeltools.property import OMEModelProperty
 
+logger = logging.getLogger(__name__)
+
 
 class ReferenceDelegate:
     """
@@ -97,7 +99,7 @@ class OMEModel:
                     elementName == "ExcitationFilterRef"):
                 pass
             else:
-                logging.warn(
+                logger.warning(
                     "Element %s has duplicate object with same name,"
                     " skipping!" % element)
             return
@@ -134,18 +136,18 @@ class OMEModel:
         obj = self.getObject(element)
         length = len(attributes)
         for i, key in enumerate(attributes):
-            logging.debug("Processing attribute: %s %d/%d"
-                          % (key, i + 1, length))
+            logger.debug("Processing attribute: %s %d/%d"
+                         % (key, i + 1, length))
             attribute = attributes[key]
-            logging.debug("Dump: %s" % attribute.__dict__)
+            logger.debug("Dump: %s" % attribute.__dict__)
             obj.addAttribute(attribute)
 
         children = element.getChildren()
         length = len(children)
         for i, child in enumerate(children):
-            logging.debug("Processing child: %s %d/%d"
-                          % (child, i + 1, length))
-            logging.debug("Dump: %s" % child.__dict__)
+            logger.debug("Processing child: %s %d/%d"
+                         % (child, i + 1, length))
+            logger.debug("Dump: %s" % child.__dict__)
             obj.addElement(child)
 
     def processLeaf(self, element, parent):
@@ -153,8 +155,8 @@ class OMEModel:
         Process an element (a leaf).
         """
         e = element
-        logging.debug("Processing leaf (topLevel? %s): (%s) --> (%s)"
-                      % (e.topLevel, parent, e))
+        logger.debug("Processing leaf (topLevel? %s): (%s) --> (%s)"
+                     % (e.topLevel, parent, e))
         e_name = e.getName()
         e_type = e.getType()
         if parent is not None:
@@ -164,17 +166,17 @@ class OMEModel:
         if (not e.isExplicitDefine() and
                 (e_name not in config.EXPLICIT_DEFINE_OVERRIDE and
                  not e.topLevel)):
-            logging.info(
+            logger.info(
                 "Element %s.%s not an explicit define, skipping."
                 % (parent, e))
             return
         if e.getMixedExtensionError():
-            logging.error(
+            logger.error(
                 "Element %s.%s extension chain contains mixed and non-mixed"
                 " content, skipping." % (parent, e))
             return
         if e_type != e_name and e_name not in config.EXPLICIT_DEFINE_OVERRIDE:
-            logging.info(
+            logger.info(
                 "Element %s.%s is not a concrete type (%s != %s), skipping."
                 % (parent, e, e_type, e_name))
             return
@@ -203,8 +205,8 @@ class OMEModel:
                     element = self.substitutionElement_map[element.getName()]
                 if parent is None:
                     continue
-            logging.info("Processing element: %s %d/%d"
-                         % (element, i + 1, length))
+            logger.info("Processing element: %s %d/%d"
+                        % (element, i + 1, length))
             self.processLeaf(element, parent)
             children = element.getChildren()
             if children:
@@ -269,7 +271,7 @@ class OMEModel:
                      'isParentOrdered': prop.isParentOrdered,
                      'isInjected': prop.isInjected}
                 references[shortName].append(v)
-        logging.debug("Model references: %s" % references)
+        logger.debug("Model references: %s" % references)
 
         for o in self.objects.values():
             if o.name not in references:

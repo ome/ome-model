@@ -32,6 +32,8 @@ from ome.modeltools import config, language
 from ome.modeltools.entity import OMEModelEntity
 from ome.modeltools.exceptions import ModelProcessingError
 
+logger = logging.getLogger(__name__)
+
 
 class OMEModelProperty(OMEModelEntity):
     """
@@ -68,11 +70,11 @@ class OMEModelProperty(OMEModelEntity):
             root = None
             try:
                 root = ElementTree.fromstring(delegate.appinfo)
-            except Exception:
+            except (ElementTree.ParseError, TypeError):
                 # Can occur if there's an error, or we're processing
                 # garbage, which occurs when generateds mangles the
                 # input for enums with appinfo per enum.
-                logging.debug('Exception while parsing %r' % delegate.appinfo)
+                logger.debug('Exception while parsing %r' % delegate.appinfo)
             if root is not None:
                 self.plural = root.findtext('plural')
                 if root.find('manytomany') is not None:
@@ -200,9 +202,9 @@ class OMEModelProperty(OMEModelEntity):
                 simpleTypeName = self.type
                 name = self.resolveLangTypeFromSimpleType(simpleTypeName)
             else:
-                logging.debug("%s dump: %s" % (self, self.__dict__))
-                logging.debug("%s delegate dump: %s"
-                              % (self, self.delegate.__dict__))
+                logger.debug("%s dump: %s" % (self, self.__dict__))
+                logger.debug("%s delegate dump: %s"
+                             % (self, self.delegate.__dict__))
                 raise ModelProcessingError(
                     "Unable to find %s type for %s" % (self.name, self.type))
         return name
@@ -216,14 +218,12 @@ class OMEModelProperty(OMEModelEntity):
     def _get_metadataStoreArgType(self):
         mstype = None
 
-        if self.hasUnitsCompanion:
-            if isinstance(self.model.opts.lang, language.Java):
-                mstype = self.model.opts.lang.typeToUnitsType(
-                    self.unitsCompanion.metadataStoreArgType)
+        if self.hasUnitsCompanion and isinstance(self.model.opts.lang, language.Java):
+            mstype = self.model.opts.lang.typeToUnitsType(
+                self.unitsCompanion.metadataStoreArgType)
 
-        if self.name == "Transform":
-            if isinstance(self.model.opts.lang, language.Java):
-                mstype = "AffineTransform"
+        if self.name == "Transform" and isinstance(self.model.opts.lang, language.Java):
+            mstype = "AffineTransform"
 
         if isinstance(self.model.opts.lang, language.Java):
             if (mstype is None and not self.isPrimitive and
@@ -239,14 +239,12 @@ class OMEModelProperty(OMEModelEntity):
     def _get_metadataStoreRetType(self):
         mstype = None
 
-        if self.hasUnitsCompanion:
-            if isinstance(self.model.opts.lang, language.Java):
-                mstype = self.model.opts.lang.typeToUnitsType(
-                    self.unitsCompanion.metadataStoreRetType)
+        if self.hasUnitsCompanion and isinstance(self.model.opts.lang, language.Java):
+            mstype = self.model.opts.lang.typeToUnitsType(
+                self.unitsCompanion.metadataStoreRetType)
 
-        if self.name == "Transform":
-            if isinstance(self.model.opts.lang, language.Java):
-                mstype = "AffineTransform"
+        if self.name == "Transform" and isinstance(self.model.opts.lang, language.Java):
+            mstype = "AffineTransform"
 
         if isinstance(self.model.opts.lang, language.Java):
             if (mstype is None and not self.isPrimitive and
@@ -319,52 +317,50 @@ class OMEModelProperty(OMEModelEntity):
         doc="""The property's default unit.""")
 
     def _get_enumProperties(self):
-        if self.isEnumeration:
-            if self.enumProps is None:
-                self.enumProps = dict()
+        if self.isEnumeration and self.enumProps is None:
+            self.enumProps = dict()
 
-                try:
-                    root = self.model.schemas['ome']
-                    enum = None
-                    for e in root.findall("{http://www.w3.org/2001/XMLSchema}simpleType"):
+            try:
+                root = self.model.schemas['ome']
+                enum = None
+                for e in root.findall("{http://www.w3.org/2001/XMLSchema}simpleType"):
+                    if e.get('name') is not None and e.get('name') == self.langType:
+                        enum = e
+                        break
+                if enum is None:
+                    for e in root.findall(".//{http://www.w3.org/2001/XMLSchema}attribute"):
                         if e.get('name') is not None and e.get('name') == self.langType:
-                            enum = e
-                            break
-                    if enum is None:
-                        for e in root.findall(".//{http://www.w3.org/2001/XMLSchema}attribute"):
-                            if e.get('name') is not None and e.get('name') == self.langType:
-                                e2 = e.find('{http://www.w3.org/2001/XMLSchema}simpleType')
-                                if e2 is not None:
-                                    enum = e2
-                                    break
-                    for value in enum.findall(".//{http://www.w3.org/2001/XMLSchema}enumeration"):
-                        symbol = value.attrib['value']
-                        props = value.find(".//xsdfu/enum")
-                        if isinstance(self.model.opts.lang, language.Java) and getattr(props.attrib, 'javaenum', None) is not None:
-                            props.attrib.enum = props.attrib.javaenum
-                        self.enumProps[symbol] = props.attrib
-                except AttributeError:
-                    pass
+                            e2 = e.find('{http://www.w3.org/2001/XMLSchema}simpleType')
+                            if e2 is not None:
+                                enum = e2
+                                break
+                for value in enum.findall(".//{http://www.w3.org/2001/XMLSchema}enumeration"):
+                    symbol = value.attrib['value']
+                    props = value.find(".//xsdfu/enum")
+                    if isinstance(self.model.opts.lang, language.Java) and getattr(props.attrib, 'javaenum', None) is not None:
+                        props.attrib.enum = props.attrib.javaenum
+                    self.enumProps[symbol] = props.attrib
+            except AttributeError:
+                pass
         return self.enumProps
     enumProperties = property(
         _get_enumProperties,
         doc="""The property's enumeration properties.""")
 
     def _get_enumDocumentation(self):
-        if self.isEnumeration:
-            if self.enumDocs is None:
-                self.enumDocs = dict()
+        if self.isEnumeration and self.enumDocs is None:
+            self.enumDocs = dict()
 
-                try:
-                    root = self.model.schemas['ome']
-                    for e in root.findall("{http://www.w3.org/2001/XMLSchema}simpleType"):
-                        if e.get('name') is not None and e.get('name') == self.langType:
-                            for e2 in e.findall('.//{http://www.w3.org/2001/XMLSchema}enumeration'):
-                                symbol = e2.attrib['value']
-                                doc = e2.find(".//{http://www.w3.org/2001/XMLSchema}documentation")
-                                self.enumDocs[symbol] = doc.text
-                except AttributeError:
-                    pass
+            try:
+                root = self.model.schemas['ome']
+                for e in root.findall("{http://www.w3.org/2001/XMLSchema}simpleType"):
+                    if e.get('name') is not None and e.get('name') == self.langType:
+                        for e2 in e.findall('.//{http://www.w3.org/2001/XMLSchema}enumeration'):
+                            symbol = e2.attrib['value']
+                            doc = e2.find(".//{http://www.w3.org/2001/XMLSchema}documentation")
+                            self.enumDocs[symbol] = doc.text
+            except AttributeError:
+                pass
 
         return self.enumDocs
     enumDocumentation = property(
@@ -449,16 +445,12 @@ class OMEModelProperty(OMEModelEntity):
             if self.hasUnitsCompanion:
                 itype = self.model.opts.lang.typeToUnitsType(
                     self.unitsCompanion.instanceVariableType)
-            elif self.isReference and self.maxOccurs > 1:
+            elif (self.isReference and self.maxOccurs > 1) or (self.isBackReference and self.maxOccurs > 1):
                 itype = "List<%s>" % self.langTypeNS
-            elif self.isBackReference and self.maxOccurs > 1:
-                itype = "List<%s>" % self.langTypeNS
-            elif self.isBackReference:
-                itype = self.langTypeNS
-            elif self.maxOccurs == 1 and (
+            elif self.isBackReference or (self.maxOccurs == 1 and (
                     not self.parent.isAbstract or
                     self.isAttribute or not self.isComplex() or
-                    not self.isChoice):
+                    not self.isChoice)):
                 itype = self.langTypeNS
             elif self.maxOccurs > 1 and not self.parent.isAbstract:
                 itype = "List<%s>" % self.langTypeNS
@@ -472,16 +464,12 @@ class OMEModelProperty(OMEModelEntity):
         idefault = None
 
         if isinstance(self.model.opts.lang, language.Java):
-            if self.isReference and self.maxOccurs > 1:
+            if (self.isReference and self.maxOccurs > 1) or (self.isBackReference and self.maxOccurs > 1):
                 idefault = "ReferenceList<>"
-            elif self.isBackReference and self.maxOccurs > 1:
-                idefault = "ReferenceList<>"
-            elif self.isBackReference:
-                idefault = None
-            elif self.maxOccurs == 1 and (
+            elif self.isBackReference or (self.maxOccurs == 1 and (
                     not self.parent.isAbstract or
                     self.isAttribute or not self.isComplex() or
-                    not self.isChoice):
+                    not self.isChoice)):
                 idefault = None
             elif self.maxOccurs > 1 and not self.parent.isAbstract:
                 idefault = "ArrayList<>"
@@ -518,16 +506,14 @@ class OMEModelProperty(OMEModelEntity):
 
     def _get_header(self):
         header = None
-        if self.name in list(self.model.opts.lang.model_type_map.keys()) and self.name not in list(self.model.opts.lang.primitive_type_map.keys()):
+        if (self.name in list(self.model.opts.lang.model_type_map.keys()) and self.name not in list(self.model.opts.lang.primitive_type_map.keys())) or self.langType is None:
             pass
-        elif self.langType is None:
-            pass
-        elif isinstance(self.model.opts.lang, language.Java):
-            if not self.model.opts.lang.hasPrimitiveType(self.langType):
-                if self.isEnumeration:
-                    header = "ome.xml.model.%s" % self.langType
-                else:
-                    header = "ome.xml.model.enums.%s" % self.langType
+        elif (isinstance(self.model.opts.lang, language.Java) and
+              not self.model.opts.lang.hasPrimitiveType(self.langType)):
+            if self.isEnumeration:
+                header = "ome.xml.model.%s" % self.langType
+            else:
+                header = "ome.xml.model.enums.%s" % self.langType
         return header
     header = property(
         _get_header,
@@ -536,16 +522,14 @@ class OMEModelProperty(OMEModelEntity):
 
     def _get_source_deps(self):
         deps = set()
-        if self.name in list(self.model.opts.lang.model_type_map.keys()):
+        if self.name in list(self.model.opts.lang.model_type_map.keys()) or self.langType is None:
             pass
-        elif self.langType is None:
-            pass
-        elif isinstance(self.model.opts.lang, language.Java):
-            if not self.model.opts.lang.hasPrimitiveType(self.langType):
-                if self.isEnumeration:
-                    deps.add("ome.xml.model.%s" % self.langType)
-                else:
-                    deps.add("ome.xml.model.enums.%s" % self.langType)
+        elif (isinstance(self.model.opts.lang, language.Java) and
+              not self.model.opts.lang.hasPrimitiveType(self.langType)):
+            if self.isEnumeration:
+                deps.add("ome.xml.model.%s" % self.langType)
+            else:
+                deps.add("ome.xml.model.enums.%s" % self.langType)
 
         return deps
     source_dependencies = property(

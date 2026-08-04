@@ -29,22 +29,20 @@ Generate code to process OME-XML from an OME-XML schema.
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import codecs
 import itertools
-import sys
 import os
 import re
-import codecs
+import sys
 from collections import OrderedDict
-
-from ome.modeltools.template import TemplateInfo
-from ome.modeltools import config
-from ome.modeltools import language
-from ome.modeltools import generateds
+from getopt import GetoptError, gnu_getopt
+from glob import glob
 
 from genshi.template import NewTextTemplate
+from ome.modeltools import config, generateds, language
+from ome.modeltools.exceptions import ModelProcessingError
+from ome.modeltools.template import TemplateInfo
 
-from getopt import gnu_getopt, GetoptError
-from glob import glob
 
 def macroname(filename):
     filename = "_".join(filename.split(os.path.sep))
@@ -56,7 +54,7 @@ def guard(filename):
     return macroname(filename)
 
 def class_prefix(filename):
-    filename, ext = os.path.splitext(filename)
+    filename, _ext = os.path.splitext(filename)
     return macroname(filename)
 
 def usage(error):
@@ -96,7 +94,6 @@ Available subcommands:
   omexml_model
   omexml_model_enums
   omexml_model_enum_handlers
-  omexml_model_enum_includeall
   omexml_model_quantity
   tab_gen
 
@@ -126,10 +123,9 @@ def main(model, opts):
     """
     used_files = {os.path.realpath(file) for file in opts.args}
 
-    aggregate_content = ""
-
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_package)
-    template = NewTextTemplate(codecs.open(opts.lang.templatepath('CLASS'), encoding='utf-8').read(), encoding='utf-8')
+    with codecs.open(opts.lang.templatepath('CLASS'), encoding='utf-8') as template_file:
+        template = NewTextTemplate(template_file.read(), encoding='utf-8')
     used_files.add(os.path.realpath(opts.lang.templatepath('CLASS')))
     base, filename = os.path.split(opts.lang.templatepath('CLASS'))
     name, extension = os.path.splitext(filename)
@@ -145,7 +141,8 @@ def main(model, opts):
             base, '%s_%s%s' % (name, obj.name, extension))
         customContent = ''
         if os.path.exists(CUSTOM_CLASS_TEMPLATE):
-            customTemplate = NewTextTemplate(codecs.open(CUSTOM_CLASS_TEMPLATE, encoding='utf-8'), encoding='utf-8')
+            with codecs.open(CUSTOM_CLASS_TEMPLATE, encoding='utf-8') as template_file:
+                customTemplate = NewTextTemplate(template_file.read(), encoding='utf-8')
             used_files.add(os.path.realpath(CUSTOM_CLASS_TEMPLATE))
             customContent = customTemplate.generate(
                 fu=fu, klass=obj, parents=parents, model=model, opts=opts, lang=opts.lang, debug=opts.debug)
@@ -159,7 +156,8 @@ def main(model, opts):
             end = customTemplate.rfind(".")
             propertyName = customTemplate[start:end]
             used_files.add(os.path.realpath(customTemplate))
-            customTemplate = NewTextTemplate(codecs.open(customTemplate, encoding='utf-8'), encoding='utf-8')
+            with codecs.open(customTemplate, encoding='utf-8') as template_file:
+                customTemplate = NewTextTemplate(template_file.read(), encoding='utf-8')
             content = customTemplate.generate(
                 fu=fu, klass=obj, parents=parents, model=model, opts=opts, lang=opts.lang, debug=opts.debug)
             content = content.render(encoding='utf-8').decode('utf-8')
@@ -174,7 +172,8 @@ def main(model, opts):
             end = customTemplate.rfind(".")
             propertyName = customTemplate[start:end]
             used_files.add(os.path.realpath(customTemplate))
-            customTemplate = NewTextTemplate(codecs.open(customTemplate, encoding='utf-8'), encoding='utf-8')
+            with codecs.open(customTemplate, encoding='utf-8') as template_file:
+                customTemplate = NewTextTemplate(template_file.read(), encoding='utf-8')
             content = customTemplate.generate(
                 fu=fu, klass=obj, parents=parents, model=model, opts=opts, lang=opts.lang, debug=opts.debug)
             content = content.render(encoding='utf-8').decode('utf-8')
@@ -207,9 +206,8 @@ def main(model, opts):
         classContent = classContent.render(encoding='utf-8')
 
         if not opts.dryrun:
-            f = codecs.open(fullname, "w", encoding='utf-8')
-            f.write(classContent.decode('utf-8'))
-            f.close()
+            with codecs.open(fullname, "w", encoding='utf-8') as output_file:
+                output_file.write(classContent.decode('utf-8'))
 
     if opts.print_depends:
         for file in sorted(used_files):
@@ -262,18 +260,17 @@ def enumTypesMain(model, opts):
 
     used_files = {os.path.realpath(file) for file in opts.args}
 
-    aggregate_content = ""
-
     enums = dict()
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_enums_package)
-    template = NewTextTemplate(codecs.open(opts.lang.templatepath('ENUM'), encoding='utf-8').read(), encoding='utf-8')
+    with codecs.open(opts.lang.templatepath('ENUM'), encoding='utf-8') as template_file:
+        template = NewTextTemplate(template_file.read(), encoding='utf-8')
     used_files.add(os.path.realpath(opts.lang.templatepath('ENUM')))
     for obj in model.objects.values():
         for prop in obj.properties.values():
             if not prop.isEnumeration:
                 continue
-            if not prop.langType in enums:
+            if prop.langType not in enums:
                 enums[prop.langType] = prop
 
     for propname in sorted(enums.keys()):
@@ -301,9 +298,8 @@ def enumTypesMain(model, opts):
                                          enum_value_name=enum_value_name).render(encoding='utf-8')
 
         if not opts.dryrun:
-            f = codecs.open(fullname, "w", encoding='utf-8')
-            f.write(classContent.decode('utf-8'))
-            f.close()
+            with codecs.open(fullname, "w", encoding='utf-8') as output_file:
+                output_file.write(classContent.decode('utf-8'))
 
     if opts.print_depends:
         for file in sorted(used_files):
@@ -318,7 +314,8 @@ def enumHandlersMain(model, opts):
     used_files = {os.path.realpath(file) for file in opts.args}
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_omexml_model_enum_handlers_package)
-    template = NewTextTemplate(codecs.open(opts.lang.templatepath('ENUM_HANDLER'), encoding='utf-8').read(), encoding='utf-8')
+    with codecs.open(opts.lang.templatepath('ENUM_HANDLER'), encoding='utf-8') as template_file:
+        template = NewTextTemplate(template_file.read(), encoding='utf-8')
     used_files.add(os.path.realpath(opts.lang.templatepath('ENUM_HANDLER')))
     for obj in model.objects.values():
         for prop in obj.properties.values():
@@ -347,9 +344,8 @@ def enumHandlersMain(model, opts):
                                              enum_value_name=enum_value_name, config=config.ENUM_HANDLERS).render(encoding='utf-8')
 
             if not opts.dryrun:
-                f = codecs.open(fullname, "w", encoding='utf-8')
-                f.write(classContent.decode('utf-8'))
-                f.close()
+                with codecs.open(fullname, "w", encoding='utf-8') as output_file:
+                    output_file.write(classContent.decode('utf-8'))
 
     if opts.print_depends:
         for file in sorted(used_files):
@@ -364,7 +360,8 @@ def quantityTypesMain(model, opts):
     used_files = {os.path.realpath(file) for file in opts.args}
 
     fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_enums_package)
-    template = NewTextTemplate(codecs.open(opts.lang.templatepath('QUANTITY'), encoding='utf-8').read(), encoding='utf-8')
+    with codecs.open(opts.lang.templatepath('QUANTITY'), encoding='utf-8') as template_file:
+        template = NewTextTemplate(template_file.read(), encoding='utf-8')
     used_files.add(os.path.realpath(opts.lang.templatepath('QUANTITY')))
     for obj in model.objects.values():
         for prop in obj.properties.values():
@@ -396,9 +393,8 @@ def quantityTypesMain(model, opts):
                                              quantityType=quantityType).render(encoding='utf-8')
 
             if not opts.dryrun:
-                f = codecs.open(fullname, "w", encoding='utf-8')
-                f.write(classContent.decode('utf-8'))
-                f.close()
+                with codecs.open(fullname, "w", encoding='utf-8') as output_file:
+                    output_file.write(classContent.decode('utf-8'))
 
     if opts.print_depends:
         for file in sorted(used_files):
@@ -458,7 +454,6 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     to a given "Metadata" template for interface or concrete class code
     generation.
     """
-    args = opts.args
     template = opts.lang.templatepath(template)
 
     used_files = {os.path.realpath(file) for file in opts.args}
@@ -485,9 +480,10 @@ def processMetadataTemplate(template, outputFilename, model, opts):
     fu.DEFAULT_BASE_CLASS = model.opts.lang.getDefaultModelBaseClass()
 
     base, filename = os.path.split(template)
-    name, extension = os.path.splitext(filename)
+    name, _extension = os.path.splitext(filename)
     used_files.add(os.path.realpath(template))
-    template = NewTextTemplate(codecs.open(template, encoding='utf-8').read(), encoding='utf-8')
+    with codecs.open(template, encoding='utf-8') as template_file:
+        template = NewTextTemplate(template_file.read(), encoding='utf-8')
     from glob import glob
     customContent = dict()
     for customTemplate in glob(os.path.join(base, '%s_*' % (name))):
@@ -495,7 +491,8 @@ def processMetadataTemplate(template, outputFilename, model, opts):
         filename = os.path.splitext(filename)[0]
         base, objectName, propertyName = filename.split("_")
         used_files.add(os.path.realpath(customTemplate))
-        customTemplate = NewTextTemplate(codecs.open(customTemplate, encoding='utf-8').read(), encoding='utf-8')
+        with codecs.open(customTemplate, encoding='utf-8') as template_file:
+            customTemplate = NewTextTemplate(template_file.read(), encoding='utf-8')
         customTemplate = customTemplate.generate(
             fu=fu, model=model, parents=parents, is_multi_path=is_multi_path,
             indexes=indexes, opts=opts, lang=opts.lang, debug=opts.debug)
@@ -522,9 +519,8 @@ def processMetadataTemplate(template, outputFilename, model, opts):
                                 customContent=customContent,
                                 opts=opts, lang=opts.lang, debug=opts.debug).render(encoding='utf-8')
     if not opts.dryrun:
-        f = codecs.open(fullname, "w", encoding='utf-8')
-        f.write(content.decode('utf-8'))
-        f.close()
+        with codecs.open(fullname, "w", encoding='utf-8') as output_file:
+            output_file.write(content.decode('utf-8'))
 
     if opts.print_depends:
         for file in sorted(used_files):
@@ -587,8 +583,6 @@ def docGenMain(model, opts):
     ]:
         prefix = theSchemas[0] + ":"
         opts.args = [theSchemas[1]]
-        fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_package)
-        template = NewTextTemplate(codecs.open(opts.lang.templatepath('CLASS'), encoding='utf-8').read(), encoding='utf-8')
         print(" == `%s` ==" % (prefix))
         for obj in model.objects.values():
             print(" === %s%s ===" % (prefix, obj.name))
@@ -609,16 +603,13 @@ def tabGenMain(model, opts):
             ["OME",       "../specification/InProgress/ome.xsd",
                 [["OME", "OME:"]]]
         ]:
-        prefix = theSchemas[0] + ":"
         opts.args = [theSchemas[1]]
-        fu = TemplateInfo(opts.outdir, opts.lang.omexml_model_package)
-        template = NewTextTemplate(codecs.open(opts.lang.templatepath('CLASS'), encoding='utf-8').read(), encoding='utf-8')
         for theToplevelNode in theSchemas[2]:
             parentlist(model, theToplevelNode[0], theToplevelNode[1])
 
 def parentlist(model, name, pre):
     for obj in model.objects.values():
-        if obj.name in [name]:
+        if obj.name == name:
             #print pre + name;
             for prop in obj.properties.values():
                 if prop.name[-14:] == "_BackReference":
@@ -636,9 +627,15 @@ def validateMetadataConverter():
     storeFilename = os.path.join(relpath, "MetadataStore")
     retrieveFilename = os.path.join(relpath, "MetadataRetrieve")
     convertFilename = os.path.join(os.path.join(root, opts.lang.getConverterDir()), opts.lang.getConverterName())
-    storeFile = open(os.path.join(opts.outdir, opts.lang.generatedFilename(storeFilename, opts.filetype)))
-    retrieveFile = open(os.path.join(opts.outdir, opts.lang.generatedFilename(retrieveFilename, opts.filetype)))
-    convertFile = open(os.path.join(opts.outdir, convertFilename + opts.lang.source_suffix))
+    store_path = os.path.join(opts.outdir, opts.lang.generatedFilename(storeFilename, opts.filetype))
+    retrieve_path = os.path.join(opts.outdir, opts.lang.generatedFilename(retrieveFilename, opts.filetype))
+    convert_path = os.path.join(opts.outdir, convertFilename + opts.lang.source_suffix)
+    with open(store_path, encoding='utf-8') as store_file:
+        store_lines = store_file.readlines()
+    with open(retrieve_path, encoding='utf-8') as retrieve_file:
+        retrieve_lines = retrieve_file.readlines()
+    with open(convert_path, encoding='utf-8') as convert_file:
+        convert_lines = convert_file.readlines()
     storegrepper = None
     retrievegrepper = None
     convertgrepper = None
@@ -648,9 +645,9 @@ def validateMetadataConverter():
         storegrepper = grepper
         retrievegrepper = grepper
         convertgrepper = grepper
-    storeSet = set(itertools.chain.from_iterable(storegrepper(storeFile)))
-    retrieveSet = set(itertools.chain.from_iterable(retrievegrepper(retrieveFile)))
-    convertSet = set(itertools.chain.from_iterable(convertgrepper(convertFile)))
+    storeSet = set(itertools.chain.from_iterable(storegrepper(store_lines)))
+    retrieveSet = set(itertools.chain.from_iterable(retrievegrepper(retrieve_lines)))
+    convertSet = set(itertools.chain.from_iterable(convertgrepper(convert_lines)))
     combinedSet = storeSet | retrieveSet
     convertDiff = convertSet.difference(set(combinedSet))
     combinedDiff = combinedSet.difference(set(convertSet))
@@ -662,9 +659,9 @@ def validateMetadataConverter():
         print("MetadataValidation: store=%s" % storeFilename, file=sys.stderr)
         print("MetadataValidation: retrieve=%s" % retrieveFilename, file=sys.stderr)
         print("MetadataValidation: convert=%s" % convertFilename, file=sys.stderr)
-        print("MetadataValidation: storef=%s" % storeFile, file=sys.stderr)
-        print("MetadataValidation: retrievef=%s" % retrieveFile, file=sys.stderr)
-        print("MetadataValidation: convertf=%s" % convertFile, file=sys.stderr)
+        print("MetadataValidation: storef=%s" % store_path, file=sys.stderr)
+        print("MetadataValidation: retrievef=%s" % retrieve_path, file=sys.stderr)
+        print("MetadataValidation: convertf=%s" % convert_path, file=sys.stderr)
     fail = False
     for match in combinedDiff:
         if match == 'setRoot' or match == 'getRoot':
@@ -680,7 +677,7 @@ def validateMetadataConverter():
         else:
             print("MetadataValidation: %s is present in %s but missing from MetadataRetrieve" % (match, opts.lang.getConverterName()), file=sys.stderr)
         fail = True
-    if fail == True:
+    if fail:
         print("Source code generation failed: Inconsistency between MetadataStore, MetadataRetrieve and %s" % opts.lang.getConverterName(), file=sys.stderr)
         sys.exit(1)
 
@@ -825,12 +822,8 @@ if __name__ == '__main__':
         omeXmlMetadataMain(model, opts)
     elif opts.command == "metadata":
         metadataMain(model, opts)
-    elif opts.command == "omexml_model_enums":
+    elif opts.command == "omexml_model_enums" or opts.command == "omexml_model_quantities":
         enumTypesMain(model, opts)
-    elif opts.command == "omexml_model_quantities":
-        enumTypesMain(model, opts)
-    elif opts.command == "omexml_model_enum_includeall":
-        enumTypesIncludeAll(model, opts)
     elif opts.command == "omexml_model_enum_handlers":
         enumHandlersMain(model, opts)
     elif opts.command == "doc_gen":

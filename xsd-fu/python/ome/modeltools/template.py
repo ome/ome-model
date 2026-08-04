@@ -25,18 +25,13 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+from datetime import UTC, datetime
+
 from ome.modeltools import config
 
-try:
-    from mx import DateTime
 
-    def now():
-        return DateTime.ISO.str(DateTime.now())
-except ImportError:
-    from datetime import datetime
-
-    def now():
-        return datetime.now()
+def now():
+    return datetime.now(UTC)
 
 
 class TemplateInfo:

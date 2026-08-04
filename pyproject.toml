@@ -49,6 +49,11 @@ ignore = [
     "C408",     # Unnecessary `list()`/`dict()` call (rewrite as a literal)
     "G002",     # Logging statement uses `%`
     "G010",     # Logging statement uses `warn` instead of `warning`
+    "EXE001",   # Shebang is present but file is not executable
+    "EXE002",   # File is executable but no shebang is present
+    "EXE003",   # Shebang should contain python, pytest, or uv run
+    "EXE004",   # Avoid whitespace before shebang
+    "EXE005",   # Shebang should be at the beginning of the file
     "FURB154",  # Use of repeated consecutive `global`
     "RUF031",   # Avoid parentheses for tuples in subscripts
 ]

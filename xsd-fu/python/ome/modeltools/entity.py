@@ -30,6 +30,8 @@ import logging
 from ome.modeltools import config
 from ome.modeltools.exceptions import ModelProcessingError
 
+logger = logging.getLogger(__name__)
+
 
 class OMEModelEntity:
     """
@@ -42,8 +44,8 @@ class OMEModelEntity:
         while True:
             simpleType = getSimpleType(simpleTypeName)
             if simpleType is None:
-                logging.debug("No simpleType found with name: %s"
-                              % simpleTypeName)
+                logger.debug("No simpleType found with name: %s"
+                             % simpleTypeName)
                 # Handle cases where the simple type is prefixed by
                 # a namespace definition. (ex. OME:LSID).
                 namespaceless = simpleTypeName.split(':')[-1]
@@ -51,8 +53,8 @@ class OMEModelEntity:
                     simpleTypeName = namespaceless
                     continue
                 break
-            logging.debug("%s simpleType dump: %s"
-                          % (self, simpleType.__dict__))
+            logger.debug("%s simpleType dump: %s"
+                         % (self, simpleType.__dict__))
             # It's possible the simpleType is a union of other
             # simpleTypes so we need to handle that. We assume
             # that all the unioned simpleTypes are of the same

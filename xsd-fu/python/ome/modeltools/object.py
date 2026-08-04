@@ -33,6 +33,8 @@ from ome.modeltools import config, language
 from ome.modeltools.entity import OMEModelEntity
 from ome.modeltools.property import OMEModelProperty
 
+logger = logging.getLogger(__name__)
+
 
 class OMEModelObject(OMEModelEntity):
     """
@@ -66,7 +68,7 @@ class OMEModelObject(OMEModelEntity):
             try:
                 root = ElementTree.fromstring(element.appinfo)
             except:
-                logging.error('Exception while parsing %r' % element.appinfo)
+                logger.error('Exception while parsing %r' % element.appinfo)
                 raise
             if root.find('abstract') is not None:
                 self.isAbstract = True
@@ -278,9 +280,7 @@ class OMEModelObject(OMEModelEntity):
     def _get_source_deps(self):
         deps = set()
 
-        if self.name in list(self.model.opts.lang.model_type_map.keys()):
-            pass
-        elif isinstance(self.model.opts.lang, language.Java):
+        if self.name in list(self.model.opts.lang.model_type_map.keys()) or isinstance(self.model.opts.lang, language.Java):
             pass
 
         for prop in self.properties.values():

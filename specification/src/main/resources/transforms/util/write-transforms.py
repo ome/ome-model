@@ -39,6 +39,10 @@ schemas = []
 transforms = defaultdict(list)
 
 
+class TransformPathError(Exception):
+    """Raised when no valid transform path exists between two schemas."""
+
+
 # report the quality of a single transform
 
 def quality(from_schema, to_schema):
@@ -86,7 +90,6 @@ name_pattern = re.compile(r'^(.+)\-to\-(.+)\.xsl$')
 # scan the current directory to determine the schemas and transforms
 
 def load_transforms():
-    global transforms
     global schemas
     seen = set()
 
@@ -122,7 +125,7 @@ for from_schema in schemas:
                     best_paths[(from_schema, to_schema)] = (path, min_quality)
                     break
             if not best_paths[(from_schema, to_schema)]:
-                raise Exception(
+                raise TransformPathError(
                     'no path from ' + from_schema + ' to ' + to_schema)
 
 
