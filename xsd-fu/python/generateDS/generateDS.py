@@ -1,12 +1,11 @@
-#!/usr/bin/env python
 """
 Synopsis:
     Generate Python classes from XML Schema definition.
     Input is read from in_xsd_file or, if "-" (dash) arg, from stdin.
     Output is written to files named in "-o" and "-s" options.
 Usage:
-    python generateDS.py [ options ] <xsd_file>
-    python generateDS.py [ options ] -
+    uv run python generateDS.py [ options ] <xsd_file>
+    uv run python generateDS.py [ options ] -
 Options:
     -h, --help               Display this help information.
     -o <outfilename>         Output file name for data representation classes
@@ -3272,7 +3271,6 @@ def generateClasses(outfile, prefix, element, delayed):
 
 
 TEMPLATE_HEADER = """\
-#!/usr/bin/env python
 
 #
 # Generated %s by generateDS.py version %s.
@@ -3469,7 +3467,7 @@ def generateHeader(outfile, prefix):
 
 TEMPLATE_MAIN = """\
 USAGE_TEXT = \"\"\"
-Usage: python <%(prefix)sParser>.py [ -s ] <in_xml_file>
+Usage: uv run python <%(prefix)sParser>.py [ -s ] <in_xml_file>
 Options:
     -s        Use the SAX parser, not the minidom parser.
 \"\"\"
@@ -3731,7 +3729,6 @@ def generateSubclass(outfile, element, prefix, xmlbehavior,  behaviors, baseUrl)
 
 
 TEMPLATE_SUBCLASS_HEADER = """\
-#!/usr/bin/env python
 
 #
 # Generated %s by generateDS.py version %s.
@@ -3867,7 +3864,7 @@ def parseLiteral(inFilename):
 
 
 USAGE_TEXT = \"\"\"
-Usage: python ???.py <infilename>
+Usage: uv run python ???.py <infilename>
 \"\"\"
 
 def usage():

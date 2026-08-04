@@ -1,4 +1,31 @@
-[lint]
+[project]
+name = "ome-model-tooling"
+version = "0.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "Genshi>=0.7.11,<0.8",
+    "pytz>=2024.1",
+]
+
+[dependency-groups]
+dev = [
+    "ruff==0.16.1",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+required-version = "==0.16.1"
+target-version = "py312"
+extend-include = [
+    "xsd-fu/xsd-fu",
+]
+extend-exclude = [
+    "xsd-fu/python/generateDS/**",
+]
+
+[tool.ruff.lint]
 extend-select = [
     "W",     # pycodestyle (Warning)
     "I",     # isort

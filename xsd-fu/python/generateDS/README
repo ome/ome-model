@@ -43,8 +43,8 @@ the following:
 
 Then, the regular Distutils commands should work:
 
-    python setup.py build
-    python setup.py install
+    uv run python setup.py build
+    uv run python setup.py install
 
 
 -------------
@@ -56,12 +56,12 @@ See generateDS.html for documentation.
 Produce class definitions and sub-class definitions with something
 like the following:
 
-    $ python generateDS.py -o people.py -s people_subs.py people.xsd
+    $ uv run python generateDS.py -o people.py -s people_subs.py people.xsd
 
 Here is a test using the enclosed sample Xschema file:
 
-    $ python generateDS.py -o people.py people.xsd
-    $ python people.py people.xml
+    $ uv run python generateDS.py -o people.py people.xsd
+    $ uv run python people.py people.xml
 
 
 ----------------
@@ -670,7 +670,7 @@ Version 1.2a (again, 5/16/03)
   * Added very simple unit tests in tests directory.  Can be run
     with:
         cd tests
-        python test.py
+        uv run python test.py
 
 Version 1.2a (3/14/03)
   * Added support for XML Schema xs:double and xs:boolean types.
@@ -720,4 +720,3 @@ The following enhancements and fixes remain to be done:
 Dave Kuhlman
 dkuhlman@rexx.com
 http://www.rexx.com/~dkuhlman
-

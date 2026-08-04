@@ -5,6 +5,7 @@ target
 
 # Python files
 *.pyc
+.venv/
 build
 dist
 ome_model.egg-info

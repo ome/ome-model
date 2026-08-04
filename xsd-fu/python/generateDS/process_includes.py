@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- mode: pymode; -*-
 """
 Synopsis:
@@ -7,17 +6,17 @@ Synopsis:
     Input is read either from a file or from stdin.
     Output is written either to a file or to stdout.
 Usage:
-    python process_includes.py [options] [ infile [ outfile ] ]
+    uv run python process_includes.py [options] [ infile [ outfile ] ]
 Options:
     -h, --help      Display this help message.
     -f, --force     Force.  If outfile exists, overwrite without asking.
     -s, --search    Search path for schemas.  Colon separated list of directories where schemas may be found.
 
 Examples:
-    python process_includes.py infile.xsd
-    python process_includes.py infile.xsd outfile.xsd
-    python process_includes.py infile.xsd > outfile.xsd
-    cat infile.xsd | python process_includes.py > outfile.xsd
+    uv run python process_includes.py infile.xsd
+    uv run python process_includes.py infile.xsd outfile.xsd
+    uv run python process_includes.py infile.xsd > outfile.xsd
+    cat infile.xsd | uv run python process_includes.py > outfile.xsd
 """
 
 #

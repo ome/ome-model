@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Generate code to process OME-XML from an OME-XML schema.
 """
