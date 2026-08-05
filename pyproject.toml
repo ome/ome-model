@@ -1,6 +1,6 @@
 [project]
 name = "xsd-fu"
-version = "0.0.0"
+version = "0.1.0"
 description = "OME XML Schema Java source generation tools"
 readme = "xsd-fu/README.md"
 requires-python = ">=3.13,<3.14"
