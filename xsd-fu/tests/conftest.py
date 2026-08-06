@@ -16,15 +16,13 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
     """Apply broad test markers from the test directory layout.
 
     Tests in ``tests/unit`` are marked as unit tests, tests in
-    ``tests/integration`` are marked as integration tests, and tests in
-    ``tests/benchmark`` are marked as benchmark tests.
+    ``tests/integration`` are marked as integration tests.
     """
     del config
 
     tests_root = Path(__file__).parent
     unit_root = tests_root / "unit"
     integration_root = tests_root / "integration"
-    benchmark_root = tests_root / "benchmark"
 
     for item in items:
         item_path = Path(str(item.path))
@@ -33,8 +31,6 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
             item.add_marker(pytest.mark.unit)
         elif item_path.is_relative_to(integration_root):
             item.add_marker(pytest.mark.integration)
-        elif item_path.is_relative_to(benchmark_root):
-            item.add_marker(pytest.mark.benchmark)
 
 
 @pytest.fixture(scope="session")

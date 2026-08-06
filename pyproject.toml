@@ -1,7 +1,7 @@
 [project]
 name = "xsd-fu"
 version = "0.1.0"
-description = "OME XML Schema Java source generation tools"
+description = "OME XML Schema Java source and transform catalog generation tools"
 readme = "xsd-fu/README.md"
 requires-python = ">=3.13,<3.14"
 dependencies = [
@@ -80,5 +80,4 @@ filterwarnings = [
 markers = [
     "unit: focused tests that do not cross component boundaries",
     "integration: multi-component integration tests",
-    "benchmark: performance and scaling tests",
 ]

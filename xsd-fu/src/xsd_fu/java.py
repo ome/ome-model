@@ -1,11 +1,68 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from xsd_fu.errors import ModelProcessingError
 
 SOURCE_TYPE = "source"
+
+_JAVA_IDENTIFIER = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
+_JAVA_KEYWORDS = frozenset(
+    {
+        "abstract",
+        "assert",
+        "boolean",
+        "break",
+        "byte",
+        "case",
+        "catch",
+        "char",
+        "class",
+        "const",
+        "continue",
+        "default",
+        "do",
+        "double",
+        "else",
+        "enum",
+        "extends",
+        "final",
+        "finally",
+        "float",
+        "for",
+        "goto",
+        "if",
+        "implements",
+        "import",
+        "instanceof",
+        "int",
+        "interface",
+        "long",
+        "native",
+        "new",
+        "package",
+        "private",
+        "protected",
+        "public",
+        "return",
+        "short",
+        "static",
+        "strictfp",
+        "super",
+        "switch",
+        "synchronized",
+        "this",
+        "throw",
+        "throws",
+        "transient",
+        "try",
+        "void",
+        "volatile",
+        "while",
+    }
+)
 
 _TEMPLATES = {
     "enum": "OMEXMLModelEnum.template",
@@ -18,6 +75,28 @@ _TEMPLATES = {
     "dummy_metadata": "DummyMetadata.template",
     "filter_metadata": "FilterMetadata.template",
 }
+
+
+def java_package_path(package: str) -> Path:
+    """Validate a dotted Java package name and return its relative path.
+
+    Raises
+    ------
+    ModelProcessingError
+        If the package is empty or contains a non-identifier or Java keyword.
+    """
+    parts = package.split(".")
+    invalid = next(
+        (
+            part
+            for part in parts
+            if _JAVA_IDENTIFIER.fullmatch(part) is None or part in _JAVA_KEYWORDS
+        ),
+        None,
+    )
+    if invalid is not None:
+        raise ModelProcessingError(f"Invalid Java package name: {package!r}")
+    return Path(*parts)
 
 
 @dataclass(slots=True)
@@ -106,6 +185,18 @@ class JavaConfiguration:
             "UnitsPower": "UNITS.WATT",
             "UnitsFrequency": "UNITS.HERTZ",
         }
+
+    def validate(self) -> None:
+        """Validate all Java package configuration used by generated sources."""
+        for package in (
+            self.model_package,
+            self.enum_package,
+            self.enum_handler_package,
+            self.metadata_package,
+            self.metadata_implementation_package,
+            self.units_package,
+        ):
+            java_package_path(package)
 
     def template_path(self, template: str) -> Path:
         """Return the configured path for a named built-in template."""

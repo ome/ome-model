@@ -41,6 +41,13 @@ jobs:
       - name: Install locked development environment
         run: uv sync --locked --dev
 
+      - name: Verify transform catalog
+        run: >-
+          uv run --locked xsd-fu generate-transform-catalog
+          specification/src/main/resources/transforms
+          --output specification/src/main/resources/transforms/ome-transforms.xml
+          --check
+
       - name: Check formatting
         run: uv run --locked ruff format --check xsd-fu/src/xsd_fu xsd-fu/tests
 

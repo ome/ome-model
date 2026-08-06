@@ -14,6 +14,9 @@ uv sync --locked
 uv run --locked xsd-fu --help
 ```
 
+Use `--locked` with development and CI commands to use the committed lockfile.
+Run `uv lock` when intentionally changing dependencies.
+
 The wheel includes all Java templates, so the command does not depend on the
 checkout layout after installation.
 
@@ -36,8 +39,14 @@ uv run --locked xsd-fu generate \
 - `--template-dir` to use an alternate template set;
 - package override options for each generated Java package.
 
-Writes use temporary files followed by atomic replacement. Conflicting output
+Package overrides must be valid dotted Java package names. Every destination is
+resolved below `--output-dir` before any files are written, and writes use
+temporary files followed by atomic replacement. Conflicting or escaping output
 paths are rejected before anything is written.
+
+Schema imports are resolved from checked-in sibling XSDs (or the adjacent
+`external` directory), never fetched over the network. `--list-dependencies`
+includes these transitive schema imports as well as templates.
 
 ## Validating MetadataConverter
 
@@ -61,12 +70,34 @@ The integration suite verifies SHA-256 hashes for every generated file from the
 Run all quality gates from the repository root:
 
 ```sh
-uv run --locked ruff check
-uv run --locked ruff format --check xsd-fu/src/xsd_fu xsd-fu/tests
+uv run --locked ruff check --no-fix
+uv run --locked ruff format --check
 uv run --locked ty check
 uv run --locked pytest
 uv run --locked pytest --cov-report=html
 ```
 
-Maven invokes the installed command once during `generate-sources` to generate
-both source families.
+Maven invokes the installed command during `generate-sources` to generate both
+source families, then validates them against the hand-written
+`MetadataConverter` API.
+
+## Maintaining the transform catalog
+
+`specification` packages `ome-transforms.xml`, a catalog of the best available
+XSL route between every pair of supported OME schema versions. Regenerate it
+after adding or removing a top-level `SOURCE-to-TARGET.xsl` transform:
+
+```sh
+uv run --locked xsd-fu generate-transform-catalog \
+  specification/src/main/resources/transforms \
+  --output specification/src/main/resources/transforms/ome-transforms.xml
+```
+
+CI verifies that the committed catalog is current. Run the same check locally:
+
+```sh
+uv run --locked xsd-fu generate-transform-catalog \
+  specification/src/main/resources/transforms \
+  --output specification/src/main/resources/transforms/ome-transforms.xml \
+  --check
+```

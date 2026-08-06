@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import unquote, urlparse
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
@@ -30,6 +31,14 @@ from xsd_fu.errors import ModelProcessingError
 from xsd_fu.settings import GenerationSettings
 
 XSD_NAMESPACE = "http://www.w3.org/2001/XMLSchema"
+_SCHEMA_REFERENCE_TAGS = frozenset(
+    {
+        f"{{{XSD_NAMESPACE}}}import",
+        f"{{{XSD_NAMESPACE}}}include",
+        f"{{{XSD_NAMESPACE}}}redefine",
+    }
+)
+_REMOTE_SCHEMES = frozenset({"http", "https"})
 _BUILTIN_TYPES = frozenset(
     {
         "anyURI",
@@ -250,6 +259,66 @@ class SchemaGraph:
     dependencies: frozenset[Path]
 
 
+def _local_schema_reference(source: Path, location: str) -> Path:
+    parsed = urlparse(location)
+    if parsed.scheme in _REMOTE_SCHEMES:
+        filename = Path(unquote(parsed.path)).name
+        candidates = (
+            source.parent / filename,
+            source.parent.parent / "external" / filename,
+        )
+        local = next((candidate for candidate in candidates if candidate.is_file()), None)
+        if local is None:
+            raise ModelProcessingError(
+                "Remote XML Schema dependency has no checked-in local file: "
+                f"{location} (referenced by {source})"
+            )
+        return local.resolve()
+    if parsed.scheme == "file":
+        local = Path(unquote(parsed.path))
+    elif parsed.scheme:
+        raise ModelProcessingError(
+            f"Unsupported XML Schema dependency URI: {location} (referenced by {source})"
+        )
+    else:
+        local = source.parent / unquote(parsed.path)
+    if not local.is_file():
+        raise ModelProcessingError(
+            f"XML Schema dependency does not exist: {local} (referenced by {source})"
+        )
+    return local.resolve()
+
+
+def _schema_resources(schema_paths: tuple[Path, ...]) -> tuple[dict[str, str], frozenset[Path]]:
+    """Discover local schema dependencies and map remote URIs to them."""
+    pending = [path.resolve() for path in schema_paths]
+    dependencies: set[Path] = set()
+    uri_mapper: dict[str, str] = {}
+    while pending:
+        source = pending.pop()
+        if source in dependencies:
+            continue
+        root = ElementTree.parse(source).getroot()
+        dependencies.add(source)
+        for element in root:
+            if element.tag not in _SCHEMA_REFERENCE_TAGS:
+                continue
+            location = element.get("schemaLocation")
+            if not location:
+                continue
+            local = _local_schema_reference(source, location)
+            parsed = urlparse(location)
+            if parsed.scheme in _REMOTE_SCHEMES:
+                previous = uri_mapper.setdefault(location, str(local))
+                if previous != str(local):
+                    raise ModelProcessingError(
+                        f"XML Schema URI maps to multiple local files: {location}"
+                    )
+            if local not in dependencies:
+                pending.append(local)
+    return uri_mapper, frozenset(dependencies)
+
+
 class _GraphBuilder:
     def __init__(self, schemas: list[xmlschema.XMLSchema10], xsd_prefix: str) -> None:
         self.schemas = schemas
@@ -428,12 +497,15 @@ def load_schema(settings: GenerationSettings) -> SchemaGraph:
     schemas: list[xmlschema.XMLSchema10] = []
     source_trees: dict[str, Element] = {}
     try:
+        uri_mapper, dependencies = _schema_resources(settings.schema_paths)
         for path in settings.schema_paths:
             resolved = path.resolve()
             schema = xmlschema.XMLSchema10(
                 resolved,
                 validation="strict",
                 use_fallback=False,
+                allow="local",
+                uri_mapper=uri_mapper,
             )
             schemas.append(schema)
             root = ElementTree.parse(resolved).getroot()
@@ -447,5 +519,4 @@ def load_schema(settings: GenerationSettings) -> SchemaGraph:
     roots, simple_types = _GraphBuilder(schemas, settings.java.xsd_prefix).build()
     if not roots:
         raise ModelProcessingError("No model objects found in XML Schema sources")
-    dependencies = frozenset(path.resolve() for path in settings.schema_paths)
     return SchemaGraph(roots, simple_types, source_trees, dependencies)

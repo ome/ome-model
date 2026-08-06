@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import re
-import tempfile
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -11,6 +10,8 @@ from genshi.template import NewTextTemplate
 
 from xsd_fu import config
 from xsd_fu.errors import ModelProcessingError
+from xsd_fu.filesystem import atomic_write_text, resolve_contained_path
+from xsd_fu.java import java_package_path
 from xsd_fu.model import Model, ModelObject, ModelProperty
 from xsd_fu.schema import load_schema
 from xsd_fu.settings import GenerationSettings
@@ -182,7 +183,7 @@ def _render_template(path: Path, **context: object) -> str:
 
 
 def _java_path(package: str, filename: str) -> Path:
-    return Path(*package.split(".")) / filename
+    return java_package_path(package) / filename
 
 
 def _custom_class_fragments(
@@ -372,7 +373,7 @@ def _metadata_files(model: Model, settings: GenerationSettings) -> list[Generate
     java = settings.java
     template_context = TemplateContext(metadata_object_ignore=model.metadata_object_ignore)
     parents, indexes, is_multi_path = _metadata_context(model, settings, template_context)
-    package = Path(*java.metadata_package.split("."))
+    package = java_package_path(java.metadata_package)
     specifications = (
         ("metadata_store", package / "MetadataStore.java"),
         ("metadata_retrieve", package / "MetadataRetrieve.java"),
@@ -406,6 +407,7 @@ def build_plan(settings: GenerationSettings, target: str = "all") -> GenerationR
     """Validate schemas and render the selected outputs entirely in memory."""
     if target not in {"all", "model", "metadata"}:
         raise ValueError(f"Unsupported generation target: {target}")
+    settings.java.validate()
     graph = load_schema(settings)
     model = Model.build(graph, settings)
     files: list[GeneratedFile] = []
@@ -416,6 +418,7 @@ def build_plan(settings: GenerationSettings, target: str = "all") -> GenerationR
 
     by_path: dict[Path, GeneratedFile] = {}
     for generated in files:
+        resolve_contained_path(settings.output_dir, generated.relative_path)
         previous = by_path.get(generated.relative_path)
         if previous is not None and previous.content != generated.content:
             raise ModelProcessingError(f"Conflicting generated output: {generated.relative_path}")
@@ -430,31 +433,17 @@ def build_plan(settings: GenerationSettings, target: str = "all") -> GenerationR
     return GenerationResult(ordered, dependencies)
 
 
-def _atomic_write(path: Path, content: str) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary: Path | None = None
-    try:
-        with tempfile.NamedTemporaryFile(
-            mode="w", encoding="utf-8", dir=path.parent, delete=False
-        ) as stream:
-            stream.write(content)
-            temporary = Path(stream.name)
-        temporary.replace(path)
-    finally:
-        if temporary is not None and temporary.exists():
-            temporary.unlink()
-
-
 def generate(settings: GenerationSettings, target: str = "all") -> GenerationResult:
     """Generate Java sources and return the deterministic generation result."""
     result = build_plan(settings, target)
     if settings.list_generated:
         for generated in result.files:
-            print(settings.output_dir / generated.relative_path)
+            print(resolve_contained_path(settings.output_dir, generated.relative_path))
     if settings.list_dependencies:
         for dependency in sorted(result.dependencies):
             print(dependency)
     if not settings.dry_run:
         for generated in result.files:
-            _atomic_write(settings.output_dir / generated.relative_path, generated.content)
+            destination = resolve_contained_path(settings.output_dir, generated.relative_path)
+            atomic_write_text(destination, generated.content)
     return result

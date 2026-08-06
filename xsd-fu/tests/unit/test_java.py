@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 
 from xsd_fu.errors import ModelProcessingError
-from xsd_fu.java import JavaConfiguration
+from xsd_fu.java import JavaConfiguration, java_package_path
 
 
 def test_java_configuration_maps_types_and_paths(tmp_path: Path) -> None:
@@ -32,6 +32,19 @@ def test_java_configuration_reports_invalid_names(tmp_path: Path) -> None:
         java.template_name("missing")
     with pytest.raises(ModelProcessingError, match="Invalid Java source type"):
         java.generated_filename("Image", "header")
+
+
+@pytest.mark.parametrize(
+    "package",
+    ("", "/tmp/example", "example..model", "example.model-name", "example.class", ".."),
+)
+def test_java_package_path_rejects_invalid_packages(package: str) -> None:
+    with pytest.raises(ModelProcessingError, match="Invalid Java package name"):
+        java_package_path(package)
+
+
+def test_java_package_path_returns_relative_directory() -> None:
+    assert java_package_path("org.openmicroscopy.model") == Path("org/openmicroscopy/model")
 
 
 def test_java_index_helpers(tmp_path: Path) -> None:

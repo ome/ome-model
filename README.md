@@ -14,6 +14,30 @@ Links
 - [OME-TIFF sample images](https://downloads.openmicroscopy.org/images/OME-TIFF/)
 - [OME-XML sample images](https://downloads.openmicroscopy.org/images/OME-XML/)
 
+Building
+--------
+
+The project is built with Maven and includes the `specification` and `ome-xml`
+modules. The `ome-xml` build generates Java sources with `xsd-fu` during the
+`generate-sources` phase.
+
+Requirements:
+
+- Java 11 JDK
+- Maven 3.0.5 or newer
+- [`uv`](https://docs.astral.sh/uv/getting-started/installation/), which
+  provisions the Python version required by `xsd-fu`
+
+Build all modules from the repository root:
+
+```sh
+uv sync --locked
+mvn clean install
+```
+
+See the [`xsd-fu` development instructions](xsd-fu/README.md#development) for
+Python quality checks.
+
 Contribute
 ----------
 

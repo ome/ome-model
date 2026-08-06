@@ -7,9 +7,11 @@ from collections.abc import Sequence
 from pathlib import Path
 
 from xsd_fu.errors import ModelProcessingError
+from xsd_fu.filesystem import atomic_write_text
 from xsd_fu.java import JavaConfiguration
 from xsd_fu.render import generate
 from xsd_fu.settings import GenerationSettings
+from xsd_fu.transforms import generate_transform_catalog
 from xsd_fu.validation import validate_converter
 
 logger = logging.getLogger(__name__)
@@ -24,6 +26,15 @@ def _existing_file(value: str) -> Path:
     return path
 
 
+def _existing_directory(value: str) -> Path:
+    path = Path(value)
+    if not path.exists():
+        raise argparse.ArgumentTypeError(f"directory does not exist: {path}")
+    if not path.is_dir():
+        raise argparse.ArgumentTypeError(f"path is not a directory: {path}")
+    return path
+
+
 def _add_verbosity(parser: argparse.ArgumentParser) -> None:
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-q", "--quiet", action="store_true")
@@ -33,7 +44,7 @@ def _add_verbosity(parser: argparse.ArgumentParser) -> None:
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="xsd-fu",
-        description="Generate Java sources from OME XML Schema definitions.",
+        description="Generate OME model sources and transform metadata.",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -62,6 +73,19 @@ def _parser() -> argparse.ArgumentParser:
     validate_parser.add_argument("--retrieve", type=_existing_file, required=True)
     validate_parser.add_argument("--converter", type=_existing_file, required=True)
     _add_verbosity(validate_parser)
+
+    catalog_parser = subparsers.add_parser(
+        "generate-transform-catalog",
+        help="generate ome-transforms.xml from version-to-version XSL files",
+    )
+    catalog_parser.add_argument("transform_dir", type=_existing_directory, metavar="DIR")
+    catalog_parser.add_argument("-o", "--output", type=Path, metavar="FILE")
+    catalog_parser.add_argument(
+        "--check",
+        action="store_true",
+        help="verify that --output already contains the generated catalog",
+    )
+    _add_verbosity(catalog_parser)
     return parser
 
 
@@ -111,6 +135,25 @@ def _run_generate(args: argparse.Namespace) -> int:
     return 0
 
 
+def _run_generate_transform_catalog(args: argparse.Namespace) -> int:
+    content = generate_transform_catalog(args.transform_dir)
+    if args.check:
+        if args.output is None:
+            raise ModelProcessingError("--check requires --output")
+        if not args.output.exists():
+            raise ModelProcessingError(f"Transform catalog does not exist: {args.output}")
+        if not args.output.is_file():
+            raise ModelProcessingError(f"Transform catalog path is not a file: {args.output}")
+        if args.output.read_text(encoding="utf-8") != content:
+            raise ModelProcessingError(f"Transform catalog is out of date: {args.output}")
+        return 0
+    if args.output is None:
+        print(content, end="")
+    else:
+        atomic_write_text(args.output, content)
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     """Run the xsd-fu command-line interface."""
     parser = _parser()
@@ -119,6 +162,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         if args.command == "generate":
             return _run_generate(args)
+        if args.command == "generate-transform-catalog":
+            return _run_generate_transform_catalog(args)
         errors = validate_converter(args.store, args.retrieve, args.converter)
         for error in errors:
             print(error, file=sys.stderr)

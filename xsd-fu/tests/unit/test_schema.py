@@ -76,6 +76,57 @@ def test_schema_loader_rejects_invalid_and_empty_inputs(
         load_schema(settings_factory((), tmp_path / "output"))
 
 
+def test_schema_loader_maps_remote_imports_to_local_files(
+    tmp_path: Path,
+    settings_factory: Callable[[tuple[Path, ...], Path], GenerationSettings],
+) -> None:
+    imported = tmp_path / "imported.xsd"
+    imported.write_text(
+        """\
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="urn:imported">
+  <xsd:complexType name="Imported"><xsd:sequence/></xsd:complexType>
+</xsd:schema>
+""",
+        encoding="utf-8",
+    )
+    root = tmp_path / "root.xsd"
+    root.write_text(
+        """\
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:imported="urn:imported" targetNamespace="urn:root">
+  <xsd:import namespace="urn:imported"
+    schemaLocation="https://schemas.example.test/imported.xsd"/>
+  <xsd:element name="Root" type="imported:Imported"/>
+</xsd:schema>
+""",
+        encoding="utf-8",
+    )
+
+    graph = load_schema(settings_factory((root,), tmp_path / "output"))
+
+    assert graph.dependencies == frozenset({root.resolve(), imported.resolve()})
+
+
+def test_schema_loader_rejects_unmapped_remote_imports(
+    tmp_path: Path,
+    settings_factory: Callable[[tuple[Path, ...], Path], GenerationSettings],
+) -> None:
+    root = tmp_path / "root.xsd"
+    root.write_text(
+        """\
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:import namespace="urn:missing"
+    schemaLocation="https://schemas.example.test/missing.xsd"/>
+</xsd:schema>
+""",
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ModelProcessingError, match="no checked-in local file"):
+        load_schema(settings_factory((root,), tmp_path / "output"))
+
+
 def test_schema_value_objects_normalize_declarations() -> None:
     status_element = ElementTree.fromstring(
         """\

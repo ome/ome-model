@@ -115,6 +115,31 @@
               </arguments>
             </configuration>
           </execution>
+          <!-- Keep the hand-written converter synchronized with generated metadata APIs. -->
+          <execution>
+            <id>xsd-fu-validate-metadata-converter</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>${uv}</executable>
+              <arguments>
+                <argument>run</argument>
+                <argument>--locked</argument>
+                <argument>--project</argument>
+                <argument>${project.rootdir}</argument>
+                <argument>xsd-fu</argument>
+                <argument>validate-converter</argument>
+                <argument>--store</argument>
+                <argument>${xsdfu.outputpath}/ome/xml/meta/MetadataStore.java</argument>
+                <argument>--retrieve</argument>
+                <argument>${xsdfu.outputpath}/ome/xml/meta/MetadataRetrieve.java</argument>
+                <argument>--converter</argument>
+                <argument>${basedir}/src/main/java/ome/xml/meta/MetadataConverter.java</argument>
+              </arguments>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
