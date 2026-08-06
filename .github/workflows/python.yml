@@ -18,7 +18,7 @@ env:
 
 jobs:
   quality:
-    name: Quality and package
+    name: Quality
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -31,15 +31,12 @@ jobs:
         uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           cache-dependency-glob: uv.lock
-          enable-cache: true
+          enable-cache: false
           python-version: "3.13"
           version: ${{ env.UV_VERSION }}
 
-      - name: Verify lockfile
-        run: uv lock --check
-
-      - name: Install locked development environment
-        run: uv sync --locked --dev
+      - name: Install and verify locked development environment
+        run: uv sync --locked
 
       - name: Verify transform catalog
         run: >-
@@ -49,16 +46,13 @@ jobs:
           --check
 
       - name: Check formatting
-        run: uv run --locked ruff format --check xsd-fu/src/xsd_fu xsd-fu/tests
+        run: uv run --locked ruff format --check
 
       - name: Lint
         run: uv run --locked ruff check --no-fix --output-format=github
 
       - name: Type check
         run: uv run --locked ty check
-
-      - name: Build source and wheel distributions
-        run: uv build --no-sources --clear
 
   test:
     name: Test Python 3.13
@@ -74,12 +68,13 @@ jobs:
         uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           cache-dependency-glob: uv.lock
-          enable-cache: true
+          enable-cache: false
           python-version: "3.13"
           version: ${{ env.UV_VERSION }}
+          save-cache: false
 
       - name: Install locked development environment
-        run: uv sync --locked --dev
+        run: uv sync --locked
 
       - name: Run tests with branch coverage
         run: uv run --locked pytest

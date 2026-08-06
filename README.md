@@ -24,7 +24,7 @@ modules. The `ome-xml` build generates Java sources with `xsd-fu` during the
 Requirements:
 
 - Java 11 JDK
-- Maven 3.0.5 or newer
+- Maven 3.6.3 or newer
 - [`uv`](https://docs.astral.sh/uv/getting-started/installation/), which
   provisions the Python version required by `xsd-fu`
 
