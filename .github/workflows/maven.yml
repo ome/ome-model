@@ -36,7 +36,7 @@ jobs:
         uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           python-version: '3.13'
-          enable-cache: true # already done by the python ci job
+          enable-cache: true # creates dependency caches
           cache-dependency-glob: uv.lock
           version: ${{ env.UV_VERSION }}
       - name: Sync Python environment

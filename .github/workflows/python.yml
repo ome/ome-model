@@ -31,7 +31,7 @@ jobs:
         uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           cache-dependency-glob: uv.lock
-          enable-cache: false
+          enable-cache: false # done by maven ci job
           python-version: "3.13"
           version: ${{ env.UV_VERSION }}
 
@@ -40,19 +40,19 @@ jobs:
 
       - name: Verify transform catalog
         run: >-
-          uv run --locked xsd-fu generate-transform-catalog
+          uv run --no-sync xsd-fu generate-transform-catalog
           specification/src/main/resources/transforms
           --output specification/src/main/resources/transforms/ome-transforms.xml
           --check
 
       - name: Check formatting
-        run: uv run --locked ruff format --check
+        run: uv run --no-sync ruff format --check
 
       - name: Lint
-        run: uv run --locked ruff check --no-fix --output-format=github
+        run: uv run --no-sync ruff check --no-fix --output-format=github
 
       - name: Type check
-        run: uv run --locked ty check
+        run: uv run --no-sync ty check
 
   test:
     name: Test Python 3.13
@@ -68,7 +68,7 @@ jobs:
         uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9 # v9.0.0
         with:
           cache-dependency-glob: uv.lock
-          enable-cache: false
+          enable-cache: false # done by maven ci job
           python-version: "3.13"
           version: ${{ env.UV_VERSION }}
           save-cache: false
@@ -77,4 +77,4 @@ jobs:
         run: uv sync --locked
 
       - name: Run tests with branch coverage
-        run: uv run --locked pytest
+        run: uv run --no-sync pytest
