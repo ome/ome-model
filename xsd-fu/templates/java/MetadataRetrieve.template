@@ -390,6 +390,20 @@ public interface MetadataRetrieve extends BaseMetadata {
     return null;
   }
 
+  /**
+   * Get whether the Pixels element contains a MetadataOnly marker.
+   * A MetadataOnly marker is mutually exclusive with BinData and TiffData
+   * elements under the same Pixels element.
+   *
+   * @param imageIndex the Image index.
+   * @return true if the marker is present, false if it is absent, or null if
+   *   this metadata implementation cannot determine its presence.
+   */
+  default Boolean getPixelsMetadataOnly(int imageIndex)
+  {
+    return null;
+  }
+
   // -- Entity retrieval (code generated definitions) --
 
 {% for o in sorted(model.objects.values(), key=lambda x: x.name) %}\

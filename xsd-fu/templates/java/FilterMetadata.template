@@ -220,6 +220,12 @@ public class FilterMetadata implements MetadataStore
     store.setCreator(creator);
   }
 
+  /* @see MetadataStore#setPixelsMetadataOnly(Boolean, int) */
+  public void setPixelsMetadataOnly(Boolean metadataOnly, int imageIndex)
+  {
+    store.setPixelsMetadataOnly(metadataOnly, imageIndex);
+  }
+
   // -- AggregateMetadata API methods --
 
   // -- Entity storage (manual definitions) --

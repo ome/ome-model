@@ -1299,6 +1299,14 @@ public final class MetadataConverter {
         }
         catch (NullPointerException ignored) { }
 
+        try {
+          Boolean metadataOnly = src.getPixelsMetadataOnly(i);
+          if (metadataOnly != null) {
+            dest.setPixelsMetadataOnly(metadataOnly, i);
+          }
+        }
+        catch (NullPointerException ignored) { }
+
         int binDataCount = 0;
         try {
           binDataCount = src.getPixelsBinDataCount(i);
