@@ -87,7 +87,7 @@
 
     <logback.version>1.5.37</logback.version>
     <slf4j.version>2.0.9</slf4j.version>
-    <ome_common.version>6.3.0</ome_common.version>
+    <ome_common.version>7.0.0</ome_common.version>
     <ome-common.version>${ome_common.version}</ome-common.version>
     <testng.version>7.9.0</testng.version>
 
@@ -352,6 +352,12 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <version>3.2.7</version>
+            <configuration>
+              <gpgArguments>
+                <arg>--pinentry-mode</arg>
+                <arg>loopback</arg>
+              </gpgArguments>
+            </configuration>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -366,11 +372,13 @@
           <plugin>
             <groupId>org.sonatype.central</groupId>
             <artifactId>central-publishing-maven-plugin</artifactId>
-            <version>0.8.0</version>
+            <version>0.12.0</version>
             <extensions>true</extensions>
             <configuration>
               <publishingServerId>central</publishingServerId>
-              <tokenAuth>true</tokenAuth>
+              <autoPublish>true</autoPublish>
+              <waitUntil>published</waitUntil>
+              <waitMaxTime>3600</waitMaxTime>
             </configuration>
           </plugin>
         </plugins>
