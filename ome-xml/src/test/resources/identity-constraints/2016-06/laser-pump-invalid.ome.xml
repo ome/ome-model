@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd">
+  <!-- Invalid: Laser Pump refers to a missing light source (InstrumentLightSourceLaserPumpLightSourceIDKey). -->
+  <Instrument ID="Instrument:0">
+    <Laser ID="LightSource:0">
+      <Pump ID="LightSource:2"/>
+    </Laser>
+    <Arc ID="LightSource:1"/>
+  </Instrument>
+</OME>

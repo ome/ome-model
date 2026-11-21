@@ -190,7 +190,7 @@
     <xsd:keyref name="InstrumentFilterSetExcitationFilterIDKeyRef" refer="OME:FilterIDKey" ><xsd:selector xpath="OME:Instrument/OME:FilterSet/OME:ExcitationFilterRef"/><xsd:field xpath="@ID"/></xsd:keyref>
     <xsd:keyref name="InstrumentFilterSetDichroicIDKeyRef" refer="OME:DichroicIDKey" ><xsd:selector xpath="OME:Instrument/OME:FilterSet/OME:DichroicRef"/><xsd:field xpath="@ID"/></xsd:keyref>
     <xsd:keyref name="InstrumentFilterSetEmissionFilterIDKeyRef" refer="OME:FilterIDKey" ><xsd:selector xpath="OME:Instrument/OME:FilterSet/OME:EmissionFilterRef"/><xsd:field xpath="@ID"/></xsd:keyref>
-    <xsd:keyref name="InstrumentLightSourceLaserPumpLightSourceIDKey" refer="OME:LightSourceIDKey" ><xsd:selector xpath="OME:Instrument/OME:LightSource/OME:Laser/OME:Pump"/><xsd:field xpath="@ID"/></xsd:keyref>
+    <xsd:keyref name="InstrumentLightSourceLaserPumpLightSourceIDKey" refer="OME:LightSourceIDKey" ><xsd:selector xpath="OME:Instrument/OME:Laser/OME:Pump"/><xsd:field xpath="@ID"/></xsd:keyref>
     <xsd:keyref name="PlateScreenIDKeyRef" refer="OME:ScreenIDKey" ><xsd:selector xpath="OME:Plate/OME:ScreenRef"/><xsd:field xpath="@ID"/></xsd:keyref>
     <xsd:keyref name="PlateWellReagentIDKeyRef" refer="OME:ReagentIDKey" ><xsd:selector xpath="OME:Plate/OME:Well/OME:ReagentRef"/><xsd:field xpath="@ID"/></xsd:keyref>
     <xsd:keyref name="PlateWellWellSampleImageIDKeyRef" refer="OME:ImageIDKey" ><xsd:selector xpath="OME:Plate/OME:Well/OME:WellSample/OME:ImageRef"/><xsd:field xpath="@ID"/></xsd:keyref>
@@ -198,8 +198,8 @@
     <xsd:keyref name="ProjectExperimenterGroupIDKeyRef" refer="OME:ExperimenterGroupIDKey" ><xsd:selector xpath="OME:Project/OME:ExperimenterGroupRef"/><xsd:field xpath="@ID"/></xsd:keyref>
     <xsd:keyref name="ScreenPlateIDKeyRef" refer="OME:PlateIDKey" ><xsd:selector xpath="OME:Screen/OME:PlateRef"/><xsd:field xpath="@ID"/></xsd:keyref>
     <xsd:keyref name="ScreenScreenAcquisitionWellSampleIDKeyRef" refer="OME:WellSampleIDKey" ><xsd:selector xpath="OME:Screen/OME:ScreenAcquisition/OME:WellSampleRef"/><xsd:field xpath="@ID"/></xsd:keyref>
-    <xsd:keyref name="ExperimentMicrobeamManipulationROIIDKeyRef" refer="OME:ROIIDKey" ><xsd:selector xpath="OME:Experiment/OME:MicrobeamManipulation/ROIRef"/><xsd:field xpath="@ID"/></xsd:keyref>
-    <xsd:keyref name="ImageROIIDKeyRef" refer="OME:ROIIDKey" ><xsd:selector xpath="OME:Image/ROIRef"/><xsd:field xpath="@ID"/></xsd:keyref>
+    <xsd:keyref name="ExperimentMicrobeamManipulationROIIDKeyRef" refer="OME:ROIIDKey" ><xsd:selector xpath="OME:Experiment/OME:MicrobeamManipulation/OME:ROIRef"/><xsd:field xpath="@ID"/></xsd:keyref>
+    <xsd:keyref name="ImageROIIDKeyRef" refer="OME:ROIIDKey" ><xsd:selector xpath="OME:Image/OME:ROIRef"/><xsd:field xpath="@ID"/></xsd:keyref>
     <xsd:keyref name="AnnotationRefAnnotationIDKeyRef" refer="OME:AnnotationIDKey"><xsd:selector xpath=".//OME:AnnotationRef"/><xsd:field xpath="@ID"/></xsd:keyref>
     <xsd:keyref name="AnnotationAnnotatorExperimenterIDKeyRef" refer="OME:ExperimenterIDKey"><xsd:selector xpath="OME:StructuredAnnotations/*"/><xsd:field xpath="@Annotator"/></xsd:keyref>
 
@@ -4440,7 +4440,7 @@ PlaneInfo (as Plane)
       </xsd:attribute>
     </xsd:complexType>
     <!-- Unique Indexes -->
-    <xsd:key name="WellSampleIndex"><xsd:selector xpath="Well/WellSample"/><xsd:field xpath="@Index"/></xsd:key>
+    <xsd:key name="WellSampleIndex"><xsd:selector xpath="OME:Well/OME:WellSample"/><xsd:field xpath="@Index"/></xsd:key>
 
   </xsd:element>
 
