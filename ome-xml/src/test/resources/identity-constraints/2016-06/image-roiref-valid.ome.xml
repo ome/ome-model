@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd">
+  <!-- Image ROIRef refers to an existing ROI. -->
+  <Image ID="Image:0">
+    <Pixels ID="Pixels:0" DimensionOrder="XYZCT" Type="uint8" SizeX="1" SizeY="1" SizeZ="1" SizeC="1" SizeT="1">
+      <MetadataOnly/>
+    </Pixels>
+    <ROIRef ID="ROI:0"/>
+  </Image>
+  <ROI ID="ROI:0">
+    <Union>
+      <Point ID="Shape:0" X="0" Y="0"/>
+    </Union>
+  </ROI>
+</OME>

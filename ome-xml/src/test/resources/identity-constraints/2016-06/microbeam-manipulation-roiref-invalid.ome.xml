@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd">
+  <!-- Invalid: MicrobeamManipulation ROIRef refers to a missing ROI (ExperimentMicrobeamManipulationROIIDKeyRef). -->
+  <Experiment ID="Experiment:0">
+    <MicrobeamManipulation ID="MicrobeamManipulation:0">
+      <ROIRef ID="ROI:1"/>
+      <ExperimenterRef ID="Experimenter:0"/>
+    </MicrobeamManipulation>
+  </Experiment>
+  <Experimenter ID="Experimenter:0"/>
+  <ROI ID="ROI:0">
+    <Union>
+      <Point ID="Shape:0" X="0" Y="0"/>
+    </Union>
+  </ROI>
+</OME>

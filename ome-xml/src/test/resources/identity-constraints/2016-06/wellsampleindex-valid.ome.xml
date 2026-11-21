@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd">
+  <!-- WellSample Index is unique per Plate: the same values may repeat in another Plate. -->
+  <Plate ID="Plate:0">
+    <Well ID="Well:0:0" Column="0" Row="0">
+      <WellSample ID="WellSample:0:0" Index="0"/>
+    </Well>
+    <Well ID="Well:0:1" Column="1" Row="0">
+      <WellSample ID="WellSample:0:1" Index="1"/>
+    </Well>
+  </Plate>
+  <Plate ID="Plate:1">
+    <Well ID="Well:1:0" Column="0" Row="0">
+      <WellSample ID="WellSample:1:0" Index="0"/>
+    </Well>
+    <Well ID="Well:1:1" Column="1" Row="0">
+      <WellSample ID="WellSample:1:1" Index="1"/>
+    </Well>
+  </Plate>
+</OME>
